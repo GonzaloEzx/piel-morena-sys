@@ -45,16 +45,17 @@ if ($method === 'POST') {
     $duracion = intval($input['duracion_minutos'] ?? 30);
     $desc     = trim($input['descripcion'] ?? '');
     $cat      = $input['id_categoria'] ?? null;
+    $imagen   = trim($input['imagen'] ?? '');
 
     if (!$nombre || $precio <= 0) {
         responder_json(false, null, 'Nombre y precio son obligatorios', 400);
     }
 
     $stmt = $db->prepare(
-        "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria)
-         VALUES (?, ?, ?, ?, ?)"
+        "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria, imagen)
+         VALUES (?, ?, ?, ?, ?, ?)"
     );
-    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null]);
+    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null]);
     responder_json(true, ['id' => $db->lastInsertId()]);
 }
 
@@ -66,16 +67,17 @@ if ($method === 'PUT') {
     $duracion = intval($input['duracion_minutos'] ?? 30);
     $desc     = trim($input['descripcion'] ?? '');
     $cat      = $input['id_categoria'] ?? null;
+    $imagen   = trim($input['imagen'] ?? '');
 
     if (!$id || !$nombre || $precio <= 0) {
         responder_json(false, null, 'Datos incompletos', 400);
     }
 
     $stmt = $db->prepare(
-        "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, id_categoria=?
+        "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, id_categoria=?, imagen=?
          WHERE id=?"
     );
-    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $id]);
+    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $id]);
     responder_json(true);
 }
 

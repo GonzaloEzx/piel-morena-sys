@@ -1,17 +1,28 @@
 <?php
 /**
  * Piel Morena - Admin Header (Layout con sidebar)
- * Requiere: rol admin para acceder
+ * Requiere: rol admin o empleado para acceder
  */
 
 if (!defined('PIEL_MORENA')) {
     require_once __DIR__ . '/../../includes/init.php';
 }
 
-requerir_rol('admin');
+// Permitir admin y empleado en el panel
+$rol_requerido = $rol_admin_requerido ?? 'admin';
+if ($rol_requerido === 'empleado') {
+    requerir_auth();
+    if (!tiene_rol('admin') && !tiene_rol('empleado')) {
+        redirigir(URL_BASE . '/');
+    }
+} else {
+    requerir_rol('admin');
+}
 
 $logueado      = esta_autenticado();
 $nombreUsuario = sanitizar($_SESSION['usuario_nombre'] ?? '');
+$rolUsuario    = usuario_actual_rol();
+$esAdmin       = tiene_rol('admin');
 $uri           = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $vista_actual  = basename($uri, '.php') ?: 'index';
 ?>
@@ -62,27 +73,40 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
   <div class="pm-sidebar-brand">
     <span class="pm-sidebar-emoji">&#127832;</span>
     <span class="pm-sidebar-nombre">Piel Morena</span>
-    <span class="pm-sidebar-badge">Admin</span>
+    <span class="pm-sidebar-badge"><?= $esAdmin ? 'Admin' : 'Staff' ?></span>
   </div>
 
   <!-- Nav -->
   <nav class="pm-sidebar-nav">
     <ul class="pm-sidebar-menu">
+      <?php if ($esAdmin): ?>
       <li class="pm-sidebar-item">
         <a href="<?= URL_ADMIN ?>/" class="pm-sidebar-link <?= $vista_actual === 'index' ? 'active' : '' ?>">
           <i class="bi bi-grid-1x2-fill"></i>
           <span>Dashboard</span>
         </a>
       </li>
+      <?php endif; ?>
 
-      <li class="pm-sidebar-divider">Gestión</li>
+      <li class="pm-sidebar-divider"><?= $esAdmin ? 'Gestión' : 'Mi Panel' ?></li>
 
       <li class="pm-sidebar-item">
-        <a href="<?= URL_ADMIN ?>/views/citas.php" class="pm-sidebar-link <?= $vista_actual === 'citas' ? 'active' : '' ?>">
+        <a href="<?= URL_ADMIN ?>/views/<?= $esAdmin ? 'citas' : 'mis-citas' ?>.php" class="pm-sidebar-link <?= in_array($vista_actual, ['citas','mis-citas']) ? 'active' : '' ?>">
           <i class="bi bi-calendar-check"></i>
-          <span>Citas</span>
+          <span><?= $esAdmin ? 'Citas' : 'Mis Citas' ?></span>
         </a>
       </li>
+
+      <?php if (!$esAdmin): ?>
+      <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/mi-horario.php" class="pm-sidebar-link <?= $vista_actual === 'mi-horario' ? 'active' : '' ?>">
+          <i class="bi bi-clock"></i>
+          <span>Mi Horario</span>
+        </a>
+      </li>
+      <?php endif; ?>
+
+      <?php if ($esAdmin): ?>
       <li class="pm-sidebar-item">
         <a href="<?= URL_ADMIN ?>/views/servicios.php" class="pm-sidebar-link <?= $vista_actual === 'servicios' ? 'active' : '' ?>">
           <i class="bi bi-stars"></i>
@@ -116,6 +140,12 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
           <span>Caja</span>
         </a>
       </li>
+      <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/reportes.php" class="pm-sidebar-link <?= $vista_actual === 'reportes' ? 'active' : '' ?>">
+          <i class="bi bi-bar-chart-line"></i>
+          <span>Reportes</span>
+        </a>
+      </li>
 
       <li class="pm-sidebar-divider">Sistema</li>
 
@@ -125,6 +155,7 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
           <span>Mensajes</span>
         </a>
       </li>
+      <?php endif; ?>
       <li class="pm-sidebar-item">
         <a href="<?= URL_ADMIN ?>/views/configuracion.php" class="pm-sidebar-link <?= $vista_actual === 'configuracion' ? 'active' : '' ?>">
           <i class="bi bi-gear-fill"></i>
@@ -155,6 +186,23 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
     <h1 class="pm-topbar-title"><?= $titulo_admin ?? 'Dashboard' ?></h1>
 
     <div class="pm-topbar-actions">
+      <!-- Campana de notificaciones -->
+      <div class="dropdown me-2">
+        <button class="pm-topbar-toggle position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btnNotifCampana" title="Notificaciones">
+          <i class="bi bi-bell"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" id="notifBadge" style="font-size:.65rem">0</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end shadow" style="width:320px;max-height:380px;overflow-y:auto" id="notifDropdown">
+          <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+            <strong style="font-size:.85rem">Notificaciones</strong>
+            <button class="btn btn-link btn-sm p-0 text-decoration-none" style="font-size:.75rem" onclick="marcarTodasLeidas()">Marcar todas</button>
+          </div>
+          <div id="notifLista">
+            <div class="text-center text-muted py-3" style="font-size:.82rem">Cargando...</div>
+          </div>
+        </div>
+      </div>
+
       <div class="dropdown">
         <button class="pm-topbar-user dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-person-circle"></i>

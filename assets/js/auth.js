@@ -156,8 +156,15 @@ const LoginModal = {
       },
     }).then(result => {
       if (result.isConfirmed && result.value) {
-        // Login exitoso — recargar pagina
-        window.location.reload();
+        // Login exitoso — redirigir segun rol
+        const rol = result.value.data?.rol;
+        if (rol === 'admin') {
+          window.location.href = 'admin/';
+        } else if (rol === 'empleado') {
+          window.location.href = 'admin/views/mis-citas.php';
+        } else {
+          window.location.reload();
+        }
       }
     });
   },

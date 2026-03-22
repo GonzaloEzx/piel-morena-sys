@@ -14,6 +14,18 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Cargar configuración
 require_once __DIR__ . '/../config/config.php';
+
+// Expiración de sesión por inactividad
+if (isset($_SESSION['usuario_id']) && isset($_SESSION['ultima_actividad'])) {
+    if (time() - $_SESSION['ultima_actividad'] > SESSION_LIFETIME) {
+        session_unset();
+        session_destroy();
+        session_start();
+    }
+}
+if (isset($_SESSION['usuario_id'])) {
+    $_SESSION['ultima_actividad'] = time();
+}
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/functions.php';
 require_once __DIR__ . '/auth.php';

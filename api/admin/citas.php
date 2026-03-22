@@ -16,6 +16,26 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 // ── GET ──
 if ($method === 'GET') {
+    // Empleados que ofrecen un servicio específico
+    if (!empty($_GET['empleados_servicio'])) {
+        $id_servicio = intval($_GET['empleados_servicio']);
+        $stmt = $db->prepare(
+            "SELECT u.id, CONCAT(u.nombre, ' ', u.apellidos) AS nombre
+             FROM empleados_servicios es
+             JOIN usuarios u ON es.id_empleado = u.id
+             WHERE es.id_servicio = ? AND u.activo = 1
+             ORDER BY u.nombre"
+        );
+        $stmt->execute([$id_servicio]);
+        $empleados = $stmt->fetchAll();
+        // Si no hay asignaciones, devolver todos los empleados activos
+        if (empty($empleados)) {
+            $stmt = $db->query("SELECT id, CONCAT(nombre, ' ', apellidos) AS nombre FROM usuarios WHERE rol = 'empleado' AND activo = 1 ORDER BY nombre");
+            $empleados = $stmt->fetchAll();
+        }
+        responder_json(true, $empleados);
+    }
+
     $where  = [];
     $params = [];
 
@@ -23,17 +43,26 @@ if ($method === 'GET') {
         $where[]  = 'c.fecha = ?';
         $params[] = $_GET['fecha'];
     }
+    if (!empty($_GET['fecha_desde']) && !empty($_GET['fecha_hasta'])) {
+        $where[]  = 'c.fecha >= ?';
+        $params[] = $_GET['fecha_desde'];
+        $where[]  = 'c.fecha <= ?';
+        $params[] = $_GET['fecha_hasta'];
+    }
     if (!empty($_GET['estado'])) {
         $where[]  = 'c.estado = ?';
         $params[] = $_GET['estado'];
     }
 
     $sql = "SELECT c.id, c.fecha, c.hora_inicio, c.hora_fin, c.estado, c.notas,
+                   c.id_servicio, c.id_empleado,
                    s.nombre AS servicio, s.precio,
-                   CONCAT(u.nombre, ' ', u.apellidos) AS cliente, u.telefono AS cliente_tel
+                   CONCAT(u.nombre, ' ', u.apellidos) AS cliente, u.telefono AS cliente_tel,
+                   CONCAT(COALESCE(e.nombre,''), ' ', COALESCE(e.apellidos,'')) AS empleado
             FROM citas c
             JOIN servicios s ON c.id_servicio = s.id
-            JOIN usuarios u  ON c.id_cliente = u.id";
+            JOIN usuarios u  ON c.id_cliente = u.id
+            LEFT JOIN usuarios e ON c.id_empleado = e.id";
 
     if ($where) {
         $sql .= ' WHERE ' . implode(' AND ', $where);
@@ -56,8 +85,16 @@ if ($method === 'PATCH') {
         responder_json(false, null, 'ID y estado válido son requeridos', 400);
     }
 
-    $stmt = $db->prepare("UPDATE citas SET estado = ? WHERE id = ?");
-    $stmt->execute([$estado, $id]);
+    // Asignar empleado si se proporciona
+    $id_empleado = !empty($input['id_empleado']) ? intval($input['id_empleado']) : null;
+
+    if ($id_empleado) {
+        $stmt = $db->prepare("UPDATE citas SET estado = ?, id_empleado = ? WHERE id = ?");
+        $stmt->execute([$estado, $id_empleado, $id]);
+    } else {
+        $stmt = $db->prepare("UPDATE citas SET estado = ? WHERE id = ?");
+        $stmt->execute([$estado, $id]);
+    }
 
     // Obtener datos de la cita (servicio + cliente) — se usa para caja y notificaciones
     $stmt = $db->prepare(

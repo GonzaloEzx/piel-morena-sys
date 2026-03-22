@@ -40,6 +40,22 @@ if ($cita['estado'] === 'completada') {
     responder_json(false, null, 'No se puede cancelar una cita completada', 400);
 }
 
+// Verificar restricción de tiempo mínimo (2 horas antes)
+$stmt_fecha = $db->prepare("SELECT fecha, hora_inicio FROM citas WHERE id = ?");
+$stmt_fecha->execute([$id_cita]);
+$cita_fecha = $stmt_fecha->fetch();
+if ($cita_fecha) {
+    $inicio_cita = strtotime($cita_fecha['fecha'] . ' ' . $cita_fecha['hora_inicio']);
+    $horas_restantes = ($inicio_cita - time()) / 3600;
+    if ($horas_restantes < 2 && $horas_restantes > 0) {
+        // Admin puede cancelar sin restricción
+        $es_admin = esta_autenticado() && tiene_rol('admin');
+        if (!$es_admin) {
+            responder_json(false, null, 'No se puede cancelar con menos de 2 horas de anticipación. Contactá al salón.', 400);
+        }
+    }
+}
+
 // Verificar autorización
 $autorizado = false;
 

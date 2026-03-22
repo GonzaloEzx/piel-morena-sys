@@ -33,13 +33,14 @@ if ($method === 'POST') {
     $precio   = floatval($input['precio'] ?? 0);
     $stock    = intval($input['stock'] ?? 0);
     $stockMin = intval($input['stock_minimo'] ?? 5);
+    $imagen   = trim($input['imagen'] ?? '');
 
     if (!$nombre || $precio <= 0) {
         responder_json(false, null, 'Nombre y precio son obligatorios', 400);
     }
 
-    $stmt = $db->prepare("INSERT INTO productos (nombre, descripcion, precio, stock, stock_minimo) VALUES (?, ?, ?, ?, ?)");
-    $stmt->execute([$nombre, $desc, $precio, $stock, $stockMin]);
+    $stmt = $db->prepare("INSERT INTO productos (nombre, descripcion, precio, stock, stock_minimo, imagen) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->execute([$nombre, $desc, $precio, $stock, $stockMin, $imagen ?: null]);
     responder_json(true, ['id' => $db->lastInsertId()]);
 }
 
@@ -50,13 +51,14 @@ if ($method === 'PUT') {
     $precio   = floatval($input['precio'] ?? 0);
     $stock    = intval($input['stock'] ?? 0);
     $stockMin = intval($input['stock_minimo'] ?? 5);
+    $imagen   = trim($input['imagen'] ?? '');
 
     if (!$id || !$nombre || $precio <= 0) {
         responder_json(false, null, 'Datos incompletos', 400);
     }
 
-    $stmt = $db->prepare("UPDATE productos SET nombre=?, descripcion=?, precio=?, stock=?, stock_minimo=? WHERE id=?");
-    $stmt->execute([$nombre, $desc, $precio, $stock, $stockMin, $id]);
+    $stmt = $db->prepare("UPDATE productos SET nombre=?, descripcion=?, precio=?, stock=?, stock_minimo=?, imagen=? WHERE id=?");
+    $stmt->execute([$nombre, $desc, $precio, $stock, $stockMin, $imagen ?: null, $id]);
     responder_json(true);
 }
 

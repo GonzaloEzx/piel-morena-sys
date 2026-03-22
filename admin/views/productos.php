@@ -63,6 +63,12 @@ require_once __DIR__ . '/../includes/admin_header.php';
               <input type="number" class="form-control" name="stock_minimo" id="prodStockMin" min="0" value="5">
             </div>
           </div>
+          <div class="mt-3">
+            <label class="form-label">Imagen</label>
+            <input type="file" class="form-control" id="prodImagen" accept="image/*">
+            <input type="hidden" name="imagen" id="prodImagenUrl">
+            <div id="prodImagenPreview" class="mt-2"></div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-pm-outline btn-pm-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -110,6 +116,8 @@ function abrirModalProducto() {
     document.getElementById('modalProductoTitle').textContent = 'Nuevo Producto';
     document.getElementById('formProducto').reset();
     document.getElementById('prodId').value = '';
+    document.getElementById('prodImagenUrl').value = '';
+    document.getElementById('prodImagenPreview').innerHTML = '';
     modalProducto.show();
 }
 
@@ -124,8 +132,28 @@ async function editarProducto(id) {
     document.getElementById('prodPrecio').value = p.precio;
     document.getElementById('prodStock').value = p.stock;
     document.getElementById('prodStockMin').value = p.stock_minimo;
+    document.getElementById('prodImagenUrl').value = p.imagen || '';
+    document.getElementById('prodImagenPreview').innerHTML = p.imagen
+        ? `<img src="${p.imagen}" class="rounded" style="max-height:80px">`
+        : '';
     modalProducto.show();
 }
+
+// Upload de imagen al seleccionar archivo
+document.getElementById('prodImagen').addEventListener('change', async function() {
+    if (!this.files[0]) return;
+    const fd = new FormData();
+    fd.append('imagen', this.files[0]);
+    fd.append('tipo', 'productos');
+    const res = await apiCall('<?= URL_API ?>/admin/upload.php', 'POST', fd);
+    if (res.success) {
+        document.getElementById('prodImagenUrl').value = res.data.url;
+        document.getElementById('prodImagenPreview').innerHTML = `<img src="${res.data.url}" class="rounded" style="max-height:80px">`;
+        PM.toast('success', 'Imagen subida');
+    } else {
+        PM.error('Error', res.error);
+    }
+});
 
 document.getElementById('formProducto').addEventListener('submit', async (e) => {
     e.preventDefault();

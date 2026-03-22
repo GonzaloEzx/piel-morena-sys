@@ -66,6 +66,12 @@ require_once __DIR__ . '/../includes/admin_header.php';
               <input type="number" class="form-control" name="duracion_minutos" id="srvDuracion" min="5" step="5" value="30" required>
             </div>
           </div>
+          <div class="mt-3">
+            <label class="form-label">Imagen</label>
+            <input type="file" class="form-control" id="srvImagen" accept="image/*">
+            <input type="hidden" name="imagen" id="srvImagenUrl">
+            <div id="srvImagenPreview" class="mt-2"></div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-pm-outline btn-pm-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -126,6 +132,8 @@ function abrirModalServicio() {
     document.getElementById('modalServicioTitle').textContent = 'Nuevo Servicio';
     document.getElementById('formServicio').reset();
     document.getElementById('srvId').value = '';
+    document.getElementById('srvImagenUrl').value = '';
+    document.getElementById('srvImagenPreview').innerHTML = '';
     modalServicio.show();
 }
 
@@ -141,8 +149,28 @@ async function editarServicio(id) {
     document.getElementById('srvDescripcion').value = s.descripcion || '';
     document.getElementById('srvPrecio').value = s.precio;
     document.getElementById('srvDuracion').value = s.duracion_minutos;
+    document.getElementById('srvImagenUrl').value = s.imagen || '';
+    document.getElementById('srvImagenPreview').innerHTML = s.imagen
+        ? `<img src="${s.imagen}" class="rounded" style="max-height:80px">`
+        : '';
     modalServicio.show();
 }
+
+// Upload de imagen al seleccionar archivo
+document.getElementById('srvImagen').addEventListener('change', async function() {
+    if (!this.files[0]) return;
+    const fd = new FormData();
+    fd.append('imagen', this.files[0]);
+    fd.append('tipo', 'servicios');
+    const res = await apiCall('<?= URL_API ?>/admin/upload.php', 'POST', fd);
+    if (res.success) {
+        document.getElementById('srvImagenUrl').value = res.data.url;
+        document.getElementById('srvImagenPreview').innerHTML = `<img src="${res.data.url}" class="rounded" style="max-height:80px">`;
+        PM.toast('success', 'Imagen subida');
+    } else {
+        PM.error('Error', res.error);
+    }
+});
 
 document.getElementById('formServicio').addEventListener('submit', async (e) => {
     e.preventDefault();
