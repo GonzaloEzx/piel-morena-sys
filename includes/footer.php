@@ -13,8 +13,9 @@
           <img src="<?= URL_BASE ?>/assets/img/piel-morena-instagram-logo.jpg" alt="Piel Morena" class="pm-footer-logo">
           <span class="pm-footer-nombre">Piel Morena</span>
         </div>
+        <p class="pm-footer-lema">Estética Piel Morena Spa &amp; Beauty</p>
         <p class="pm-footer-tagline">
-          Tu espacio de belleza y confianza. Estética, depilación y tratamientos profesionales para realzar tu mejor versión.
+          Tu espacio de belleza y confianza. Tratamientos profesionales para realzar tu mejor versión.
         </p>
         <div class="pm-footer-redes">
           <a href="#" class="pm-footer-red-btn" aria-label="Instagram" target="_blank" rel="noopener">

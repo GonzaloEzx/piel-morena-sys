@@ -1891,6 +1891,14 @@
     font-size: 0.75rem;
 }
 
+/* ── Prevent body shift when offcanvas opens ───────────── */
+body.offcanvas-open,
+body[style*="overflow: hidden"],
+body[style*="padding-right"] {
+    padding-right: 0 !important;
+    overflow-x: hidden !important;
+}
+
 /* ── Backdrop — warmer ──────────────────────────────────── */
 .offcanvas-backdrop.show {
     background-color: rgba(44, 24, 16, 0.5);

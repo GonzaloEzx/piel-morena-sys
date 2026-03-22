@@ -17,6 +17,7 @@
           <div class="pm-hero-overlay"></div>
           <div class="container position-relative" style="z-index: 2;">
             <div class="pm-hero-content text-center">
+              <span class="pm-hero-badge pm-animate"><i class="bi bi-gem me-2"></i>Estética Piel Morena Spa &amp; Beauty</span>
               <h1 class="pm-hero-title pm-animate">Tu belleza,<br>nuestra pasión</h1>
               <p class="pm-hero-subtitle pm-animate">Estética &middot; Depilación &middot; Tratamientos de Frío</p>
               <div class="pm-hero-ctas pm-animate">
