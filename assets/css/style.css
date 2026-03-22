@@ -36,10 +36,11 @@
 :root {
     /* -- Colores Principales -- */
     --pm-bronce:           #8A7650;
-    --pm-bronce-light:     #957C62;
     --pm-bronce-dark:      #6C5D43;
-    --pm-tierra:           #957C62;
-    --pm-tierra-dark:      #7A654F;
+    --pm-tierra:           #7A654F;
+    --pm-tierra-mid:       #957C62;
+    --pm-bronce-light:     var(--pm-tierra-mid);
+    --pm-tierra-dark:      var(--pm-tierra);
     --pm-arena:            #DBCEA5;
     --pm-arena-light:      #E2B59A;
     --pm-crema:            #ECE7D1;
@@ -50,13 +51,13 @@
     --pm-dorado:           #FFE1AF;
     --pm-verde:            #8E977D;
     --pm-rojo:             #A85F52;
-    --pm-azul-hielo:       #8E977D;
-    --pm-warning:          #E2B59A;
+    --pm-azul-hielo:       #A8BAC4;
+    --pm-warning:          #D4935A;
 
     /* -- Texto -- */
     --pm-text:             #3F352B;
     --pm-text-heading:     #4A4034;
-    --pm-text-muted:       #746754;
+    --pm-text-muted:       #5C4F42;
     --pm-text-light:       #9A8C77;
     --pm-text-inverse:     #F8F4E8;
 
@@ -69,11 +70,12 @@
     --pm-border-light:     #E6DFC8;
 
     /* -- Gradientes -- */
-    --pm-gradient-hero:    linear-gradient(135deg, #957C62 0%, #8A7650 50%, #FFE1AF 100%);
+    --pm-gradient-hero:    linear-gradient(135deg, #7A654F 0%, #8A7650 50%, #FFE1AF 100%);
     --pm-gradient-footer:  linear-gradient(180deg, #7A654F 0%, #957C62 100%);
-    --pm-gradient-btn:     linear-gradient(135deg, #8A7650 0%, #957C62 100%);
+    --pm-gradient-btn:     linear-gradient(135deg, #8A7650 0%, #7A654F 100%);
     --pm-gradient-frio:    linear-gradient(135deg, #8E977D 0%, #B7BEA7 100%);
     --pm-glass:            rgba(248, 244, 232, 0.85);
+    --pm-glass-blur:       blur(12px);
     --pm-glass-border:     1px solid rgba(138, 118, 80, 0.24);
 
     /* -- Sombras -- */
@@ -84,6 +86,7 @@
     --pm-shadow-card:      0 2px 12px rgba(74, 64, 52, 0.10);
     --pm-shadow-card-hover:0 8px 24px rgba(74, 64, 52, 0.18);
     --pm-shadow-dorado:    0 4px 16px rgba(183, 116, 102, 0.35);
+    --pm-shadow-focus:     0 0 0 3px rgba(138, 118, 80, 0.30);
 
     /* -- Tipografia -- */
     --pm-font-heading:     'Playfair Display', Georgia, serif;
@@ -126,6 +129,21 @@
     --pm-icon-lg:          24px;
     --pm-icon-xl:          32px;
     --pm-icon-xxl:         48px;
+
+    /* -- Z-Index -- */
+    --pm-z-base:           0;
+    --pm-z-raised:         10;
+    --pm-z-dropdown:       100;
+    --pm-z-sticky:         200;
+    --pm-z-overlay:        300;
+    --pm-z-modal:          400;
+    --pm-z-toast:          500;
+
+    /* -- Safe Area Insets -- */
+    --pm-safe-top:         env(safe-area-inset-top, 0px);
+    --pm-safe-bottom:      env(safe-area-inset-bottom, 0px);
+    --pm-safe-left:        env(safe-area-inset-left, 0px);
+    --pm-safe-right:       env(safe-area-inset-right, 0px);
 
     /* -- Layout -- */
     --pm-navbar-height:    80px;
@@ -799,20 +817,20 @@ main {
 }
 
 .pm-hero-indicator {
-    width: 12px;
-    height: 12px;
+    width: 8px;
+    height: 8px;
     border-radius: var(--pm-radius-full);
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    background: transparent;
+    border: none;
+    background: rgba(255, 255, 255, 0.4);
     padding: 0;
     cursor: pointer;
-    transition: all var(--pm-transition-base);
+    transition: all 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pm-hero-indicator.active {
     background: var(--pm-dorado);
-    border-color: var(--pm-dorado);
-    transform: scale(1.2);
+    width: 28px;
+    border-radius: 4px;
 }
 
 
@@ -2378,8 +2396,8 @@ select.input-pm {
    ============================================================= */
 .pm-back-to-top {
     position: fixed;
-    bottom: var(--pm-space-6);
-    left: var(--pm-space-6);
+    bottom: calc(var(--pm-space-6) + var(--pm-safe-bottom));
+    left: calc(var(--pm-space-6) + var(--pm-safe-left));
     width: 48px;
     height: 48px;
     z-index: 998;
@@ -2671,8 +2689,8 @@ select.input-pm {
 /* -- Floating WhatsApp button -- */
 .pm-whatsapp-float {
     position: fixed;
-    bottom: var(--pm-space-6);
-    right: var(--pm-space-6);
+    bottom: calc(var(--pm-space-6) + var(--pm-safe-bottom));
+    right: calc(var(--pm-space-6) + var(--pm-safe-right));
     width: 56px;
     height: 56px;
     background-color: #25D366;

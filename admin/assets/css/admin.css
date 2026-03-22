@@ -4,10 +4,11 @@
 
 :root {
   --pm-bronce: #8A7650;
-  --pm-bronce-light: #957C62;
   --pm-bronce-dark: #6C5D43;
-  --pm-tierra: #957C62;
-  --pm-tierra-dark: #7A654F;
+  --pm-tierra: #7A654F;
+  --pm-tierra-mid: #957C62;
+  --pm-bronce-light: var(--pm-tierra-mid);
+  --pm-tierra-dark: var(--pm-tierra);
   --pm-arena: #DBCEA5;
   --pm-crema: #ECE7D1;
   --pm-marfil: #F8F4E8;
@@ -17,7 +18,7 @@
   --pm-rojo: #A85F52;
   --pm-text: #3F352B;
   --pm-text-heading: #4A4034;
-  --pm-text-muted: #746754;
+  --pm-text-muted: #5C4F42;
   --pm-text-light: #9A8C77;
   --pm-text-inverse: #F8F4E8;
   --pm-surface: #FEFCF8;
@@ -58,7 +59,7 @@
   left: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  background: linear-gradient(180deg, var(--pm-tierra-dark) 0%, var(--pm-tierra) 100%);
+  background: linear-gradient(180deg, var(--pm-tierra) 0%, var(--pm-tierra-mid) 100%);
   color: var(--pm-text-inverse);
   display: flex;
   flex-direction: column;

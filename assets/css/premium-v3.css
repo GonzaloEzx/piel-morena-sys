@@ -65,6 +65,14 @@
     --pm-v3-card-glow: 0 4px 20px rgba(255, 225, 175, 0.15), 0 0 0 1px rgba(219, 206, 165, 0.15);
     --pm-v3-botanical-shape-1: 60% 40% 30% 70% / 50% 60% 40% 50%;
     --pm-v3-botanical-shape-2: 40% 60% 70% 30% / 60% 30% 70% 40%;
+
+    /* Feminine blush palette — soft rose tones for warmth and elegance */
+    --pm-v3-blush:          #D4A5A5;
+    --pm-v3-blush-light:    #E8CCCC;
+    --pm-v3-blush-dark:     #C48888;
+    --pm-v3-blush-glow:     rgba(212, 165, 165, 0.25);
+    --pm-v3-gradient-blush: linear-gradient(135deg, #D4A5A5 0%, #B77466 100%);
+    --pm-v3-gradient-warm:  linear-gradient(135deg, #F8F4E8 0%, #E8CCCC 50%, #ECE7D1 100%);
 }
 
 
@@ -177,12 +185,24 @@
    CTA glow effects.
    ================================================================= */
 
-/* Dramatically larger hero title */
+/* Dramatically larger hero title — editorial weight */
 .pm-hero-title {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    letter-spacing: -0.035em;
-    line-height: 1.08;
-    margin-bottom: 1.5rem;
+    font-size: clamp(2.5rem, 7vw, 4.75rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 1.25rem;
+    text-shadow: 0 2px 24px rgba(63, 53, 43, 0.15);
+}
+
+/* Hero subtitle — more breathing room */
+.pm-hero-subtitle {
+    font-size: clamp(0.9375rem, 2vw, 1.25rem);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-family: var(--pm-font-ui);
+    font-weight: 500;
+    opacity: 0.9;
+    margin-bottom: 2rem;
 }
 
 /* Floating organic shapes behind hero content */
@@ -224,21 +244,44 @@
     animation: pmV3FloatOrganic 18s ease-in-out infinite reverse;
 }
 
-/* Hero badge — refined static style (no shimmer) */
+/* Hero badge — elegant pill with warm blush tint */
 .pm-hero-badge {
-    background: rgba(255, 225, 175, 0.14);
-    border: 1px solid rgba(255, 225, 175, 0.28);
-    box-shadow: 0 2px 12px rgba(255, 225, 175, 0.15);
+    background: rgba(212, 165, 165, 0.18);
+    border: 1px solid rgba(212, 165, 165, 0.35);
+    box-shadow: 0 2px 12px rgba(212, 165, 165, 0.12);
+    font-family: var(--pm-font-ui);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border-radius: var(--pm-radius-full);
 }
 
-/* CTA buttons — refined hover */
+/* CTA buttons — warmer glow with blush undertone */
+.pm-hero-ctas .btn-pm-dorado {
+    padding: 14px 36px;
+    font-size: 1rem;
+    border-radius: 14px;
+}
 .pm-hero-ctas .btn-pm-dorado:hover {
-    box-shadow: 0 6px 20px rgba(183, 116, 102, 0.4);
+    box-shadow: 0 8px 28px rgba(183, 116, 102, 0.35);
+    transform: translateY(-2px);
+}
+.pm-hero-ctas .btn-pm-dorado:active {
+    transform: translateY(1px);
 }
 
+.pm-hero-ctas .btn-pm-outline,
+.pm-hero-ctas .btn-pm-outline--white {
+    padding: 14px 36px;
+    font-size: 1rem;
+    border-radius: 14px;
+}
 .pm-hero-ctas .btn-pm-outline:hover,
 .pm-hero-ctas .btn-pm-outline--white:hover {
     box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
 }
 
 
@@ -247,30 +290,33 @@
    Larger title with text gradient, refined subtitle spacing.
    ================================================================= */
 
-/* Section title — editorial scale, warm solid color (no gradient text) */
+/* Section title — editorial scale, warm solid color */
 .pm-section-title {
-    font-size: clamp(1.75rem, 4vw, 2.75rem);
-    letter-spacing: -0.02em;
-    color: var(--pm-tierra-dark);
+    font-size: clamp(1.875rem, 4.5vw, 2.875rem);
+    letter-spacing: -0.025em;
+    color: var(--pm-tierra);
+    position: relative;
 }
 
-/* Subtitle — more generous spacing */
+/* Subtitle — more generous spacing, slightly warmer */
 .pm-section-subtitle {
     font-size: clamp(0.9375rem, 1.8vw, 1.125rem);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
     line-height: 1.7;
-    max-width: 640px;
+    max-width: 560px;
+    color: var(--pm-text-muted);
 }
 
-/* Divider — slightly wider with warmer gradient */
+/* Divider — organic warm gradient with blush accent */
 .pm-divider {
-    width: 56px;
+    width: 64px;
+    height: 2px;
     background: linear-gradient(90deg,
-        var(--pm-arena) 0%,
-        var(--pm-bronce) 40%,
+        var(--pm-v3-blush) 0%,
+        var(--pm-bronce) 50%,
         var(--pm-rosa) 100%
     );
-    opacity: 0.85;
+    opacity: 0.8;
 }
 
 
@@ -288,27 +334,28 @@
 .pm-about-img-placeholder::after {
     content: '';
     position: absolute;
-    top: 12px;
-    left: 12px;
-    right: -12px;
-    bottom: -12px;
-    border: 2px solid var(--pm-arena);
+    top: 14px;
+    left: 14px;
+    right: -14px;
+    bottom: -14px;
+    border: 2px solid var(--pm-v3-blush);
     border-radius: var(--pm-radius-lg);
     z-index: -1;
     pointer-events: none;
-    opacity: 0.5;
-    transition: opacity var(--pm-transition-base), transform var(--pm-transition-base);
+    opacity: 0.4;
+    transition: opacity 400ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pm-about-img-placeholder:hover::after {
-    opacity: 0.8;
-    transform: translate(2px, 2px);
+    opacity: 0.7;
+    transform: translate(3px, 3px);
 }
 
-/* Feature icons — warm solid color */
+/* Feature icons — blush accent for warmth */
 .pm-about-feature i {
-    color: var(--pm-bronce);
-    font-size: 1.15rem;
+    color: var(--pm-rosa);
+    font-size: 1.2rem;
 }
 
 /* About heading — Playfair accent */
@@ -328,15 +375,24 @@
    category badge warm gradient.
    ================================================================= */
 
-/* Enhanced hover — warm surface lift (no glassmorphism) */
+/* Enhanced hover — warm surface lift with blush glow */
+.pm-service-card {
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
 .pm-service-card:hover {
     background: var(--pm-marfil);
-    box-shadow: var(--pm-shadow-card-hover);
+    box-shadow: var(--pm-shadow-card-hover), 0 0 0 1px rgba(212, 165, 165, 0.12);
+    transform: translateY(-6px);
 }
 
 /* Service image — zoom on hover */
+.pm-service-img-placeholder {
+    transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
 .pm-service-card:hover .pm-service-img-placeholder {
-    transform: scale(1.03);
+    transform: scale(1.04);
 }
 
 /* Price tooltip — clean hover instead of pulse animation */
@@ -370,26 +426,37 @@
    Double-border on photo area, larger name, warm Instagram hover.
    ================================================================= */
 
-/* Decorative double-border on photo — inner ring */
+/* Decorative double-border on photo — inner ring with blush */
 .pm-team-photo {
     border: 3px solid var(--pm-surface);
-    box-shadow: inset 0 0 0 1px rgba(219, 206, 165, 0.3);
+    box-shadow: inset 0 0 0 1px rgba(212, 165, 165, 0.25);
     position: relative;
 }
 
-/* Outer subtle decorative ring */
+/* Outer subtle decorative ring — blush tint */
 .pm-team-card {
-    border: 1px solid rgba(219, 206, 165, 0.35);
+    border: 1px solid rgba(212, 165, 165, 0.2);
+    transition: border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pm-team-card:hover {
-    border-color: rgba(219, 206, 165, 0.6);
+    border-color: rgba(212, 165, 165, 0.5);
+    box-shadow: 0 8px 24px rgba(212, 165, 165, 0.12);
+    transform: translateY(-4px);
 }
 
 /* Name — slightly larger Playfair */
 .pm-team-name {
     font-size: 1.15rem;
     letter-spacing: -0.01em;
+}
+
+/* Team role — softer */
+.pm-team-role {
+    color: var(--pm-text-muted);
+    font-size: 0.8125rem;
 }
 
 /* Instagram icon — warm gradient on hover */
@@ -504,14 +571,14 @@
    Oversized quote mark, larger quote text, warm author underline.
    ================================================================= */
 
-/* Larger quote mark — editorial presence, solid warm color */
+/* Larger quote mark — editorial presence, blush-tinted */
 .pm-testimonial-quote-icon {
-    font-size: 6.5rem;
+    font-size: 7rem;
     font-family: var(--pm-font-heading);
-    opacity: 0.18;
-    line-height: 0.6;
-    margin-bottom: 1rem;
-    color: var(--pm-arena);
+    opacity: 0.15;
+    line-height: 0.5;
+    margin-bottom: 0.75rem;
+    color: var(--pm-v3-blush);
 }
 
 /* Quote text — larger with more breathing room */
@@ -525,7 +592,7 @@
     margin-bottom: 2rem;
 }
 
-/* Author name — warm underline accent */
+/* Author name — blush underline accent */
 .pm-testimonial-name {
     position: relative;
     display: inline-block;
@@ -539,17 +606,23 @@
     left: 0;
     width: 100%;
     height: 2px;
-    background: linear-gradient(90deg, var(--pm-bronce), var(--pm-arena));
+    background: linear-gradient(90deg, var(--pm-v3-blush), var(--pm-bronce));
     border-radius: 2px;
-    opacity: 0.6;
+    opacity: 0.5;
 }
 
-/* Testimonial card — refined warm border */
+/* Testimonial card — refined with blush glow */
 .pm-testimonial-card {
-    border: 1px solid rgba(219, 206, 165, 0.25);
+    border: 1px solid rgba(212, 165, 165, 0.18);
     box-shadow:
         var(--pm-shadow-md),
-        0 0 0 1px rgba(255, 225, 175, 0.06);
+        0 0 0 1px rgba(212, 165, 165, 0.06);
+    transition: box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.pm-testimonial-card:hover {
+    box-shadow:
+        var(--pm-shadow-lg),
+        0 0 0 1px rgba(212, 165, 165, 0.12);
 }
 
 
@@ -558,7 +631,7 @@
    Multiple floating dots/circles via box-shadow, premium glow buttons.
    ================================================================= */
 
-/* CTA section — subtle warm overlay instead of floating particles */
+/* CTA section — layered warm radial overlays with blush undertone */
 .pm-cta-section::after {
     content: '';
     position: absolute;
@@ -568,11 +641,9 @@
     bottom: 0;
     pointer-events: none;
     z-index: 0;
-    background: radial-gradient(
-        ellipse at 50% 40%,
-        rgba(255, 225, 175, 0.08) 0%,
-        transparent 60%
-    );
+    background:
+        radial-gradient(ellipse at 30% 50%, rgba(212, 165, 165, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 40%, rgba(255, 225, 175, 0.08) 0%, transparent 55%);
     border-radius: 0;
     border: none;
     width: auto;
@@ -693,9 +764,9 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 24px;
+    width: 28px;
     height: 2px;
-    background: linear-gradient(90deg, var(--pm-dorado), transparent);
+    background: linear-gradient(90deg, var(--pm-v3-blush), transparent);
     border-radius: 2px;
 }
 
@@ -1256,7 +1327,8 @@
     }
 
     .pm-hero-subtitle {
-        font-size: 0.9375rem;
+        font-size: 0.8125rem;
+        letter-spacing: 0.04em;
     }
 
     /* Hide floating shapes on small screens — performance */
