@@ -1,0 +1,177 @@
+<?php
+/**
+ * Piel Morena — Admin: CRUD Servicios
+ */
+$titulo_admin = 'Servicios';
+require_once __DIR__ . '/../includes/admin_header.php';
+?>
+
+<div class="pm-panel">
+  <div class="pm-panel-header">
+    <h3 class="pm-panel-title"><i class="bi bi-stars me-2"></i>Listado de Servicios</h3>
+    <button class="btn btn-pm btn-pm-sm" onclick="abrirModalServicio()">
+      <i class="bi bi-plus-lg me-1"></i>Nuevo Servicio
+    </button>
+  </div>
+  <div class="pm-panel-body">
+    <table id="dtServicios" class="table table-hover w-100">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Servicio</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Duración</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal Servicio -->
+<div class="modal fade" id="modalServicio" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalServicioTitle">Nuevo Servicio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="formServicio">
+        <div class="modal-body">
+          <input type="hidden" name="id" id="srvId">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" name="nombre" id="srvNombre" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Categoría</label>
+            <select class="form-select" name="id_categoria" id="srvCategoria">
+              <option value="">Sin categoría</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea class="form-control" name="descripcion" id="srvDescripcion" rows="3"></textarea>
+          </div>
+          <div class="row g-3">
+            <div class="col-6">
+              <label class="form-label">Precio ($)</label>
+              <input type="number" class="form-control" name="precio" id="srvPrecio" step="0.01" min="0" required>
+            </div>
+            <div class="col-6">
+              <label class="form-label">Duración (min)</label>
+              <input type="number" class="form-control" name="duracion_minutos" id="srvDuracion" min="5" step="5" value="30" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-pm-outline btn-pm-sm" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-pm btn-pm-sm">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+let dtServicios;
+let modalServicio;
+
+document.addEventListener('DOMContentLoaded', () => {
+    modalServicio = new bootstrap.Modal(document.getElementById('modalServicio'));
+    cargarCategorias();
+    initTabla();
+});
+
+async function cargarCategorias() {
+    const res = await apiCall('<?= URL_API ?>/admin/categorias.php');
+    if (res.success) {
+        const sel = document.getElementById('srvCategoria');
+        res.data.forEach(c => {
+            sel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`;
+        });
+    }
+}
+
+function initTabla() {
+    dtServicios = $('#dtServicios').DataTable({
+        ...DT_DEFAULTS,
+        ajax: {
+            url: '<?= URL_API ?>/admin/servicios.php',
+            dataSrc: function(json) { return json.success ? json.data : []; }
+        },
+        columns: [
+            { data: 'id' },
+            { data: 'nombre' },
+            { data: 'categoria', defaultContent: '<span class="text-muted">—</span>' },
+            { data: 'precio', render: (d) => formatPrecio(d) },
+            { data: 'duracion_minutos', render: (d) => d + ' min' },
+            { data: 'activo', render: (d) => d == 1
+                ? '<span class="badge-estado badge-completada">Activo</span>'
+                : '<span class="badge-estado badge-cancelada">Inactivo</span>'
+            },
+            { data: null, orderable: false, render: (d) => `
+                <button class="pm-action-btn edit" title="Editar" onclick="editarServicio(${d.id})"><i class="bi bi-pencil"></i></button>
+                <button class="pm-action-btn delete" title="Eliminar" onclick="eliminarServicio(${d.id}, '${d.nombre}')"><i class="bi bi-trash"></i></button>
+            `}
+        ],
+        order: [[0, 'desc']]
+    });
+}
+
+function abrirModalServicio() {
+    document.getElementById('modalServicioTitle').textContent = 'Nuevo Servicio';
+    document.getElementById('formServicio').reset();
+    document.getElementById('srvId').value = '';
+    modalServicio.show();
+}
+
+async function editarServicio(id) {
+    const res = await apiCall('<?= URL_API ?>/admin/servicios.php?id=' + id);
+    if (!res.success) return PM.error('Error', res.error);
+    const s = res.data;
+
+    document.getElementById('modalServicioTitle').textContent = 'Editar Servicio';
+    document.getElementById('srvId').value = s.id;
+    document.getElementById('srvNombre').value = s.nombre;
+    document.getElementById('srvCategoria').value = s.id_categoria || '';
+    document.getElementById('srvDescripcion').value = s.descripcion || '';
+    document.getElementById('srvPrecio').value = s.precio;
+    document.getElementById('srvDuracion').value = s.duracion_minutos;
+    modalServicio.show();
+}
+
+document.getElementById('formServicio').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const id = fd.get('id');
+    const url = '<?= URL_API ?>/admin/servicios.php';
+
+    const res = await apiCall(url, id ? 'PUT' : 'POST', Object.fromEntries(fd));
+
+    if (res.success) {
+        PM.toast('success', id ? 'Servicio actualizado' : 'Servicio creado');
+        modalServicio.hide();
+        dtServicios.ajax.reload();
+    } else {
+        PM.error('Error', res.error);
+    }
+});
+
+async function eliminarServicio(id, nombre) {
+    if (!await PM.confirmDelete(nombre)) return;
+
+    const res = await apiCall('<?= URL_API ?>/admin/servicios.php', 'DELETE', { id });
+    if (res.success) {
+        PM.toast('success', 'Servicio eliminado');
+        dtServicios.ajax.reload();
+    } else {
+        PM.error('Error', res.error);
+    }
+}
+</script>
+
+<?php require_once __DIR__ . '/../includes/admin_footer.php'; ?>

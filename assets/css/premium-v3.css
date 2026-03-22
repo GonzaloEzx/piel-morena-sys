@@ -1,0 +1,1916 @@
+/* ========= PREMIUM REDESIGN v3.0 — Warm Luxury Botanical ========= */
+/*
+ * Design Direction: "Warm Luxury Botanical"
+ * Target: Women seeking premium beauty services.
+ * Feeling: Entering a warm, premium spa with vanilla/cinnamon scent and natural light.
+ * Think: High-end beauty magazine editorial.
+ *
+ * This file is loaded AFTER style.css and overrides/enhances existing styles.
+ * All rules use existing class names and --pm-* CSS variables.
+ * Scoped to public pages only (no admin panel interference).
+ *
+ * TABLE OF CONTENTS:
+ *   1.  New CSS Variables (v3.0)
+ *   2.  Navbar — Premium Gold Line
+ *   3.  Hero — Dramatic Typography + Floating Shapes
+ *   4.  Section Headers — Editorial Style
+ *   5.  About Section — Overlapping Layout Feel
+ *   6.  Service Cards — Glassmorphism + Premium
+ *   7.  Team Cards — Photo Frame Effect
+ *   8.  Gallery — Magazine-Style Grid
+ *   9.  Promotions — More Dramatic
+ *   10. Testimonials — Editorial Quote Style
+ *   11. CTA Section — Floating Particles Effect
+ *   12. Contact — Warm Split Tone
+ *   13. Footer — Premium Bottom Edge
+ *   14. Global Button Upgrades
+ *   15. Keyframe Animations (v3.0)
+ *   16. Responsive — Mobile Premium Feel
+ *   17. Reduced Motion Support
+ * ================================================================= */
+
+
+/* =================================================================
+   1. NEW CSS VARIABLES (v3.0)
+   Additional design tokens for the premium layer.
+   ================================================================= */
+:root {
+    /* Warm gradients for v3 */
+    --pm-v3-gold-line: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 225, 175, 0.15) 15%,
+        rgba(138, 118, 80, 0.6) 35%,
+        var(--pm-bronce) 50%,
+        rgba(138, 118, 80, 0.6) 65%,
+        rgba(255, 225, 175, 0.15) 85%,
+        transparent 100%
+    );
+    --pm-v3-text-gradient: linear-gradient(135deg, var(--pm-bronce) 0%, var(--pm-tierra) 60%, var(--pm-rosa) 100%);
+    --pm-v3-warm-glow: 0 8px 32px rgba(138, 118, 80, 0.18), 0 2px 8px rgba(183, 116, 102, 0.12);
+    --pm-v3-glass-premium: rgba(248, 244, 232, 0.92);
+    --pm-v3-shimmer-gradient: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 40%,
+        rgba(255, 225, 175, 0.25) 50%,
+        transparent 60%,
+        transparent 100%
+    );
+    --pm-v3-btn-radius: 12px;
+
+    /* Rosewood accent — high-contrast CTA for navbar buttons */
+    --pm-v3-rosewood: #A2596A;
+    --pm-v3-rosewood-hover: #8E4B5B;
+    --pm-v3-rosewood-glow: rgba(162, 89, 106, 0.35);
+    --pm-v3-card-glow: 0 4px 20px rgba(255, 225, 175, 0.15), 0 0 0 1px rgba(219, 206, 165, 0.15);
+    --pm-v3-botanical-shape-1: 60% 40% 30% 70% / 50% 60% 40% 50%;
+    --pm-v3-botanical-shape-2: 40% 60% 70% 30% / 60% 30% 70% 40%;
+}
+
+
+/* =================================================================
+   2. NAVBAR — Premium Gold Line
+   Refined glassmorphism + 1px warm gradient bottom accent on scroll.
+   ================================================================= */
+
+/* Enhanced scrolled state — more refined glass */
+.pm-navbar.scrolled {
+    background-color: var(--pm-v3-glass-premium);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border-bottom: none;
+    box-shadow:
+        0 1px 0 0 rgba(138, 118, 80, 0.08),
+        0 4px 16px rgba(74, 64, 52, 0.06);
+}
+
+/* Premium gold accent line — bottom edge on scroll */
+.pm-navbar.scrolled::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--pm-v3-gold-line);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 1;
+    transition: opacity var(--pm-transition-slow);
+}
+
+/* Ensure brand doesn't clip over line */
+.pm-navbar .container {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* ----- Navbar CTA Buttons — Rosewood Accent -----
+   Override navbar buttons for high contrast in both states:
+   - Default (transparent over dark hero): bright/vivid buttons
+   - Scrolled (cream glass): rosewood stands out against warm background
+   ----------------------------------------------------------------- */
+
+/* "Reservar Cita" — solid rosewood CTA */
+.pm-navbar-actions .btn-pm {
+    background-color: var(--pm-v3-rosewood);
+    border-color: var(--pm-v3-rosewood);
+    color: #FFFFFF;
+    box-shadow: 0 2px 10px var(--pm-v3-rosewood-glow);
+}
+
+.pm-navbar-actions .btn-pm:hover {
+    background-color: var(--pm-v3-rosewood-hover);
+    border-color: var(--pm-v3-rosewood-hover);
+    color: #FFFFFF;
+    box-shadow: 0 4px 18px var(--pm-v3-rosewood-glow);
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.pm-navbar-actions .btn-pm:active {
+    background-color: #7D3F4D;
+    border-color: #7D3F4D;
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* "Ingresar" / user dropdown — outline: adapts per navbar state */
+
+/* Default state (over dark hero): white outline for visibility */
+.pm-navbar-actions .btn-pm-outline {
+    border-color: rgba(255, 255, 255, 0.7);
+    color: #FFFFFF;
+}
+
+.pm-navbar-actions .btn-pm-outline:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: #FFFFFF;
+    color: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+/* Scrolled state (cream glass): rosewood outline for contrast */
+.pm-navbar.scrolled .pm-navbar-actions .btn-pm-outline {
+    border-color: var(--pm-v3-rosewood);
+    color: var(--pm-v3-rosewood);
+}
+
+.pm-navbar.scrolled .pm-navbar-actions .btn-pm-outline:hover {
+    background-color: var(--pm-v3-rosewood);
+    border-color: var(--pm-v3-rosewood);
+    color: #FFFFFF;
+    box-shadow: 0 4px 16px var(--pm-v3-rosewood-glow);
+}
+
+.pm-navbar.scrolled .pm-navbar-actions .btn-pm-outline:active {
+    background-color: var(--pm-v3-rosewood-hover);
+    border-color: var(--pm-v3-rosewood-hover);
+}
+
+
+/* =================================================================
+   3. HERO — Dramatic Typography + Floating Shapes
+   Larger hero title, organic floating shapes, badge shimmer,
+   CTA glow effects.
+   ================================================================= */
+
+/* Dramatically larger hero title */
+.pm-hero-title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    letter-spacing: -0.035em;
+    line-height: 1.08;
+    margin-bottom: 1.5rem;
+}
+
+/* Floating organic shapes behind hero content */
+.pm-hero-section::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: -5%;
+    width: clamp(200px, 30vw, 400px);
+    height: clamp(200px, 30vw, 400px);
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 225, 175, 0.08) 0%,
+        rgba(255, 225, 175, 0.03) 40%,
+        transparent 70%
+    );
+    border-radius: var(--pm-v3-botanical-shape-1);
+    z-index: 1;
+    pointer-events: none;
+    animation: pmV3FloatOrganic 14s ease-in-out infinite;
+}
+
+.pm-hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    right: -8%;
+    width: clamp(180px, 25vw, 350px);
+    height: clamp(180px, 25vw, 350px);
+    background: radial-gradient(
+        ellipse at center,
+        rgba(219, 206, 165, 0.07) 0%,
+        rgba(183, 116, 102, 0.03) 45%,
+        transparent 70%
+    );
+    border-radius: var(--pm-v3-botanical-shape-2);
+    z-index: 1;
+    pointer-events: none;
+    animation: pmV3FloatOrganic 18s ease-in-out infinite reverse;
+}
+
+/* Hero badge — enhanced shimmer */
+.pm-hero-badge {
+    animation: pmV3BadgeShimmer 3s ease-in-out infinite;
+    background-size: 300% auto;
+    background-image: linear-gradient(
+        110deg,
+        rgba(255, 225, 175, 0.12) 0%,
+        rgba(255, 225, 175, 0.12) 35%,
+        rgba(255, 225, 175, 0.35) 50%,
+        rgba(255, 225, 175, 0.12) 65%,
+        rgba(255, 225, 175, 0.12) 100%
+    );
+    border: 1px solid rgba(255, 225, 175, 0.28);
+    box-shadow: 0 2px 12px rgba(255, 225, 175, 0.15);
+}
+
+/* CTA buttons — hover glow effect */
+.pm-hero-ctas .btn-pm-dorado:hover {
+    box-shadow:
+        0 6px 24px rgba(183, 116, 102, 0.5),
+        0 0 40px rgba(255, 225, 175, 0.2);
+}
+
+.pm-hero-ctas .btn-pm-outline:hover,
+.pm-hero-ctas .btn-pm-outline--white:hover {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+}
+
+
+/* =================================================================
+   4. SECTION HEADERS — Editorial Style
+   Larger title with text gradient, refined subtitle spacing.
+   ================================================================= */
+
+/* Section title — editorial scale + gradient text */
+.pm-section-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    letter-spacing: -0.02em;
+    background: var(--pm-v3-text-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding-bottom: 2px; /* prevents clipping on descenders */
+}
+
+/* Subtitle — more generous spacing */
+.pm-section-subtitle {
+    font-size: clamp(0.9375rem, 1.8vw, 1.125rem);
+    letter-spacing: 0.03em;
+    line-height: 1.7;
+    max-width: 640px;
+}
+
+/* Divider — slightly wider with warmer gradient */
+.pm-divider {
+    width: 56px;
+    background: linear-gradient(90deg,
+        var(--pm-arena) 0%,
+        var(--pm-bronce) 40%,
+        var(--pm-rosa) 100%
+    );
+    opacity: 0.85;
+}
+
+
+/* =================================================================
+   5. ABOUT SECTION — Overlapping Layout Feel
+   Decorative offset border on image, warm gradient on feature icons.
+   ================================================================= */
+
+/* Decorative offset border frame on about image */
+.pm-about-img-placeholder {
+    position: relative;
+    z-index: 1;
+}
+
+.pm-about-img-placeholder::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: -12px;
+    bottom: -12px;
+    border: 2px solid var(--pm-arena);
+    border-radius: var(--pm-radius-lg);
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+    transition: opacity var(--pm-transition-base), transform var(--pm-transition-base);
+}
+
+.pm-about-img-placeholder:hover::after {
+    opacity: 0.8;
+    transform: translate(2px, 2px);
+}
+
+/* Feature icons — warm gradient fill */
+.pm-about-feature i {
+    background: linear-gradient(135deg, var(--pm-bronce) 0%, var(--pm-rosa) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.15rem;
+}
+
+/* About heading — Playfair accent */
+.pm-about-heading {
+    font-family: var(--pm-font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    color: var(--pm-text-heading);
+    margin-bottom: 1.25rem;
+}
+
+
+/* =================================================================
+   6. SERVICE CARDS — Glassmorphism + Premium
+   Hover glassmorphism, image zoom, price tooltip pulse,
+   category badge warm gradient.
+   ================================================================= */
+
+/* Enhanced hover — subtle glass backdrop */
+.pm-service-card:hover {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow:
+        var(--pm-shadow-card-hover),
+        var(--pm-v3-card-glow);
+}
+
+/* Service image — zoom on hover (refined to 1.03 scale) */
+.pm-service-card:hover .pm-service-img-placeholder {
+    transform: scale(1.03);
+}
+
+/* Price tooltip — subtle pulse to draw attention */
+.pm-price-tooltip {
+    animation: pmV3PriceSubtle 3s ease-in-out infinite;
+    animation-delay: 0.5s;
+}
+
+/* Category badge on service image — warm gradient background */
+.pm-service-img .pm-badge {
+    background: linear-gradient(135deg, var(--pm-arena) 0%, rgba(219, 206, 165, 0.95) 100%);
+    color: var(--pm-tierra-dark);
+    border: 1px solid rgba(138, 118, 80, 0.12);
+    box-shadow: 0 2px 6px rgba(74, 64, 52, 0.08);
+}
+
+.pm-service-img .pm-badge-frio {
+    background: linear-gradient(135deg, var(--pm-verde) 0%, #A5AE94 100%);
+    color: white;
+    border-color: transparent;
+}
+
+
+/* =================================================================
+   7. TEAM CARDS — Photo Frame Effect
+   Double-border on photo area, larger name, warm Instagram hover.
+   ================================================================= */
+
+/* Decorative double-border on photo — inner ring */
+.pm-team-photo {
+    border: 3px solid var(--pm-surface);
+    box-shadow: inset 0 0 0 1px rgba(219, 206, 165, 0.3);
+    position: relative;
+}
+
+/* Outer subtle decorative ring */
+.pm-team-card {
+    border: 1px solid rgba(219, 206, 165, 0.35);
+}
+
+.pm-team-card:hover {
+    border-color: rgba(219, 206, 165, 0.6);
+}
+
+/* Name — slightly larger Playfair */
+.pm-team-name {
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+}
+
+/* Instagram icon — warm gradient on hover */
+.pm-team-social .pm-social-icon:hover {
+    background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 4px 12px rgba(131, 58, 180, 0.3);
+}
+
+
+/* =================================================================
+   8. GALLERY — Magazine-Style Grid
+   More dramatic overlay gradient, subtle frame, larger zoom icon.
+   ================================================================= */
+
+/* Subtle frame effect — inner border */
+.pm-gallery-item {
+    border: 1px solid rgba(219, 206, 165, 0.2);
+}
+
+.pm-gallery-item:hover {
+    border-color: rgba(138, 118, 80, 0.3);
+}
+
+/* Enhanced overlay — more dramatic bottom-heavy gradient */
+.pm-gallery-overlay {
+    background: linear-gradient(
+        180deg,
+        transparent 0%,
+        transparent 25%,
+        rgba(74, 46, 26, 0.15) 50%,
+        rgba(74, 46, 26, 0.55) 75%,
+        rgba(74, 46, 26, 0.85) 100%
+    );
+}
+
+/* Zoom icon — larger and more prominent */
+.pm-gallery-overlay i {
+    font-size: 2.5rem;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    color: rgba(255, 255, 255, 0.95);
+}
+
+/* Inner decorative corners on hover */
+.pm-gallery-item::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(255, 225, 175, 0.3);
+    border-radius: calc(var(--pm-radius-lg) - 8px);
+    opacity: 0;
+    transition: opacity 400ms ease;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.pm-gallery-item:hover::before {
+    opacity: 1;
+}
+
+
+/* =================================================================
+   9. PROMOTIONS — More Dramatic
+   Warm glow shadow on promo card, animated gradient badge.
+   ================================================================= */
+
+/* Promo card — warm glow shadow */
+.pm-promo-card {
+    box-shadow:
+        var(--pm-shadow-lg),
+        0 8px 40px rgba(255, 225, 175, 0.12);
+    border: 1px solid rgba(219, 206, 165, 0.25);
+}
+
+.pm-promo-card:hover {
+    box-shadow:
+        var(--pm-shadow-xl),
+        0 12px 48px rgba(255, 225, 175, 0.2),
+        0 0 0 1px rgba(138, 118, 80, 0.1);
+}
+
+/* Discount badge — more prominent with animated gradient */
+.pm-promo-discount {
+    font-size: 4rem;
+    text-shadow:
+        0 2px 16px rgba(0, 0, 0, 0.35),
+        0 0 60px rgba(255, 225, 175, 0.2);
+    letter-spacing: -0.02em;
+}
+
+/* Promo "OFERTA" badge — animated gradient background */
+.pm-promo-badge {
+    background: linear-gradient(
+        135deg,
+        var(--pm-rojo) 0%,
+        #C96B5E 50%,
+        var(--pm-rojo) 100%
+    );
+    background-size: 200% 200%;
+    animation:
+        pmPulseGlow 2s infinite,
+        pmV3GradientBadge 3s ease infinite;
+    font-size: 0.8125rem;
+    padding: 0.4rem 1rem;
+    box-shadow: 0 2px 8px rgba(168, 95, 82, 0.35);
+}
+
+
+/* =================================================================
+   10. TESTIMONIALS — Editorial Quote Style
+   Oversized quote mark, larger quote text, warm author underline.
+   ================================================================= */
+
+/* Larger quote mark — editorial presence */
+.pm-testimonial-quote-icon {
+    font-size: 6.5rem;
+    font-family: var(--pm-font-heading);
+    opacity: 0.25;
+    line-height: 0.6;
+    margin-bottom: 1rem;
+    background: linear-gradient(180deg, var(--pm-arena) 0%, rgba(219, 206, 165, 0.3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Quote text — larger with more breathing room */
+.pm-testimonial-text {
+    font-size: clamp(1.0625rem, 2.2vw, 1.3125rem);
+    line-height: 1.85;
+    letter-spacing: 0.005em;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2rem;
+}
+
+/* Author name — warm underline accent */
+.pm-testimonial-name {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 4px;
+}
+
+.pm-testimonial-name::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--pm-bronce), var(--pm-arena));
+    border-radius: 2px;
+    opacity: 0.6;
+}
+
+/* Testimonial card — refined warm border */
+.pm-testimonial-card {
+    border: 1px solid rgba(219, 206, 165, 0.25);
+    box-shadow:
+        var(--pm-shadow-md),
+        0 0 0 1px rgba(255, 225, 175, 0.06);
+}
+
+
+/* =================================================================
+   11. CTA SECTION — Floating Particles Effect
+   Multiple floating dots/circles via box-shadow, premium glow buttons.
+   ================================================================= */
+
+/* Floating particles using box-shadow technique */
+.pm-cta-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+        /* Particle cluster 1 */
+        radial-gradient(circle 2px at 10% 20%, rgba(255, 225, 175, 0.25) 50%, transparent 50%),
+        radial-gradient(circle 3px at 25% 70%, rgba(255, 225, 175, 0.15) 50%, transparent 50%),
+        radial-gradient(circle 1.5px at 40% 15%, rgba(219, 206, 165, 0.2) 50%, transparent 50%),
+        /* Particle cluster 2 */
+        radial-gradient(circle 2.5px at 60% 80%, rgba(255, 225, 175, 0.18) 50%, transparent 50%),
+        radial-gradient(circle 1px at 75% 35%, rgba(219, 206, 165, 0.22) 50%, transparent 50%),
+        radial-gradient(circle 3px at 85% 60%, rgba(255, 225, 175, 0.12) 50%, transparent 50%),
+        /* Particle cluster 3 */
+        radial-gradient(circle 2px at 15% 55%, rgba(183, 116, 102, 0.1) 50%, transparent 50%),
+        radial-gradient(circle 1.5px at 50% 45%, rgba(255, 225, 175, 0.16) 50%, transparent 50%),
+        radial-gradient(circle 2px at 90% 15%, rgba(219, 206, 165, 0.14) 50%, transparent 50%),
+        radial-gradient(circle 1px at 35% 90%, rgba(255, 225, 175, 0.2) 50%, transparent 50%);
+    animation: pmV3FloatParticles 20s ease-in-out infinite;
+    border-radius: 0;
+    border: none;
+    width: auto;
+    height: auto;
+}
+
+/* CTA buttons — premium glow on hover */
+.pm-cta-section .btn-pm-dorado:hover {
+    box-shadow:
+        0 8px 28px rgba(183, 116, 102, 0.5),
+        0 0 50px rgba(255, 225, 175, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    filter: brightness(1.12);
+}
+
+.pm-cta-section .btn-pm-outline:hover,
+.pm-cta-section .btn-pm-outline--white:hover {
+    box-shadow:
+        0 4px 20px rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+
+
+/* =================================================================
+   12. CONTACT — Warm Split Tone
+   Subtle warm gradient background, warm icon circles,
+   premium focus states on inputs.
+   ================================================================= */
+
+/* Contact section — subtle warm gradient background */
+#contacto.pm-section {
+    background: linear-gradient(
+        135deg,
+        var(--pm-marfil) 0%,
+        rgba(236, 231, 209, 0.6) 40%,
+        rgba(248, 244, 232, 0.8) 100%
+    );
+}
+
+/* Contact info icon circles — warm gradient */
+.pm-contact-icon {
+    background: linear-gradient(135deg, var(--pm-crema) 0%, rgba(219, 206, 165, 0.5) 100%);
+    color: var(--pm-bronce);
+    border: 1px solid rgba(219, 206, 165, 0.3);
+    border-radius: var(--pm-radius-full);
+    box-shadow: 0 2px 6px rgba(138, 118, 80, 0.08);
+    transition:
+        background var(--pm-transition-base),
+        box-shadow var(--pm-transition-base),
+        transform var(--pm-transition-base);
+}
+
+.pm-contact-item:hover .pm-contact-icon {
+    background: linear-gradient(135deg, var(--pm-arena) 0%, var(--pm-bronce) 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(138, 118, 80, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Form inputs — premium focus state */
+.pm-contact-form .input-pm:focus,
+.pm-contact-form .form-control:focus {
+    border-color: var(--pm-bronce);
+    box-shadow:
+        0 0 0 3px rgba(138, 118, 80, 0.12),
+        0 0 0 6px rgba(138, 118, 80, 0.04),
+        0 2px 8px rgba(138, 118, 80, 0.08);
+}
+
+/* Inputs — subtle warm background on focus */
+.pm-contact-form .input-pm:focus {
+    background-color: rgba(248, 244, 232, 0.5);
+}
+
+
+/* =================================================================
+   13. FOOTER — Premium Bottom Edge
+   Golden glow at top edge, brand-color social hover,
+   uppercase headings with wider spacing.
+   ================================================================= */
+
+/* Golden glow at the very top edge of footer */
+.pm-footer {
+    border-top: 1px solid rgba(255, 225, 175, 0.12);
+    box-shadow: 0 -8px 32px rgba(255, 225, 175, 0.06);
+}
+
+/* Override existing ::after for a warm top glow line */
+.pm-footer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 225, 175, 0.2) 20%,
+        rgba(255, 225, 175, 0.45) 50%,
+        rgba(255, 225, 175, 0.2) 80%,
+        transparent 100%
+    );
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Footer column headings — uppercase wider spacing */
+.pm-footer-titulo {
+    font-family: var(--pm-font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pm-arena);
+    margin-bottom: var(--pm-space-4);
+    position: relative;
+    padding-bottom: 0.75rem;
+}
+
+/* Subtle underline accent on footer headings */
+.pm-footer-titulo::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 24px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--pm-dorado), transparent);
+    border-radius: 2px;
+}
+
+/* Footer social buttons — brand-color hover effects */
+.pm-footer-red-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(219, 206, 165, 0.4);
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.125rem;
+    text-decoration: none;
+    transition:
+        background var(--pm-transition-base),
+        color var(--pm-transition-base),
+        border-color var(--pm-transition-base),
+        transform var(--pm-transition-base),
+        box-shadow var(--pm-transition-base);
+}
+
+.pm-footer-red-btn:hover {
+    transform: translateY(-3px);
+    color: white;
+}
+
+/* Instagram gradient */
+.pm-footer-red-btn[aria-label*="Instagram"]:hover {
+    background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(131, 58, 180, 0.3);
+}
+
+/* Facebook blue */
+.pm-footer-red-btn[aria-label*="Facebook"]:hover {
+    background: #1877F2;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+}
+
+/* WhatsApp green */
+.pm-footer-red-btn[aria-label*="WhatsApp"]:hover {
+    background: #25D366;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+/* Footer redes container */
+.pm-footer-redes {
+    display: flex;
+    gap: var(--pm-space-2);
+}
+
+/* Footer brand logo */
+.pm-footer-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.pm-footer-nombre {
+    font-family: var(--pm-font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--pm-text-inverse);
+}
+
+/* Footer schedule / horarios */
+.pm-footer-horarios {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--pm-space-2);
+}
+
+.pm-footer-horarios li {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.pm-footer-dia {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.pm-footer-hora {
+    font-size: 0.8125rem;
+}
+
+.pm-footer-cerrado {
+    color: var(--pm-rosa);
+    font-weight: 500;
+}
+
+/* Footer contacto list */
+.pm-footer-contacto {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--pm-space-3);
+}
+
+.pm-footer-contacto li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--pm-space-2);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.pm-footer-contacto li i {
+    color: var(--pm-arena);
+    font-size: 1rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.pm-footer-contacto a {
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: color var(--pm-transition-base);
+}
+
+.pm-footer-contacto a:hover {
+    color: var(--pm-dorado);
+}
+
+/* Footer divider */
+.pm-footer-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: var(--pm-space-6) 0 var(--pm-space-4);
+}
+
+/* Footer copyright */
+.pm-footer-copy {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Footer bottom — center aligned */
+.pm-footer-bottom {
+    text-align: center;
+    justify-content: center;
+}
+
+
+/* =================================================================
+   14. GLOBAL BUTTON UPGRADES
+   Shimmer overlay on hover, dramatic glow, rounder radius.
+   ================================================================= */
+
+/* All buttons — slightly more rounded */
+.btn-pm,
+.btn-pm-dorado,
+.btn-pm-outline,
+.btn-pm-whatsapp,
+.btn-pm-ghost {
+    border-radius: var(--pm-v3-btn-radius);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* Shimmer sweep on hover — light reflection */
+.btn-pm::before,
+.btn-pm-dorado::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        110deg,
+        transparent 0%,
+        transparent 30%,
+        rgba(255, 255, 255, 0.2) 45%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.2) 55%,
+        transparent 70%,
+        transparent 100%
+    );
+    z-index: 1;
+    transition: left 500ms cubic-bezier(0.23, 1, 0.32, 1);
+    pointer-events: none;
+}
+
+.btn-pm:hover::before,
+.btn-pm-dorado:hover::before {
+    left: 100%;
+}
+
+/* btn-pm-dorado — more dramatic glow shadow on hover */
+.btn-pm-dorado:hover {
+    box-shadow:
+        0 6px 24px rgba(183, 116, 102, 0.5),
+        0 0 0 1px rgba(255, 225, 175, 0.15),
+        0 0 40px rgba(138, 118, 80, 0.12);
+    transform: translateY(-2px);
+    filter: brightness(1.12);
+}
+
+/* Outline buttons — warm fill on hover */
+.btn-pm-outline {
+    border-radius: var(--pm-v3-btn-radius);
+}
+
+.btn-pm-outline:hover {
+    box-shadow: 0 4px 16px rgba(138, 118, 80, 0.15);
+}
+
+/* Button sizes — maintain radius */
+.btn-pm-sm {
+    border-radius: 10px;
+}
+
+.btn-pm-lg {
+    border-radius: 14px;
+}
+
+
+/* =================================================================
+   15. KEYFRAME ANIMATIONS (v3.0)
+   New animations for the premium layer.
+   ================================================================= */
+
+/* Organic floating shape movement */
+@keyframes pmV3FloatOrganic {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+    }
+    25% {
+        transform: translate(15px, -20px) rotate(3deg);
+        border-radius: 50% 50% 40% 60% / 40% 50% 60% 50%;
+    }
+    50% {
+        transform: translate(-10px, -10px) rotate(-2deg);
+        border-radius: 40% 60% 70% 30% / 60% 30% 70% 40%;
+    }
+    75% {
+        transform: translate(5px, 15px) rotate(1deg);
+        border-radius: 55% 45% 35% 65% / 45% 55% 45% 55%;
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+        border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+    }
+}
+
+/* Badge shimmer — repeating light sweep */
+@keyframes pmV3BadgeShimmer {
+    0% {
+        background-position: -300% center;
+    }
+    100% {
+        background-position: 300% center;
+    }
+}
+
+/* Subtle price tooltip pulse (less aggressive than pmPriceGlow) */
+@keyframes pmV3PriceSubtle {
+    0%, 100% {
+        box-shadow:
+            0 2px 8px rgba(255, 225, 175, 0.35),
+            0 0 0 3px rgba(255, 225, 175, 0.15);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow:
+            0 2px 12px rgba(255, 225, 175, 0.45),
+            0 0 0 6px rgba(255, 225, 175, 0.08);
+        transform: scale(1.04);
+    }
+}
+
+/* Floating particles drift */
+@keyframes pmV3FloatParticles {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.6;
+    }
+    25% {
+        transform: translateY(-8px) translateX(4px);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-3px) translateX(-6px);
+        opacity: 0.5;
+    }
+    75% {
+        transform: translateY(-12px) translateX(2px);
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.6;
+    }
+}
+
+/* Gradient badge animation for promo */
+@keyframes pmV3GradientBadge {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+
+/* =================================================================
+   15b. PREMIUM AUTH MODALS — SweetAlert2 Login/Register
+   Rosewood accent, fixed password toggle, centered forgot link,
+   refined inputs and buttons for auth modals.
+   ================================================================= */
+
+/* --- Modal Container: Rosewood top accent + warm shadow --- */
+.swal2-popup.pm-modal {
+    border-top: 4px solid var(--pm-v3-rosewood) !important;
+    border-radius: 16px !important;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.12),
+        0 8px 24px rgba(162, 89, 106, 0.08) !important;
+}
+
+/* --- Title: Warm heading with rosewood icon tint --- */
+.pm-modal .swal2-title {
+    font-size: 1.4rem !important;
+    letter-spacing: -0.01em !important;
+}
+
+.pm-modal .swal2-title .bi {
+    color: var(--pm-v3-rosewood);
+}
+
+/* --- HTML Container: Ensure form doesn't clip --- */
+.pm-modal .swal2-html-container {
+    overflow: visible !important;
+    padding: 0 8px !important;
+}
+
+/* --- Form Group: Better spacing --- */
+.pm-modal .pm-form-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.pm-modal .pm-form-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--pm-tierra, #957C62);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+}
+
+/* --- Inputs: Refined border + rosewood focus ring --- */
+.pm-modal .input-pm {
+    border: 1.5px solid var(--pm-border, #E8E0D0);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 0.92rem;
+    background-color: var(--pm-surface, #FFFFFF);
+    color: var(--pm-text, #3F352B);
+    transition:
+        border-color 200ms ease,
+        box-shadow 200ms ease;
+}
+
+.pm-modal .input-pm:focus {
+    border-color: var(--pm-v3-rosewood) !important;
+    box-shadow: 0 0 0 3px rgba(162, 89, 106, 0.12) !important;
+    outline: none;
+}
+
+/* --- Password Wrap: Contain toggle properly --- */
+.pm-modal .pm-input-password-wrap {
+    position: relative;
+    display: block;
+}
+
+.pm-modal .pm-input-password-wrap .input-pm {
+    padding-right: 48px;
+}
+
+/* --- FIX: Password toggle eye icon escaping input box --- */
+.pm-modal .pm-toggle-pass {
+    position: absolute !important;
+    right: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 34px !important;
+    height: 34px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    border-radius: 6px !important;
+    background: transparent !important;
+    color: var(--pm-text-muted, #746754) !important;
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    z-index: 2;
+    outline: none !important;
+    box-shadow: none !important;
+    transition:
+        color 200ms ease,
+        background 200ms ease !important;
+}
+
+.pm-modal .pm-toggle-pass:focus,
+.pm-modal .pm-toggle-pass:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.pm-modal .pm-toggle-pass:hover {
+    background: rgba(162, 89, 106, 0.1) !important;
+    color: var(--pm-v3-rosewood) !important;
+    transform: translateY(-50%) !important;
+}
+
+.pm-modal .pm-toggle-pass:active {
+    background: rgba(162, 89, 106, 0.18) !important;
+    transform: translateY(-50%) !important;
+}
+
+/* --- Forgot Password: CENTERED --- */
+.pm-modal .pm-form-footer {
+    text-align: center !important;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.pm-modal .pm-link-forgot {
+    color: var(--pm-v3-rosewood);
+    font-size: 0.84rem;
+    font-weight: 500;
+}
+
+.pm-modal .pm-link-forgot:hover {
+    color: var(--pm-v3-rosewood-hover);
+}
+
+.pm-modal .pm-link-forgot::after {
+    background: var(--pm-v3-rosewood);
+}
+
+/* --- Confirm Button: Rosewood gradient CTA --- */
+.pm-modal .swal2-confirm {
+    background: linear-gradient(
+        135deg,
+        var(--pm-v3-rosewood) 0%,
+        var(--pm-v3-rosewood-hover) 100%
+    ) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 10px 28px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    box-shadow: 0 4px 16px var(--pm-v3-rosewood-glow) !important;
+    transition:
+        box-shadow 250ms ease,
+        transform 200ms ease,
+        filter 200ms ease !important;
+}
+
+.pm-modal .swal2-confirm:hover {
+    box-shadow: 0 6px 24px var(--pm-v3-rosewood-glow) !important;
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+}
+
+.pm-modal .swal2-confirm:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px var(--pm-v3-rosewood-glow) !important;
+}
+
+/* --- Cancel Button: Rosewood outline on hover --- */
+.pm-modal .swal2-cancel:hover {
+    border-color: var(--pm-v3-rosewood) !important;
+    color: var(--pm-v3-rosewood) !important;
+}
+
+/* --- Validation Message: Rosewood-tinted error bar --- */
+.pm-modal .swal2-validation-message {
+    background: rgba(162, 89, 106, 0.07) !important;
+    border: 1px solid rgba(162, 89, 106, 0.18) !important;
+    border-left: 3px solid var(--pm-v3-rosewood) !important;
+    color: var(--pm-v3-rosewood-hover) !important;
+    border-radius: 8px !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    margin: 12px 0 0 !important;
+    padding: 10px 14px !important;
+}
+
+.pm-modal .swal2-validation-message::before {
+    color: var(--pm-v3-rosewood) !important;
+}
+
+
+/* =================================================================
+   16. RESPONSIVE — Mobile Premium Feel
+   Adjustments for tablets and mobile to maintain luxury feel.
+   ================================================================= */
+
+/* ---- Tablet and below (991.98px) ---- */
+@media (max-width: 991.98px) {
+
+    /* Hero title — scale down gracefully */
+    .pm-hero-title {
+        font-size: clamp(2rem, 5.5vw, 3.5rem);
+        line-height: 1.12;
+    }
+
+    /* Floating organic shapes — smaller and less intrusive */
+    .pm-hero-section::before {
+        width: clamp(120px, 20vw, 220px);
+        height: clamp(120px, 20vw, 220px);
+        opacity: 0.6;
+    }
+
+    .pm-hero-section::after {
+        width: clamp(100px, 18vw, 180px);
+        height: clamp(100px, 18vw, 180px);
+        opacity: 0.5;
+    }
+
+    /* About image offset border — reduce offset */
+    .pm-about-img-placeholder::after {
+        top: 8px;
+        left: 8px;
+        right: -8px;
+        bottom: -8px;
+    }
+
+    /* Section titles — slightly smaller */
+    .pm-section-title {
+        font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    }
+
+    /* CTA floating particles — simplify */
+    .pm-cta-section::after {
+        opacity: 0.4;
+    }
+
+    /* Footer social — larger touch targets */
+    .pm-footer-red-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    /* Gallery inner border — hide on tablet */
+    .pm-gallery-item::before {
+        display: none;
+    }
+
+    /* Testimonial quote — slightly smaller */
+    .pm-testimonial-quote-icon {
+        font-size: 5rem;
+    }
+}
+
+/* ---- Mobile (575.98px and below) ---- */
+@media (max-width: 575.98px) {
+
+    /* Hero — mobile optimized */
+    .pm-hero-title {
+        font-size: clamp(1.75rem, 8vw, 2.5rem);
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+    }
+
+    .pm-hero-subtitle {
+        font-size: 0.9375rem;
+    }
+
+    /* Hide floating shapes on small screens — performance */
+    .pm-hero-section::before,
+    .pm-hero-section::after {
+        display: none;
+    }
+
+    /* Section title — mobile scale */
+    .pm-section-title {
+        font-size: clamp(1.375rem, 5vw, 1.75rem);
+    }
+
+    .pm-section-subtitle {
+        font-size: 0.875rem;
+        letter-spacing: 0.01em;
+    }
+
+    /* About offset border — hide on mobile for clean look */
+    .pm-about-img-placeholder::after {
+        display: none;
+    }
+
+    /* Service cards — maintain premium feel */
+    .pm-service-card:hover {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    /* Gallery overlay — always show subtle hint */
+    .pm-gallery-overlay {
+        opacity: 0.3;
+    }
+
+    .pm-gallery-item:hover .pm-gallery-overlay {
+        opacity: 1;
+    }
+
+    /* Testimonial — compact editorial */
+    .pm-testimonial-quote-icon {
+        font-size: 4rem;
+    }
+
+    .pm-testimonial-text {
+        font-size: 1rem;
+        line-height: 1.75;
+    }
+
+    /* CTA particles — hide on mobile */
+    .pm-cta-section::after {
+        display: none;
+    }
+
+    /* Promo discount — slightly smaller */
+    .pm-promo-discount {
+        font-size: 3rem;
+    }
+
+    /* Contact gradient — more subtle on mobile */
+    #contacto.pm-section {
+        background: var(--pm-marfil);
+    }
+
+    /* Buttons — slightly smaller radius on mobile */
+    .btn-pm,
+    .btn-pm-dorado,
+    .btn-pm-outline,
+    .btn-pm-whatsapp,
+    .btn-pm-ghost {
+        border-radius: 10px;
+    }
+
+    /* Footer headings — left aligned */
+    .pm-footer-titulo::after {
+        width: 20px;
+    }
+
+    /* Footer social — proper mobile size */
+    .pm-footer-red-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+}
+
+/* ---- Small mobile (380px and below) ---- */
+@media (max-width: 380px) {
+    .pm-hero-title {
+        font-size: 1.625rem;
+    }
+
+    .pm-section-title {
+        font-size: 1.25rem;
+    }
+
+    .pm-testimonial-quote-icon {
+        font-size: 3rem;
+    }
+
+    .pm-promo-discount {
+        font-size: 2.5rem;
+    }
+}
+
+
+/* =================================================================
+   17. REDUCED MOTION SUPPORT
+   Disable all v3.0 animations for users who prefer reduced motion.
+   ================================================================= */
+@media (prefers-reduced-motion: reduce) {
+    /* Disable floating organic shapes */
+    .pm-hero-section::before,
+    .pm-hero-section::after {
+        animation: none;
+    }
+
+    /* Disable badge shimmer */
+    .pm-hero-badge {
+        animation: none;
+    }
+
+    /* Disable price tooltip pulse */
+    .pm-price-tooltip {
+        animation: none;
+    }
+
+    /* Disable CTA particles drift */
+    .pm-cta-section::after {
+        animation: none;
+    }
+
+    /* Disable promo badge gradient animation */
+    .pm-promo-badge {
+        animation: none;
+    }
+
+    /* Disable button shimmer sweep */
+    .btn-pm::before,
+    .btn-pm-dorado::before {
+        display: none;
+    }
+
+    /* Disable all v3 transforms on hover */
+    .pm-contact-item:hover .pm-contact-icon,
+    .pm-footer-red-btn:hover,
+    .pm-team-social .pm-social-icon:hover {
+        transform: none;
+    }
+
+    /* Keep static versions of decorative elements */
+    .pm-about-img-placeholder:hover::after {
+        transform: none;
+    }
+}
+
+/* =================================================================
+   18. GALLERY LIGHTBOX — Full-screen image viewer
+   Warm overlay, smooth open/close, nav arrows.
+   ================================================================= */
+
+/* Lightbox backdrop */
+.pm-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(44, 24, 16, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    cursor: pointer;
+}
+.pm-lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Lightbox content — the image/placeholder */
+.pm-lightbox-content {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+        0 24px 64px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 225, 175, 0.15);
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+}
+.pm-lightbox.active .pm-lightbox-content {
+    transform: scale(1);
+}
+
+.pm-lightbox-content img,
+.pm-lightbox-content .pm-lightbox-placeholder {
+    display: block;
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+}
+
+.pm-lightbox-placeholder {
+    width: 70vw;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--pm-font-heading);
+    font-size: 2rem;
+    color: rgba(255, 248, 240, 0.7);
+    letter-spacing: 0.05em;
+}
+
+/* Close button */
+.pm-lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border: 2px solid rgba(255, 225, 175, 0.3);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 248, 240, 0.9);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 2;
+}
+.pm-lightbox-close:hover {
+    background: rgba(255, 225, 175, 0.15);
+    border-color: var(--pm-dorado);
+    color: var(--pm-dorado);
+    transform: rotate(90deg);
+}
+
+/* Nav arrows */
+.pm-lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border: 2px solid rgba(255, 225, 175, 0.2);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 248, 240, 0.8);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 2;
+}
+.pm-lightbox-nav:hover {
+    background: rgba(255, 225, 175, 0.12);
+    border-color: rgba(255, 225, 175, 0.4);
+    color: var(--pm-dorado);
+}
+.pm-lightbox-prev { left: 20px; }
+.pm-lightbox-next { right: 20px; }
+
+/* Counter */
+.pm-lightbox-counter {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--pm-font-ui);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(255, 248, 240, 0.6);
+    letter-spacing: 0.1em;
+    z-index: 2;
+}
+
+/* Gallery cursor change on hover when lightbox is available */
+.pm-gallery-item {
+    cursor: pointer;
+}
+
+@media (max-width: 575.98px) {
+    .pm-lightbox-nav {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    .pm-lightbox-prev { left: 10px; }
+    .pm-lightbox-next { right: 10px; }
+
+    .pm-lightbox-placeholder {
+        width: 90vw;
+        height: 50vh;
+        font-size: 1.5rem;
+    }
+}
+
+
+/* =================================================================
+   19. BOTTOM SHEET MOBILE MENU — Warm Luxury Action Sheet
+   Modern slide-up menu from bottom with drag handle.
+   ================================================================= */
+
+/* ── Bottom sheet panel ─────────────────────────────────── */
+.offcanvas.offcanvas-bottom.pm-bottom-sheet {
+    background: linear-gradient(180deg,
+        #5A4A38 0%,
+        #6C5842 40%,
+        #7A654F 100%
+    ) !important;
+    border-top: 1px solid rgba(255, 225, 175, 0.15) !important;
+    border-left: none;
+    border-radius: 24px 24px 0 0 !important;
+    box-shadow: 0 -8px 40px rgba(44, 24, 16, 0.5);
+    max-height: 85vh !important;
+    height: auto !important;
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Texture overlay */
+.offcanvas.offcanvas-bottom.pm-bottom-sheet::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 24px 24px 0 0;
+    background:
+        url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='1' fill='rgba(255,225,175,0.04)'/%3E%3C/svg%3E") repeat;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.offcanvas.offcanvas-bottom.pm-bottom-sheet > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Drag handle ────────────────────────────────────────── */
+.pm-sheet-handle {
+    display: flex;
+    justify-content: center;
+    padding: 12px 0 4px;
+}
+
+.pm-sheet-handle-bar {
+    display: block;
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 225, 175, 0.3);
+    transition: background 0.2s;
+}
+
+.pm-bottom-sheet:hover .pm-sheet-handle-bar {
+    background: rgba(255, 225, 175, 0.5);
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+.offcanvas.pm-bottom-sheet .pm-offcanvas-header {
+    border-bottom: 1px solid rgba(255, 225, 175, 0.12);
+    padding: 8px 24px 16px;
+    background: transparent;
+}
+
+.pm-offcanvas-title {
+    font-family: var(--pm-font-heading);
+    font-weight: 700;
+    color: #fff;
+    font-size: 1.125rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pm-offcanvas-title .pm-navbar-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    filter: drop-shadow(0 0 6px rgba(255, 225, 175, 0.4));
+}
+
+/* Close button */
+.offcanvas.offcanvas-bottom.pm-bottom-sheet .btn-close-white {
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+.offcanvas.offcanvas-bottom.pm-bottom-sheet .btn-close-white:hover {
+    opacity: 1;
+}
+
+/* ── Nav links — grid layout for bottom sheet ───────────── */
+.offcanvas.pm-bottom-sheet .navbar-nav.pm-offcanvas-nav {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 8px 20px;
+    list-style: none;
+    margin: 0;
+    flex-direction: unset;
+}
+
+.offcanvas.pm-bottom-sheet .pm-offcanvas-link {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 14px 8px;
+    font-family: var(--pm-font-ui);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-left: none;
+    border-radius: 14px;
+    transition: all 0.25s ease;
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.offcanvas.pm-bottom-sheet .pm-offcanvas-link:hover,
+.offcanvas.pm-bottom-sheet .pm-offcanvas-link:focus {
+    color: #fff;
+    background: rgba(255, 225, 175, 0.1);
+}
+.offcanvas.pm-bottom-sheet .pm-offcanvas-link:active {
+    transform: scale(0.96);
+    background: rgba(255, 225, 175, 0.15);
+}
+.offcanvas.pm-bottom-sheet .pm-offcanvas-link.active {
+    color: #fff;
+    background: rgba(255, 225, 175, 0.14);
+    font-weight: 600;
+    box-shadow: inset 0 0 0 1px rgba(255, 225, 175, 0.2);
+}
+
+.offcanvas.pm-bottom-sheet .pm-offcanvas-link i {
+    font-size: 1.375rem;
+    width: auto;
+    opacity: 0.8;
+    transition: all 0.25s ease;
+}
+
+.offcanvas.pm-bottom-sheet .pm-offcanvas-link:hover i,
+.offcanvas.pm-bottom-sheet .pm-offcanvas-link.active i {
+    opacity: 1;
+    color: var(--pm-dorado);
+}
+
+.offcanvas.pm-bottom-sheet .pm-offcanvas-link span {
+    line-height: 1.2;
+}
+
+/* ── Divider ────────────────────────────────────────────── */
+.pm-offcanvas-divider {
+    border-color: rgba(255, 225, 175, 0.12);
+    margin: 8px 24px;
+}
+
+/* ── Action buttons ─────────────────────────────────────── */
+.pm-offcanvas-actions {
+    padding: 0 20px;
+}
+
+.pm-offcanvas-actions .btn-pm {
+    background: linear-gradient(135deg, var(--pm-rosa) 0%, #C97A6B 100%);
+    border: none;
+    font-family: var(--pm-font-ui);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 16px rgba(183, 116, 102, 0.35);
+    transition: all 0.3s ease;
+    border-radius: 14px;
+    padding: 14px 20px;
+    -webkit-tap-highlight-color: transparent;
+}
+.pm-offcanvas-actions .btn-pm:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+.pm-offcanvas-actions .btn-pm:active {
+    transform: scale(0.98);
+}
+
+.pm-offcanvas-actions .btn-pm-outline {
+    border-color: rgba(255, 225, 175, 0.25);
+    color: rgba(255, 255, 255, 0.85);
+    font-family: var(--pm-font-ui);
+    font-weight: 500;
+    transition: all 0.25s ease;
+    border-radius: 14px;
+    padding: 12px 20px;
+    -webkit-tap-highlight-color: transparent;
+}
+.pm-offcanvas-actions .btn-pm-outline:hover {
+    background: rgba(255, 225, 175, 0.1);
+    border-color: rgba(255, 225, 175, 0.4);
+    color: #fff;
+}
+
+.pm-offcanvas-actions .btn-pm-ghost {
+    background: transparent;
+    border: 1px solid rgba(168, 95, 82, 0.3);
+    color: rgba(255, 200, 180, 0.8);
+    font-family: var(--pm-font-ui);
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 14px;
+    transition: all 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.pm-offcanvas-actions .btn-pm-ghost:hover {
+    background: rgba(168, 95, 82, 0.12);
+    border-color: rgba(168, 95, 82, 0.5);
+    color: #fff;
+}
+
+/* ── Info row — compact horizontal layout ───────────────── */
+.pm-offcanvas-info {
+    padding: 0 20px 8px;
+}
+
+.pm-sheet-info-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    padding: 4px 0;
+}
+
+.pm-offcanvas-horario,
+.pm-offcanvas-telefono,
+.pm-offcanvas-whatsapp {
+    font-family: var(--pm-font-ui);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+.pm-offcanvas-info a {
+    color: rgba(255, 225, 175, 0.65);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.pm-offcanvas-info a:hover {
+    color: var(--pm-dorado);
+}
+.pm-offcanvas-info i {
+    color: rgba(255, 225, 175, 0.35);
+    font-size: 0.75rem;
+}
+
+/* ── Backdrop — warmer ──────────────────────────────────── */
+.offcanvas-backdrop.show {
+    background-color: rgba(44, 24, 16, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+/* ── Bootstrap offcanvas-bottom override for smooth animation ── */
+.offcanvas.pm-bottom-sheet.offcanvas-bottom {
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+
+/* =================================================================
+   20. ENHANCED PRICE TOOLTIP HOVER
+   Intensified glow + scale on interaction.
+   ================================================================= */
+.pm-price-tooltip:hover {
+    animation: none;
+    transform: scale(1.2);
+    box-shadow:
+        0 4px 20px rgba(255, 225, 175, 0.6),
+        0 0 0 4px rgba(255, 225, 175, 0.2),
+        0 0 40px rgba(255, 225, 175, 0.15);
+    background: linear-gradient(135deg, var(--pm-dorado), #FFD280);
+    transition: all 0.3s ease;
+}
+
+.pm-price-tooltip:active {
+    transform: scale(1.1);
+}
+
+
+/* ========= END PREMIUM REDESIGN v3.0 ========= */

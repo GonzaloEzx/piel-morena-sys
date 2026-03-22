@@ -1,0 +1,810 @@
+/* ============================================================
+   PIEL MORENA — Premium Admin Panel v1.0
+   Warm Luxury Dashboard — overlay sobre admin.css
+   Aesthetic: Rich warmth, glassmorphism depth, golden accents
+   ============================================================ */
+
+/* ── Premium Variables ────────────────────────────────────── */
+:root {
+  --pma-gold-glow: rgba(255, 225, 175, 0.35);
+  --pma-warm-glass: rgba(255, 248, 240, 0.65);
+  --pma-warm-glass-strong: rgba(255, 248, 240, 0.85);
+  --pma-sidebar-start: #5A4A38;
+  --pma-sidebar-mid: #6C5842;
+  --pma-sidebar-end: #7A654F;
+  --pma-accent-line: linear-gradient(90deg, var(--pm-dorado), var(--pm-bronce), var(--pm-rosa));
+  --pma-card-shine: linear-gradient(135deg, rgba(255,225,175,0.08) 0%, transparent 60%);
+  --pma-surface-elevated: rgba(255, 255, 255, 0.92);
+  --pma-border-warm: rgba(219, 206, 165, 0.5);
+  --pma-shadow-warm: 0 4px 24px rgba(108, 93, 67, 0.10);
+  --pma-shadow-glow: 0 0 20px rgba(255, 225, 175, 0.15);
+  --pma-radius: 16px;
+  --pma-radius-sm: 10px;
+}
+
+/* ── Body refined background ─────────────────────────────── */
+.pm-admin-body {
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(219,206,165,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(183,116,102,0.08) 0%, transparent 50%),
+    var(--pm-surface-warm);
+}
+
+/* ============================================================
+   1. SIDEBAR — Rich depth + golden accents
+   ============================================================ */
+.pm-sidebar {
+  background:
+    linear-gradient(180deg,
+      var(--pma-sidebar-start) 0%,
+      var(--pma-sidebar-mid) 40%,
+      var(--pma-sidebar-end) 100%);
+  box-shadow:
+    4px 0 24px rgba(74, 64, 52, 0.20),
+    inset -1px 0 0 rgba(255,225,175,0.08);
+}
+
+/* Subtle texture overlay */
+.pm-sidebar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q35 15 30 25 Q25 15 30 5z' fill='rgba(255,225,175,0.03)'/%3E%3C/svg%3E") repeat;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pm-sidebar > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Brand shine */
+.pm-sidebar-brand {
+  border-bottom-color: rgba(255,225,175,0.15);
+  background: linear-gradient(135deg, rgba(255,225,175,0.06) 0%, transparent 100%);
+}
+
+.pm-sidebar-emoji {
+  filter: drop-shadow(0 0 6px rgba(255,225,175,0.4));
+  transition: transform 0.3s ease;
+}
+.pm-sidebar-brand:hover .pm-sidebar-emoji {
+  transform: scale(1.15) rotate(-5deg);
+}
+
+.pm-sidebar-nombre {
+  background: linear-gradient(135deg, #fff 40%, var(--pm-dorado) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pm-sidebar-badge {
+  background: linear-gradient(135deg, rgba(255,225,175,0.3), rgba(255,225,175,0.15));
+  border: 1px solid rgba(255,225,175,0.2);
+  backdrop-filter: blur(4px);
+}
+
+/* Nav links — warm hover glow */
+.pm-sidebar-link {
+  border-left-width: 3px;
+  border-radius: 0 8px 8px 0;
+  margin: 2px 8px 2px 0;
+  transition: all 0.25s ease;
+}
+
+.pm-sidebar-link:hover {
+  background: rgba(255,225,175,0.10);
+  border-left-color: var(--pm-dorado);
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255,225,175,0.3);
+}
+
+.pm-sidebar-link.active {
+  background: linear-gradient(90deg, rgba(255,225,175,0.18) 0%, rgba(255,225,175,0.05) 100%);
+  border-left-color: var(--pm-dorado);
+  box-shadow: inset 3px 0 8px rgba(255,225,175,0.15);
+}
+
+.pm-sidebar-link.active i {
+  color: var(--pm-dorado);
+  filter: drop-shadow(0 0 4px rgba(255,225,175,0.5));
+}
+
+/* Dividers — gold dot accent */
+.pm-sidebar-divider {
+  color: rgba(255,225,175,0.45);
+  position: relative;
+  padding-left: 28px;
+  list-style: none !important;
+}
+.pm-sidebar-divider::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--pm-dorado);
+  opacity: 0.6;
+  transform: translateY(25%);
+}
+.pm-sidebar-item {
+  list-style: none !important;
+}
+
+/* Footer */
+.pm-sidebar-footer {
+  border-top-color: rgba(255,225,175,0.12);
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.08) 100%);
+}
+
+/* ============================================================
+   2. TOP BAR — Warm accent line
+   ============================================================ */
+.pm-topbar {
+  background: var(--pma-surface-elevated);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: none;
+  box-shadow:
+    0 1px 0 var(--pma-border-warm),
+    var(--pm-shadow-sm);
+  position: relative;
+}
+
+/* Golden accent line under topbar */
+.pm-topbar::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--pma-accent-line);
+  opacity: 0.5;
+}
+
+.pm-topbar-title {
+  background: linear-gradient(135deg, var(--pm-text-heading) 60%, var(--pm-bronce));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pm-topbar-user {
+  border-color: var(--pma-border-warm);
+  background: linear-gradient(135deg, #fff, var(--pm-marfil));
+  border-radius: var(--pma-radius-sm);
+  transition: all 0.25s ease;
+}
+.pm-topbar-user:hover {
+  border-color: var(--pm-bronce);
+  box-shadow: var(--pma-shadow-glow);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   3. STAT CARDS — Gradient backgrounds + shimmer
+   ============================================================ */
+.pm-stat-card {
+  border: 1px solid var(--pma-border-warm);
+  border-radius: var(--pma-radius);
+  background: linear-gradient(135deg, #fff 0%, var(--pm-marfil) 100%);
+  box-shadow: var(--pma-shadow-warm);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Diagonal shine on hover */
+.pm-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,225,175,0.15) 45%,
+    rgba(255,225,175,0.25) 50%,
+    rgba(255,225,175,0.15) 55%,
+    transparent 60%
+  );
+  transition: left 0.6s ease;
+  z-index: 1;
+}
+.pm-stat-card:hover::before {
+  left: 100%;
+}
+
+.pm-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    var(--pma-shadow-warm),
+    var(--pma-shadow-glow);
+  border-color: rgba(255,225,175,0.5);
+}
+
+/* Stat icon — larger, richer */
+.pm-stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  font-size: 1.375rem;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
+}
+.pm-stat-card:hover .pm-stat-icon {
+  transform: scale(1.08);
+}
+
+.pm-stat-icon.bg-bronce {
+  background: linear-gradient(135deg, rgba(138,118,80,0.15), rgba(138,118,80,0.08));
+  box-shadow: 0 2px 8px rgba(138,118,80,0.12);
+}
+.pm-stat-icon.bg-verde {
+  background: linear-gradient(135deg, rgba(142,151,125,0.2), rgba(142,151,125,0.1));
+  box-shadow: 0 2px 8px rgba(142,151,125,0.12);
+}
+.pm-stat-icon.bg-rosa {
+  background: linear-gradient(135deg, rgba(183,116,102,0.15), rgba(183,116,102,0.08));
+  box-shadow: 0 2px 8px rgba(183,116,102,0.12);
+}
+.pm-stat-icon.bg-dorado {
+  background: linear-gradient(135deg, rgba(255,225,175,0.35), rgba(255,225,175,0.15));
+  box-shadow: 0 2px 8px rgba(255,225,175,0.2);
+}
+
+.pm-stat-value {
+  position: relative;
+  z-index: 2;
+}
+.pm-stat-label {
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================================
+   4. PANEL CARDS — Elevated, warm accents
+   ============================================================ */
+.pm-panel {
+  border: 1px solid var(--pma-border-warm);
+  border-radius: var(--pma-radius);
+  background: var(--pma-surface-elevated);
+  box-shadow: var(--pma-shadow-warm);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: box-shadow 0.3s ease;
+}
+.pm-panel:hover {
+  box-shadow:
+    var(--pma-shadow-warm),
+    0 0 0 1px rgba(219,206,165,0.3);
+}
+
+/* Panel header — warm accent bar */
+.pm-panel-header {
+  border-bottom: 1px solid var(--pma-border-warm);
+  background: linear-gradient(135deg, rgba(248,244,232,0.5) 0%, transparent 100%);
+  position: relative;
+}
+
+/* Decorative left accent on panel header */
+.pm-panel-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--pma-accent-line);
+  opacity: 0.6;
+}
+
+.pm-panel-title i {
+  color: var(--pm-bronce);
+}
+
+/* ============================================================
+   5. DATATABLES — Refined theme
+   ============================================================ */
+
+/* Search input — warm focus */
+.dataTables_wrapper .dataTables_filter input {
+  border: 1.5px solid var(--pma-border-warm);
+  border-radius: var(--pma-radius-sm);
+  background: var(--pm-marfil);
+  transition: all 0.25s ease;
+}
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color: var(--pm-bronce);
+  background: #fff;
+  box-shadow:
+    0 0 0 3px rgba(138,118,80,0.12),
+    var(--pma-shadow-glow);
+}
+
+/* Table header — gradient */
+table.dataTable thead th {
+  background: linear-gradient(135deg, var(--pm-tierra-dark) 0%, var(--pm-tierra) 100%);
+  padding: 14px 16px;
+  border-bottom: 2px solid var(--pm-bronce) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+table.dataTable thead th:first-child { border-radius: 12px 0 0 0; }
+table.dataTable thead th:last-child  { border-radius: 0 12px 0 0; }
+
+/* Table body — warm hover */
+table.dataTable tbody tr {
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+table.dataTable tbody tr:hover {
+  background: rgba(219,206,165,0.15) !important;
+}
+
+table.dataTable tbody td {
+  border-bottom-color: rgba(219,206,165,0.3);
+}
+
+/* Alternating rows */
+table.dataTable tbody tr:nth-child(even) {
+  background: rgba(248,244,232,0.4);
+}
+
+/* Pagination — rounded, warm */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  border-radius: 8px !important;
+  margin: 0 2px;
+  transition: all 0.2s ease;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: linear-gradient(135deg, var(--pm-bronce), var(--pm-bronce-light)) !important;
+  border-color: transparent !important;
+  box-shadow: 0 2px 8px rgba(138,118,80,0.3);
+}
+
+/* Length select */
+.dataTables_wrapper .dataTables_length select {
+  border-color: var(--pma-border-warm);
+  border-radius: 8px;
+  background: var(--pm-marfil);
+}
+
+/* ============================================================
+   6. STATUS BADGES — Enhanced depth
+   ============================================================ */
+.badge-estado {
+  border: 1px solid transparent;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease;
+}
+.badge-estado:hover {
+  transform: scale(1.05);
+}
+
+.badge-pendiente {
+  background: linear-gradient(135deg, rgba(255,225,175,0.4), rgba(255,225,175,0.2));
+  border-color: rgba(255,225,175,0.5);
+}
+.badge-confirmada {
+  background: linear-gradient(135deg, rgba(138,118,80,0.2), rgba(138,118,80,0.1));
+  border-color: rgba(138,118,80,0.25);
+}
+.badge-completada {
+  background: linear-gradient(135deg, rgba(142,151,125,0.3), rgba(142,151,125,0.15));
+  border-color: rgba(142,151,125,0.3);
+}
+.badge-cancelada {
+  background: linear-gradient(135deg, rgba(168,95,82,0.2), rgba(168,95,82,0.1));
+  border-color: rgba(168,95,82,0.2);
+}
+
+/* ============================================================
+   7. BUTTONS — Warm glow + transitions
+   ============================================================ */
+.pm-admin-body .btn-pm {
+  background: linear-gradient(135deg, var(--pm-bronce), var(--pm-bronce-light));
+  border-radius: var(--pma-radius-sm);
+  box-shadow: 0 2px 8px rgba(138,118,80,0.25);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.pm-admin-body .btn-pm::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+.pm-admin-body .btn-pm:hover::after {
+  transform: translateX(100%);
+}
+.pm-admin-body .btn-pm:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 16px rgba(138,118,80,0.3),
+    var(--pma-shadow-glow);
+}
+
+.pm-admin-body .btn-pm-outline {
+  border-color: var(--pma-border-warm);
+  border-radius: var(--pma-radius-sm);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.pm-admin-body .btn-pm-outline:hover {
+  background: linear-gradient(135deg, var(--pm-bronce), var(--pm-bronce-light));
+  border-color: var(--pm-bronce);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(138,118,80,0.2);
+}
+
+/* Quick access buttons — icon emphasis */
+.pm-admin-content .btn-pm-outline i {
+  transition: transform 0.25s ease;
+}
+.pm-admin-content .btn-pm-outline:hover i {
+  transform: scale(1.15);
+}
+
+/* ============================================================
+   8. MODALS — Glassmorphism + warm borders
+   ============================================================ */
+.pm-admin-body .modal-content {
+  border-radius: 18px;
+  border: 1px solid var(--pma-border-warm);
+  box-shadow:
+    0 24px 64px rgba(74, 64, 52, 0.25),
+    0 0 0 1px rgba(219,206,165,0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.96);
+}
+
+.pm-admin-body .modal-header {
+  background: linear-gradient(135deg, var(--pm-tierra-dark) 0%, var(--pm-tierra) 60%, var(--pm-bronce-light) 100%);
+  border-radius: 18px 18px 0 0;
+  padding: 18px 24px;
+  position: relative;
+}
+
+/* Subtle gold line under header */
+.pm-admin-body .modal-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: var(--pma-accent-line);
+  opacity: 0.4;
+}
+
+.pm-admin-body .modal-body .form-control:focus,
+.pm-admin-body .modal-body .form-select:focus {
+  border-color: var(--pm-bronce);
+  box-shadow:
+    0 0 0 3px rgba(138,118,80,0.12),
+    0 0 12px rgba(255,225,175,0.1);
+}
+
+/* ============================================================
+   9. ACTION BUTTONS (table) — Refined hover
+   ============================================================ */
+.pm-action-btn {
+  border-radius: var(--pma-radius-sm);
+  transition: all 0.25s ease;
+}
+.pm-action-btn:hover {
+  transform: scale(1.1);
+  background: var(--pm-crema);
+}
+.pm-action-btn.edit:hover {
+  background: rgba(138,118,80,0.12);
+  box-shadow: 0 0 8px rgba(138,118,80,0.15);
+}
+.pm-action-btn.delete:hover {
+  background: rgba(168,95,82,0.1);
+  box-shadow: 0 0 8px rgba(168,95,82,0.15);
+}
+
+/* ============================================================
+   10. QUICK LIST (Dashboard) — Enhanced items
+   ============================================================ */
+.pm-quick-item {
+  border-bottom-color: rgba(219,206,165,0.3);
+  padding: 14px 0;
+  transition: background 0.2s ease;
+  border-radius: 8px;
+  margin: 0 -8px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.pm-quick-item:hover {
+  background: rgba(248,244,232,0.6);
+}
+
+.pm-quick-avatar {
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(138,118,80,0.12), rgba(138,118,80,0.05)) !important;
+  border: 1px solid rgba(138,118,80,0.1);
+}
+
+.pm-quick-time {
+  background: linear-gradient(135deg, var(--pm-bronce), var(--pm-bronce-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   11. CHART CONTAINERS — Warm frame
+   ============================================================ */
+.pm-chart-container {
+  border-radius: 8px;
+  padding: 4px;
+}
+
+/* ============================================================
+   12. EMPTY STATE — Refined
+   ============================================================ */
+.pm-empty-state {
+  padding: 56px 24px;
+}
+.pm-empty-state i {
+  color: var(--pm-bronce);
+  opacity: 0.3;
+  font-size: 3.5rem;
+}
+.pm-empty-state p {
+  color: var(--pm-text-muted);
+  font-style: italic;
+}
+
+/* ============================================================
+   13. FORM INPUTS — Premium focus states
+   ============================================================ */
+.pm-admin-content .form-control,
+.pm-admin-content .form-select {
+  border-color: var(--pma-border-warm);
+  background: rgba(255,255,255,0.8);
+  border-radius: var(--pma-radius-sm);
+}
+
+.pm-admin-content .form-control:focus,
+.pm-admin-content .form-select:focus {
+  background: #fff;
+  border-color: var(--pm-bronce);
+  box-shadow:
+    0 0 0 3px rgba(138,118,80,0.1),
+    0 0 16px rgba(255,225,175,0.08);
+}
+
+.pm-admin-content .form-label {
+  position: relative;
+  padding-left: 0;
+}
+
+/* ============================================================
+   14. DROPDOWN MENUS — Warm theme
+   ============================================================ */
+.pm-admin-body .dropdown-menu {
+  border: 1px solid var(--pma-border-warm);
+  border-radius: 12px;
+  box-shadow: var(--pma-shadow-warm);
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 6px;
+  animation: pmaDropIn 0.2s ease;
+}
+
+.pm-admin-body .dropdown-item {
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: var(--pm-font-ui);
+  font-size: 0.8125rem;
+  transition: all 0.2s ease;
+}
+.pm-admin-body .dropdown-item:hover {
+  background: var(--pm-crema);
+  color: var(--pm-bronce-dark);
+}
+
+@keyframes pmaDropIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================
+   15. SCROLLBAR — Custom warm theme
+   ============================================================ */
+.pm-admin-content::-webkit-scrollbar,
+.pm-panel-body::-webkit-scrollbar {
+  width: 6px;
+}
+.pm-admin-content::-webkit-scrollbar-track,
+.pm-panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.pm-admin-content::-webkit-scrollbar-thumb,
+.pm-panel-body::-webkit-scrollbar-thumb {
+  background: rgba(138,118,80,0.2);
+  border-radius: 3px;
+}
+.pm-admin-content::-webkit-scrollbar-thumb:hover,
+.pm-panel-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(138,118,80,0.35);
+}
+
+/* ============================================================
+   16. SWEETALERT2 OVERRIDES — Warm theme
+   ============================================================ */
+.pm-admin-body .swal2-popup {
+  border-radius: 18px;
+  border: 1px solid var(--pma-border-warm);
+  box-shadow: 0 24px 64px rgba(74, 64, 52, 0.25);
+}
+
+.pm-admin-body .swal2-title {
+  font-family: var(--pm-font-heading);
+  color: var(--pm-text-heading);
+}
+
+.pm-admin-body .swal2-html-container {
+  font-family: var(--pm-font-body);
+  color: var(--pm-text-muted);
+}
+
+.pm-admin-body .swal2-confirm {
+  border-radius: var(--pma-radius-sm) !important;
+  font-family: var(--pm-font-ui) !important;
+  font-weight: 600 !important;
+}
+
+.pm-admin-body .swal2-cancel {
+  border-radius: var(--pma-radius-sm) !important;
+  font-family: var(--pm-font-ui) !important;
+}
+
+/* Toast — warm accent */
+.pm-admin-body .swal2-toast {
+  border: 1px solid var(--pma-border-warm);
+  box-shadow: var(--pma-shadow-warm);
+}
+
+/* ============================================================
+   17. LOADING ANIMATION — Warm pulse
+   ============================================================ */
+@keyframes pmaWarmPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.pm-admin-body .pm-stat-value:empty::after,
+.pm-admin-body [id^="stat"]:not(:empty) {
+  /* Static, no animation needed */
+}
+
+/* Skeleton loading placeholder */
+.pma-skeleton {
+  background: linear-gradient(90deg,
+    var(--pm-crema) 25%,
+    var(--pm-marfil) 50%,
+    var(--pm-crema) 75%
+  );
+  background-size: 200% 100%;
+  animation: pmaShimmer 1.5s ease infinite;
+  border-radius: 6px;
+}
+
+@keyframes pmaShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================================
+   18. BADGE GOOGLE/MANUAL — Enhanced
+   ============================================================ */
+.pm-admin-body .badge.bg-danger.bg-opacity-75 {
+  background: linear-gradient(135deg, #EA4335, #DB4437) !important;
+  border: 1px solid rgba(219,68,55,0.3);
+  font-weight: 600;
+}
+
+.pm-admin-body .badge.bg-secondary {
+  background: linear-gradient(135deg, var(--pm-tierra), var(--pm-tierra-dark)) !important;
+  border: 1px solid rgba(149,124,98,0.3);
+}
+
+.pm-admin-body .badge.bg-success {
+  background: linear-gradient(135deg, var(--pm-verde), #7A856A) !important;
+  border: 1px solid rgba(142,151,125,0.3);
+}
+
+/* ============================================================
+   19. RESPONSIVE PREMIUM OVERRIDES
+   ============================================================ */
+@media (max-width: 991.98px) {
+  /* Mobile sidebar — backdrop blur overlay */
+  .pm-sidebar-overlay.show {
+    background: rgba(63, 53, 43, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .pm-sidebar.show {
+    box-shadow: 8px 0 32px rgba(74, 64, 52, 0.35);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .pm-stat-card {
+    border-radius: 12px;
+  }
+
+  .pm-stat-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.15rem;
+  }
+
+  .pm-panel {
+    border-radius: 12px;
+  }
+
+  .pm-panel-header::before {
+    display: none;
+  }
+
+  .pm-topbar::after {
+    height: 1.5px;
+  }
+}
+
+/* ============================================================
+   20. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .pm-stat-card::before,
+  .pm-admin-body .btn-pm::after {
+    display: none;
+  }
+
+  .pm-stat-card,
+  .pm-stat-icon,
+  .pm-action-btn,
+  .pm-admin-body .btn-pm,
+  .pm-admin-body .btn-pm-outline,
+  .pm-topbar-user,
+  .pm-quick-item,
+  .badge-estado,
+  .pm-sidebar-emoji,
+  table.dataTable tbody tr {
+    transition: none !important;
+  }
+
+  .pma-skeleton {
+    animation: none;
+    background: var(--pm-crema);
+  }
+}

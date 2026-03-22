@@ -1,0 +1,5209 @@
+/* =========================================================
+   style.css — Piel Morena Estetica
+   Sistema de diseno: piel-morena design system v1.0
+
+   TABLA DE CONTENIDOS:
+   1. VARIABLES CSS (:root)
+   2. RESET & BASE
+   3. TIPOGRAFIA
+   4. LAYOUT
+      4.1 Secciones generales
+      4.2 Container overrides
+   5. NAVBAR
+   6. HERO
+   7. BOTONES
+   8. CARDS DE SERVICIO
+   9. CARDS DE EQUIPO
+   10. GALERIA
+   11. TESTIMONIOS
+   12. PROMOCIONES
+   13. SECCION RESERVAR (CTA)
+   14. CONTACTO
+   15. FOOTER
+   16. INPUTS & FORMULARIOS
+   17. MODALES SWEETALERT2
+   18. BADGES
+   19. BACK TO TOP
+   20. ANIMACIONES
+   21. UTILIDADES
+   22. RESPONSIVE & MEDIA QUERIES
+   ========================================================= */
+
+
+/* =============================================================
+   1. VARIABLES CSS
+   ============================================================= */
+:root {
+    /* -- Colores Principales -- */
+    --pm-bronce:           #8A7650;
+    --pm-bronce-light:     #957C62;
+    --pm-bronce-dark:      #6C5D43;
+    --pm-tierra:           #957C62;
+    --pm-tierra-dark:      #7A654F;
+    --pm-arena:            #DBCEA5;
+    --pm-arena-light:      #E2B59A;
+    --pm-crema:            #ECE7D1;
+    --pm-marfil:           #F8F4E8;
+
+    /* -- Acentos Funcionales -- */
+    --pm-rosa:             #B77466;
+    --pm-dorado:           #FFE1AF;
+    --pm-verde:            #8E977D;
+    --pm-rojo:             #A85F52;
+    --pm-azul-hielo:       #8E977D;
+    --pm-warning:          #E2B59A;
+
+    /* -- Texto -- */
+    --pm-text:             #3F352B;
+    --pm-text-heading:     #4A4034;
+    --pm-text-muted:       #746754;
+    --pm-text-light:       #9A8C77;
+    --pm-text-inverse:     #F8F4E8;
+
+    /* -- Superficies -- */
+    --pm-surface:          #FFFFFF;
+    --pm-surface-warm:     #F8F4E8;
+    --pm-surface-alt:      #ECE7D1;
+    --pm-surface-hover:    #E6DFC8;
+    --pm-border:           #D8CCAA;
+    --pm-border-light:     #E6DFC8;
+
+    /* -- Gradientes -- */
+    --pm-gradient-hero:    linear-gradient(135deg, #957C62 0%, #8A7650 50%, #FFE1AF 100%);
+    --pm-gradient-footer:  linear-gradient(180deg, #7A654F 0%, #957C62 100%);
+    --pm-gradient-btn:     linear-gradient(135deg, #8A7650 0%, #957C62 100%);
+    --pm-gradient-frio:    linear-gradient(135deg, #8E977D 0%, #B7BEA7 100%);
+    --pm-glass:            rgba(248, 244, 232, 0.85);
+    --pm-glass-border:     1px solid rgba(138, 118, 80, 0.24);
+
+    /* -- Sombras -- */
+    --pm-shadow-sm:        0 2px 8px rgba(74, 64, 52, 0.08);
+    --pm-shadow-md:        0 4px 16px rgba(74, 64, 52, 0.12);
+    --pm-shadow-lg:        0 8px 32px rgba(74, 64, 52, 0.16);
+    --pm-shadow-xl:        0 16px 48px rgba(74, 64, 52, 0.20);
+    --pm-shadow-card:      0 2px 12px rgba(74, 64, 52, 0.10);
+    --pm-shadow-card-hover:0 8px 24px rgba(74, 64, 52, 0.18);
+    --pm-shadow-dorado:    0 4px 16px rgba(183, 116, 102, 0.35);
+
+    /* -- Tipografia -- */
+    --pm-font-heading:     'Playfair Display', Georgia, serif;
+    --pm-font-body:        'Inter', -apple-system, sans-serif;
+    --pm-font-ui:          'Poppins', Helvetica, sans-serif;
+    --pm-leading-tight:    1.2;
+    --pm-leading-normal:   1.6;
+    --pm-leading-relaxed:  1.8;
+    --pm-tracking-tight:   -0.02em;
+    --pm-tracking-normal:  0;
+    --pm-tracking-wide:    0.05em;
+    --pm-tracking-wider:   0.1em;
+
+    /* -- Espaciado (base 8px) -- */
+    --pm-space-1:          0.25rem;
+    --pm-space-2:          0.5rem;
+    --pm-space-3:          0.75rem;
+    --pm-space-4:          1rem;
+    --pm-space-5:          1.5rem;
+    --pm-space-6:          2rem;
+    --pm-space-7:          3rem;
+    --pm-space-8:          4rem;
+    --pm-space-9:          6rem;
+
+    /* -- Border Radius -- */
+    --pm-radius-sm:        6px;
+    --pm-radius-md:        10px;
+    --pm-radius-lg:        16px;
+    --pm-radius-xl:        24px;
+    --pm-radius-full:      9999px;
+
+    /* -- Transiciones -- */
+    --pm-transition-fast:  150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --pm-transition-base:  250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --pm-transition-slow:  400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* -- Iconos -- */
+    --pm-icon-sm:          16px;
+    --pm-icon-md:          20px;
+    --pm-icon-lg:          24px;
+    --pm-icon-xl:          32px;
+    --pm-icon-xxl:         48px;
+
+    /* -- Layout -- */
+    --pm-navbar-height:    80px;
+    --pm-navbar-shrink:    64px;
+}
+
+
+/* =============================================================
+   2. RESET & BASE
+   ============================================================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--pm-font-body);
+    font-size: 1rem;
+    color: var(--pm-text);
+    background-color: var(--pm-surface-warm);
+    line-height: var(--pm-leading-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    color: var(--pm-bronce);
+    text-decoration: none;
+    transition: color var(--pm-transition-base);
+}
+
+a:hover {
+    color: var(--pm-bronce-dark);
+}
+
+ul, ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+}
+
+::selection {
+    background-color: var(--pm-arena);
+    color: var(--pm-tierra-dark);
+}
+
+
+/* =============================================================
+   3. TIPOGRAFIA
+   ============================================================= */
+h1, h2, h3 {
+    font-family: var(--pm-font-heading);
+    color: var(--pm-text-heading);
+    line-height: var(--pm-leading-tight);
+    font-weight: 700;
+    letter-spacing: var(--pm-tracking-tight);
+}
+
+h4, h5, h6 {
+    font-family: var(--pm-font-body);
+    color: var(--pm-text-heading);
+    line-height: var(--pm-leading-tight);
+    font-weight: 600;
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+}
+
+h2 {
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+}
+
+h3 {
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+    font-weight: 600;
+}
+
+h4 {
+    font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+}
+
+h5 {
+    font-size: clamp(1rem, 2vw, 1.125rem);
+}
+
+h6 {
+    font-size: 1rem;
+}
+
+p {
+    font-size: 1rem;
+    color: var(--pm-text);
+    line-height: var(--pm-leading-normal);
+    margin-bottom: var(--pm-space-4);
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+.pm-subtitle {
+    font-family: var(--pm-font-body);
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--pm-text-muted);
+    line-height: var(--pm-leading-relaxed);
+    max-width: 600px;
+}
+
+.pm-caption {
+    font-family: var(--pm-font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: var(--pm-tracking-wide);
+    color: var(--pm-text-muted);
+}
+
+.pm-price {
+    font-family: var(--pm-font-heading);
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    font-weight: 700;
+    color: var(--pm-dorado);
+}
+
+small,
+.pm-small {
+    font-size: 0.875rem;
+    color: var(--pm-text-muted);
+}
+
+
+/* =============================================================
+   4. LAYOUT
+   ============================================================= */
+
+/* -- 4.1 Secciones generales -- */
+.pm-section {
+    padding: var(--pm-space-8) 0;
+    background-color: var(--pm-marfil);
+    position: relative;
+}
+
+.pm-section-alt {
+    padding: var(--pm-space-8) 0;
+    background-color: var(--pm-crema);
+    position: relative;
+}
+
+/* Soft curved transition between sections — organic flow */
+.pm-section-alt::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: inherit;
+    clip-path: ellipse(55% 100% at 50% 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.pm-section-title {
+    font-family: var(--pm-font-heading);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--pm-text-heading);
+    text-align: center;
+    margin-bottom: var(--pm-space-3);
+    letter-spacing: -0.02em;
+}
+
+.pm-section-subtitle {
+    font-family: var(--pm-font-body);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--pm-text-muted);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto var(--pm-space-6);
+    line-height: var(--pm-leading-relaxed);
+}
+
+.pm-divider {
+    display: block;
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--pm-arena), var(--pm-bronce), var(--pm-arena));
+    border: none;
+    margin: 0 auto var(--pm-space-5);
+    border-radius: var(--pm-radius-full);
+    position: relative;
+}
+
+/* Side dots — subtle decorative touch */
+.pm-divider::before,
+.pm-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 5px;
+    height: 5px;
+    background: var(--pm-arena);
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+.pm-divider::before { left: -14px; }
+.pm-divider::after  { right: -14px; }
+
+/* -- 4.2 Container overrides (Bootstrap overrides) -- */
+.container {
+    max-width: 1200px;
+}
+
+.container-narrow {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.container-wide {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+main {
+    min-height: 100vh;
+}
+
+
+/* =============================================================
+   5. NAVBAR
+   ============================================================= */
+.pm-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    padding: var(--pm-space-4) 0;
+    background-color: transparent;
+    transition:
+        background-color var(--pm-transition-slow),
+        box-shadow var(--pm-transition-slow),
+        padding var(--pm-transition-slow),
+        backdrop-filter var(--pm-transition-slow);
+}
+
+/* Scrolled state -- applied via JS */
+.pm-navbar.scrolled {
+    background-color: var(--pm-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: var(--pm-glass-border);
+    box-shadow: var(--pm-shadow-sm);
+    padding: var(--pm-space-2) 0;
+}
+
+/* -- Brand -- */
+.pm-navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--pm-space-2);
+    text-decoration: none;
+}
+
+.pm-navbar-brand-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* Logo image in navbar */
+.pm-navbar-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform var(--pm-transition-base);
+}
+
+.pm-navbar-brand:hover .pm-navbar-logo {
+    transform: scale(1.08);
+}
+
+.pm-navbar-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.pm-navbar-brand-name {
+    font-family: var(--pm-font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--pm-text-inverse);
+    transition: color var(--pm-transition-base);
+}
+
+.pm-navbar-brand-tagline {
+    font-family: var(--pm-font-body);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: var(--pm-tracking-wider);
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    transition: color var(--pm-transition-base);
+}
+
+/* Brand colors on scroll */
+.pm-navbar.scrolled .pm-navbar-brand-name {
+    color: var(--pm-tierra);
+}
+
+.pm-navbar.scrolled .pm-navbar-brand-tagline {
+    color: var(--pm-text-muted);
+}
+
+/* -- Nav Links -- */
+.pm-navbar .nav-link {
+    font-family: var(--pm-font-ui);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.82);
+    padding: var(--pm-space-1) var(--pm-space-3);
+    border-radius: var(--pm-radius-sm);
+    letter-spacing: var(--pm-tracking-wider);
+    transition:
+        color var(--pm-transition-base),
+        background-color var(--pm-transition-base),
+        opacity var(--pm-transition-base);
+    position: relative;
+}
+
+.pm-navbar .nav-link:hover {
+    color: var(--pm-text-inverse);
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+}
+
+.pm-navbar .nav-link.active {
+    color: var(--pm-text-inverse);
+    font-weight: 600;
+}
+
+.pm-navbar .nav-link.active::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -2px;
+    left: var(--pm-space-3);
+    right: var(--pm-space-3);
+    height: 2px;
+    background-color: var(--pm-arena);
+    border-radius: 2px;
+}
+
+/* Nav links on scroll */
+.pm-navbar.scrolled .nav-link {
+    color: var(--pm-text-muted);
+}
+
+.pm-navbar.scrolled .nav-link:hover {
+    color: var(--pm-bronce);
+    background-color: var(--pm-surface-alt);
+}
+
+.pm-navbar.scrolled .nav-link.active {
+    color: var(--pm-tierra);
+}
+
+.pm-navbar.scrolled .nav-link.active::after {
+    background-color: var(--pm-bronce);
+}
+
+/* -- Login / Ingresar button -- */
+.pm-navbar-login-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pm-space-1);
+    background-color: transparent;
+    border: 1.5px solid var(--pm-arena);
+    border-radius: var(--pm-radius-md);
+    color: var(--pm-arena);
+    font-family: var(--pm-font-ui);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: var(--pm-space-1) var(--pm-space-4);
+    cursor: pointer;
+    transition:
+        background-color var(--pm-transition-base),
+        color var(--pm-transition-base),
+        border-color var(--pm-transition-base),
+        transform var(--pm-transition-base);
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.pm-navbar-login-btn:hover {
+    background-color: var(--pm-arena);
+    color: var(--pm-tierra-dark);
+    transform: translateY(-1px);
+}
+
+.pm-navbar.scrolled .pm-navbar-login-btn {
+    border-color: var(--pm-bronce);
+    color: var(--pm-bronce);
+}
+
+.pm-navbar.scrolled .pm-navbar-login-btn:hover {
+    background-color: var(--pm-bronce);
+    color: var(--pm-text-inverse);
+}
+
+/* -- Mobile toggler -- */
+.pm-navbar-toggler {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    color: var(--pm-text-inverse);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color var(--pm-transition-base);
+}
+
+.pm-navbar.scrolled .pm-navbar-toggler {
+    color: var(--pm-text);
+}
+
+/* -- Mobile collapse -- */
+@media (max-width: 991.98px) {
+    .pm-navbar-toggler {
+        display: flex;
+    }
+
+    .pm-navbar .navbar-collapse {
+        background-color: var(--pm-surface);
+        border: 1px solid var(--pm-border);
+        border-radius: var(--pm-radius-md);
+        padding: var(--pm-space-4);
+        margin-top: var(--pm-space-2);
+        box-shadow: var(--pm-shadow-md);
+    }
+
+    .pm-navbar .nav-link {
+        color: var(--pm-text-muted);
+        padding: var(--pm-space-2) var(--pm-space-4);
+        border-radius: var(--pm-radius-sm);
+    }
+
+    .pm-navbar .nav-link:hover,
+    .pm-navbar .nav-link.active {
+        color: var(--pm-bronce);
+        background-color: var(--pm-surface-alt);
+    }
+
+    .pm-navbar .nav-link.active::after {
+        display: none;
+    }
+
+    .pm-navbar-aside {
+        padding-top: var(--pm-space-4);
+        margin-top: var(--pm-space-2);
+        border-top: 1px solid var(--pm-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .pm-navbar-login-btn {
+        border-color: var(--pm-bronce);
+        color: var(--pm-bronce);
+    }
+}
+
+
+/* =============================================================
+   6. HERO SECTION
+   ============================================================= */
+.pm-hero-section {
+    position: relative;
+    width: 100%;
+}
+
+.pm-hero-slide {
+    height: 100vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+.pm-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 120%, rgba(74, 46, 26, 0.45) 0%, transparent 60%),
+        linear-gradient(
+            175deg,
+            rgba(122, 101, 79, 0.30) 0%,
+            rgba(138, 118, 80, 0.48) 35%,
+            rgba(108, 93, 67, 0.65) 100%
+        );
+    z-index: 1;
+}
+
+.pm-hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.pm-hero-title {
+    font-family: var(--pm-font-heading);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 6vw, 3.75rem);
+    color: var(--pm-text-inverse);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.15),
+        0 4px 24px rgba(74, 46, 26, 0.2);
+}
+
+.pm-hero-title strong {
+    color: var(--pm-arena);
+    display: block;
+}
+
+.pm-hero-subtitle {
+    font-family: var(--pm-font-body);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 400;
+    color: var(--pm-arena-light);
+    max-width: 500px;
+    margin: 0 auto var(--pm-space-7);
+    line-height: 1.55;
+    letter-spacing: 0.02em;
+}
+
+.pm-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-family: var(--pm-font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--pm-dorado);
+    background: rgba(138, 118, 80, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 225, 175, 0.2);
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--pm-radius-full);
+    text-transform: uppercase;
+    letter-spacing: var(--pm-tracking-wider);
+    margin-bottom: 1.5rem;
+    animation: pmShimmer 4s linear infinite;
+    background-size: 200% auto;
+    background-image: linear-gradient(
+        90deg,
+        rgba(255, 225, 175, 0.12) 0%,
+        rgba(255, 225, 175, 0.28) 50%,
+        rgba(255, 225, 175, 0.12) 100%
+    );
+}
+
+.pm-hero-ctas {
+    display: flex;
+    gap: var(--pm-space-4);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pm-hero-ctas a {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+/* -- Hero carousel nav -- */
+.pm-hero-nav {
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity var(--pm-transition-slow);
+}
+
+.pm-hero-section:hover .pm-hero-nav,
+.pm-hero-nav:focus {
+    opacity: 0.8;
+}
+
+.pm-hero-nav:hover {
+    opacity: 1;
+}
+
+.pm-hero-nav-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: var(--pm-radius-full);
+    font-size: 1.25rem;
+    color: white;
+    transition: background var(--pm-transition-base);
+}
+
+.pm-hero-nav:hover .pm-hero-nav-icon {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* -- Hero indicators -- */
+.pm-hero-indicators {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.pm-hero-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--pm-radius-full);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: all var(--pm-transition-base);
+}
+
+.pm-hero-indicator.active {
+    background: var(--pm-dorado);
+    border-color: var(--pm-dorado);
+    transform: scale(1.2);
+}
+
+
+/* =============================================================
+   7. BOTONES
+   ============================================================= */
+
+/* -- Base button -- */
+.btn-pm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pm-space-2);
+    background-color: var(--pm-bronce);
+    color: #FFFFFF;
+    border: 2px solid transparent;
+    border-radius: var(--pm-radius-md);
+    padding: 10px 24px;
+    font-family: var(--pm-font-ui);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        background-color var(--pm-transition-base),
+        color var(--pm-transition-base),
+        box-shadow var(--pm-transition-base),
+        transform var(--pm-transition-base),
+        filter var(--pm-transition-base);
+}
+
+.btn-pm:hover {
+    background-color: var(--pm-bronce-light);
+    color: #FFFFFF;
+    box-shadow: var(--pm-shadow-sm);
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.btn-pm:active {
+    background-color: var(--pm-bronce-dark);
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* -- Outline -- */
+.btn-pm-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pm-space-2);
+    background-color: transparent;
+    color: var(--pm-bronce);
+    border: 2px solid var(--pm-bronce);
+    border-radius: var(--pm-radius-md);
+    padding: 10px 24px;
+    font-family: var(--pm-font-ui);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        background-color var(--pm-transition-base),
+        color var(--pm-transition-base),
+        border-color var(--pm-transition-base),
+        transform var(--pm-transition-base);
+}
+
+.btn-pm-outline:hover {
+    background-color: var(--pm-bronce);
+    color: #FFFFFF;
+    transform: translateY(-1px);
+}
+
+.btn-pm-outline:active {
+    background-color: var(--pm-bronce-dark);
+    border-color: var(--pm-bronce-dark);
+    color: #FFFFFF;
+}
+
+/* Outline white variant (for hero) */
+.btn-pm-outline--white {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: var(--pm-text-inverse);
+}
+
+.btn-pm-outline--white:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.8);
+    color: var(--pm-text-inverse);
+}
+
+/* -- Dorado (premium) -- */
+.btn-pm-dorado {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pm-space-2);
+    background: var(--pm-gradient-btn);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--pm-radius-md);
+    padding: 10px 24px;
+    font-family: var(--pm-font-ui);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: var(--pm-shadow-dorado);
+    transition:
+        box-shadow var(--pm-transition-base),
+        transform var(--pm-transition-base),
+        filter var(--pm-transition-base);
+}
+
+.btn-pm-dorado:hover {
+    color: #FFFFFF;
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(183, 116, 102, 0.45);
+    transform: translateY(-2px);
+}
+
+.btn-pm-dorado:active {
+    transform: translateY(0);
+    box-shadow: var(--pm-shadow-dorado);
+}
+
+/* -- WhatsApp -- */
+.btn-pm-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pm-space-2);
+    background-color: #25D366;
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--pm-radius-md);
+    padding: 10px 24px;
+    font-family: var(--pm-font-ui);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        background-color var(--pm-transition-base),
+        transform var(--pm-transition-base),
+        box-shadow var(--pm-transition-base);
+}
+
+.btn-pm-whatsapp:hover {
+    background-color: #1DA851;
+    color: #FFFFFF;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.btn-pm-whatsapp:active {
+    background-color: #189e46;
+    transform: translateY(0);
+}
+
+/* -- Ghost -- */
+.btn-pm-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--pm-space-2);
+    background-color: transparent;
+    color: var(--pm-bronce);
+    border: none;
+    border-radius: var(--pm-radius-md);
+    padding: 10px 24px;
+    font-family: var(--pm-font-ui);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+        background-color var(--pm-transition-base),
+        color var(--pm-transition-base);
+}
+
+.btn-pm-ghost:hover {
+    background-color: var(--pm-crema);
+    color: var(--pm-bronce-dark);
+}
+
+.btn-pm-ghost:active {
+    background-color: var(--pm-surface-hover);
+}
+
+/* -- Button Sizes -- */
+.btn-pm-sm,
+.btn-pm-outline.btn-pm-sm,
+.btn-pm-dorado.btn-pm-sm,
+.btn-pm-whatsapp.btn-pm-sm,
+.btn-pm-ghost.btn-pm-sm {
+    padding: 6px 16px;
+    font-size: 0.8125rem;
+}
+
+.btn-pm-lg,
+.btn-pm-outline.btn-pm-lg,
+.btn-pm-dorado.btn-pm-lg,
+.btn-pm-whatsapp.btn-pm-lg,
+.btn-pm-ghost.btn-pm-lg {
+    padding: 14px 32px;
+    font-size: 1.0625rem;
+}
+
+/* -- Full width -- */
+.btn-pm-block {
+    width: 100%;
+}
+
+
+/* =============================================================
+   8. CARDS DE SERVICIO
+   ============================================================= */
+.pm-service-card {
+    background: var(--pm-surface);
+    border: 1px solid var(--pm-border-light);
+    border-radius: var(--pm-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--pm-shadow-card);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    transition:
+        transform 400ms cubic-bezier(0.23, 1, 0.32, 1),
+        box-shadow 400ms cubic-bezier(0.23, 1, 0.32, 1),
+        border-color var(--pm-transition-slow);
+}
+
+/* Golden accent line — appears on hover */
+.pm-service-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--pm-dorado), var(--pm-bronce));
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 5;
+    border-radius: var(--pm-radius-lg) var(--pm-radius-lg) 0 0;
+}
+
+.pm-service-card:hover::after {
+    transform: scaleX(1);
+}
+
+.pm-service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--pm-shadow-card-hover), 0 0 0 1px rgba(255, 225, 175, 0.12);
+    border-color: var(--pm-arena);
+}
+
+/* -- Image wrapper (matches HTML class .pm-service-img) -- */
+.pm-service-img {
+    position: relative;
+    overflow: hidden;
+}
+
+.pm-service-img-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.8);
+    transition: transform var(--pm-transition-slow);
+}
+
+.pm-service-card:hover .pm-service-img-placeholder {
+    transform: scale(1.05);
+}
+
+/* -- Price tooltip (circular 44px, golden gradient) -- */
+.pm-price-tooltip {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--pm-dorado) 0%, #f0c96e 100%);
+    color: var(--pm-tierra-dark);
+    border-radius: var(--pm-radius-full);
+    cursor: pointer;
+    font-size: 1.125rem;
+    font-weight: 700;
+    z-index: 3;
+    box-shadow:
+        0 2px 8px rgba(255, 225, 175, 0.4),
+        0 0 0 3px rgba(255, 225, 175, 0.2);
+    transition:
+        transform var(--pm-transition-base),
+        box-shadow var(--pm-transition-base);
+    animation: pmPriceGlow 2.5s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+.pm-price-tooltip:hover {
+    transform: scale(1.15);
+    box-shadow:
+        0 4px 16px rgba(255, 225, 175, 0.5),
+        0 0 0 6px rgba(255, 225, 175, 0.15);
+    animation: none;
+}
+
+/* -- Category badge on service image -- */
+.pm-service-img .pm-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    font-family: var(--pm-font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--pm-tracking-wide);
+    background: var(--pm-arena);
+    color: var(--pm-tierra);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--pm-radius-sm);
+    z-index: 2;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.pm-badge-frio {
+    background: var(--pm-azul-hielo);
+    color: white;
+}
+
+/* -- Card body (matches HTML class .pm-service-body) -- */
+.pm-service-body {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.pm-service-body h4 {
+    font-family: var(--pm-font-heading);
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--pm-text-heading);
+    margin-bottom: 0.5rem;
+}
+
+.pm-service-body p {
+    font-family: var(--pm-font-body);
+    font-size: 0.9375rem;
+    color: var(--pm-text-muted);
+    line-height: var(--pm-leading-normal);
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+
+.pm-service-duration {
+    font-family: var(--pm-font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--pm-text-light);
+    display: flex;
+    align-items: center;
+}
+
+/* -- Card footer (matches HTML class .pm-service-footer) -- */
+.pm-service-footer {
+    padding: 0 1.25rem 1.25rem;
+}
+
+.pm-service-footer .btn-pm {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+
+/* =============================================================
+   9. CARDS DE EQUIPO
+   ============================================================= */
+.pm-team-card {
+    background: var(--pm-surface);
+    border: 1px solid var(--pm-border-light);
+    border-radius: var(--pm-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--pm-shadow-card);
+    text-align: center;
+    position: relative;
+    transition:
+        transform 400ms cubic-bezier(0.23, 1, 0.32, 1),
+        box-shadow 400ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Warm accent — bottom border */
+.pm-team-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--pm-arena), transparent);
+    opacity: 0;
+    transition: opacity var(--pm-transition-base);
+}
+
+.pm-team-card:hover::after {
+    opacity: 1;
+}
+
+.pm-team-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--pm-shadow-card-hover);
+}
+
+/* -- Photo area (matches HTML .pm-team-photo) -- */
+.pm-team-photo {
+    overflow: hidden;
+    position: relative;
+}
+
+.pm-team-photo-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--pm-transition-slow);
+}
+
+.pm-team-card:hover .pm-team-photo-placeholder {
+    transform: scale(1.04);
+}
+
+.pm-team-initials {
+    font-family: var(--pm-font-heading);
+    font-size: 3rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.05em;
+}
+
+/* Hover overlay with gradient */
+.pm-team-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(74, 46, 26, 0.35) 100%);
+    opacity: 0;
+    transition: opacity var(--pm-transition-base);
+    pointer-events: none;
+}
+
+.pm-team-card:hover .pm-team-photo::after {
+    opacity: 1;
+}
+
+/* -- Info area (matches HTML .pm-team-info) -- */
+.pm-team-info {
+    padding: 1.25rem;
+}
+
+.pm-team-name {
+    font-family: var(--pm-font-heading);
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: var(--pm-text-heading);
+    margin-bottom: 0.25rem;
+}
+
+.pm-team-role {
+    font-family: var(--pm-font-body);
+    font-size: 0.875rem;
+    color: var(--pm-text-muted);
+    margin-bottom: 0.75rem;
+}
+
+/* -- Social icons (shared across team + contact) -- */
+.pm-team-social {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.pm-social-icon {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--pm-arena);
+    border-radius: var(--pm-radius-full);
+    color: var(--pm-arena);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all var(--pm-transition-base);
+}
+
+.pm-social-icon:hover {
+    background: var(--pm-arena);
+    color: white;
+    transform: translateY(-3px);
+}
+
+/* Instagram gradient on hover */
+.pm-social-icon[aria-label*="Instagram"]:hover {
+    background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
+    border-color: transparent;
+}
+
+/* Facebook blue on hover */
+.pm-social-icon[aria-label*="Facebook"]:hover {
+    background: #1877F2;
+    border-color: transparent;
+}
+
+/* WhatsApp green on hover */
+.pm-social-icon[aria-label*="WhatsApp"]:hover {
+    background: #25D366;
+    border-color: transparent;
+}
+
+
+/* =============================================================
+   10. GALERIA
+   ============================================================= */
+.pm-gallery-item {
+    position: relative;
+    border-radius: var(--pm-radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: var(--pm-shadow-sm);
+    transition:
+        box-shadow 400ms cubic-bezier(0.23, 1, 0.32, 1),
+        transform 400ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pm-gallery-item:hover {
+    box-shadow: var(--pm-shadow-lg);
+    transform: translateY(-4px);
+}
+
+/* Placeholder gradient blocks */
+.pm-gallery-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    transition: transform var(--pm-transition-slow);
+}
+
+.pm-gallery-text {
+    font-family: var(--pm-font-heading);
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: var(--pm-tracking-wide);
+}
+
+.pm-gallery-item:hover .pm-gallery-placeholder {
+    transform: scale(1.05);
+}
+
+/* Hover overlay with zoom icon */
+.pm-gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        transparent 30%,
+        rgba(122, 101, 79, 0.65) 100%
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--pm-transition-base);
+}
+
+.pm-gallery-overlay i {
+    font-size: 2rem;
+    color: white;
+    transform: scale(0.8);
+    transition: transform var(--pm-transition-base);
+}
+
+.pm-gallery-item:hover .pm-gallery-overlay {
+    opacity: 1;
+}
+
+.pm-gallery-item:hover .pm-gallery-overlay i {
+    transform: scale(1);
+}
+
+
+/* =============================================================
+   11. TESTIMONIOS
+   ============================================================= */
+.pm-testimonial-card {
+    background: var(--pm-surface);
+    border-radius: var(--pm-radius-xl);
+    padding: 3rem 2.5rem;
+    box-shadow: var(--pm-shadow-md);
+    border: 1px solid var(--pm-border-light);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle warm accent — top-left corner glow */
+.pm-testimonial-card::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(255, 225, 175, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Decorative quote icon */
+.pm-testimonial-quote-icon {
+    font-size: 4rem;
+    color: var(--pm-arena);
+    display: block;
+    margin-bottom: 0.5rem;
+    transform: rotate(180deg);
+    opacity: 0.6;
+    line-height: 1;
+}
+
+.pm-testimonial-text {
+    font-family: var(--pm-font-heading);
+    font-size: 1.125rem;
+    color: var(--pm-text);
+    line-height: 1.75;
+    font-style: italic;
+    font-weight: 400;
+    margin-bottom: 1.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Stars */
+.pm-testimonial-stars {
+    color: var(--pm-dorado);
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.pm-testimonial-stars i.empty {
+    color: var(--pm-border);
+}
+
+/* Author row */
+.pm-testimonial-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.pm-testimonial-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--pm-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(255, 225, 175, 0.25);
+}
+
+.pm-testimonial-avatar span {
+    font-family: var(--pm-font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.pm-testimonial-info {
+    text-align: left;
+}
+
+.pm-testimonial-name {
+    font-family: var(--pm-font-body);
+    font-weight: 600;
+    color: var(--pm-text-heading);
+    display: block;
+    font-size: 0.9375rem;
+}
+
+.pm-testimonial-role {
+    font-family: var(--pm-font-body);
+    font-size: 0.8125rem;
+    color: var(--pm-text-light);
+}
+
+/* Carousel indicators */
+.pm-testimonial-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 2rem;
+}
+
+.pm-testimonial-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--pm-radius-full);
+    border: 2px solid var(--pm-arena);
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: all var(--pm-transition-base);
+}
+
+.pm-testimonial-indicator.active {
+    background: var(--pm-bronce);
+    border-color: var(--pm-bronce);
+}
+
+
+/* =============================================================
+   12. PROMOCIONES
+   ============================================================= */
+.pm-promo-card {
+    background: var(--pm-surface);
+    border-radius: var(--pm-radius-xl);
+    overflow: hidden;
+    box-shadow: var(--pm-shadow-lg);
+    border: 1px solid var(--pm-border-light);
+    transition: box-shadow 400ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pm-promo-card:hover {
+    box-shadow: var(--pm-shadow-xl);
+}
+
+.pm-promo-img-placeholder {
+    height: 100%;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.pm-promo-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-family: var(--pm-font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--pm-tracking-wider);
+    background: var(--pm-rojo);
+    color: white;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--pm-radius-sm);
+    animation: pmPulseGlow 2s infinite;
+}
+
+.pm-promo-discount {
+    font-family: var(--pm-font-heading);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.pm-promo-body {
+    padding: 2rem;
+}
+
+.pm-promo-title {
+    font-family: var(--pm-font-heading);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--pm-text-heading);
+    margin-bottom: 0.75rem;
+}
+
+.pm-promo-desc {
+    font-family: var(--pm-font-body);
+    color: var(--pm-text-muted);
+    line-height: var(--pm-leading-relaxed);
+    margin-bottom: 1.5rem;
+}
+
+/* Promo carousel nav */
+.pm-promo-nav {
+    width: 44px;
+    height: 44px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity var(--pm-transition-base);
+}
+
+.pm-promo-nav:hover,
+.pm-promo-nav:focus {
+    opacity: 1;
+}
+
+/* Show on carousel hover */
+#promosCarousel:hover .pm-promo-nav {
+    opacity: 0.7;
+}
+
+.pm-promo-nav-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pm-tierra);
+    border-radius: var(--pm-radius-full);
+    color: white;
+    font-size: 1.125rem;
+    transition: background var(--pm-transition-base);
+}
+
+.pm-promo-nav-icon:hover {
+    background: var(--pm-bronce);
+}
+
+
+/* =============================================================
+   13. SECCION RESERVAR (CTA)
+   ============================================================= */
+.pm-cta-section {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #7A654F 0%, #8A7650 40%, #957C62 100%);
+}
+
+/* Layered warm glow — left */
+.pm-cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(255, 225, 175, 0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 30%, rgba(219, 206, 165, 0.12) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Decorative floating ring — right */
+.pm-cta-section::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    right: -40px;
+    width: 240px;
+    height: 240px;
+    border: 1px solid rgba(255, 225, 175, 0.12);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: pmFloat 8s ease-in-out infinite;
+}
+
+.pm-cta-title {
+    font-family: var(--pm-font-heading);
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+    font-weight: 700;
+    color: var(--pm-text-inverse);
+    margin-bottom: 1.25rem;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 12px rgba(74, 46, 26, 0.2);
+}
+
+.pm-cta-subtitle {
+    font-family: var(--pm-font-body);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--pm-arena);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    line-height: var(--pm-leading-relaxed);
+    position: relative;
+    z-index: 1;
+    opacity: 0.88;
+}
+
+
+/* =============================================================
+   14. CONTACTO
+   ============================================================= */
+
+/* -- Form labels (matches HTML .pm-label) -- */
+.pm-label {
+    display: block;
+    font-family: var(--pm-font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--pm-text);
+    margin-bottom: 0.375rem;
+}
+
+/* -- Contact info card (matches HTML .pm-contact-info-card) -- */
+.pm-contact-info-card {
+    background: var(--pm-surface);
+    border: 1px solid var(--pm-border-light);
+    border-radius: var(--pm-radius-lg);
+    padding: 2rem;
+    box-shadow: var(--pm-shadow-card);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Warm accent bar — left side */
+.pm-contact-info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--pm-dorado), var(--pm-bronce));
+    border-radius: var(--pm-radius-lg) 0 0 var(--pm-radius-lg);
+}
+
+.pm-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.pm-contact-item:last-of-type {
+    margin-bottom: 1.5rem;
+}
+
+.pm-contact-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pm-crema);
+    color: var(--pm-bronce);
+    border-radius: var(--pm-radius-md);
+    font-size: 1.125rem;
+    transition: background var(--pm-transition-base);
+}
+
+.pm-contact-item:hover .pm-contact-icon {
+    background: var(--pm-arena);
+}
+
+.pm-contact-item strong {
+    display: block;
+    font-family: var(--pm-font-body);
+    font-weight: 600;
+    color: var(--pm-text-heading);
+    margin-bottom: 0.125rem;
+}
+
+.pm-contact-item p {
+    font-family: var(--pm-font-body);
+    font-size: 0.9375rem;
+    color: var(--pm-text-muted);
+    margin: 0;
+    line-height: var(--pm-leading-normal);
+}
+
+.pm-contact-item p a {
+    color: var(--pm-text-muted);
+    text-decoration: none;
+    transition: color var(--pm-transition-base);
+}
+
+.pm-contact-item p a:hover {
+    color: var(--pm-bronce);
+}
+
+.pm-contact-social {
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* Map placeholder */
+.pm-map-placeholder {
+    border-radius: var(--pm-radius-lg);
+    overflow: hidden;
+}
+
+.pm-map-inner {
+    width: 100%;
+    height: 200px;
+    background: var(--pm-surface-alt);
+    border: 1px solid var(--pm-border-light);
+    border-radius: var(--pm-radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.pm-map-inner i {
+    font-size: 2rem;
+    color: var(--pm-text-light);
+    margin-bottom: 0.5rem;
+}
+
+.pm-map-inner p {
+    color: var(--pm-text-muted);
+    margin: 0;
+}
+
+/* Real map container */
+.pm-map {
+    border-radius: var(--pm-radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--pm-border-light);
+    box-shadow: var(--pm-shadow-card);
+}
+
+.pm-map iframe {
+    width: 100%;
+    height: 300px;
+    border: none;
+    display: block;
+}
+
+
+/* =============================================================
+   15. FOOTER
+   ============================================================= */
+.pm-footer {
+    background: linear-gradient(180deg, #6C5D43 0%, #7A654F 35%, #957C62 100%);
+    color: rgba(255, 255, 255, 0.75);
+    padding: var(--pm-space-8) 0 0;
+    position: relative;
+}
+
+/* Curved top edge — connects footer to content organically */
+.pm-footer::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: linear-gradient(180deg, transparent, #6C5D43);
+    clip-path: ellipse(55% 100% at 50% 100%);
+    pointer-events: none;
+}
+
+/* -- Footer brand -- */
+.pm-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--pm-space-2);
+    margin-bottom: var(--pm-space-4);
+}
+
+.pm-footer-brand-icon {
+    font-size: 1.5rem;
+}
+
+.pm-footer-brand-name {
+    font-family: var(--pm-font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--pm-text-inverse);
+    display: block;
+    line-height: 1.2;
+}
+
+.pm-footer-brand-tagline {
+    font-size: 0.7rem;
+    letter-spacing: var(--pm-tracking-wider);
+    text-transform: uppercase;
+    color: var(--pm-arena);
+    display: block;
+}
+
+.pm-footer-tagline {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: var(--pm-space-5);
+    line-height: 1.5;
+    max-width: 300px;
+}
+
+/* -- Footer social -- */
+.pm-footer-social {
+    display: flex;
+    gap: var(--pm-space-2);
+}
+
+.pm-footer-social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--pm-arena);
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 1.125rem;
+    text-decoration: none;
+    transition:
+        background-color var(--pm-transition-base),
+        color var(--pm-transition-base),
+        transform var(--pm-transition-base);
+}
+
+.pm-footer-social-btn:hover {
+    background-color: var(--pm-arena);
+    color: var(--pm-tierra-dark);
+    transform: translateY(-3px);
+}
+
+/* Platform-specific hover colors */
+.pm-footer-social-btn[aria-label*="Instagram"]:hover {
+    background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
+    border-color: transparent;
+    color: white;
+}
+
+.pm-footer-social-btn[aria-label*="Facebook"]:hover {
+    background: #1877F2;
+    border-color: transparent;
+    color: white;
+}
+
+.pm-footer-social-btn[aria-label*="WhatsApp"]:hover {
+    background: #25D366;
+    border-color: transparent;
+    color: white;
+}
+
+/* -- Footer column titles -- */
+.pm-footer-col-title {
+    font-family: var(--pm-font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: var(--pm-tracking-wider);
+    text-transform: uppercase;
+    color: var(--pm-arena);
+    margin-bottom: var(--pm-space-4);
+}
+
+/* -- Footer links -- */
+.pm-footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--pm-space-2);
+}
+
+.pm-footer-links a {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: color var(--pm-transition-base);
+}
+
+.pm-footer-links a:hover {
+    color: var(--pm-dorado);
+}
+
+/* -- Footer contact list -- */
+.pm-footer-contact {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--pm-space-4);
+}
+
+.pm-footer-contact li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--pm-space-2);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.pm-footer-contact li i {
+    color: var(--pm-arena);
+    font-size: 1rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.pm-footer-contact a {
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: color var(--pm-transition-base);
+}
+
+.pm-footer-contact a:hover {
+    color: var(--pm-dorado);
+}
+
+/* -- Footer schedule -- */
+.pm-footer-schedule {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--pm-space-2);
+}
+
+.pm-footer-schedule li {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.65);
+    display: flex;
+    justify-content: space-between;
+}
+
+.pm-footer-schedule li strong {
+    color: rgba(255, 255, 255, 0.82);
+    font-weight: 500;
+}
+
+/* -- Footer bottom bar -- */
+.pm-footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--pm-space-2);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--pm-space-5) 0;
+    margin-top: var(--pm-space-7);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.pm-footer-credit i {
+    color: var(--pm-arena);
+    font-size: 0.75rem;
+}
+
+
+/* =============================================================
+   16. INPUTS & FORMULARIOS
+   ============================================================= */
+.input-pm {
+    border: 1.5px solid var(--pm-border);
+    border-radius: var(--pm-radius-md);
+    padding: 10px 16px;
+    font-family: var(--pm-font-body);
+    font-size: 0.9375rem;
+    color: var(--pm-text);
+    background-color: var(--pm-surface);
+    width: 100%;
+    transition:
+        border-color var(--pm-transition-base),
+        box-shadow var(--pm-transition-base);
+}
+
+.input-pm:focus {
+    border-color: var(--pm-bronce);
+    box-shadow: 0 0 0 3px rgba(138, 118, 80, 0.18);
+    outline: none;
+}
+
+.input-pm::placeholder {
+    color: var(--pm-text-light);
+}
+
+textarea.input-pm {
+    min-height: 120px;
+    resize: vertical;
+    line-height: var(--pm-leading-normal);
+}
+
+select.input-pm {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237A6558' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+/* Bootstrap form-control override */
+.pm-contact-form .form-control {
+    border: 1.5px solid var(--pm-border);
+    border-radius: var(--pm-radius-md);
+    padding: 10px 16px;
+    font-family: var(--pm-font-body);
+    font-size: 0.9375rem;
+    color: var(--pm-text);
+    background-color: var(--pm-surface);
+    transition:
+        border-color var(--pm-transition-base),
+        box-shadow var(--pm-transition-base);
+}
+
+.pm-contact-form .form-control:focus {
+    border-color: var(--pm-bronce);
+    box-shadow: 0 0 0 3px rgba(138, 118, 80, 0.18);
+}
+
+.pm-contact-form .form-control::placeholder {
+    color: var(--pm-text-light);
+}
+
+/* -- Input group (password) -- */
+.pm-input-group {
+    position: relative;
+}
+
+.pm-input-group .input-pm {
+    padding-right: 2.75rem;
+}
+
+.pm-toggle-pass {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--pm-text-muted);
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    font-size: 1rem;
+}
+
+.pm-toggle-pass:hover {
+    color: var(--pm-bronce);
+}
+
+
+/* =============================================================
+   17. MODALES SWEETALERT2
+   ============================================================= */
+.swal2-popup.pm-modal {
+    border-radius: var(--pm-radius-lg) !important;
+    font-family: var(--pm-font-body) !important;
+    background-color: var(--pm-surface) !important;
+    border: 1px solid var(--pm-border) !important;
+    border-top: 4px solid var(--pm-bronce) !important;
+    padding-bottom: var(--pm-space-6) !important;
+}
+
+.pm-modal .swal2-title {
+    font-family: var(--pm-font-heading) !important;
+    font-size: 1.375rem !important;
+    color: var(--pm-tierra) !important;
+    font-weight: 700 !important;
+}
+
+.pm-modal .swal2-html-container {
+    color: var(--pm-text-muted) !important;
+    font-size: 0.9375rem !important;
+    line-height: var(--pm-leading-normal) !important;
+}
+
+.pm-modal .swal2-confirm {
+    background-color: var(--pm-bronce) !important;
+    color: #FFFFFF !important;
+    font-family: var(--pm-font-ui) !important;
+    border-radius: var(--pm-radius-md) !important;
+    padding: var(--pm-space-2) var(--pm-space-6) !important;
+    font-weight: 600 !important;
+    font-size: 0.9375rem !important;
+    transition:
+        background-color var(--pm-transition-base) !important;
+}
+
+.pm-modal .swal2-confirm:hover {
+    background-color: var(--pm-bronce-light) !important;
+}
+
+.pm-modal .swal2-cancel {
+    background-color: var(--pm-surface-alt) !important;
+    color: var(--pm-text-muted) !important;
+    border: 1.5px solid var(--pm-border) !important;
+    font-family: var(--pm-font-ui) !important;
+    border-radius: var(--pm-radius-md) !important;
+    padding: var(--pm-space-2) var(--pm-space-6) !important;
+    font-size: 0.9375rem !important;
+    transition:
+        border-color var(--pm-transition-base) !important,
+        color var(--pm-transition-base) !important;
+}
+
+.pm-modal .swal2-cancel:hover {
+    border-color: var(--pm-bronce) !important;
+    color: var(--pm-bronce) !important;
+}
+
+.pm-modal .swal2-input {
+    border: 1.5px solid var(--pm-border) !important;
+    border-radius: var(--pm-radius-md) !important;
+    font-family: var(--pm-font-body) !important;
+    font-size: 0.9375rem !important;
+    color: var(--pm-text) !important;
+    background-color: var(--pm-surface) !important;
+    padding: var(--pm-space-2) var(--pm-space-4) !important;
+    box-shadow: none !important;
+}
+
+.pm-modal .swal2-input:focus {
+    border-color: var(--pm-bronce) !important;
+    box-shadow: 0 0 0 3px rgba(138, 118, 80, 0.18) !important;
+    outline: none !important;
+}
+
+/* Modal icon color overrides */
+.pm-modal .swal2-icon.swal2-success .swal2-success-ring {
+    border-color: rgba(142, 151, 125, 0.30) !important;
+}
+
+.pm-modal .swal2-icon.swal2-success [class^='swal2-success-line'] {
+    background-color: var(--pm-verde) !important;
+}
+
+.pm-modal .swal2-icon.swal2-error {
+    border-color: rgba(168, 95, 82, 0.30) !important;
+}
+
+.pm-modal .swal2-icon.swal2-error .swal2-x-mark-line-left,
+.pm-modal .swal2-icon.swal2-error .swal2-x-mark-line-right {
+    background-color: var(--pm-rojo) !important;
+}
+
+.pm-modal .swal2-icon.swal2-warning {
+    border-color: rgba(255, 225, 175, 0.34) !important;
+    color: var(--pm-dorado) !important;
+}
+
+
+/* =============================================================
+   18. BADGES
+   ============================================================= */
+.pm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--pm-space-1);
+    font-family: var(--pm-font-ui);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: var(--pm-tracking-wide);
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: var(--pm-radius-sm);
+    white-space: nowrap;
+}
+
+/* Default badge */
+.pm-badge {
+    background-color: var(--pm-arena-light);
+    color: var(--pm-tierra);
+}
+
+/* Category variants */
+.pm-badge-depilacion {
+    background-color: rgba(183, 116, 102, 0.18);
+    color: #8D5B50;
+}
+
+.pm-badge-facial {
+    background-color: rgba(255, 225, 175, 0.28);
+    color: #8A7650;
+}
+
+.pm-badge-corporal {
+    background-color: rgba(138, 118, 80, 0.18);
+    color: var(--pm-bronce);
+}
+
+.pm-badge-frio {
+    background-color: rgba(142, 151, 125, 0.22);
+    color: #6D755F;
+}
+
+.pm-badge-maquillaje {
+    background-color: rgba(183, 116, 102, 0.15);
+    color: var(--pm-rosa);
+}
+
+.pm-badge-unas {
+    background-color: rgba(226, 181, 154, 0.32);
+    color: var(--pm-tierra);
+}
+
+/* State badges */
+.pm-badge-success {
+    background-color: rgba(142, 151, 125, 0.15);
+    color: var(--pm-verde);
+}
+
+.pm-badge-danger {
+    background-color: rgba(168, 95, 82, 0.12);
+    color: var(--pm-rojo);
+}
+
+.pm-badge-warning {
+    background-color: rgba(226, 181, 154, 0.20);
+    color: var(--pm-warning);
+}
+
+.pm-badge-info {
+    background-color: rgba(142, 151, 125, 0.16);
+    color: var(--pm-azul-hielo);
+}
+
+.pm-badge-premium {
+    background-color: var(--pm-dorado);
+    color: #FFFFFF;
+}
+
+.pm-badge-oferta {
+    background-color: var(--pm-rojo);
+    color: #FFFFFF;
+}
+
+
+/* =============================================================
+   19. BACK TO TOP — Progreso circular SVG
+   ============================================================= */
+.pm-back-to-top {
+    position: fixed;
+    bottom: var(--pm-space-6);
+    left: var(--pm-space-6);
+    width: 48px;
+    height: 48px;
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px);
+    transition:
+        opacity var(--pm-transition-slow),
+        visibility var(--pm-transition-slow),
+        transform var(--pm-transition-slow);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.pm-back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.pm-back-to-top svg {
+    width: 48px;
+    height: 48px;
+    filter: drop-shadow(0 2px 8px rgba(74, 64, 52, 0.15));
+}
+
+.pm-back-to-top .progress-bg {
+    fill: var(--pm-surface);
+    stroke: var(--pm-border-light);
+    stroke-width: 2;
+}
+
+.pm-back-to-top .progress-bar {
+    fill: none;
+    stroke: var(--pm-bronce);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 126;
+    stroke-dashoffset: 126;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    transition: stroke-dashoffset 80ms linear;
+}
+
+.pm-back-to-top .arrow-icon {
+    fill: var(--pm-bronce);
+}
+
+.pm-back-to-top:hover .progress-bg {
+    fill: var(--pm-crema);
+}
+
+.pm-back-to-top:hover .arrow-icon {
+    fill: var(--pm-bronce-dark);
+}
+
+
+/* =============================================================
+   20. ANIMACIONES
+   ============================================================= */
+
+/* -- Keyframes -- */
+@keyframes pmFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pmFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes pmScaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pmSlideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pmPulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(138, 118, 80, 0.40);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(138, 118, 80, 0);
+    }
+}
+
+@keyframes pmPriceGlow {
+    0%, 100% {
+        box-shadow:
+            0 2px 8px rgba(255, 225, 175, 0.4),
+            0 0 0 3px rgba(255, 225, 175, 0.2);
+    }
+    50% {
+        box-shadow:
+            0 2px 8px rgba(255, 225, 175, 0.4),
+            0 0 0 8px rgba(255, 225, 175, 0);
+    }
+}
+
+@keyframes pmShimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+@keyframes pmFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+/* -- Intersection Observer trigger classes -- */
+.pm-animate {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+        opacity 600ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pm-animate.pm-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger delays */
+.pm-animate-delay-1 { transition-delay: 100ms; }
+.pm-animate-delay-2 { transition-delay: 200ms; }
+.pm-animate-delay-3 { transition-delay: 300ms; }
+.pm-animate-delay-4 { transition-delay: 400ms; }
+.pm-animate-delay-5 { transition-delay: 500ms; }
+.pm-animate-delay-6 { transition-delay: 600ms; }
+
+/* Fade in (no translateY) */
+.pm-animate-fade {
+    opacity: 0;
+    transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pm-animate-fade.pm-visible {
+    opacity: 1;
+}
+
+/* Scale in */
+.pm-animate-scale {
+    opacity: 0;
+    transform: scale(0.95);
+    transition:
+        opacity 400ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pm-animate-scale.pm-visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Fade in class (immediate) */
+.pm-fade-in {
+    animation: pmFadeIn 300ms ease forwards;
+}
+
+
+/* =============================================================
+   21. UTILIDADES
+   ============================================================= */
+
+/* -- Glassmorphism -- */
+.pm-glass {
+    background-color: var(--pm-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--pm-glass-border);
+}
+
+/* -- Warm overlay -- */
+.pm-overlay-warm {
+    background: linear-gradient(
+        180deg,
+        rgba(74, 46, 26, 0.3) 0%,
+        rgba(107, 66, 38, 0.7) 100%
+    );
+}
+
+/* -- Text gradient -- */
+.pm-text-gradient {
+    background: var(--pm-gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* -- Image aspect ratios -- */
+.pm-img-service { aspect-ratio: 4/3; object-fit: cover; }
+.pm-img-gallery { aspect-ratio: 1/1; object-fit: cover; }
+.pm-img-team    { aspect-ratio: 3/4; object-fit: cover; }
+.pm-img-banner  { aspect-ratio: 16/9; object-fit: cover; }
+
+/* -- Background utilities -- */
+.bg-pm-marfil    { background-color: var(--pm-marfil); }
+.bg-pm-crema     { background-color: var(--pm-crema); }
+.bg-pm-surface   { background-color: var(--pm-surface); }
+.bg-pm-tierra    { background-color: var(--pm-tierra); }
+.bg-pm-bronce    { background-color: var(--pm-bronce); }
+
+/* -- Text utilities -- */
+.text-pm-tierra  { color: var(--pm-tierra); }
+.text-pm-bronce  { color: var(--pm-bronce); }
+.text-pm-dorado  { color: var(--pm-dorado); }
+.text-pm-muted   { color: var(--pm-text-muted); }
+.text-pm-light   { color: var(--pm-text-light); }
+.text-pm-inverse { color: var(--pm-text-inverse); }
+
+/* -- Border utilities -- */
+.border-pm       { border: 1px solid var(--pm-border); }
+.border-pm-light { border: 1px solid var(--pm-border-light); }
+
+/* -- Radius utilities -- */
+.radius-pm-sm    { border-radius: var(--pm-radius-sm); }
+.radius-pm-md    { border-radius: var(--pm-radius-md); }
+.radius-pm-lg    { border-radius: var(--pm-radius-lg); }
+.radius-pm-xl    { border-radius: var(--pm-radius-xl); }
+.radius-pm-full  { border-radius: var(--pm-radius-full); }
+
+/* -- Shadow utilities -- */
+.shadow-pm-sm    { box-shadow: var(--pm-shadow-sm); }
+.shadow-pm-md    { box-shadow: var(--pm-shadow-md); }
+.shadow-pm-lg    { box-shadow: var(--pm-shadow-lg); }
+.shadow-pm-card  { box-shadow: var(--pm-shadow-card); }
+
+/* -- Spacing overrides -- */
+.pm-mt-section   { margin-top: var(--pm-space-8); }
+.pm-mb-section   { margin-bottom: var(--pm-space-8); }
+.pm-py-section   { padding-top: var(--pm-space-8); padding-bottom: var(--pm-space-8); }
+
+/* -- Truncate text -- */
+.pm-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pm-line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.pm-line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* -- Decorative divider (vertical line between sections) -- */
+.pm-divider-vertical {
+    width: 2px;
+    height: 40px;
+    background-color: var(--pm-arena);
+    margin: 0 auto;
+    border-radius: var(--pm-radius-full);
+}
+
+/* -- Floating WhatsApp button -- */
+.pm-whatsapp-float {
+    position: fixed;
+    bottom: var(--pm-space-6);
+    right: var(--pm-space-6);
+    width: 56px;
+    height: 56px;
+    background-color: #25D366;
+    color: #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+    z-index: 999;
+    text-decoration: none;
+    transition:
+        transform var(--pm-transition-base),
+        box-shadow var(--pm-transition-base);
+    animation: pmPulseGlow 2s infinite;
+    animation-delay: 3s;
+}
+
+.pm-whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
+    color: #FFFFFF;
+}
+
+/* -- About section -- */
+.pm-about-img-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: var(--pm-radius-lg);
+    background: linear-gradient(135deg, #DBCEA5 0%, #8A7650 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--pm-shadow-lg);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Organic decorative shape behind placeholder */
+.pm-about-img-placeholder::before {
+    content: '';
+    position: absolute;
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(ellipse at 30% 70%, rgba(255, 225, 175, 0.2) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.pm-placeholder-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    position: relative;
+    z-index: 1;
+}
+
+.pm-placeholder-icon {
+    font-size: 4rem;
+    filter: grayscale(20%);
+    animation: pmFloat 4s ease-in-out infinite;
+}
+
+.pm-placeholder-text {
+    font-family: var(--pm-font-heading);
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: var(--pm-tracking-wide);
+}
+
+.pm-about-heading {
+    font-family: var(--pm-font-heading);
+    color: var(--pm-tierra);
+    margin-bottom: 1rem;
+}
+
+.pm-about-feature {
+    display: flex;
+    align-items: center;
+    font-family: var(--pm-font-body);
+    font-weight: 500;
+    color: var(--pm-text);
+    padding: 0.6rem 0.75rem;
+    border-radius: var(--pm-radius-sm);
+    transition:
+        transform var(--pm-transition-base),
+        background-color var(--pm-transition-base);
+}
+
+.pm-about-feature:hover {
+    transform: translateX(4px);
+    background-color: rgba(219, 206, 165, 0.15);
+}
+
+.pm-about-feature i {
+    color: var(--pm-bronce);
+    margin-right: 0.625rem;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+
+
+/* =============================================================
+   22. RESPONSIVE & MEDIA QUERIES
+   ============================================================= */
+
+/* ---- Tablet (max 991.98px) ---- */
+@media (max-width: 991.98px) {
+    .pm-section,
+    .pm-section-alt {
+        padding: var(--pm-space-7) 0;
+    }
+
+    .pm-hero-title {
+        font-size: 2.5rem;
+    }
+
+    .pm-hero-subtitle {
+        font-size: 1.0625rem;
+    }
+
+    .pm-section-title {
+        font-size: 1.875rem;
+    }
+
+    .pm-hero-ctas a {
+        display: block;
+        margin: 0.5rem auto;
+        max-width: 280px;
+        text-align: center;
+    }
+
+    .pm-hero-ctas .ms-3 {
+        margin-left: 0 !important;
+    }
+
+    .pm-cta-section {
+        padding: var(--pm-space-8) 0;
+    }
+
+    .pm-footer {
+        text-align: center;
+    }
+
+    .pm-footer-brand {
+        justify-content: center;
+    }
+
+    .pm-footer-tagline {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .pm-footer-social {
+        justify-content: center;
+    }
+
+    .pm-footer-bottom {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* ---- Mobile landscape (max 768px) ---- */
+@media (max-width: 768px) {
+    .pm-section,
+    .pm-section-alt {
+        padding: var(--pm-space-7) 0;
+    }
+
+    .pm-hero-title {
+        font-size: 2rem;
+    }
+
+    .pm-hero-slide {
+        min-height: 500px;
+    }
+
+    .pm-hero-indicators {
+        bottom: 20px;
+    }
+
+    .pm-hero-nav {
+        display: none;
+    }
+
+    /* Touch-friendly buttons */
+    .btn-pm,
+    .btn-pm-outline,
+    .btn-pm-dorado,
+    .btn-pm-whatsapp {
+        min-height: 48px;
+        padding: 12px 24px;
+    }
+
+    .pm-map iframe,
+    .pm-map-inner {
+        height: 200px;
+    }
+
+    .pm-whatsapp-float {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+        bottom: var(--pm-space-4);
+        right: var(--pm-space-4);
+    }
+
+    .pm-back-to-top {
+        bottom: var(--pm-space-4);
+        left: var(--pm-space-4);
+        width: 42px;
+        height: 42px;
+    }
+
+    .pm-back-to-top svg {
+        width: 42px;
+        height: 42px;
+    }
+
+    /* Footer columns stack */
+    .pm-footer-schedule li {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    /* Promo image shorter on mobile */
+    .pm-promo-img-placeholder {
+        min-height: 200px;
+    }
+}
+
+/* ---- Mobile portrait (max 575.98px) ---- */
+@media (max-width: 575.98px) {
+    .pm-section,
+    .pm-section-alt {
+        padding: var(--pm-space-6) 0;
+    }
+
+    .pm-section-title {
+        font-size: 1.5rem;
+    }
+
+    .pm-hero-ctas {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--pm-space-3);
+    }
+
+    .pm-hero-ctas a {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .pm-service-body {
+        padding: var(--pm-space-4);
+    }
+
+    .pm-service-footer {
+        padding: 0 var(--pm-space-4) var(--pm-space-4);
+    }
+
+    /* Touch-friendly inputs */
+    .input-pm {
+        min-height: 48px;
+        font-size: 1rem;
+    }
+
+    .pm-contact-info-card {
+        padding: 1.25rem;
+    }
+
+    .pm-testimonial-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .pm-cta-section {
+        padding: var(--pm-space-7) 0;
+    }
+
+    /* Social icons larger touch target */
+    .pm-social-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.125rem;
+    }
+}
+
+/* ---- Extra small (max 375px) ---- */
+@media (max-width: 375px) {
+    html {
+        font-size: 15px;
+    }
+
+    .pm-hero-title {
+        font-size: 1.75rem;
+    }
+
+    .pm-hero-subtitle {
+        font-size: 0.9375rem;
+    }
+
+    .btn-pm,
+    .btn-pm-outline,
+    .btn-pm-dorado,
+    .btn-pm-whatsapp,
+    .btn-pm-ghost {
+        padding: 10px 20px;
+        font-size: 0.875rem;
+    }
+
+    .pm-about-img-placeholder {
+        aspect-ratio: 1/1;
+    }
+}
+
+/* ---- Ultra wide (min 1400px) ---- */
+@media (min-width: 1400px) {
+    .pm-section,
+    .pm-section-alt {
+        padding: var(--pm-space-9) 0;
+    }
+
+    .pm-hero-title {
+        font-size: 3.5rem;
+    }
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    .pm-animate {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .pm-service-card:hover,
+    .pm-team-card:hover,
+    .pm-promo-card:hover,
+    .pm-testimonial-card:hover {
+        transform: none;
+    }
+}
+
+/* ---- Print styles ---- */
+@media print {
+    .pm-navbar,
+    .pm-back-to-top,
+    .pm-whatsapp-float,
+    .pm-hero-nav-btn,
+    .pm-hero-indicators {
+        display: none !important;
+    }
+
+    .pm-hero {
+        height: auto;
+        min-height: auto;
+    }
+
+    body {
+        background: #fff;
+        color: #000;
+    }
+
+    .pm-section,
+    .pm-section-alt {
+        padding: 1rem 0;
+    }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   AUTH PAGES — Login, Registro, Mi Cuenta
+   ════════════════════════════════════════════════════════════ */
+
+.pm-auth-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 0 60px;
+    background: var(--pm-marfil, #F8F4E8);
+}
+
+.pm-auth-card {
+    background: #fff;
+    border-radius: var(--pm-radius-lg, 16px);
+    box-shadow: 0 4px 32px rgba(138, 118, 80, 0.10);
+    padding: 40px 36px;
+    border: 1px solid var(--pm-border, #E8E0D0);
+}
+
+.pm-auth-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.pm-auth-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--pm-crema, #ECE7D1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 28px;
+    color: var(--pm-bronce, #8A7650);
+}
+
+.pm-auth-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: var(--pm-tierra, #957C62);
+    margin: 0 0 8px;
+}
+
+.pm-auth-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--pm-text-muted, #746754);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Google Button ─────────────────────────────────────────── */
+.pm-auth-google {
+    margin-bottom: 20px;
+}
+
+.pm-btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border: 2px solid var(--pm-border, #E8E0D0);
+    border-radius: var(--pm-radius-md, 10px);
+    background: #fff;
+    color: var(--pm-text, #3F352B);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.pm-btn-google:hover {
+    border-color: var(--pm-bronce, #8A7650);
+    background: var(--pm-marfil, #F8F4E8);
+    color: var(--pm-text, #3F352B);
+    box-shadow: 0 2px 12px rgba(138, 118, 80, 0.12);
+}
+
+/* ── Auth Divider ──────────────────────────────────────────── */
+.pm-auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.pm-auth-divider::before,
+.pm-auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--pm-border, #E8E0D0);
+}
+
+.pm-auth-divider span {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: var(--pm-text-muted, #746754);
+    white-space: nowrap;
+}
+
+/* ── Auth Form ─────────────────────────────────────────────── */
+.pm-auth-form .pm-form-group {
+    margin-bottom: 18px;
+}
+
+.pm-auth-form .pm-form-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--pm-text, #3F352B);
+    margin-bottom: 6px;
+}
+
+.pm-auth-form .pm-form-footer {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pm-link-forgot {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: var(--pm-bronce, #8A7650);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.pm-link-forgot:hover {
+    color: var(--pm-tierra, #957C62);
+    text-decoration: underline;
+}
+
+.pm-auth-form .pm-btn-submit {
+    padding: 12px 20px;
+    font-size: 1rem;
+    margin-top: 4px;
+}
+
+/* ── Auth Error Message ────────────────────────────────────── */
+.pm-auth-error {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: var(--pm-radius-md, 10px);
+    background: rgba(168, 95, 82, 0.08);
+    border: 1px solid rgba(168, 95, 82, 0.2);
+    color: var(--pm-rojo, #A85F52);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* ── Auth Alt Link (bottom) ────────────────────────────────── */
+.pm-auth-alt {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--pm-border, #E8E0D0);
+}
+
+.pm-auth-alt p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    color: var(--pm-text-muted, #746754);
+    margin: 0;
+}
+
+.pm-link {
+    color: var(--pm-bronce, #8A7650);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.pm-link:hover {
+    color: var(--pm-tierra, #957C62);
+    text-decoration: underline;
+}
+
+/* ── Password toggle ───────────────────────────────────────── */
+.pm-input-password-wrap {
+    position: relative;
+}
+
+.pm-input-password-wrap .input-pm {
+    padding-right: 44px;
+}
+
+.pm-toggle-pass {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--pm-text-muted, #746754);
+    cursor: pointer;
+    padding: 4px;
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.pm-toggle-pass:hover {
+    color: var(--pm-bronce, #8A7650);
+}
+
+/* ── Auth Info Banner (para reservar.php) ──────────────────── */
+.pm-auth-required {
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 48px 24px;
+}
+
+.pm-auth-required-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--pm-crema, #ECE7D1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 36px;
+    color: var(--pm-bronce, #8A7650);
+}
+
+.pm-auth-required h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--pm-tierra, #957C62);
+    margin-bottom: 12px;
+}
+
+.pm-auth-required p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--pm-text-muted, #746754);
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.pm-auth-required-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+    text-align: left;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pm-auth-required-benefits li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    color: var(--pm-text, #3F352B);
+    list-style: none;
+}
+
+.pm-auth-required-benefits li i {
+    color: var(--pm-verde, #8E977D);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.pm-auth-required-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.pm-auth-required-actions .btn {
+    padding: 12px 20px;
+}
+
+.pm-auth-required-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+
+.pm-auth-required-divider::before,
+.pm-auth-required-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--pm-border, #E8E0D0);
+}
+
+.pm-auth-required-divider span {
+    font-size: 0.78rem;
+    color: var(--pm-text-muted, #746754);
+}
+
+/* ── Mi Cuenta Page ────────────────────────────────────────── */
+.pm-cuenta-section {
+    padding: 120px 0 60px;
+    min-height: 100vh;
+    background: var(--pm-marfil, #F8F4E8);
+}
+
+.pm-cuenta-header {
+    margin-bottom: 32px;
+}
+
+.pm-cuenta-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.75rem;
+    color: var(--pm-tierra, #957C62);
+    margin: 0 0 4px;
+}
+
+.pm-cuenta-header p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--pm-text-muted, #746754);
+    margin: 0;
+}
+
+.pm-cuenta-card {
+    background: #fff;
+    border-radius: var(--pm-radius-lg, 16px);
+    box-shadow: 0 2px 16px rgba(138, 118, 80, 0.06);
+    border: 1px solid var(--pm-border, #E8E0D0);
+    padding: 28px;
+    margin-bottom: 24px;
+}
+
+.pm-cuenta-card-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: var(--pm-tierra, #957C62);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--pm-border, #E8E0D0);
+}
+
+.pm-cuenta-card-title i {
+    margin-right: 8px;
+    color: var(--pm-bronce, #8A7650);
+}
+
+/* ── Cita card (Mi Cuenta) ─────────────────────────────────── */
+.pm-cita-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: var(--pm-radius-md, 10px);
+    background: var(--pm-marfil, #F8F4E8);
+    margin-bottom: 12px;
+    transition: box-shadow 0.2s;
+}
+
+.pm-cita-item:hover {
+    box-shadow: 0 2px 12px rgba(138, 118, 80, 0.08);
+}
+
+.pm-cita-fecha {
+    text-align: center;
+    min-width: 52px;
+    flex-shrink: 0;
+}
+
+.pm-cita-fecha-dia {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    color: var(--pm-bronce, #8A7650);
+    line-height: 1;
+}
+
+.pm-cita-fecha-mes {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    color: var(--pm-text-muted, #746754);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pm-cita-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.pm-cita-servicio {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--pm-text, #3F352B);
+    margin-bottom: 2px;
+}
+
+.pm-cita-hora {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    color: var(--pm-text-muted, #746754);
+}
+
+.pm-cita-estado {
+    flex-shrink: 0;
+}
+
+/* ── Estado badges ─────────────────────────────────────────── */
+.pm-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.pm-badge-pendiente {
+    background: rgba(255, 225, 175, 0.3);
+    color: #B8860B;
+}
+
+.pm-badge-confirmada {
+    background: rgba(142, 151, 125, 0.15);
+    color: var(--pm-verde, #8E977D);
+}
+
+.pm-badge-completada {
+    background: rgba(142, 151, 125, 0.25);
+    color: #5a6b4a;
+}
+
+.pm-badge-cancelada {
+    background: rgba(168, 95, 82, 0.1);
+    color: var(--pm-rojo, #A85F52);
+}
+
+/* ── Auth Responsive ───────────────────────────────────────── */
+@media (max-width: 575.98px) {
+    .pm-auth-card {
+        padding: 28px 20px;
+        border-radius: 12px;
+    }
+
+    .pm-auth-title {
+        font-size: 1.4rem;
+    }
+
+    .pm-auth-section {
+        padding: 100px 0 40px;
+    }
+
+    .pm-cuenta-section {
+        padding: 100px 0 40px;
+    }
+
+    .pm-cita-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .pm-cita-fecha {
+        display: flex;
+        gap: 6px;
+        align-items: baseline;
+    }
+}
+
+
+/* =========================================================
+   ENHANCEMENTS v2.0 — Appended 2026-03-14
+   Visual refinements: hero fix, decorative flourishes,
+   textures, card enhancements, animations, mobile polish.
+   ALL new rules — no existing lines modified.
+   ========================================================= */
+
+
+/* =============================================================
+   E0. CRITICAL FIX — Hero Carousel Text Overlap
+   Bootstrap 5 carousel-fade keeps inactive .carousel-item as
+   display:block; opacity:0. The content inside has z-index:2,
+   causing text from hidden slides to sit above the active slide.
+   Fix: remove pointer-events and force visibility hidden on
+   inactive items so their text never overlaps.
+   ============================================================= */
+.pm-hero-section .carousel-fade .carousel-item {
+    visibility: hidden;
+}
+
+.pm-hero-section .carousel-fade .carousel-item.active {
+    visibility: visible;
+}
+
+/* During transitions, both outgoing and incoming must be visible */
+.pm-hero-section .carousel-fade .carousel-item-start,
+.pm-hero-section .carousel-fade .carousel-item-next,
+.pm-hero-section .carousel-fade .carousel-item-prev {
+    visibility: visible;
+}
+
+
+/* =============================================================
+   E1. Section Header Decorative Flourish
+   Replaces plain 48px line with ornamental double-line +
+   diamond motif. Targets existing .pm-divider element.
+   ============================================================= */
+.pm-divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--pm-arena) 20%,
+        var(--pm-bronce) 50%,
+        var(--pm-arena) 80%,
+        transparent 100%
+    );
+    position: relative;
+    border-radius: 0;
+}
+
+/* Replace side dots with a centered diamond motif */
+.pm-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: var(--pm-bronce);
+    border-radius: 1px;
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.pm-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--pm-arena);
+    border-radius: 2px;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background: transparent;
+}
+
+/* Secondary thin lines flanking the diamond */
+.pm-section .pm-divider,
+.pm-section-alt .pm-divider {
+    overflow: visible;
+}
+
+
+/* =============================================================
+   E2. Subtle Background Texture
+   CSS-only micro-noise on body using layered radial gradients.
+   Barely perceptible — adds tactile depth to the marfil bg.
+   ============================================================= */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.025;
+    background-image:
+        radial-gradient(circle at 20% 35%, #8A7650 0.5px, transparent 0.5px),
+        radial-gradient(circle at 60% 70%, #957C62 0.5px, transparent 0.5px),
+        radial-gradient(circle at 80% 20%, #8A7650 0.5px, transparent 0.5px),
+        radial-gradient(circle at 40% 80%, #957C62 0.5px, transparent 0.5px);
+    background-size: 4px 4px, 6px 6px, 5px 5px, 7px 7px;
+    mix-blend-mode: multiply;
+}
+
+
+/* =============================================================
+   E3. Enhanced Service Cards — Gradient Border on Hover
+   Subtle animated border + soft inner glow.
+   ============================================================= */
+.pm-service-card {
+    background-clip: padding-box;
+    transition:
+        transform var(--pm-transition-base),
+        box-shadow var(--pm-transition-base),
+        border-color 400ms ease;
+}
+
+.pm-service-card:hover {
+    border-color: var(--pm-rosa);
+    box-shadow:
+        var(--pm-shadow-card-hover),
+        inset 0 0 20px rgba(183, 116, 102, 0.06),
+        0 0 0 1px rgba(183, 116, 102, 0.12);
+}
+
+/* Animated gradient accent line on hover — enhanced from arena to rosa */
+.pm-service-card::after {
+    background: linear-gradient(
+        90deg,
+        var(--pm-arena),
+        var(--pm-rosa),
+        var(--pm-arena)
+    );
+    background-size: 200% 100%;
+}
+
+.pm-service-card:hover::after {
+    animation: pmGradientSlide 2s ease infinite;
+}
+
+@keyframes pmGradientSlide {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+
+/* =============================================================
+   E4. Team Cards Enhancement
+   Decorative arc behind avatar area + hover color shift.
+   Uses ::before on .pm-team-photo for the curved backdrop.
+   ============================================================= */
+.pm-team-photo {
+    position: relative;
+}
+
+.pm-team-photo::before {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130%;
+    height: 60px;
+    background: radial-gradient(
+        ellipse at 50% 100%,
+        rgba(219, 206, 165, 0.25) 0%,
+        transparent 70%
+    );
+    border-radius: 0 0 50% 50%;
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity var(--pm-transition-base);
+}
+
+.pm-team-card:hover .pm-team-photo::before {
+    opacity: 0.6;
+}
+
+/* Warm tint shift on placeholder hover */
+.pm-team-card:hover .pm-team-photo-placeholder {
+    filter: brightness(1.06) saturate(1.1);
+}
+
+
+/* =============================================================
+   E5. Testimonial Card Refinement
+   More prominent decorative quote mark using ::before on the
+   .pm-testimonial-quote element. Playfair Display, oversized.
+   ============================================================= */
+.pm-testimonial-quote-icon {
+    font-size: 5rem;
+    color: var(--pm-arena);
+    opacity: 0.35;
+    line-height: 0.7;
+    display: block;
+    margin-bottom: 0.75rem;
+    font-family: var(--pm-font-heading);
+    transition: opacity var(--pm-transition-base);
+}
+
+.pm-testimonial-card:hover .pm-testimonial-quote-icon {
+    opacity: 0.55;
+}
+
+/* Subtle warm border accent on testimonial cards */
+.pm-testimonial-card {
+    border: 1px solid rgba(219, 206, 165, 0.3);
+    transition:
+        transform var(--pm-transition-base),
+        box-shadow var(--pm-transition-base),
+        border-color var(--pm-transition-base);
+}
+
+.pm-testimonial-card:hover {
+    border-color: var(--pm-arena);
+}
+
+
+/* =============================================================
+   E6. CTA Section Enhancement
+   Animated gradient background + decorative floating circles.
+   ============================================================= */
+.pm-cta-section {
+    background: linear-gradient(135deg, #7A654F 0%, #8A7650 40%, #957C62 100%);
+    background-size: 200% 200%;
+    animation: pmCTAGradient 10s ease infinite;
+}
+
+@keyframes pmCTAGradient {
+    0%   { background-position: 0% 50%; }
+    25%  { background-position: 50% 0%; }
+    50%  { background-position: 100% 50%; }
+    75%  { background-position: 50% 100%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Decorative floating circles — very low opacity */
+.pm-cta-section .container {
+    position: relative;
+    z-index: 1;
+}
+
+.pm-cta-section::before {
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(255, 225, 175, 0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 30%, rgba(219, 206, 165, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 15% 80%, rgba(255, 225, 175, 0.08) 0%, transparent 30%),
+        radial-gradient(circle at 85% 70%, rgba(183, 116, 102, 0.06) 0%, transparent 25%);
+    animation: pmCTAGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes pmCTAGlow {
+    0%   { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+/* Additional floating ring — left side */
+.pm-cta-title::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: -120px;
+    width: 160px;
+    height: 160px;
+    border: 1px solid rgba(255, 225, 175, 0.08);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: pmFloat 12s ease-in-out infinite reverse;
+}
+
+
+/* =============================================================
+   E7. Gallery Hover Effects
+   Warm overlay with zoom icon + "Ver" text.
+   Enhanced scale and brightness transition.
+   ============================================================= */
+.pm-gallery-item {
+    cursor: pointer;
+}
+
+.pm-gallery-overlay {
+    background: linear-gradient(
+        180deg,
+        rgba(138, 118, 80, 0.1) 0%,
+        rgba(122, 101, 79, 0.65) 60%,
+        rgba(74, 46, 26, 0.8) 100%
+    );
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* "Ver" label beneath the zoom icon */
+.pm-gallery-overlay::after {
+    content: 'Ver';
+    font-family: var(--pm-font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: var(--pm-tracking-wider);
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+        opacity 300ms ease 100ms,
+        transform 300ms ease 100ms;
+}
+
+.pm-gallery-item:hover .pm-gallery-overlay::after {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.pm-gallery-item:hover .pm-gallery-placeholder {
+    filter: brightness(1.08);
+}
+
+.pm-gallery-overlay i {
+    font-size: 1.75rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+/* =============================================================
+   E8. Contact Section Polish
+   Decorative wave separator + warm accent on info card.
+   ============================================================= */
+
+/* Wave separator before contact section */
+#contacto {
+    position: relative;
+}
+
+#contacto::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: var(--pm-surface-warm, var(--pm-marfil));
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath d='M0 40V20C200 0 400 0 600 20S1000 40 1200 20V40z' fill='%23fff'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath d='M0 40V20C200 0 400 0 600 20S1000 40 1200 20V40z' fill='%23fff'/%3E%3C/svg%3E");
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Enhanced contact info card — warm left border (higher specificity override) */
+section#contacto .pm-contact-info-card {
+    border-left: 3px solid var(--pm-bronce);
+    box-shadow: var(--pm-shadow-sm), inset 4px 0 12px rgba(138, 118, 80, 0.04);
+    transition:
+        box-shadow var(--pm-transition-base),
+        border-color var(--pm-transition-base);
+}
+
+section#contacto .pm-contact-info-card:hover {
+    border-left-color: var(--pm-rosa);
+    box-shadow: var(--pm-shadow-md), inset 4px 0 16px rgba(183, 116, 102, 0.06);
+}
+
+
+/* =============================================================
+   E9. Footer Enhancement
+   Subtle decorative top pattern — repeating dots ornament
+   above the footer's curved top edge.
+   ============================================================= */
+.pm-footer {
+    position: relative;
+}
+
+/* Ornamental dot pattern line above footer */
+.pm-footer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(80%, 600px);
+    height: 1px;
+    background-image: radial-gradient(
+        circle,
+        rgba(255, 225, 175, 0.4) 1px,
+        transparent 1px
+    );
+    background-size: 12px 1px;
+    background-repeat: repeat-x;
+    pointer-events: none;
+    z-index: 1;
+}
+
+
+/* =============================================================
+   E10. Smooth Scroll Reveal Animations
+   Enhanced animation classes that complement the existing
+   .pm-animate system from main.js IntersectionObserver.
+   ============================================================= */
+
+/* Fade-up variant (gentle, refined movement) */
+.pm-animate {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+        opacity 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.pm-animate.pm-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Refined stagger delays — slightly longer for elegance */
+.pm-animate-delay-1 { transition-delay: 120ms; }
+.pm-animate-delay-2 { transition-delay: 240ms; }
+.pm-animate-delay-3 { transition-delay: 360ms; }
+.pm-animate-delay-4 { transition-delay: 480ms; }
+
+/* Fade-in from left */
+.pm-animate-left {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition:
+        opacity 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.pm-animate-left.pm-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Fade-in from right */
+.pm-animate-right {
+    opacity: 0;
+    transform: translateX(20px);
+    transition:
+        opacity 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.pm-animate-right.pm-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+/* =============================================================
+   E11. Mobile Polish
+   Better spacing, larger touch targets, refined CTA on small
+   screens.
+   ============================================================= */
+
+/* Tablet and below */
+@media (max-width: 991.98px) {
+    /* Service cards: tighter grid gap on tablet */
+    .pm-service-card {
+        margin-bottom: var(--pm-space-4);
+    }
+
+    /* CTA section: softer padding */
+    .pm-cta-section {
+        padding: var(--pm-space-7) var(--pm-space-3);
+    }
+
+    /* Hide CTA floating ring on smaller screens */
+    .pm-cta-title::before {
+        display: none;
+    }
+}
+
+/* Mobile: 576px and below */
+@media (max-width: 575.98px) {
+    /* Service cards: full-width stacking with better spacing */
+    .pm-service-card {
+        margin-bottom: var(--pm-space-3);
+        border-radius: var(--pm-radius-md, 12px);
+    }
+
+    /* Larger social icon touch targets (min 44px per WCAG) */
+    .pm-social-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+
+    .pm-footer-social-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    /* CTA section mobile refinement */
+    .pm-cta-section {
+        padding: var(--pm-space-6) var(--pm-space-2);
+        text-align: center;
+    }
+
+    .pm-cta-title {
+        font-size: 1.5rem;
+        line-height: var(--pm-leading-tight);
+    }
+
+    .pm-cta-subtitle {
+        font-size: 0.9375rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Divider: slightly narrower on mobile */
+    .pm-divider {
+        width: 80px;
+    }
+
+    /* Gallery items: tighter rounding */
+    .pm-gallery-item {
+        border-radius: var(--pm-radius-md, 12px);
+    }
+
+    /* Testimonial cards: compact padding */
+    .pm-testimonial-card {
+        padding: 1.75rem 1.25rem;
+    }
+
+    .pm-testimonial-quote-icon {
+        font-size: 3.5rem;
+    }
+
+    /* Contact card: reduced left border */
+    section#contacto .pm-contact-info-card {
+        border-left-width: 2px;
+    }
+
+    /* Wave separator: smaller on mobile */
+    #contacto::before {
+        height: 24px;
+    }
+}
+
+/* Small mobile: 380px and below */
+@media (max-width: 380px) {
+    .pm-service-card {
+        margin-bottom: var(--pm-space-2);
+    }
+
+    .pm-cta-title {
+        font-size: 1.35rem;
+    }
+
+    .pm-gallery-item {
+        border-radius: 8px;
+    }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .pm-cta-section {
+        animation: none;
+    }
+
+    .pm-cta-section::before {
+        animation: none;
+    }
+
+    .pm-service-card:hover::after {
+        animation: none;
+    }
+
+    .pm-cta-title::before {
+        animation: none;
+    }
+
+    body::after {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   ENHANCEMENTS v2.1 — Auth & Mi Cuenta Design Polish
+   Premium refinements for login, registro, mi-cuenta pages.
+   Warm, feminine, beauty-salon aesthetic.
+   ALL new rules — no existing lines modified.
+   ========================================================= */
+
+
+/* =============================================================
+   E12. Auth Section — Decorative Background
+   Replaces flat marfil with layered warm radials + botanical
+   silhouette shapes. Creates an inviting, spa-like atmosphere.
+   ============================================================= */
+.pm-auth-section {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 20% 30%, rgba(219, 206, 165, 0.25) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(183, 116, 102, 0.08) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 100%, rgba(236, 231, 209, 0.5) 0%, transparent 60%),
+        var(--pm-marfil, #F8F4E8);
+}
+
+/* Decorative leaf silhouette — top-right corner */
+.pm-auth-section::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -60px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(
+        ellipse at 30% 40%,
+        rgba(142, 151, 125, 0.06) 0%,
+        transparent 65%
+    );
+    border-radius: 40% 60% 50% 50%;
+    transform: rotate(-15deg);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Decorative soft ring — bottom-left */
+.pm-auth-section::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -60px;
+    width: 280px;
+    height: 280px;
+    border: 1px solid rgba(219, 206, 165, 0.18);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+
+/* =============================================================
+   E13. Auth Card — Premium Elevation
+   Top accent bar, refined shadow depth, warm focus glow,
+   subtle entrance animation.
+   ============================================================= */
+.pm-auth-card {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    box-shadow:
+        0 4px 32px rgba(138, 118, 80, 0.10),
+        0 1px 4px rgba(138, 118, 80, 0.06);
+    transition:
+        box-shadow 400ms ease,
+        transform 400ms ease;
+    animation: pmAuthCardEnter 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Top accent gradient bar */
+.pm-auth-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-arena, #DBCEA5) 0%,
+        var(--pm-bronce, #8A7650) 35%,
+        var(--pm-rosa, #B77466) 65%,
+        var(--pm-arena, #DBCEA5) 100%
+    );
+    border-radius: var(--pm-radius-lg, 16px) var(--pm-radius-lg, 16px) 0 0;
+}
+
+/* Warm glow when interacting with the card */
+.pm-auth-card:focus-within {
+    box-shadow:
+        0 8px 40px rgba(138, 118, 80, 0.14),
+        0 2px 8px rgba(138, 118, 80, 0.08),
+        0 0 0 1px rgba(219, 206, 165, 0.2);
+}
+
+@keyframes pmAuthCardEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =============================================================
+   E14. Auth Icon — Gradient + Subtle Animation
+   More distinctive circular icon with warm gradient bg.
+   ============================================================= */
+.pm-auth-icon {
+    background: linear-gradient(
+        135deg,
+        var(--pm-crema, #ECE7D1) 0%,
+        rgba(219, 206, 165, 0.6) 100%
+    );
+    box-shadow:
+        0 4px 16px rgba(138, 118, 80, 0.1),
+        inset 0 -2px 4px rgba(138, 118, 80, 0.06);
+    transition: transform 400ms ease, box-shadow 400ms ease;
+}
+
+.pm-auth-card:hover .pm-auth-icon {
+    transform: scale(1.05);
+    box-shadow:
+        0 6px 20px rgba(138, 118, 80, 0.14),
+        inset 0 -2px 4px rgba(138, 118, 80, 0.06);
+}
+
+.pm-auth-icon i {
+    background: linear-gradient(
+        135deg,
+        var(--pm-bronce, #8A7650),
+        var(--pm-tierra, #957C62)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+/* =============================================================
+   E15. Google Button — Refined Hover
+   Shadow lift + border warmth + icon micro-scale.
+   ============================================================= */
+.pm-btn-google {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shimmer effect on hover */
+.pm-btn-google::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        transparent 40%,
+        rgba(219, 206, 165, 0.15) 50%,
+        transparent 60%
+    );
+    transform: translateX(-100%);
+    transition: transform 500ms ease;
+    pointer-events: none;
+}
+
+.pm-btn-google:hover::after {
+    transform: translateX(100%);
+}
+
+.pm-btn-google:hover svg {
+    transform: scale(1.08);
+    transition: transform 200ms ease;
+}
+
+.pm-btn-google svg {
+    transition: transform 200ms ease;
+}
+
+.pm-btn-google:active {
+    transform: scale(0.98);
+}
+
+
+/* =============================================================
+   E16. Form Input Focus — Warm Underline Animation
+   Animated bottom border on focus + label color shift.
+   ============================================================= */
+.pm-auth-form .input-pm,
+.pm-cuenta-card .input-pm {
+    position: relative;
+    background: rgba(248, 244, 232, 0.4);
+    transition:
+        border-color 250ms ease,
+        box-shadow 250ms ease,
+        background 250ms ease;
+}
+
+.pm-auth-form .input-pm:focus,
+.pm-cuenta-card .input-pm:focus {
+    background: #fff;
+    border-color: var(--pm-bronce, #8A7650);
+    box-shadow:
+        0 0 0 3px rgba(138, 118, 80, 0.12),
+        0 2px 8px rgba(138, 118, 80, 0.06);
+}
+
+/* Label styling within forms — shift to bronce on sibling focus */
+.pm-form-group:focus-within .pm-form-label {
+    color: var(--pm-bronce, #8A7650);
+    transition: color 200ms ease;
+}
+
+.pm-form-group:focus-within .pm-form-label i {
+    color: var(--pm-rosa, #B77466);
+    transition: color 200ms ease;
+}
+
+
+/* =============================================================
+   E17. Auth Divider Enhancement
+   Slightly more visible line + refined text treatment.
+   ============================================================= */
+.pm-auth-divider::before,
+.pm-auth-divider::after {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--pm-border, #E8E0D0) 30%,
+        var(--pm-border, #E8E0D0) 70%,
+        transparent 100%
+    );
+}
+
+.pm-auth-divider span {
+    letter-spacing: 0.02em;
+    font-weight: 500;
+}
+
+
+/* =============================================================
+   E18. Auth Error — Gentle animation
+   Slide-down + fade on appearance for smoother UX.
+   ============================================================= */
+.pm-auth-error[style*="block"] {
+    animation: pmErrorAppear 300ms ease both;
+}
+
+@keyframes pmErrorAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =============================================================
+   E19. Auth Alt Link — Refined
+   More inviting "switch" link at bottom of auth cards.
+   ============================================================= */
+.pm-auth-alt {
+    position: relative;
+}
+
+.pm-auth-alt .pm-link {
+    position: relative;
+    display: inline-block;
+}
+
+.pm-auth-alt .pm-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 0;
+    height: 1.5px;
+    background: var(--pm-bronce, #8A7650);
+    transition: width 300ms ease;
+}
+
+.pm-auth-alt .pm-link:hover::after {
+    width: 100%;
+}
+
+.pm-auth-alt .pm-link:hover {
+    text-decoration: none;
+}
+
+
+/* =============================================================
+   E20. Submit Button — Enhanced
+   Larger presence, subtle gradient overlay, lift on hover.
+   ============================================================= */
+.pm-auth-form .pm-btn-submit,
+.pm-auth-form .btn-pm {
+    position: relative;
+    overflow: hidden;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 13px 24px;
+    transition:
+        background-color 200ms ease,
+        box-shadow 250ms ease,
+        transform 200ms ease;
+}
+
+.pm-auth-form .pm-btn-submit:hover,
+.pm-auth-form .btn-pm:hover {
+    box-shadow:
+        0 4px 16px rgba(138, 118, 80, 0.25),
+        0 2px 4px rgba(138, 118, 80, 0.1);
+}
+
+/* Subtle shimmer sweep on hover */
+.pm-auth-form .pm-btn-submit::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 70%
+    );
+    transition: left 600ms ease;
+    pointer-events: none;
+}
+
+.pm-auth-form .pm-btn-submit:hover::after {
+    left: 100%;
+}
+
+
+/* =============================================================
+   E21. Mi Cuenta — Section Background
+   Matches auth section's layered warmth.
+   ============================================================= */
+.pm-cuenta-section {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 15% 20%, rgba(219, 206, 165, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 80%, rgba(183, 116, 102, 0.06) 0%, transparent 40%),
+        var(--pm-marfil, #F8F4E8);
+}
+
+
+/* =============================================================
+   E22. Mi Cuenta — Card Enhancement
+   Top accent bar (matches auth card), warm elevation, smooth
+   entry animation with stagger.
+   ============================================================= */
+.pm-cuenta-card {
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 2px 16px rgba(138, 118, 80, 0.06),
+        0 1px 3px rgba(138, 118, 80, 0.04);
+    transition:
+        box-shadow 350ms ease,
+        transform 350ms ease;
+    animation: pmCuentaCardEnter 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Staggered entry */
+.pm-cuenta-card:nth-child(1) { animation-delay: 0ms; }
+.pm-cuenta-card:nth-child(2) { animation-delay: 100ms; }
+.pm-cuenta-card:nth-child(3) { animation-delay: 200ms; }
+
+/* Thin accent bar at top */
+.pm-cuenta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-arena, #DBCEA5),
+        var(--pm-bronce, #8A7650),
+        var(--pm-arena, #DBCEA5)
+    );
+}
+
+/* Hover lift */
+.pm-cuenta-card:hover {
+    box-shadow:
+        0 6px 24px rgba(138, 118, 80, 0.10),
+        0 2px 6px rgba(138, 118, 80, 0.06);
+    transform: translateY(-2px);
+}
+
+/* Focus-within glow (when editing form inside card) */
+.pm-cuenta-card:focus-within {
+    box-shadow:
+        0 6px 28px rgba(138, 118, 80, 0.12),
+        0 0 0 1px rgba(219, 206, 165, 0.25);
+}
+
+@keyframes pmCuentaCardEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =============================================================
+   E23. Mi Cuenta — Header Enhancement
+   Warm greeting area with decorative accent.
+   ============================================================= */
+.pm-cuenta-header {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.pm-cuenta-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-bronce, #8A7650),
+        transparent
+    );
+    border-radius: 1px;
+}
+
+.pm-cuenta-header h1 {
+    display: flex;
+    align-items: center;
+}
+
+.pm-cuenta-header h1 i {
+    background: linear-gradient(
+        135deg,
+        var(--pm-bronce, #8A7650),
+        var(--pm-rosa, #B77466)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+
+/* =============================================================
+   E24. Mi Cuenta — Card Title Enhancement
+   Subtle icon container + refined border treatment.
+   ============================================================= */
+.pm-cuenta-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(
+        90deg,
+        var(--pm-border, #E8E0D0) 0%,
+        transparent 80%
+    ) 1;
+}
+
+.pm-cuenta-card-title i {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--pm-crema, #ECE7D1);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-right: 4px;
+}
+
+
+/* =============================================================
+   E25. Mi Cuenta — Cita Item Enhancement
+   More distinctive date badge, better hover state, warm
+   status badges.
+   ============================================================= */
+.pm-cita-item {
+    transition:
+        background 200ms ease,
+        box-shadow 200ms ease;
+    border-radius: var(--pm-radius-sm, 8px);
+}
+
+.pm-cita-item:hover {
+    background: rgba(248, 244, 232, 0.5);
+    box-shadow: 0 1px 4px rgba(138, 118, 80, 0.06);
+}
+
+/* Date badge refinement */
+.pm-cita-fecha {
+    position: relative;
+}
+
+.pm-cita-fecha-dia {
+    text-shadow: 0 1px 2px rgba(138, 118, 80, 0.1);
+}
+
+/* Status badges — warmer palette */
+.pm-badge-pendiente {
+    background: rgba(219, 206, 165, 0.2);
+    color: var(--pm-bronce, #8A7650);
+    border: 1px solid rgba(219, 206, 165, 0.4);
+}
+
+.pm-badge-confirmada {
+    background: rgba(142, 151, 125, 0.15);
+    color: #5A6E4D;
+    border: 1px solid rgba(142, 151, 125, 0.3);
+}
+
+.pm-badge-completada {
+    background: rgba(138, 118, 80, 0.1);
+    color: var(--pm-tierra, #957C62);
+    border: 1px solid rgba(138, 118, 80, 0.2);
+}
+
+.pm-badge-cancelada {
+    background: rgba(183, 116, 102, 0.1);
+    color: var(--pm-rosa, #B77466);
+    border: 1px solid rgba(183, 116, 102, 0.2);
+}
+
+/* Badge shared styles */
+.pm-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: var(--pm-font-ui, 'Poppins', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+
+/* =============================================================
+   E26. Empty State Enhancement
+   More inviting empty states for citas sections.
+   ============================================================= */
+.pm-cuenta-card .text-center i[style*="font-size:2.5rem"] {
+    opacity: 0.6;
+    transition: opacity 200ms ease;
+}
+
+.pm-cuenta-card .text-center:hover i[style*="font-size:2.5rem"] {
+    opacity: 0.9;
+}
+
+
+/* =============================================================
+   E27. Password Toggle Enhancement
+   Subtle background on hover, smoother interaction.
+   ============================================================= */
+.pm-toggle-pass {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition:
+        color 200ms ease,
+        background 200ms ease;
+}
+
+.pm-toggle-pass:hover {
+    background: rgba(219, 206, 165, 0.25);
+    color: var(--pm-bronce, #8A7650);
+}
+
+
+/* =============================================================
+   E28. Auth Pages — Responsive Refinements
+   Better mobile experience for auth + mi-cuenta.
+   ============================================================= */
+@media (max-width: 575.98px) {
+    .pm-auth-card {
+        padding: 32px 24px;
+        border-radius: var(--pm-radius-md, 12px);
+        margin: 0 -4px;
+    }
+
+    .pm-auth-card::before {
+        border-radius: var(--pm-radius-md, 12px) var(--pm-radius-md, 12px) 0 0;
+    }
+
+    .pm-auth-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+    }
+
+    .pm-auth-title {
+        font-size: 1.5rem;
+    }
+
+    .pm-btn-google {
+        padding: 11px 16px;
+        font-size: 0.9rem;
+    }
+
+    /* Mi Cuenta */
+    .pm-cuenta-card {
+        padding: 22px 18px;
+        border-radius: var(--pm-radius-md, 12px);
+    }
+
+    .pm-cuenta-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .pm-cita-item {
+        padding: 12px;
+    }
+
+    .pm-cuenta-card-title i {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .pm-auth-card {
+        padding: 28px 18px;
+    }
+
+    .pm-auth-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 22px;
+    }
+
+    .pm-auth-title {
+        font-size: 1.35rem;
+    }
+}
+
+/* Reduced motion — disable auth animations */
+@media (prefers-reduced-motion: reduce) {
+    .pm-auth-card {
+        animation: none;
+    }
+
+    .pm-cuenta-card {
+        animation: none;
+    }
+
+    .pm-auth-error[style*="block"] {
+        animation: none;
+    }
+
+    .pm-btn-google::after {
+        display: none;
+    }
+
+    .pm-auth-form .pm-btn-submit::after {
+        display: none;
+    }
+}
+
+
+/* =========================================================
+   ENHANCEMENTS v2.2 — Reservar Wizard Design
+   Migrated from inline <style> in reservar.php + enhanced
+   with warm transitions, accent lines, hover polish.
+   ========================================================= */
+
+
+/* =============================================================
+   E29. Reservar Section Background
+   ============================================================= */
+.pm-reservar-section {
+    padding-top: 120px;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(219, 206, 165, 0.18) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(183, 116, 102, 0.06) 0%, transparent 40%),
+        var(--pm-marfil, #F8F4E8);
+}
+
+
+/* =============================================================
+   E29b. Reservar Title & Subtitle
+   ============================================================= */
+.pm-reservar-title {
+    font-family: var(--pm-font-heading, 'Playfair Display', serif);
+    color: var(--pm-tierra, #957C62);
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.pm-reservar-title i {
+    color: var(--pm-bronce, #8A7650);
+}
+
+.pm-reservar-subtitle {
+    color: var(--pm-text-muted, #746754);
+    font-family: var(--pm-font-body, 'Inter', sans-serif);
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+}
+
+
+/* =============================================================
+   E30. Progress Steps — Wizard Indicator
+   Horizontal step dots with connecting lines.
+   ============================================================= */
+.pm-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 24px;
+}
+
+.pm-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    opacity: 0.4;
+    transition: opacity 300ms ease;
+}
+
+.pm-step.active {
+    opacity: 1;
+}
+
+.pm-step.done {
+    opacity: 0.7;
+}
+
+.pm-step-num {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--pm-crema, #ECE7D1);
+    color: var(--pm-tierra, #957C62);
+    font-family: var(--pm-font-ui, 'Poppins', sans-serif);
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--pm-border, #E8E0D0);
+    transition: all 300ms ease;
+}
+
+.pm-step.active .pm-step-num {
+    background: var(--pm-bronce, #8A7650);
+    color: #fff;
+    border-color: var(--pm-bronce, #8A7650);
+    box-shadow: 0 2px 8px rgba(138, 118, 80, 0.25);
+}
+
+.pm-step.done .pm-step-num {
+    background: var(--pm-verde, #8E977D);
+    color: #fff;
+    border-color: var(--pm-verde, #8E977D);
+}
+
+.pm-step-label {
+    font-size: 0.75rem;
+    color: var(--pm-text-muted, #746754);
+    font-family: var(--pm-font-ui, 'Poppins', sans-serif);
+    font-weight: 500;
+}
+
+.pm-step.active .pm-step-label {
+    color: var(--pm-bronce, #8A7650);
+    font-weight: 600;
+}
+
+.pm-step-line {
+    flex: 1;
+    height: 2px;
+    background: var(--pm-border, #E8E0D0);
+    margin: 0 8px;
+    max-width: 60px;
+    transition: background 300ms ease;
+}
+
+/* Line between completed steps gets colored */
+.pm-step.done + .pm-step-line {
+    background: var(--pm-verde, #8E977D);
+}
+
+
+/* =============================================================
+   E31. Wizard Step Card
+   Each step panel with card styling + entrance animation.
+   ============================================================= */
+.pm-wizard-step {
+    background: #fff;
+    border-radius: var(--pm-radius-lg, 16px);
+    padding: 28px;
+    box-shadow:
+        0 2px 16px rgba(138, 118, 80, 0.08),
+        0 1px 3px rgba(138, 118, 80, 0.04);
+    border: 1px solid var(--pm-border, #E8E0D0);
+    position: relative;
+    overflow: hidden;
+    animation: pmWizardStepEnter 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+/* Top accent gradient (like auth card) */
+.pm-wizard-step::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-arena, #DBCEA5),
+        var(--pm-bronce, #8A7650),
+        var(--pm-arena, #DBCEA5)
+    );
+}
+
+.pm-wizard-step h3 {
+    font-family: var(--pm-font-heading, 'Playfair Display', serif);
+    color: var(--pm-tierra-dark, #6B5D4D);
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+}
+
+.pm-wizard-step h3 i {
+    color: var(--pm-bronce, #8A7650);
+}
+
+@keyframes pmWizardStepEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =============================================================
+   E32. Service Option Cards
+   Selectable service rows with icon, name, meta, and price.
+   ============================================================= */
+.pm-servicio-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 2px solid var(--pm-border-light, #EDE8DA);
+    border-radius: var(--pm-radius-md, 10px);
+    cursor: pointer;
+    transition:
+        border-color 200ms ease,
+        background 200ms ease,
+        box-shadow 200ms ease,
+        transform 200ms ease;
+    margin-bottom: 8px;
+    background: #fff;
+}
+
+.pm-servicio-option:hover {
+    border-color: var(--pm-bronce, #8A7650);
+    background: var(--pm-crema, #ECE7D1);
+    box-shadow: 0 2px 8px rgba(138, 118, 80, 0.08);
+    transform: translateY(-1px);
+}
+
+.pm-servicio-option.selected {
+    border-color: var(--pm-bronce, #8A7650);
+    background: rgba(138, 118, 80, 0.08);
+    box-shadow: 0 0 0 1px rgba(138, 118, 80, 0.15);
+}
+
+.pm-servicio-option .pm-so-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pm-crema, #ECE7D1), rgba(219, 206, 165, 0.5));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--pm-bronce, #8A7650);
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    transition: transform 200ms ease;
+}
+
+.pm-servicio-option:hover .pm-so-icon {
+    transform: scale(1.05);
+}
+
+.pm-servicio-option .pm-so-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.pm-servicio-option .pm-so-name {
+    font-weight: 600;
+    color: var(--pm-text, #3F352B);
+    font-size: 0.9375rem;
+    font-family: var(--pm-font-body, 'Inter', sans-serif);
+}
+
+.pm-servicio-option .pm-so-meta {
+    font-size: 0.8125rem;
+    color: var(--pm-text-muted, #746754);
+    font-family: var(--pm-font-body, 'Inter', sans-serif);
+}
+
+.pm-servicio-option .pm-so-price {
+    font-family: var(--pm-font-heading, 'Playfair Display', serif);
+    font-weight: 700;
+    color: var(--pm-dorado, #FFE1AF);
+    font-size: 1.0625rem;
+    flex-shrink: 0;
+}
+
+
+/* =============================================================
+   E33. Time Slots Grid
+   Selectable hour buttons in responsive grid.
+   ============================================================= */
+.pm-turnos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+}
+
+.pm-turno-btn {
+    padding: 10px 8px;
+    border: 2px solid var(--pm-border-light, #EDE8DA);
+    border-radius: var(--pm-radius-md, 10px);
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+    font-family: var(--pm-font-ui, 'Poppins', sans-serif);
+    font-weight: 500;
+    color: var(--pm-text, #3F352B);
+    transition:
+        border-color 200ms ease,
+        background 200ms ease,
+        color 200ms ease,
+        transform 200ms ease;
+    font-size: 0.9375rem;
+}
+
+.pm-turno-btn:hover {
+    border-color: var(--pm-bronce, #8A7650);
+    background: var(--pm-crema, #ECE7D1);
+    transform: translateY(-1px);
+}
+
+.pm-turno-btn.selected {
+    border-color: var(--pm-bronce, #8A7650);
+    background: var(--pm-bronce, #8A7650);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(138, 118, 80, 0.2);
+}
+
+
+/* =============================================================
+   E34. Summary Card (Confirmation Step)
+   Warm background with row layout for service details.
+   ============================================================= */
+.pm-resumen-card {
+    background: var(--pm-crema, #ECE7D1);
+    border-radius: var(--pm-radius-md, 10px);
+    padding: 16px 20px;
+    border: 1px solid rgba(219, 206, 165, 0.4);
+}
+
+.pm-resumen-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(219, 206, 165, 0.5);
+    font-family: var(--pm-font-body, 'Inter', sans-serif);
+    font-size: 0.9rem;
+}
+
+.pm-resumen-row:last-child {
+    border-bottom: none;
+}
+
+.pm-resumen-row span {
+    color: var(--pm-text-muted, #746754);
+}
+
+.pm-resumen-row strong {
+    color: var(--pm-text, #3F352B);
+}
+
+
+/* =============================================================
+   E35. No Turnos Empty State
+   ============================================================= */
+.pm-no-turnos {
+    text-align: center;
+    padding: 32px 16px;
+    color: var(--pm-text-muted, #746754);
+    font-family: var(--pm-font-body, 'Inter', sans-serif);
+}
+
+.pm-no-turnos i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+    color: var(--pm-warning, #D4A853);
+}
+
+
+/* =============================================================
+   E36. Wizard Mobile Adjustments
+   ============================================================= */
+@media (max-width: 575.98px) {
+    .pm-wizard-step {
+        padding: 22px 18px;
+        border-radius: var(--pm-radius-md, 12px);
+    }
+
+    .pm-step-num {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    .pm-step-label {
+        font-size: 0.65rem;
+    }
+
+    .pm-step-line {
+        max-width: 40px;
+        margin: 0 4px;
+    }
+
+    .pm-servicio-option {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .pm-servicio-option .pm-so-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+
+    .pm-turnos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 6px;
+    }
+
+    .pm-turno-btn {
+        padding: 8px 6px;
+        font-size: 0.875rem;
+    }
+}
+
+/* Reduced motion for wizard */
+@media (prefers-reduced-motion: reduce) {
+    .pm-wizard-step {
+        animation: none;
+    }
+}
+

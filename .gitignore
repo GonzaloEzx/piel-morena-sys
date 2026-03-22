@@ -1,0 +1,64 @@
+# ======================================
+# Solo subir archivos de producción
+# (ver docs/screenshots/archivos-para-github.png)
+# ======================================
+
+# --- Configuración sensible ---
+config/database.php
+config/mail.php
+
+# --- Uploads de usuarios ---
+uploads/*
+!uploads/.gitkeep
+
+# --- Dependencias vendor ---
+assets/vendor/*
+!assets/vendor/.gitkeep
+
+# --- Herramientas Claude / Agents ---
+.agent/
+.agents/
+.claude/
+CLAUDE.md
+AGENTS.md
+skills-lock.json
+
+# --- Playwright / Testing ---
+.playwright/
+.playwright-cli/
+.playwright-mcp/
+
+# --- Node.js ---
+node_modules/
+package.json
+package-lock.json
+
+# --- Documentación dev (no va a prod) ---
+docs/
+docu/
+
+# --- Proyectos de referencia ---
+web ejemplos/
+
+# --- Screenshots sueltos en raíz ---
+*.png
+
+# --- IDE ---
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs ---
+*.log
+error_log
+
+# --- Temp ---
+*.tmp
+*.bak
+*.swp

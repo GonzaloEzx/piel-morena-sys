@@ -1,0 +1,1982 @@
+/* ========= PREMIUM AUTH & MOBILE v3.0 ========= */
+/*
+ * Piel Morena Estetica — Premium Auth Pages & Mobile Enhancement
+ * Design Direction: "Warm Luxury Botanical"
+ * Targets: login.php, registro.php, mi-cuenta.php, reservar.php
+ *
+ * CONTENTS:
+ *   1. SHARED KEYFRAMES & ANIMATIONS
+ *   2. LOGIN PAGE ENHANCEMENTS
+ *   3. REGISTRO PAGE ENHANCEMENTS
+ *   4. MI CUENTA PAGE ENHANCEMENTS
+ *   5. RESERVAR PAGE ENHANCEMENTS
+ *   6. MOBILE PORTRAIT (max-width: 575.98px)
+ *   7. MOBILE LANDSCAPE (max-width: 767.98px)
+ *   8. TABLET (max-width: 991.98px)
+ *   9. REDUCED MOTION
+ */
+
+
+/* =============================================================
+   1. SHARED KEYFRAMES & ANIMATIONS
+   Premium micro-interactions used across all auth pages.
+   ============================================================= */
+
+/* Soft breathing pulse for auth icon */
+@keyframes pmBreathePulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow:
+            0 4px 18px rgba(138, 118, 80, 0.12),
+            inset 0 -2px 6px rgba(138, 118, 80, 0.06);
+    }
+    50% {
+        transform: scale(1.04);
+        box-shadow:
+            0 6px 24px rgba(138, 118, 80, 0.18),
+            inset 0 -2px 6px rgba(138, 118, 80, 0.08);
+    }
+}
+
+/* Luxurious card entrance — rises from below with opacity */
+@keyframes pmLuxCardEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(24px) scale(0.98);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-2px) scale(1.002);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Staggered card fade-in with upward motion */
+@keyframes pmStaggerFadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Shimmer sweep across button */
+@keyframes pmShimmerSweep {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Error slide-down entrance */
+@keyframes pmErrorSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 100px;
+    }
+}
+
+/* Floating organic blob drift */
+@keyframes pmBlobDrift {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    25% {
+        transform: translate(6px, -8px) rotate(2deg) scale(1.02);
+    }
+    50% {
+        transform: translate(-4px, -12px) rotate(-1deg) scale(0.98);
+    }
+    75% {
+        transform: translate(-8px, -4px) rotate(1.5deg) scale(1.01);
+    }
+}
+
+@keyframes pmBlobDrift2 {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    33% {
+        transform: translate(-10px, 6px) rotate(-2deg) scale(1.03);
+    }
+    66% {
+        transform: translate(8px, 10px) rotate(1deg) scale(0.97);
+    }
+}
+
+/* Warm glow pulse for active step */
+@keyframes pmGlowPulse {
+    0%, 100% {
+        box-shadow:
+            0 2px 8px rgba(138, 118, 80, 0.25),
+            0 0 0 0 rgba(138, 118, 80, 0.15);
+    }
+    50% {
+        box-shadow:
+            0 2px 12px rgba(138, 118, 80, 0.3),
+            0 0 0 6px rgba(138, 118, 80, 0.05);
+    }
+}
+
+/* Gradient bar animation — subtle hue shift */
+@keyframes pmGradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+
+/* =============================================================
+   2. LOGIN PAGE ENHANCEMENTS
+   Classes: .pm-auth-section, .pm-auth-card, .pm-auth-header,
+   .pm-auth-icon, .pm-auth-title, .pm-auth-subtitle,
+   .pm-auth-google, .pm-btn-google, .pm-auth-divider,
+   .pm-auth-form, .pm-form-group, .pm-form-label, .input-pm,
+   .pm-toggle-pass, .pm-link-forgot, .pm-btn-submit,
+   .pm-auth-error, .pm-auth-alt, .pm-link
+   ============================================================= */
+
+/* ── Section: Rich layered botanical background ──────────── */
+.pm-auth-section {
+    background:
+        /* Warm golden radial — top left */
+        radial-gradient(ellipse at 15% 25%, rgba(255, 225, 175, 0.18) 0%, transparent 55%),
+        /* Subtle rosa mist — center right */
+        radial-gradient(ellipse at 85% 40%, rgba(183, 116, 102, 0.07) 0%, transparent 50%),
+        /* Deep arena wash — bottom center */
+        radial-gradient(ellipse at 50% 95%, rgba(219, 206, 165, 0.22) 0%, transparent 55%),
+        /* Verde whisper — top right for botanical feel */
+        radial-gradient(ellipse at 90% 10%, rgba(142, 151, 125, 0.06) 0%, transparent 40%),
+        /* Crema base glow — bottom left */
+        radial-gradient(ellipse at 10% 85%, rgba(236, 231, 209, 0.35) 0%, transparent 50%),
+        var(--pm-marfil, #F8F4E8);
+}
+
+/* ── Floating organic blob shapes ────────────────────────── */
+/* Top-right botanical silhouette */
+.pm-auth-section::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -80px;
+    width: 380px;
+    height: 380px;
+    background:
+        radial-gradient(
+            ellipse at 35% 45%,
+            rgba(142, 151, 125, 0.07) 0%,
+            rgba(219, 206, 165, 0.04) 40%,
+            transparent 70%
+        );
+    border-radius: 42% 58% 55% 45% / 45% 55% 50% 55%;
+    pointer-events: none;
+    z-index: 0;
+    animation: pmBlobDrift 18s ease-in-out infinite;
+}
+
+/* Bottom-left warm organic shape */
+.pm-auth-section::after {
+    content: '';
+    position: absolute;
+    bottom: -90px;
+    left: -70px;
+    width: 340px;
+    height: 340px;
+    background:
+        radial-gradient(
+            ellipse at 60% 50%,
+            rgba(183, 116, 102, 0.05) 0%,
+            rgba(255, 225, 175, 0.06) 45%,
+            transparent 70%
+        );
+    border-radius: 55% 45% 48% 52% / 50% 42% 58% 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: pmBlobDrift2 22s ease-in-out infinite;
+}
+
+
+/* ── Auth Card: Premium glassmorphism ────────────────────── */
+.pm-auth-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    border: 1px solid rgba(219, 206, 165, 0.3);
+    box-shadow:
+        0 8px 40px rgba(138, 118, 80, 0.10),
+        0 2px 8px rgba(138, 118, 80, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    animation: pmLuxCardEnter 700ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Top accent: 3px gradient bar with animated shift */
+.pm-auth-card::before {
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-arena, #DBCEA5) 0%,
+        var(--pm-rosa, #B77466) 25%,
+        var(--pm-bronce, #8A7650) 50%,
+        var(--pm-rosa, #B77466) 75%,
+        var(--pm-arena, #DBCEA5) 100%
+    );
+    background-size: 200% 100%;
+    animation: pmGradientShift 6s ease-in-out infinite;
+}
+
+/* Focus-within: deeper warm glow */
+.pm-auth-card:focus-within {
+    box-shadow:
+        0 12px 48px rgba(138, 118, 80, 0.16),
+        0 4px 12px rgba(138, 118, 80, 0.08),
+        0 0 0 1px rgba(219, 206, 165, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border-color: rgba(138, 118, 80, 0.2);
+}
+
+
+/* ── Auth Icon: Animated warm gradient with breathing ────── */
+.pm-auth-icon {
+    background: linear-gradient(
+        135deg,
+        rgba(236, 231, 209, 0.9) 0%,
+        rgba(219, 206, 165, 0.7) 50%,
+        rgba(255, 225, 175, 0.5) 100%
+    );
+    box-shadow:
+        0 4px 18px rgba(138, 118, 80, 0.12),
+        inset 0 -2px 6px rgba(138, 118, 80, 0.06);
+    animation: pmBreathePulse 4s ease-in-out infinite;
+    border: 1px solid rgba(219, 206, 165, 0.35);
+}
+
+/* Icon inner: gradient text fill */
+.pm-auth-icon i {
+    background: linear-gradient(
+        135deg,
+        var(--pm-bronce, #8A7650) 0%,
+        var(--pm-tierra, #957C62) 60%,
+        var(--pm-rosa, #B77466) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.75rem;
+}
+
+
+/* ── Google Button: Premium shimmer + elevated shadow ────── */
+.pm-btn-google {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1.5px solid var(--pm-border, #D8CCAA);
+    border-radius: var(--pm-radius-md, 10px);
+    transition:
+        border-color 250ms ease,
+        box-shadow 300ms ease,
+        transform 200ms ease,
+        background-color 250ms ease;
+}
+
+.pm-btn-google:hover {
+    border-color: var(--pm-bronce, #8A7650);
+    background: rgba(248, 244, 232, 0.95);
+    box-shadow:
+        0 4px 16px rgba(138, 118, 80, 0.14),
+        0 1px 3px rgba(138, 118, 80, 0.06);
+    transform: translateY(-1px);
+}
+
+.pm-btn-google:active {
+    transform: translateY(0) scale(0.985);
+    box-shadow:
+        0 2px 8px rgba(138, 118, 80, 0.10);
+}
+
+/* Shimmer sweep effect */
+.pm-btn-google::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        105deg,
+        transparent 35%,
+        rgba(255, 225, 175, 0.2) 45%,
+        rgba(219, 206, 165, 0.15) 50%,
+        rgba(255, 225, 175, 0.2) 55%,
+        transparent 65%
+    );
+    transform: translateX(-120%);
+    pointer-events: none;
+}
+
+.pm-btn-google:hover::after {
+    animation: pmShimmerSweep 600ms ease forwards;
+}
+
+.pm-btn-google:hover svg {
+    transform: scale(1.1) rotate(-3deg);
+}
+
+.pm-btn-google svg {
+    transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* ── Form Inputs: Warm tint + animated bottom highlight ──── */
+.pm-auth-form .input-pm,
+.pm-cuenta-card .input-pm {
+    background: rgba(248, 244, 232, 0.5);
+    border: 1.5px solid rgba(216, 204, 170, 0.6);
+    border-radius: var(--pm-radius-sm, 6px);
+    transition:
+        border-color 250ms ease,
+        box-shadow 300ms ease,
+        background-color 250ms ease,
+        transform 150ms ease;
+}
+
+.pm-auth-form .input-pm:focus,
+.pm-cuenta-card .input-pm:focus {
+    background: #fff;
+    border-color: var(--pm-bronce, #8A7650);
+    box-shadow:
+        0 0 0 3px rgba(138, 118, 80, 0.1),
+        0 3px 12px rgba(138, 118, 80, 0.06),
+        inset 0 -2px 0 var(--pm-bronce, #8A7650);
+    transform: translateY(-1px);
+}
+
+.pm-auth-form .input-pm::placeholder,
+.pm-cuenta-card .input-pm::placeholder {
+    color: var(--pm-text-light, #9A8C77);
+    font-style: italic;
+    font-size: 0.88rem;
+}
+
+/* Label shifts to bronce on focus-within */
+.pm-form-group:focus-within .pm-form-label {
+    color: var(--pm-bronce, #8A7650);
+    transform: translateX(2px);
+    transition: color 200ms ease, transform 200ms ease;
+}
+
+.pm-form-group:focus-within .pm-form-label i {
+    color: var(--pm-rosa, #B77466);
+    transform: scale(1.1);
+    transition: color 200ms ease, transform 200ms ease;
+}
+
+
+/* ── Auth Divider: Elegant gradient lines ────────────────── */
+.pm-auth-divider {
+    margin: 24px 0;
+}
+
+.pm-auth-divider::before,
+.pm-auth-divider::after {
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(219, 206, 165, 0.5) 20%,
+        rgba(138, 118, 80, 0.2) 50%,
+        rgba(219, 206, 165, 0.5) 80%,
+        transparent 100%
+    );
+}
+
+.pm-auth-divider span {
+    color: var(--pm-text-muted, #746754);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    text-transform: lowercase;
+}
+
+
+/* ── Forgot Password Link ────────────────────────────────── */
+.pm-link-forgot {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.82rem;
+    color: var(--pm-bronce, #8A7650);
+    transition: color 200ms ease;
+}
+
+.pm-link-forgot::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 1px;
+    background: var(--pm-rosa, #B77466);
+    transition: width 300ms ease;
+}
+
+.pm-link-forgot:hover {
+    color: var(--pm-rosa, #B77466);
+    text-decoration: none;
+}
+
+.pm-link-forgot:hover::after {
+    width: 100%;
+}
+
+
+/* ── Submit Button: Gradient sweep + dramatic warm shadow ── */
+.pm-auth-form .pm-btn-submit,
+.pm-auth-form .btn-pm {
+    position: relative;
+    overflow: hidden;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 14px 28px;
+    border-radius: var(--pm-radius-md, 10px);
+    background: linear-gradient(
+        135deg,
+        var(--pm-bronce, #8A7650) 0%,
+        var(--pm-tierra, #957C62) 100%
+    );
+    border: none;
+    color: #fff;
+    font-family: var(--pm-font-ui, 'Poppins', sans-serif);
+    transition:
+        box-shadow 300ms ease,
+        transform 200ms ease,
+        background 250ms ease;
+}
+
+.pm-auth-form .pm-btn-submit:hover,
+.pm-auth-form .btn-pm:hover {
+    box-shadow:
+        0 6px 24px rgba(138, 118, 80, 0.3),
+        0 2px 6px rgba(138, 118, 80, 0.12),
+        0 0 0 1px rgba(138, 118, 80, 0.1);
+    transform: translateY(-2px);
+}
+
+.pm-auth-form .pm-btn-submit:active,
+.pm-auth-form .btn-pm:active {
+    transform: translateY(0);
+    box-shadow:
+        0 2px 8px rgba(138, 118, 80, 0.2);
+}
+
+/* Shimmer sweep overlay on hover */
+.pm-auth-form .pm-btn-submit::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        105deg,
+        transparent 25%,
+        rgba(255, 255, 255, 0.12) 40%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0.12) 60%,
+        transparent 75%
+    );
+    pointer-events: none;
+}
+
+.pm-auth-form .pm-btn-submit:hover::after {
+    animation: pmShimmerSweep 700ms ease forwards;
+}
+
+
+/* ── Error Messages: Slide-down entrance ─────────────────── */
+.pm-auth-error {
+    border-radius: var(--pm-radius-sm, 6px);
+    background: rgba(168, 95, 82, 0.06);
+    border: 1px solid rgba(168, 95, 82, 0.18);
+    border-left: 3px solid var(--pm-rojo, #A85F52);
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    overflow: hidden;
+}
+
+.pm-auth-error[style*="block"] {
+    animation: pmErrorSlideDown 350ms ease-out both;
+}
+
+
+/* ── Alt Link: Animated underline on hover ───────────────── */
+.pm-auth-alt {
+    border-top: 1px solid rgba(219, 206, 165, 0.35);
+}
+
+.pm-auth-alt .pm-link {
+    position: relative;
+    display: inline-block;
+    font-weight: 600;
+    color: var(--pm-bronce, #8A7650);
+    transition: color 250ms ease;
+}
+
+.pm-auth-alt .pm-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -2px;
+    width: 0;
+    height: 1.5px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-bronce, #8A7650),
+        var(--pm-rosa, #B77466)
+    );
+    transition: width 350ms ease, left 350ms ease;
+}
+
+.pm-auth-alt .pm-link:hover {
+    color: var(--pm-rosa, #B77466);
+    text-decoration: none;
+}
+
+.pm-auth-alt .pm-link:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+
+/* ── Password Toggle: Premium treatment ──────────────────── */
+.pm-toggle-pass {
+    width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--pm-radius-sm, 6px);
+    color: var(--pm-text-muted, #746754);
+    transition:
+        color 200ms ease,
+        background 200ms ease,
+        transform 150ms ease;
+}
+
+.pm-toggle-pass:hover {
+    background: rgba(219, 206, 165, 0.3);
+    color: var(--pm-bronce, #8A7650);
+    transform: scale(1.05);
+}
+
+
+/* =============================================================
+   3. REGISTRO PAGE ENHANCEMENTS
+   Inherits all login styles. Wider card (col-xl-5).
+   Premium two-column name row with uniform spacing.
+   ============================================================= */
+
+/* Wider registration card fills space gracefully */
+.pm-auth-section .col-xl-5 .pm-auth-card {
+    padding: 42px 40px;
+}
+
+/* Name row: premium uniform spacing */
+.pm-auth-form .row.g-3 {
+    margin-bottom: 4px;
+}
+
+.pm-auth-form .row.g-3 .pm-form-group {
+    margin-bottom: 14px;
+}
+
+/* Subtle separator between name fields on desktop */
+@media (min-width: 576px) {
+    .pm-auth-form .row.g-3 > .col-6:first-child .pm-form-group {
+        position: relative;
+    }
+
+    .pm-auth-form .row.g-3 > .col-6:first-child .pm-form-group::after {
+        content: '';
+        position: absolute;
+        right: -8px;
+        top: 28px;
+        bottom: 4px;
+        width: 1px;
+        background: linear-gradient(
+            180deg,
+            transparent 0%,
+            rgba(219, 206, 165, 0.4) 30%,
+            rgba(219, 206, 165, 0.4) 70%,
+            transparent 100%
+        );
+    }
+}
+
+/* Optional text in registration gets subtle styling */
+.pm-form-label .pm-text-muted {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--pm-text-light, #9A8C77);
+    font-style: italic;
+}
+
+
+/* =============================================================
+   4. MI CUENTA PAGE ENHANCEMENTS
+   Classes: .pm-cuenta-section, .pm-cuenta-header,
+   .pm-cuenta-card, .pm-cuenta-card-title, .pm-cita-item,
+   .pm-cita-fecha, .pm-cita-fecha-dia, .pm-cita-fecha-mes,
+   .pm-cita-info, .pm-cita-servicio, .pm-cita-hora,
+   .pm-cita-estado, .pm-badge (variants)
+   ============================================================= */
+
+/* ── Section: Warm layered background matching auth ──────── */
+.pm-cuenta-section {
+    background:
+        radial-gradient(ellipse at 10% 15%, rgba(255, 225, 175, 0.14) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 30%, rgba(142, 151, 125, 0.05) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 90%, rgba(219, 206, 165, 0.2) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 75%, rgba(183, 116, 102, 0.06) 0%, transparent 40%),
+        var(--pm-marfil, #F8F4E8);
+}
+
+
+/* ── Cards: Glassmorphism with staggered entry ───────────── */
+.pm-cuenta-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid rgba(219, 206, 165, 0.28);
+    border-radius: var(--pm-radius-lg, 16px);
+    box-shadow:
+        0 4px 24px rgba(138, 118, 80, 0.08),
+        0 1px 4px rgba(138, 118, 80, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    animation: pmStaggerFadeUp 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    transition:
+        box-shadow 350ms ease,
+        transform 350ms ease,
+        border-color 350ms ease;
+}
+
+/* Staggered animation delays */
+.pm-cuenta-card:nth-child(1) { animation-delay: 0ms; }
+.pm-cuenta-card:nth-child(2) { animation-delay: 100ms; }
+.pm-cuenta-card:nth-child(3) { animation-delay: 200ms; }
+.pm-cuenta-card:nth-child(4) { animation-delay: 300ms; }
+
+/* Accent bar at top: warm gradient */
+.pm-cuenta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2.5px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-arena, #DBCEA5) 0%,
+        var(--pm-bronce, #8A7650) 30%,
+        var(--pm-rosa, #B77466) 70%,
+        var(--pm-arena, #DBCEA5) 100%
+    );
+    border-radius: var(--pm-radius-lg, 16px) var(--pm-radius-lg, 16px) 0 0;
+}
+
+/* Hover elevation */
+.pm-cuenta-card:hover {
+    box-shadow:
+        0 8px 32px rgba(138, 118, 80, 0.12),
+        0 2px 8px rgba(138, 118, 80, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transform: translateY(-3px);
+    border-color: rgba(219, 206, 165, 0.4);
+}
+
+.pm-cuenta-card:focus-within {
+    box-shadow:
+        0 8px 36px rgba(138, 118, 80, 0.14),
+        0 0 0 1px rgba(219, 206, 165, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+
+/* ── Card Title: Icon in warm rounded square + gradient border */
+.pm-cuenta-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--pm-font-heading, 'Playfair Display', serif);
+    color: var(--pm-tierra-dark, #7A654F);
+    font-size: 1.05rem;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(
+        90deg,
+        rgba(138, 118, 80, 0.2) 0%,
+        rgba(219, 206, 165, 0.3) 40%,
+        transparent 80%
+    ) 1;
+}
+
+.pm-cuenta-card-title i {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+        135deg,
+        var(--pm-crema, #ECE7D1) 0%,
+        rgba(219, 206, 165, 0.6) 100%
+    );
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--pm-bronce, #8A7650);
+    box-shadow: 0 2px 6px rgba(138, 118, 80, 0.08);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.pm-cuenta-card:hover .pm-cuenta-card-title i {
+    transform: scale(1.06);
+    box-shadow: 0 3px 10px rgba(138, 118, 80, 0.12);
+}
+
+
+/* ── Header h1: Gradient text icon ───────────────────────── */
+.pm-cuenta-header h1 {
+    font-family: var(--pm-font-heading, 'Playfair Display', serif);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pm-cuenta-header h1 i {
+    background: linear-gradient(
+        135deg,
+        var(--pm-bronce, #8A7650) 0%,
+        var(--pm-rosa, #B77466) 60%,
+        var(--pm-tierra, #957C62) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.6rem;
+}
+
+.pm-cuenta-header p {
+    color: var(--pm-text-muted, #746754);
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+/* Decorative accent line under header */
+.pm-cuenta-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 90px;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-bronce, #8A7650),
+        var(--pm-rosa, #B77466),
+        transparent
+    );
+    border-radius: 1px;
+}
+
+
+/* ── Cita Items: Hover highlight + warm date badge ───────── */
+.pm-cita-item {
+    background: rgba(248, 244, 232, 0.5);
+    border: 1px solid rgba(219, 206, 165, 0.2);
+    border-radius: var(--pm-radius-md, 10px);
+    padding: 16px;
+    margin-bottom: 10px;
+    transition:
+        background 200ms ease,
+        box-shadow 250ms ease,
+        border-color 200ms ease,
+        transform 200ms ease;
+}
+
+.pm-cita-item:hover {
+    background: rgba(248, 244, 232, 0.8);
+    box-shadow:
+        0 3px 12px rgba(138, 118, 80, 0.08),
+        0 1px 3px rgba(138, 118, 80, 0.04);
+    border-color: rgba(219, 206, 165, 0.4);
+    transform: translateX(3px);
+}
+
+/* Date badge with warm shadow */
+.pm-cita-fecha {
+    background: linear-gradient(
+        135deg,
+        var(--pm-crema, #ECE7D1) 0%,
+        rgba(219, 206, 165, 0.6) 100%
+    );
+    border-radius: var(--pm-radius-sm, 6px);
+    padding: 8px 12px;
+    min-width: 56px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(138, 118, 80, 0.08);
+    border: 1px solid rgba(219, 206, 165, 0.3);
+}
+
+.pm-cita-fecha-dia {
+    display: block;
+    font-family: var(--pm-font-ui, 'Poppins', sans-serif);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--pm-bronce, #8A7650);
+    line-height: 1;
+    text-shadow: 0 1px 2px rgba(138, 118, 80, 0.1);
+}
+
+.pm-cita-fecha-mes {
+    display: block;
+    font-family: var(--pm-font-ui, 'Poppins', sans-serif);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--pm-tierra, #957C62);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+}
+
+/* Service name styling */
+.pm-cita-servicio {
+    font-family: var(--pm-font-body, 'Inter', sans-serif);
+    font-weight: 600;
+    font-size: 0.93rem;
+    color: var(--pm-text, #3F352B);
+}
+
+.pm-cita-hora {
+    font-size: 0.82rem;
+    color: var(--pm-text-muted, #746754);
+}
+
+.pm-cita-hora i {
+    color: var(--pm-bronce, #8A7650);
+    font-size: 0.75rem;
+}
+
+
+/* ── Status Badges: Warm color-coded pills ───────────────── */
+.pm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 14px;
+    border-radius: var(--pm-radius-full, 9999px);
+    font-family: var(--pm-font-ui, 'Poppins', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: box-shadow 200ms ease;
+}
+
+.pm-badge-pendiente {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 225, 175, 0.25) 0%,
+        rgba(219, 206, 165, 0.2) 100%
+    );
+    color: #A07520;
+    border: 1px solid rgba(255, 225, 175, 0.5);
+    box-shadow: 0 1px 4px rgba(160, 117, 32, 0.08);
+}
+
+.pm-badge-confirmada {
+    background: linear-gradient(
+        135deg,
+        rgba(142, 151, 125, 0.18) 0%,
+        rgba(142, 151, 125, 0.12) 100%
+    );
+    color: #4E6340;
+    border: 1px solid rgba(142, 151, 125, 0.35);
+    box-shadow: 0 1px 4px rgba(78, 99, 64, 0.08);
+}
+
+.pm-badge-completada {
+    background: linear-gradient(
+        135deg,
+        rgba(138, 118, 80, 0.12) 0%,
+        rgba(149, 124, 98, 0.1) 100%
+    );
+    color: var(--pm-tierra, #957C62);
+    border: 1px solid rgba(138, 118, 80, 0.25);
+    box-shadow: 0 1px 4px rgba(138, 118, 80, 0.06);
+}
+
+.pm-badge-cancelada {
+    background: linear-gradient(
+        135deg,
+        rgba(183, 116, 102, 0.1) 0%,
+        rgba(168, 95, 82, 0.08) 100%
+    );
+    color: var(--pm-rosa, #B77466);
+    border: 1px solid rgba(183, 116, 102, 0.25);
+    box-shadow: 0 1px 4px rgba(183, 116, 102, 0.06);
+}
+
+/* Badge hover for interactivity cue */
+.pm-badge:hover {
+    box-shadow: 0 2px 8px rgba(138, 118, 80, 0.12);
+}
+
+
+/* ── Empty State: Warm icon treatment ────────────────────── */
+.pm-cuenta-card .text-center i[style*="font-size:2.5rem"] {
+    background: linear-gradient(
+        135deg,
+        var(--pm-arena, #DBCEA5),
+        var(--pm-bronce, #8A7650)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0.7;
+    transition: opacity 300ms ease, transform 300ms ease;
+}
+
+.pm-cuenta-card .text-center:hover i[style*="font-size:2.5rem"] {
+    opacity: 1;
+    transform: scale(1.08);
+}
+
+
+/* =============================================================
+   5. RESERVAR PAGE ENHANCEMENTS
+   Classes: .pm-reservar-section, .pm-steps, .pm-step,
+   .pm-step-num, .pm-step-label, .pm-step-line,
+   .pm-wizard-step, .pm-servicio-option, .pm-so-icon,
+   .pm-so-name, .pm-so-meta, .pm-so-price, .pm-turnos-grid,
+   .pm-turno-btn, .pm-resumen-card, .pm-resumen-row,
+   .pm-no-turnos, .pm-auth-required, .pm-auth-required-icon,
+   .pm-auth-required-benefits, .pm-auth-required-actions
+   ============================================================= */
+
+/* ── Section: Warm radials ───────────────────────────────── */
+.pm-reservar-section {
+    background:
+        radial-gradient(ellipse at 20% 15%, rgba(255, 225, 175, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 75% 85%, rgba(183, 116, 102, 0.06) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 50%, rgba(236, 231, 209, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 85% 20%, rgba(142, 151, 125, 0.05) 0%, transparent 40%),
+        var(--pm-marfil, #F8F4E8);
+}
+
+
+/* ── Step Indicator: Active glow + done verde check ──────── */
+.pm-step {
+    transition: opacity 300ms ease, transform 200ms ease;
+}
+
+.pm-step.active {
+    transform: scale(1.05);
+}
+
+.pm-step-num {
+    transition:
+        all 300ms ease,
+        box-shadow 400ms ease;
+}
+
+.pm-step.active .pm-step-num {
+    background: linear-gradient(
+        135deg,
+        var(--pm-bronce, #8A7650) 0%,
+        var(--pm-tierra, #957C62) 100%
+    );
+    border-color: var(--pm-bronce, #8A7650);
+    animation: pmGlowPulse 2.5s ease-in-out infinite;
+}
+
+.pm-step.done .pm-step-num {
+    background: var(--pm-verde, #8E977D);
+    border-color: var(--pm-verde, #8E977D);
+    box-shadow: 0 2px 6px rgba(142, 151, 125, 0.2);
+}
+
+/* Done steps: show check mark via font */
+.pm-step.done .pm-step-num {
+    font-size: 0;
+}
+
+.pm-step.done .pm-step-num::after {
+    content: '\2713';
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.pm-step-label {
+    transition: color 200ms ease, font-weight 200ms ease;
+}
+
+.pm-step.active .pm-step-label {
+    color: var(--pm-bronce, #8A7650);
+    font-weight: 600;
+}
+
+.pm-step.done .pm-step-label {
+    color: var(--pm-verde, #8E977D);
+}
+
+/* Connecting lines turn verde when step is done */
+.pm-step.done + .pm-step-line {
+    background: linear-gradient(
+        90deg,
+        var(--pm-verde, #8E977D),
+        rgba(142, 151, 125, 0.4)
+    );
+}
+
+
+/* ── Wizard Card: Premium with top accent + entrance ─────── */
+.pm-wizard-step {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(219, 206, 165, 0.25);
+    box-shadow:
+        0 4px 24px rgba(138, 118, 80, 0.08),
+        0 1px 4px rgba(138, 118, 80, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    animation: pmLuxCardEnter 500ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Top accent gradient bar */
+.pm-wizard-step::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2.5px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-arena, #DBCEA5) 0%,
+        var(--pm-bronce, #8A7650) 35%,
+        var(--pm-rosa, #B77466) 65%,
+        var(--pm-arena, #DBCEA5) 100%
+    );
+    border-radius: var(--pm-radius-lg, 16px) var(--pm-radius-lg, 16px) 0 0;
+}
+
+
+/* ── Service Options: Hover lift + selected inner glow ───── */
+.pm-servicio-option {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid rgba(219, 206, 165, 0.35);
+    transition:
+        border-color 250ms ease,
+        background 250ms ease,
+        box-shadow 300ms ease,
+        transform 200ms ease;
+}
+
+.pm-servicio-option:hover {
+    border-color: var(--pm-bronce, #8A7650);
+    background: rgba(248, 244, 232, 0.7);
+    box-shadow:
+        0 4px 16px rgba(138, 118, 80, 0.1),
+        0 1px 3px rgba(138, 118, 80, 0.05);
+    transform: translateY(-2px);
+}
+
+.pm-servicio-option.selected {
+    border-color: var(--pm-bronce, #8A7650);
+    background: rgba(138, 118, 80, 0.06);
+    box-shadow:
+        0 2px 12px rgba(138, 118, 80, 0.12),
+        inset 0 0 0 1px rgba(138, 118, 80, 0.1),
+        inset 0 0 20px rgba(255, 225, 175, 0.08);
+}
+
+.pm-servicio-option .pm-so-icon {
+    background: linear-gradient(
+        135deg,
+        var(--pm-crema, #ECE7D1) 0%,
+        rgba(255, 225, 175, 0.5) 100%
+    );
+    box-shadow: 0 2px 6px rgba(138, 118, 80, 0.06);
+    transition: transform 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.pm-servicio-option:hover .pm-so-icon {
+    transform: scale(1.08) rotate(-3deg);
+}
+
+.pm-servicio-option .pm-so-price {
+    color: var(--pm-bronce, #8A7650);
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(138, 118, 80, 0.08);
+}
+
+
+/* ── Time Slots: Selected warm bg + white text + shadow ──── */
+.pm-turno-btn {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid rgba(219, 206, 165, 0.4);
+    transition:
+        border-color 200ms ease,
+        background 200ms ease,
+        color 200ms ease,
+        transform 200ms ease,
+        box-shadow 200ms ease;
+}
+
+.pm-turno-btn:hover {
+    border-color: var(--pm-bronce, #8A7650);
+    background: rgba(236, 231, 209, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(138, 118, 80, 0.08);
+}
+
+.pm-turno-btn.selected {
+    background: linear-gradient(
+        135deg,
+        var(--pm-bronce, #8A7650) 0%,
+        var(--pm-tierra, #957C62) 100%
+    );
+    border-color: var(--pm-bronce, #8A7650);
+    color: #fff;
+    box-shadow:
+        0 4px 14px rgba(138, 118, 80, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+}
+
+
+/* ── Summary Card: Warm border + refined typography ──────── */
+.pm-resumen-card {
+    background: linear-gradient(
+        135deg,
+        rgba(236, 231, 209, 0.7) 0%,
+        rgba(248, 244, 232, 0.8) 100%
+    );
+    border: 1px solid rgba(219, 206, 165, 0.4);
+    border-radius: var(--pm-radius-md, 10px);
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(138, 118, 80, 0.05);
+}
+
+.pm-resumen-row {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(219, 206, 165, 0.35);
+}
+
+.pm-resumen-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.pm-resumen-row span {
+    color: var(--pm-text-muted, #746754);
+    font-size: 0.88rem;
+}
+
+.pm-resumen-row strong {
+    color: var(--pm-text, #3F352B);
+    font-weight: 600;
+}
+
+
+/* ── Auth Required: Premium treatment ────────────────────── */
+.pm-auth-required {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(219, 206, 165, 0.3);
+    border-radius: var(--pm-radius-lg, 16px);
+    padding: 40px 36px;
+    text-align: center;
+    box-shadow:
+        0 8px 40px rgba(138, 118, 80, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    position: relative;
+    overflow: hidden;
+    animation: pmLuxCardEnter 600ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Top accent bar */
+.pm-auth-required::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+        90deg,
+        var(--pm-arena, #DBCEA5),
+        var(--pm-rosa, #B77466),
+        var(--pm-bronce, #8A7650),
+        var(--pm-arena, #DBCEA5)
+    );
+}
+
+.pm-auth-required-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+    background: linear-gradient(
+        135deg,
+        rgba(236, 231, 209, 0.9) 0%,
+        rgba(219, 206, 165, 0.6) 100%
+    );
+    box-shadow:
+        0 4px 16px rgba(138, 118, 80, 0.1),
+        inset 0 -2px 4px rgba(138, 118, 80, 0.05);
+    animation: pmBreathePulse 4s ease-in-out infinite;
+}
+
+.pm-auth-required-icon i {
+    background: linear-gradient(
+        135deg,
+        var(--pm-bronce, #8A7650),
+        var(--pm-rosa, #B77466)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.pm-auth-required h3 {
+    font-family: var(--pm-font-heading, 'Playfair Display', serif);
+    color: var(--pm-tierra, #957C62);
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+}
+
+.pm-auth-required p {
+    color: var(--pm-text-muted, #746754);
+    font-size: 0.92rem;
+    max-width: 380px;
+    margin: 0 auto 20px;
+    line-height: 1.6;
+}
+
+/* Benefits list */
+.pm-auth-required-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto 28px;
+    max-width: 340px;
+    text-align: left;
+}
+
+.pm-auth-required-benefits li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 0.88rem;
+    color: var(--pm-text, #3F352B);
+    border-bottom: 1px solid rgba(219, 206, 165, 0.15);
+    transition: transform 200ms ease;
+}
+
+.pm-auth-required-benefits li:last-child {
+    border-bottom: none;
+}
+
+.pm-auth-required-benefits li:hover {
+    transform: translateX(4px);
+}
+
+.pm-auth-required-benefits li i {
+    color: var(--pm-verde, #8E977D);
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+/* Actions */
+.pm-auth-required-actions {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.pm-auth-required-actions .btn {
+    min-height: 48px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border-radius: var(--pm-radius-md, 10px);
+}
+
+.pm-auth-required-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 14px 0;
+}
+
+.pm-auth-required-divider::before,
+.pm-auth-required-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(219, 206, 165, 0.5),
+        transparent
+    );
+}
+
+.pm-auth-required-divider span {
+    font-size: 0.78rem;
+    color: var(--pm-text-muted, #746754);
+    font-weight: 500;
+}
+
+
+/* =============================================================
+   6. MOBILE PORTRAIT (max-width: 575.98px)
+   Touch-friendly, compact, premium feel on small screens.
+   ============================================================= */
+@media (max-width: 575.98px) {
+
+    /* ── Hero adjustments ────────────────────────────────── */
+    .pm-hero-title {
+        font-size: clamp(2rem, 8vw, 3rem);
+        letter-spacing: -0.01em;
+    }
+
+    .pm-hero-subtitle {
+        font-size: clamp(0.88rem, 3.5vw, 1.0625rem);
+        line-height: 1.5;
+    }
+
+    .pm-hero-ctas {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .pm-hero-ctas a {
+        width: 100%;
+        max-width: 100%;
+        text-align: center;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pm-hero-badge {
+        font-size: 0.72rem;
+        padding: 5px 14px;
+    }
+
+
+    /* ── Auth Card: Tighter padding ──────────────────────── */
+    .pm-auth-card {
+        padding: 24px 20px;
+        margin: 0 -2px;
+        border-radius: var(--pm-radius-md, 12px);
+    }
+
+    .pm-auth-card::before {
+        border-radius: var(--pm-radius-md, 12px) var(--pm-radius-md, 12px) 0 0;
+    }
+
+    .pm-auth-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .pm-auth-icon i {
+        font-size: 1.35rem;
+    }
+
+    .pm-auth-title {
+        font-size: 1.35rem;
+        margin-bottom: 6px;
+    }
+
+    .pm-auth-subtitle {
+        font-size: 0.82rem;
+        line-height: 1.4;
+    }
+
+    .pm-auth-section .col-xl-5 .pm-auth-card {
+        padding: 24px 20px;
+    }
+
+
+    /* ── Google Button: Compact ──────────────────────────── */
+    .pm-btn-google {
+        padding: 11px 16px;
+        font-size: 0.88rem;
+        gap: 8px;
+    }
+
+    .pm-btn-google svg {
+        width: 16px;
+        height: 16px;
+    }
+
+
+    /* ── Form elements: Touch-friendly ───────────────────── */
+    .pm-auth-form .pm-form-group {
+        margin-bottom: 14px;
+    }
+
+    .pm-auth-form .pm-form-label {
+        font-size: 0.82rem;
+        margin-bottom: 5px;
+    }
+
+    .pm-auth-form .input-pm,
+    .pm-cuenta-card .input-pm {
+        min-height: 48px;
+        font-size: 1rem;
+        padding: 12px 14px;
+    }
+
+    .pm-auth-form .pm-btn-submit,
+    .pm-auth-form .btn-pm {
+        min-height: 48px;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+
+    .pm-auth-divider {
+        margin: 18px 0;
+    }
+
+    .pm-auth-divider span {
+        font-size: 0.72rem;
+    }
+
+
+    /* ── Password toggle: Touch-friendly ─────────────────── */
+    .pm-toggle-pass {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
+
+
+    /* ── Navbar hamburger: Warm color ────────────────────── */
+    .pm-navbar-toggler {
+        color: var(--pm-bronce, #8A7650);
+    }
+
+    .pm-navbar-toggler:focus {
+        box-shadow: 0 0 0 3px rgba(138, 118, 80, 0.15);
+    }
+
+
+    /* ── Service Cards: Full-width rounded ───────────────── */
+    .pm-service-card {
+        border-radius: var(--pm-radius-lg, 16px);
+        margin-bottom: 16px;
+    }
+
+
+    /* ── Gallery: 2-col grid feel ────────────────────────── */
+    .pm-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+
+    /* ── Team Cards: 2-col layout ────────────────────────── */
+    .pm-team-card {
+        border-radius: var(--pm-radius-md, 12px);
+    }
+
+
+    /* ── Footer: Stacked, centered text ──────────────────── */
+    .pm-footer {
+        text-align: center;
+    }
+
+    .pm-footer-brand {
+        justify-content: center;
+    }
+
+    .pm-footer-social {
+        justify-content: center;
+    }
+
+
+    /* ── Touch targets: min 44px per WCAG ────────────────── */
+    .btn-pm,
+    .btn-pm-outline,
+    .btn-pm-dorado,
+    .btn-pm-whatsapp,
+    .btn-pm-ghost {
+        min-height: 44px;
+    }
+
+    a.pm-link,
+    .pm-link-forgot,
+    .pm-auth-alt a {
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+
+    /* ── Mi Cuenta Mobile ────────────────────────────────── */
+    .pm-cuenta-card {
+        padding: 20px 16px;
+        border-radius: var(--pm-radius-md, 12px);
+        margin-bottom: 16px;
+    }
+
+    .pm-cuenta-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .pm-cuenta-card-title {
+        font-size: 0.95rem;
+        padding-bottom: 12px;
+        margin-bottom: 14px;
+    }
+
+    .pm-cuenta-card-title i {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+
+    .pm-cita-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 14px;
+    }
+
+    .pm-cita-fecha {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 12px;
+    }
+
+    .pm-cita-fecha-dia {
+        font-size: 1.2rem;
+    }
+
+    .pm-cita-fecha-mes {
+        font-size: 0.68rem;
+    }
+
+
+    /* ── Reservar Mobile ─────────────────────────────────── */
+    .pm-wizard-step {
+        padding: 20px 16px;
+        border-radius: var(--pm-radius-md, 12px);
+    }
+
+    .pm-step-num {
+        width: 32px;
+        height: 32px;
+        font-size: 0.78rem;
+    }
+
+    .pm-step-label {
+        font-size: 0.65rem;
+    }
+
+    .pm-step-line {
+        max-width: 36px;
+        margin: 0 4px;
+    }
+
+    .pm-servicio-option {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .pm-servicio-option .pm-so-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 0.95rem;
+    }
+
+    .pm-servicio-option .pm-so-name {
+        font-size: 0.88rem;
+    }
+
+    .pm-servicio-option .pm-so-meta {
+        font-size: 0.78rem;
+    }
+
+    .pm-servicio-option .pm-so-price {
+        font-size: 0.95rem;
+    }
+
+    .pm-turnos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+        gap: 6px;
+    }
+
+    .pm-turno-btn {
+        padding: 10px 6px;
+        font-size: 0.88rem;
+        min-height: 44px;
+    }
+
+    .pm-auth-required {
+        padding: 28px 20px;
+        border-radius: var(--pm-radius-md, 12px);
+    }
+
+    .pm-auth-required-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 1.6rem;
+    }
+
+    .pm-auth-required h3 {
+        font-size: 1.2rem;
+    }
+
+    .pm-resumen-card {
+        padding: 16px;
+    }
+
+    .pm-resumen-row {
+        font-size: 0.85rem;
+        padding: 8px 0;
+    }
+
+
+    /* ── Smooth transitions on all interactive elements ──── */
+    button,
+    a,
+    input,
+    .pm-servicio-option,
+    .pm-turno-btn,
+    .pm-cita-item {
+        -webkit-tap-highlight-color: rgba(138, 118, 80, 0.1);
+    }
+}
+
+
+/* =============================================================
+   7. MOBILE LANDSCAPE (max-width: 767.98px)
+   Adjustments for landscape orientation and medium phones.
+   ============================================================= */
+@media (max-width: 767.98px) {
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .pm-hero-title {
+        font-size: clamp(1.75rem, 6vw, 2.5rem);
+    }
+
+    .pm-hero-ctas {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .pm-hero-ctas a {
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+
+
+    /* ── Auth section ────────────────────────────────────── */
+    .pm-auth-section {
+        padding: 100px 0 40px;
+    }
+
+    .pm-auth-section::before {
+        width: 240px;
+        height: 240px;
+        top: -30px;
+        right: -40px;
+    }
+
+    .pm-auth-section::after {
+        width: 200px;
+        height: 200px;
+        bottom: -60px;
+        left: -40px;
+    }
+
+
+    /* ── Gallery: 2-col grid ─────────────────────────────── */
+    .pm-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+
+    /* ── Team cards layout ───────────────────────────────── */
+    .pm-team-card {
+        margin-bottom: 16px;
+    }
+
+
+    /* ── Footer columns stack ────────────────────────────── */
+    .pm-footer {
+        text-align: center;
+    }
+
+    .pm-footer-social {
+        justify-content: center;
+    }
+
+    .pm-footer-bottom {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+
+    /* ── Cuenta section ──────────────────────────────────── */
+    .pm-cuenta-section {
+        padding: 100px 0 40px;
+    }
+
+
+    /* ── Reservar section ────────────────────────────────── */
+    .pm-reservar-section {
+        padding-top: 100px;
+    }
+}
+
+
+/* =============================================================
+   8. TABLET (max-width: 991.98px)
+   Comfortable spacing for tablet browsing.
+   ============================================================= */
+@media (max-width: 991.98px) {
+
+    /* ── Auth Card: Slightly wider padding ────────────────── */
+    .pm-auth-card {
+        padding: 36px 32px;
+    }
+
+    .pm-auth-section .col-xl-5 .pm-auth-card {
+        padding: 36px 32px;
+    }
+
+
+    /* ── Service grid: 2 cols ────────────────────────────── */
+    .pm-service-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    /* ── Gallery: 2x3 grid ───────────────────────────────── */
+    .pm-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    /* ── CTA: Stacked buttons ────────────────────────────── */
+    .pm-cta-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .pm-cta-actions a {
+        width: 100%;
+        max-width: 320px;
+    }
+
+
+    /* ── Cuenta layout ───────────────────────────────────── */
+    .pm-cuenta-card {
+        margin-bottom: 16px;
+    }
+
+
+    /* ── Step indicator adjustments ───────────────────────── */
+    .pm-step-line {
+        max-width: 50px;
+    }
+}
+
+
+/* =============================================================
+   9. EXTRA SMALL DEVICES (max-width: 380px)
+   Micro adjustments for very small screens.
+   ============================================================= */
+@media (max-width: 380px) {
+
+    .pm-auth-card {
+        padding: 22px 16px;
+    }
+
+    .pm-auth-section .col-xl-5 .pm-auth-card {
+        padding: 22px 16px;
+    }
+
+    .pm-auth-icon {
+        width: 42px;
+        height: 42px;
+    }
+
+    .pm-auth-icon i {
+        font-size: 1.2rem;
+    }
+
+    .pm-auth-title {
+        font-size: 1.25rem;
+    }
+
+    .pm-auth-subtitle {
+        font-size: 0.78rem;
+    }
+
+    .pm-btn-google {
+        font-size: 0.84rem;
+        padding: 10px 14px;
+    }
+
+    .pm-cuenta-header h1 {
+        font-size: 1.25rem;
+    }
+
+    .pm-cita-fecha-dia {
+        font-size: 1.1rem;
+    }
+
+    .pm-auth-required {
+        padding: 22px 16px;
+    }
+
+    .pm-auth-required h3 {
+        font-size: 1.1rem;
+    }
+
+    .pm-auth-required p {
+        font-size: 0.85rem;
+    }
+
+    .pm-step-num {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+
+    .pm-step-label {
+        font-size: 0.6rem;
+    }
+
+    .pm-step-line {
+        max-width: 28px;
+    }
+}
+
+
+/* =============================================================
+   10. REDUCED MOTION
+   Disable animations for users who prefer reduced motion.
+   ============================================================= */
+@media (prefers-reduced-motion: reduce) {
+
+    /* ── Disable all custom animations ───────────────────── */
+    .pm-auth-card,
+    .pm-wizard-step,
+    .pm-auth-required {
+        animation: none !important;
+    }
+
+    .pm-cuenta-card {
+        animation: none !important;
+    }
+
+    .pm-auth-icon {
+        animation: none !important;
+    }
+
+    .pm-auth-required-icon {
+        animation: none !important;
+    }
+
+    .pm-auth-error[style*="block"] {
+        animation: none !important;
+    }
+
+    .pm-step.active .pm-step-num {
+        animation: none !important;
+    }
+
+    .pm-auth-section::before,
+    .pm-auth-section::after {
+        animation: none !important;
+    }
+
+    .pm-auth-card::before {
+        animation: none !important;
+    }
+
+    /* ── Disable shimmer effects ─────────────────────────── */
+    .pm-btn-google::after,
+    .pm-auth-form .pm-btn-submit::after {
+        display: none !important;
+    }
+
+    /* ── Keep hover transforms minimal ───────────────────── */
+    .pm-servicio-option:hover,
+    .pm-turno-btn:hover,
+    .pm-cita-item:hover,
+    .pm-cuenta-card:hover,
+    .pm-btn-google:hover {
+        transform: none !important;
+    }
+
+    .pm-auth-form .pm-btn-submit:hover,
+    .pm-auth-form .btn-pm:hover {
+        transform: none !important;
+    }
+
+    .pm-auth-form .input-pm:focus,
+    .pm-cuenta-card .input-pm:focus {
+        transform: none !important;
+    }
+
+    /* ── Reduce transition durations ─────────────────────── */
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+    }
+}
