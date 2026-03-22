@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body style="font-family: Inter, Arial, sans-serif; background: #F8F4E8; padding: 40px 20px; margin: 0;">
-    <div style="max-width: 560px; margin: 0 auto; background: #fff; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
+<body style="font-family: 'DM Sans', Arial, sans-serif; background: #F8F4E8; padding: 40px 20px; margin: 0;">
+    <div style="max-width: 560px; margin: 0 auto; background: #FEFCF8; border-radius: 16px; padding: 40px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
         <!-- Header -->
         <div style="text-align: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #ECE7D1;">
             <h1 style="font-family: 'Playfair Display', Georgia, serif; color: #957C62; font-size: 28px; margin: 0; letter-spacing: 1px;">Piel Morena</h1>

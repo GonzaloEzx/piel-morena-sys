@@ -61,7 +61,7 @@
     --pm-text-inverse:     #F8F4E8;
 
     /* -- Superficies -- */
-    --pm-surface:          #FFFFFF;
+    --pm-surface:          #FEFCF8;
     --pm-surface-warm:     #F8F4E8;
     --pm-surface-alt:      #ECE7D1;
     --pm-surface-hover:    #E6DFC8;
@@ -87,7 +87,7 @@
 
     /* -- Tipografia -- */
     --pm-font-heading:     'Playfair Display', Georgia, serif;
-    --pm-font-body:        'Inter', -apple-system, sans-serif;
+    --pm-font-body:        'DM Sans', -apple-system, sans-serif;
     --pm-font-ui:          'Poppins', Helvetica, sans-serif;
     --pm-leading-tight:    1.2;
     --pm-leading-normal:   1.6;
@@ -157,6 +157,9 @@ body {
     background-color: var(--pm-surface-warm);
     line-height: var(--pm-leading-normal);
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-variant-ligatures: common-ligatures;
+    hanging-punctuation: first last;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
 }
@@ -292,12 +295,14 @@ small,
     padding: var(--pm-space-8) 0;
     background-color: var(--pm-marfil);
     position: relative;
+    scroll-margin-top: var(--pm-navbar-shrink);
 }
 
 .pm-section-alt {
     padding: var(--pm-space-8) 0;
     background-color: var(--pm-crema);
     position: relative;
+    scroll-margin-top: var(--pm-navbar-shrink);
 }
 
 /* Soft curved transition between sections — organic flow */
@@ -774,7 +779,7 @@ main {
     -webkit-backdrop-filter: blur(8px);
     border-radius: var(--pm-radius-full);
     font-size: 1.25rem;
-    color: white;
+    color: var(--pm-text-inverse);
     transition: background var(--pm-transition-base);
 }
 
@@ -822,7 +827,7 @@ main {
     justify-content: center;
     gap: var(--pm-space-2);
     background-color: var(--pm-bronce);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
     border: 2px solid transparent;
     border-radius: var(--pm-radius-md);
     padding: 10px 24px;
@@ -833,25 +838,28 @@ main {
     text-decoration: none;
     white-space: nowrap;
     transition:
-        background-color var(--pm-transition-base),
-        color var(--pm-transition-base),
-        box-shadow var(--pm-transition-base),
-        transform var(--pm-transition-base),
-        filter var(--pm-transition-base);
+        background-color 250ms cubic-bezier(0.22, 1, 0.36, 1),
+        color 250ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 250ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .btn-pm:hover {
     background-color: var(--pm-bronce-light);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
     box-shadow: var(--pm-shadow-sm);
-    filter: brightness(1.08);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
 .btn-pm:active {
     background-color: var(--pm-bronce-dark);
-    transform: translateY(0);
+    transform: translateY(1px);
     box-shadow: none;
+}
+
+.btn-pm:focus-visible {
+    outline: 2px solid var(--pm-bronce);
+    outline-offset: 3px;
 }
 
 /* -- Outline -- */
@@ -880,14 +888,20 @@ main {
 
 .btn-pm-outline:hover {
     background-color: var(--pm-bronce);
-    color: #FFFFFF;
-    transform: translateY(-1px);
+    color: var(--pm-text-inverse);
+    transform: translateY(-2px);
 }
 
 .btn-pm-outline:active {
     background-color: var(--pm-bronce-dark);
     border-color: var(--pm-bronce-dark);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
+    transform: translateY(1px);
+}
+
+.btn-pm-outline:focus-visible {
+    outline: 2px solid var(--pm-bronce);
+    outline-offset: 3px;
 }
 
 /* Outline white variant (for hero) */
@@ -909,7 +923,7 @@ main {
     justify-content: center;
     gap: var(--pm-space-2);
     background: var(--pm-gradient-btn);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
     border: none;
     border-radius: var(--pm-radius-md);
     padding: 10px 24px;
@@ -921,21 +935,26 @@ main {
     white-space: nowrap;
     box-shadow: var(--pm-shadow-dorado);
     transition:
-        box-shadow var(--pm-transition-base),
-        transform var(--pm-transition-base),
-        filter var(--pm-transition-base);
+        box-shadow 250ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+        filter 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .btn-pm-dorado:hover {
-    color: #FFFFFF;
-    filter: brightness(1.1);
-    box-shadow: 0 6px 20px rgba(183, 116, 102, 0.45);
+    color: var(--pm-text-inverse);
+    filter: brightness(1.06);
+    box-shadow: 0 6px 20px rgba(183, 116, 102, 0.4);
     transform: translateY(-2px);
 }
 
 .btn-pm-dorado:active {
-    transform: translateY(0);
+    transform: translateY(1px);
     box-shadow: var(--pm-shadow-dorado);
+}
+
+.btn-pm-dorado:focus-visible {
+    outline: 2px solid var(--pm-rosa);
+    outline-offset: 3px;
 }
 
 /* -- WhatsApp -- */
@@ -945,7 +964,7 @@ main {
     justify-content: center;
     gap: var(--pm-space-2);
     background-color: #25D366;
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
     border: none;
     border-radius: var(--pm-radius-md);
     padding: 10px 24px;
@@ -963,7 +982,7 @@ main {
 
 .btn-pm-whatsapp:hover {
     background-color: #1DA851;
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
 }
@@ -1116,18 +1135,15 @@ main {
         0 2px 8px rgba(255, 225, 175, 0.4),
         0 0 0 3px rgba(255, 225, 175, 0.2);
     transition:
-        transform var(--pm-transition-base),
-        box-shadow var(--pm-transition-base);
-    animation: pmPriceGlow 2.5s ease-in-out infinite;
-    animation-delay: 1s;
+        transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pm-price-tooltip:hover {
-    transform: scale(1.15);
+    transform: scale(1.12);
     box-shadow:
         0 4px 16px rgba(255, 225, 175, 0.5),
         0 0 0 6px rgba(255, 225, 175, 0.15);
-    animation: none;
 }
 
 /* -- Category badge on service image -- */
@@ -1145,13 +1161,11 @@ main {
     padding: 0.3rem 0.75rem;
     border-radius: var(--pm-radius-sm);
     z-index: 2;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
 }
 
 .pm-badge-frio {
     background: var(--pm-azul-hielo);
-    color: white;
+    color: var(--pm-text-inverse);
 }
 
 /* -- Card body (matches HTML class .pm-service-body) -- */
@@ -1327,7 +1341,7 @@ main {
 
 .pm-social-icon:hover {
     background: var(--pm-arena);
-    color: white;
+    color: var(--pm-text-inverse);
     transform: translateY(-3px);
 }
 
@@ -1407,7 +1421,7 @@ main {
 
 .pm-gallery-overlay i {
     font-size: 2rem;
-    color: white;
+    color: var(--pm-text-inverse);
     transform: scale(0.8);
     transition: transform var(--pm-transition-base);
 }
@@ -1588,7 +1602,7 @@ main {
     text-transform: uppercase;
     letter-spacing: var(--pm-tracking-wider);
     background: var(--pm-rojo);
-    color: white;
+    color: var(--pm-text-inverse);
     padding: 0.35rem 0.85rem;
     border-radius: var(--pm-radius-sm);
     animation: pmPulseGlow 2s infinite;
@@ -1598,7 +1612,7 @@ main {
     font-family: var(--pm-font-heading);
     font-size: 3.5rem;
     font-weight: 700;
-    color: white;
+    color: var(--pm-text-inverse);
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -1649,7 +1663,7 @@ main {
     justify-content: center;
     background: var(--pm-tierra);
     border-radius: var(--pm-radius-full);
-    color: white;
+    color: var(--pm-text-inverse);
     font-size: 1.125rem;
     transition: background var(--pm-transition-base);
 }
@@ -1954,19 +1968,19 @@ main {
 .pm-footer-social-btn[aria-label*="Instagram"]:hover {
     background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
     border-color: transparent;
-    color: white;
+    color: var(--pm-text-inverse);
 }
 
 .pm-footer-social-btn[aria-label*="Facebook"]:hover {
     background: #1877F2;
     border-color: transparent;
-    color: white;
+    color: var(--pm-text-inverse);
 }
 
 .pm-footer-social-btn[aria-label*="WhatsApp"]:hover {
     background: #25D366;
     border-color: transparent;
-    color: white;
+    color: var(--pm-text-inverse);
 }
 
 /* -- Footer column titles -- */
@@ -2099,6 +2113,7 @@ main {
     border-color: var(--pm-bronce);
     box-shadow: 0 0 0 3px rgba(138, 118, 80, 0.18);
     outline: none;
+    background-color: rgba(248, 244, 232, 0.3);
 }
 
 .input-pm::placeholder {
@@ -2137,6 +2152,7 @@ select.input-pm {
 .pm-contact-form .form-control:focus {
     border-color: var(--pm-bronce);
     box-shadow: 0 0 0 3px rgba(138, 118, 80, 0.18);
+    background-color: rgba(248, 244, 232, 0.3);
 }
 
 .pm-contact-form .form-control::placeholder {
@@ -2198,7 +2214,7 @@ select.input-pm {
 
 .pm-modal .swal2-confirm {
     background-color: var(--pm-bronce) !important;
-    color: #FFFFFF !important;
+    color: var(--pm-text-inverse) !important;
     font-family: var(--pm-font-ui) !important;
     border-radius: var(--pm-radius-md) !important;
     padding: var(--pm-space-2) var(--pm-space-6) !important;
@@ -2348,12 +2364,12 @@ select.input-pm {
 
 .pm-badge-premium {
     background-color: var(--pm-dorado);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
 }
 
 .pm-badge-oferta {
     background-color: var(--pm-rojo);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
 }
 
 
@@ -2660,7 +2676,7 @@ select.input-pm {
     width: 56px;
     height: 56px;
     background-color: #25D366;
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -2679,7 +2695,7 @@ select.input-pm {
 .pm-whatsapp-float:hover {
     transform: scale(1.1);
     box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
 }
 
 /* -- About section -- */
@@ -3040,6 +3056,33 @@ select.input-pm {
     }
 }
 
+/* ---- High contrast ---- */
+@media (prefers-contrast: more) {
+    :root {
+        --pm-border: #8A7650;
+        --pm-border-light: #A69882;
+        --pm-text-muted: #3F352B;
+        --pm-shadow-sm: 0 0 0 1px var(--pm-border);
+    }
+
+    .btn-pm,
+    .btn-pm-outline,
+    .btn-pm-dorado {
+        border: 2px solid currentColor;
+    }
+
+    .pm-service-card,
+    .pm-testimonial-card,
+    .pm-promo-card {
+        border: 2px solid var(--pm-border);
+    }
+
+    .input-pm,
+    .pm-contact-form .form-control {
+        border-width: 2px;
+    }
+}
+
 
 /* ════════════════════════════════════════════════════════════
    AUTH PAGES — Login, Registro, Mi Cuenta
@@ -3054,7 +3097,7 @@ select.input-pm {
 }
 
 .pm-auth-card {
-    background: #fff;
+    background: var(--pm-surface);
     border-radius: var(--pm-radius-lg, 16px);
     box-shadow: 0 4px 32px rgba(138, 118, 80, 0.10);
     padding: 40px 36px;
@@ -3088,7 +3131,7 @@ select.input-pm {
 }
 
 .pm-auth-subtitle {
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.9rem;
     color: var(--pm-text-muted, #746754);
     margin: 0;
@@ -3108,9 +3151,9 @@ select.input-pm {
     padding: 12px 20px;
     border: 2px solid var(--pm-border, #E8E0D0);
     border-radius: var(--pm-radius-md, 10px);
-    background: #fff;
+    background: var(--pm-surface);
     color: var(--pm-text, #3F352B);
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-weight: 500;
     font-size: 0.95rem;
     transition: all 0.2s ease;
@@ -3141,7 +3184,7 @@ select.input-pm {
 }
 
 .pm-auth-divider span {
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.8rem;
     color: var(--pm-text-muted, #746754);
     white-space: nowrap;
@@ -3154,7 +3197,7 @@ select.input-pm {
 
 .pm-auth-form .pm-form-label {
     display: block;
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-weight: 500;
     font-size: 0.85rem;
     color: var(--pm-text, #3F352B);
@@ -3167,7 +3210,7 @@ select.input-pm {
 }
 
 .pm-link-forgot {
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.82rem;
     color: var(--pm-bronce, #8A7650);
     text-decoration: none;
@@ -3193,7 +3236,7 @@ select.input-pm {
     background: rgba(168, 95, 82, 0.08);
     border: 1px solid rgba(168, 95, 82, 0.2);
     color: var(--pm-rojo, #A85F52);
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.85rem;
     text-align: center;
 }
@@ -3207,7 +3250,7 @@ select.input-pm {
 }
 
 .pm-auth-alt p {
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.88rem;
     color: var(--pm-text-muted, #746754);
     margin: 0;
@@ -3283,7 +3326,7 @@ select.input-pm {
 }
 
 .pm-auth-required p {
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.95rem;
     color: var(--pm-text-muted, #746754);
     margin-bottom: 24px;
@@ -3305,7 +3348,7 @@ select.input-pm {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.88rem;
     color: var(--pm-text, #3F352B);
     list-style: none;
@@ -3369,14 +3412,14 @@ select.input-pm {
 }
 
 .pm-cuenta-header p {
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.9rem;
     color: var(--pm-text-muted, #746754);
     margin: 0;
 }
 
 .pm-cuenta-card {
-    background: #fff;
+    background: var(--pm-surface);
     border-radius: var(--pm-radius-lg, 16px);
     box-shadow: 0 2px 16px rgba(138, 118, 80, 0.06);
     border: 1px solid var(--pm-border, #E8E0D0);
@@ -3432,7 +3475,7 @@ select.input-pm {
 
 .pm-cita-fecha-mes {
     display: block;
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.72rem;
     color: var(--pm-text-muted, #746754);
     text-transform: uppercase;
@@ -3445,7 +3488,7 @@ select.input-pm {
 }
 
 .pm-cita-servicio {
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-weight: 600;
     font-size: 0.92rem;
     color: var(--pm-text, #3F352B);
@@ -3453,7 +3496,7 @@ select.input-pm {
 }
 
 .pm-cita-hora {
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.82rem;
     color: var(--pm-text-muted, #746754);
 }
@@ -3467,7 +3510,7 @@ select.input-pm {
     display: inline-block;
     padding: 4px 12px;
     border-radius: 20px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 0.72rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -4314,7 +4357,7 @@ section#contacto .pm-contact-info-card:hover {
 
 .pm-auth-form .input-pm:focus,
 .pm-cuenta-card .input-pm:focus {
-    background: #fff;
+    background: var(--pm-surface);
     border-color: var(--pm-bronce, #8A7650);
     box-shadow:
         0 0 0 3px rgba(138, 118, 80, 0.12),
@@ -4834,7 +4877,7 @@ section#contacto .pm-contact-info-card:hover {
 
 .pm-reservar-subtitle {
     color: var(--pm-text-muted, #746754);
-    font-family: var(--pm-font-body, 'Inter', sans-serif);
+    font-family: var(--pm-font-body, 'DM Sans', sans-serif);
     font-size: 0.95rem;
     margin-bottom: 12px;
 }
@@ -4887,14 +4930,14 @@ section#contacto .pm-contact-info-card:hover {
 
 .pm-step.active .pm-step-num {
     background: var(--pm-bronce, #8A7650);
-    color: #fff;
+    color: var(--pm-text-inverse);
     border-color: var(--pm-bronce, #8A7650);
     box-shadow: 0 2px 8px rgba(138, 118, 80, 0.25);
 }
 
 .pm-step.done .pm-step-num {
     background: var(--pm-verde, #8E977D);
-    color: #fff;
+    color: var(--pm-text-inverse);
     border-color: var(--pm-verde, #8E977D);
 }
 
@@ -4930,7 +4973,7 @@ section#contacto .pm-contact-info-card:hover {
    Each step panel with card styling + entrance animation.
    ============================================================= */
 .pm-wizard-step {
-    background: #fff;
+    background: var(--pm-surface);
     border-radius: var(--pm-radius-lg, 16px);
     padding: 28px;
     box-shadow:
@@ -4999,7 +5042,7 @@ section#contacto .pm-contact-info-card:hover {
         box-shadow 200ms ease,
         transform 200ms ease;
     margin-bottom: 8px;
-    background: #fff;
+    background: var(--pm-surface);
 }
 
 .pm-servicio-option:hover {
@@ -5042,13 +5085,13 @@ section#contacto .pm-contact-info-card:hover {
     font-weight: 600;
     color: var(--pm-text, #3F352B);
     font-size: 0.9375rem;
-    font-family: var(--pm-font-body, 'Inter', sans-serif);
+    font-family: var(--pm-font-body, 'DM Sans', sans-serif);
 }
 
 .pm-servicio-option .pm-so-meta {
     font-size: 0.8125rem;
     color: var(--pm-text-muted, #746754);
-    font-family: var(--pm-font-body, 'Inter', sans-serif);
+    font-family: var(--pm-font-body, 'DM Sans', sans-serif);
 }
 
 .pm-servicio-option .pm-so-price {
@@ -5074,7 +5117,7 @@ section#contacto .pm-contact-info-card:hover {
     padding: 10px 8px;
     border: 2px solid var(--pm-border-light, #EDE8DA);
     border-radius: var(--pm-radius-md, 10px);
-    background: #fff;
+    background: var(--pm-surface);
     cursor: pointer;
     text-align: center;
     font-family: var(--pm-font-ui, 'Poppins', sans-serif);
@@ -5097,7 +5140,7 @@ section#contacto .pm-contact-info-card:hover {
 .pm-turno-btn.selected {
     border-color: var(--pm-bronce, #8A7650);
     background: var(--pm-bronce, #8A7650);
-    color: #fff;
+    color: var(--pm-text-inverse);
     box-shadow: 0 2px 8px rgba(138, 118, 80, 0.2);
 }
 
@@ -5119,7 +5162,7 @@ section#contacto .pm-contact-info-card:hover {
     align-items: center;
     padding: 8px 0;
     border-bottom: 1px solid rgba(219, 206, 165, 0.5);
-    font-family: var(--pm-font-body, 'Inter', sans-serif);
+    font-family: var(--pm-font-body, 'DM Sans', sans-serif);
     font-size: 0.9rem;
 }
 
@@ -5143,7 +5186,7 @@ section#contacto .pm-contact-info-card:hover {
     text-align: center;
     padding: 32px 16px;
     color: var(--pm-text-muted, #746754);
-    font-family: var(--pm-font-body, 'Inter', sans-serif);
+    font-family: var(--pm-font-body, 'DM Sans', sans-serif);
 }
 
 .pm-no-turnos i {

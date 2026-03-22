@@ -357,7 +357,7 @@
 
 .pm-auth-form .input-pm:focus,
 .pm-cuenta-card .input-pm:focus {
-    background: #fff;
+    background: var(--pm-surface);
     border-color: var(--pm-bronce, #8A7650);
     box-shadow:
         0 0 0 3px rgba(138, 118, 80, 0.1),
@@ -461,7 +461,7 @@
         var(--pm-tierra, #957C62) 100%
     );
     border: none;
-    color: #fff;
+    color: var(--pm-text-inverse);
     font-family: var(--pm-font-ui, 'Poppins', sans-serif);
     transition:
         box-shadow 300ms ease,
@@ -868,7 +868,7 @@
 
 /* Service name styling */
 .pm-cita-servicio {
-    font-family: var(--pm-font-body, 'Inter', sans-serif);
+    font-family: var(--pm-font-body, 'DM Sans', sans-serif);
     font-weight: 600;
     font-size: 0.93rem;
     color: var(--pm-text, #3F352B);
@@ -1033,7 +1033,7 @@
     content: '\2713';
     font-size: 0.9rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--pm-text-inverse);
 }
 
 .pm-step-label {
@@ -1167,7 +1167,7 @@
         var(--pm-tierra, #957C62) 100%
     );
     border-color: var(--pm-bronce, #8A7650);
-    color: #fff;
+    color: var(--pm-text-inverse);
     box-shadow:
         0 4px 14px rgba(138, 118, 80, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.15);

@@ -22,7 +22,7 @@ assets/vendor/*
 CLAUDE.md
 AGENTS.md
 skills-lock.json
-
+.impeccable.md
 # --- Playwright / Testing ---
 .playwright/
 .playwright-cli/

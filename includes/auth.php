@@ -229,7 +229,7 @@ function enviar_email_codigo(string $email, string $codigo, string $tipo = 'regi
         ? "Tu código de verificación es: $codigo\nVálido por " . CODIGO_EXPIRACION_MINUTOS . " minutos."
         : "Tu código para restablecer tu contraseña es: $codigo\nVálido por " . CODIGO_EXPIRACION_MINUTOS . " minutos.";
 
-    $cuerpo = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:Inter,Arial,sans-serif;background:#F8F4E8;padding:40px 20px;">';
+    $cuerpo = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="font-family:DM Sans,Arial,sans-serif;background:#F8F4E8;padding:40px 20px;">';
     $cuerpo .= '<div style="max-width:480px;margin:0 auto;background:#fff;border-radius:16px;padding:40px;box-shadow:0 4px 24px rgba(0,0,0,0.08);">';
     $cuerpo .= '<div style="text-align:center;margin-bottom:24px;">';
     $cuerpo .= '<h1 style="font-family:Playfair Display,serif;color:#957C62;font-size:24px;margin:0;">Piel Morena</h1>';

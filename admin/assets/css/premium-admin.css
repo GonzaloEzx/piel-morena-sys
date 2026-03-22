@@ -98,7 +98,7 @@
 .pm-sidebar-link:hover {
   background: rgba(255,225,175,0.10);
   border-left-color: var(--pm-dorado);
-  color: #fff;
+  color: var(--pm-text-inverse);
   text-shadow: 0 0 10px rgba(255,225,175,0.3);
 }
 
@@ -326,7 +326,7 @@
 }
 .dataTables_wrapper .dataTables_filter input:focus {
   border-color: var(--pm-bronce);
-  background: #fff;
+  background: var(--pm-surface);
   box-shadow:
     0 0 0 3px rgba(138,118,80,0.12),
     var(--pma-shadow-glow);
@@ -447,7 +447,7 @@ table.dataTable tbody tr:nth-child(even) {
 .pm-admin-body .btn-pm-outline:hover {
   background: linear-gradient(135deg, var(--pm-bronce), var(--pm-bronce-light));
   border-color: var(--pm-bronce);
-  color: #fff;
+  color: var(--pm-text-inverse);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(138,118,80,0.2);
 }
@@ -586,7 +586,7 @@ table.dataTable tbody tr:nth-child(even) {
 
 .pm-admin-content .form-control:focus,
 .pm-admin-content .form-select:focus {
-  background: #fff;
+  background: var(--pm-surface);
   border-color: var(--pm-bronce);
   box-shadow:
     0 0 0 3px rgba(138,118,80,0.1),

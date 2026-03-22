@@ -116,14 +116,14 @@
 .pm-navbar-actions .btn-pm {
     background-color: var(--pm-v3-rosewood);
     border-color: var(--pm-v3-rosewood);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
     box-shadow: 0 2px 10px var(--pm-v3-rosewood-glow);
 }
 
 .pm-navbar-actions .btn-pm:hover {
     background-color: var(--pm-v3-rosewood-hover);
     border-color: var(--pm-v3-rosewood-hover);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
     box-shadow: 0 4px 18px var(--pm-v3-rosewood-glow);
     filter: brightness(1.1);
     transform: translateY(-2px);
@@ -141,13 +141,13 @@
 /* Default state (over dark hero): white outline for visibility */
 .pm-navbar-actions .btn-pm-outline {
     border-color: rgba(255, 255, 255, 0.7);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
 }
 
 .pm-navbar-actions .btn-pm-outline:hover {
     background-color: rgba(255, 255, 255, 0.15);
-    border-color: #FFFFFF;
-    color: #FFFFFF;
+    border-color: var(--pm-text-inverse);
+    color: var(--pm-text-inverse);
     box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
     transform: translateY(-2px);
 }
@@ -161,7 +161,7 @@
 .pm-navbar.scrolled .pm-navbar-actions .btn-pm-outline:hover {
     background-color: var(--pm-v3-rosewood);
     border-color: var(--pm-v3-rosewood);
-    color: #FFFFFF;
+    color: var(--pm-text-inverse);
     box-shadow: 0 4px 16px var(--pm-v3-rosewood-glow);
 }
 
@@ -224,32 +224,21 @@
     animation: pmV3FloatOrganic 18s ease-in-out infinite reverse;
 }
 
-/* Hero badge — enhanced shimmer */
+/* Hero badge — refined static style (no shimmer) */
 .pm-hero-badge {
-    animation: pmV3BadgeShimmer 3s ease-in-out infinite;
-    background-size: 300% auto;
-    background-image: linear-gradient(
-        110deg,
-        rgba(255, 225, 175, 0.12) 0%,
-        rgba(255, 225, 175, 0.12) 35%,
-        rgba(255, 225, 175, 0.35) 50%,
-        rgba(255, 225, 175, 0.12) 65%,
-        rgba(255, 225, 175, 0.12) 100%
-    );
+    background: rgba(255, 225, 175, 0.14);
     border: 1px solid rgba(255, 225, 175, 0.28);
     box-shadow: 0 2px 12px rgba(255, 225, 175, 0.15);
 }
 
-/* CTA buttons — hover glow effect */
+/* CTA buttons — refined hover */
 .pm-hero-ctas .btn-pm-dorado:hover {
-    box-shadow:
-        0 6px 24px rgba(183, 116, 102, 0.5),
-        0 0 40px rgba(255, 225, 175, 0.2);
+    box-shadow: 0 6px 20px rgba(183, 116, 102, 0.4);
 }
 
 .pm-hero-ctas .btn-pm-outline:hover,
 .pm-hero-ctas .btn-pm-outline--white:hover {
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
 }
 
 
@@ -258,15 +247,11 @@
    Larger title with text gradient, refined subtitle spacing.
    ================================================================= */
 
-/* Section title — editorial scale + gradient text */
+/* Section title — editorial scale, warm solid color (no gradient text) */
 .pm-section-title {
     font-size: clamp(1.75rem, 4vw, 2.75rem);
     letter-spacing: -0.02em;
-    background: var(--pm-v3-text-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    padding-bottom: 2px; /* prevents clipping on descenders */
+    color: var(--pm-tierra-dark);
 }
 
 /* Subtitle — more generous spacing */
@@ -320,12 +305,9 @@
     transform: translate(2px, 2px);
 }
 
-/* Feature icons — warm gradient fill */
+/* Feature icons — warm solid color */
 .pm-about-feature i {
-    background: linear-gradient(135deg, var(--pm-bronce) 0%, var(--pm-rosa) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--pm-bronce);
     font-size: 1.15rem;
 }
 
@@ -346,25 +328,26 @@
    category badge warm gradient.
    ================================================================= */
 
-/* Enhanced hover — subtle glass backdrop */
+/* Enhanced hover — warm surface lift (no glassmorphism) */
 .pm-service-card:hover {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow:
-        var(--pm-shadow-card-hover),
-        var(--pm-v3-card-glow);
+    background: var(--pm-marfil);
+    box-shadow: var(--pm-shadow-card-hover);
 }
 
-/* Service image — zoom on hover (refined to 1.03 scale) */
+/* Service image — zoom on hover */
 .pm-service-card:hover .pm-service-img-placeholder {
     transform: scale(1.03);
 }
 
-/* Price tooltip — subtle pulse to draw attention */
+/* Price tooltip — clean hover instead of pulse animation */
 .pm-price-tooltip {
-    animation: pmV3PriceSubtle 3s ease-in-out infinite;
-    animation-delay: 0.5s;
+    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pm-price-tooltip:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 12px rgba(255, 225, 175, 0.45);
 }
 
 /* Category badge on service image — warm gradient background */
@@ -377,7 +360,7 @@
 
 .pm-service-img .pm-badge-frio {
     background: linear-gradient(135deg, var(--pm-verde) 0%, #A5AE94 100%);
-    color: white;
+    color: var(--pm-text-inverse);
     border-color: transparent;
 }
 
@@ -413,7 +396,7 @@
 .pm-team-social .pm-social-icon:hover {
     background: linear-gradient(135deg, #833AB4, #FD1D1D, #F77737);
     border-color: transparent;
-    color: white;
+    color: var(--pm-text-inverse);
     box-shadow: 0 4px 12px rgba(131, 58, 180, 0.3);
 }
 
@@ -521,17 +504,14 @@
    Oversized quote mark, larger quote text, warm author underline.
    ================================================================= */
 
-/* Larger quote mark — editorial presence */
+/* Larger quote mark — editorial presence, solid warm color */
 .pm-testimonial-quote-icon {
     font-size: 6.5rem;
     font-family: var(--pm-font-heading);
-    opacity: 0.25;
+    opacity: 0.18;
     line-height: 0.6;
     margin-bottom: 1rem;
-    background: linear-gradient(180deg, var(--pm-arena) 0%, rgba(219, 206, 165, 0.3) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--pm-arena);
 }
 
 /* Quote text — larger with more breathing room */
@@ -578,7 +558,7 @@
    Multiple floating dots/circles via box-shadow, premium glow buttons.
    ================================================================= */
 
-/* Floating particles using box-shadow technique */
+/* CTA section — subtle warm overlay instead of floating particles */
 .pm-cta-section::after {
     content: '';
     position: absolute;
@@ -588,41 +568,26 @@
     bottom: 0;
     pointer-events: none;
     z-index: 0;
-    background-image:
-        /* Particle cluster 1 */
-        radial-gradient(circle 2px at 10% 20%, rgba(255, 225, 175, 0.25) 50%, transparent 50%),
-        radial-gradient(circle 3px at 25% 70%, rgba(255, 225, 175, 0.15) 50%, transparent 50%),
-        radial-gradient(circle 1.5px at 40% 15%, rgba(219, 206, 165, 0.2) 50%, transparent 50%),
-        /* Particle cluster 2 */
-        radial-gradient(circle 2.5px at 60% 80%, rgba(255, 225, 175, 0.18) 50%, transparent 50%),
-        radial-gradient(circle 1px at 75% 35%, rgba(219, 206, 165, 0.22) 50%, transparent 50%),
-        radial-gradient(circle 3px at 85% 60%, rgba(255, 225, 175, 0.12) 50%, transparent 50%),
-        /* Particle cluster 3 */
-        radial-gradient(circle 2px at 15% 55%, rgba(183, 116, 102, 0.1) 50%, transparent 50%),
-        radial-gradient(circle 1.5px at 50% 45%, rgba(255, 225, 175, 0.16) 50%, transparent 50%),
-        radial-gradient(circle 2px at 90% 15%, rgba(219, 206, 165, 0.14) 50%, transparent 50%),
-        radial-gradient(circle 1px at 35% 90%, rgba(255, 225, 175, 0.2) 50%, transparent 50%);
-    animation: pmV3FloatParticles 20s ease-in-out infinite;
+    background: radial-gradient(
+        ellipse at 50% 40%,
+        rgba(255, 225, 175, 0.08) 0%,
+        transparent 60%
+    );
     border-radius: 0;
     border: none;
     width: auto;
     height: auto;
 }
 
-/* CTA buttons — premium glow on hover */
+/* CTA buttons — refined hover */
 .pm-cta-section .btn-pm-dorado:hover {
-    box-shadow:
-        0 8px 28px rgba(183, 116, 102, 0.5),
-        0 0 50px rgba(255, 225, 175, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    filter: brightness(1.12);
+    box-shadow: 0 6px 20px rgba(183, 116, 102, 0.4);
+    filter: brightness(1.05);
 }
 
 .pm-cta-section .btn-pm-outline:hover,
 .pm-cta-section .btn-pm-outline--white:hover {
-    box-shadow:
-        0 4px 20px rgba(255, 255, 255, 0.15),
-        0 0 0 1px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
 }
 
 
@@ -657,7 +622,7 @@
 
 .pm-contact-item:hover .pm-contact-icon {
     background: linear-gradient(135deg, var(--pm-arena) 0%, var(--pm-bronce) 100%);
-    color: white;
+    color: var(--pm-text-inverse);
     box-shadow: 0 4px 12px rgba(138, 118, 80, 0.2);
     transform: translateY(-2px);
 }
@@ -757,7 +722,7 @@
 
 .pm-footer-red-btn:hover {
     transform: translateY(-3px);
-    color: white;
+    color: var(--pm-text-inverse);
 }
 
 /* Instagram gradient */
@@ -905,43 +870,17 @@
     isolation: isolate;
 }
 
-/* Shimmer sweep on hover — light reflection */
+/* Clean hover — no shimmer sweep (removed AI slop pattern) */
 .btn-pm::before,
 .btn-pm-dorado::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        110deg,
-        transparent 0%,
-        transparent 30%,
-        rgba(255, 255, 255, 0.2) 45%,
-        rgba(255, 255, 255, 0.3) 50%,
-        rgba(255, 255, 255, 0.2) 55%,
-        transparent 70%,
-        transparent 100%
-    );
-    z-index: 1;
-    transition: left 500ms cubic-bezier(0.23, 1, 0.32, 1);
-    pointer-events: none;
+    display: none;
 }
 
-.btn-pm:hover::before,
-.btn-pm-dorado:hover::before {
-    left: 100%;
-}
-
-/* btn-pm-dorado — more dramatic glow shadow on hover */
+/* btn-pm-dorado — refined lift on hover */
 .btn-pm-dorado:hover {
-    box-shadow:
-        0 6px 24px rgba(183, 116, 102, 0.5),
-        0 0 0 1px rgba(255, 225, 175, 0.15),
-        0 0 40px rgba(138, 118, 80, 0.12);
+    box-shadow: 0 6px 20px rgba(183, 116, 102, 0.35);
     transform: translateY(-2px);
-    filter: brightness(1.12);
+    filter: brightness(1.05);
 }
 
 /* Outline buttons — warm fill on hover */
@@ -1101,7 +1040,7 @@
     border-radius: 10px;
     padding: 11px 14px;
     font-size: 0.92rem;
-    background-color: var(--pm-surface, #FFFFFF);
+    background-color: var(--pm-surface, #FEFCF8);
     color: var(--pm-text, #3F352B);
     transition:
         border-color 200ms ease,
@@ -1695,7 +1634,7 @@
 .pm-offcanvas-title {
     font-family: var(--pm-font-heading);
     font-weight: 700;
-    color: #fff;
+    color: var(--pm-text-inverse);
     font-size: 1.125rem;
     display: flex;
     align-items: center;
@@ -1751,7 +1690,7 @@
 
 .offcanvas.pm-bottom-sheet .pm-offcanvas-link:hover,
 .offcanvas.pm-bottom-sheet .pm-offcanvas-link:focus {
-    color: #fff;
+    color: var(--pm-text-inverse);
     background: rgba(255, 225, 175, 0.1);
 }
 .offcanvas.pm-bottom-sheet .pm-offcanvas-link:active {
@@ -1759,7 +1698,7 @@
     background: rgba(255, 225, 175, 0.15);
 }
 .offcanvas.pm-bottom-sheet .pm-offcanvas-link.active {
-    color: #fff;
+    color: var(--pm-text-inverse);
     background: rgba(255, 225, 175, 0.14);
     font-weight: 600;
     box-shadow: inset 0 0 0 1px rgba(255, 225, 175, 0.2);
@@ -1826,7 +1765,7 @@
 .pm-offcanvas-actions .btn-pm-outline:hover {
     background: rgba(255, 225, 175, 0.1);
     border-color: rgba(255, 225, 175, 0.4);
-    color: #fff;
+    color: var(--pm-text-inverse);
 }
 
 .pm-offcanvas-actions .btn-pm-ghost {
@@ -1843,7 +1782,7 @@
 .pm-offcanvas-actions .btn-pm-ghost:hover {
     background: rgba(168, 95, 82, 0.12);
     border-color: rgba(168, 95, 82, 0.5);
-    color: #fff;
+    color: var(--pm-text-inverse);
 }
 
 /* ── Info row — compact horizontal layout ───────────────── */
