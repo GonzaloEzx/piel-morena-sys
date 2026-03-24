@@ -1774,6 +1774,20 @@ main {
     opacity: 0.88;
 }
 
+.pm-cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--pm-space-4);
+    position: relative;
+    z-index: 1;
+}
+
+.pm-cta-actions .btn-pm-lg {
+    margin: 0;
+}
+
 
 /* =============================================================
    14. CONTACTO
@@ -2865,6 +2879,16 @@ select.input-pm {
         margin-left: 0 !important;
     }
 
+    .pm-cta-actions {
+        gap: var(--pm-space-3);
+    }
+
+    .pm-cta-actions a {
+        width: 100%;
+        max-width: 320px;
+        justify-content: center;
+    }
+
     .pm-cta-section {
         padding: var(--pm-space-8) 0;
     }
@@ -2983,6 +3007,17 @@ select.input-pm {
         max-width: 280px;
         text-align: center;
         justify-content: center;
+    }
+
+    .pm-cta-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--pm-space-3);
+    }
+
+    .pm-cta-actions a {
+        width: 100%;
+        max-width: 280px;
     }
 
     .pm-service-body {
@@ -4183,6 +4218,69 @@ section#contacto .pm-contact-info-card:hover {
     }
 }
 
+@media (hover: none) and (pointer: coarse) {
+    html,
+    body {
+        overflow-x: clip;
+    }
+
+    .pm-hero-slide {
+        height: 100svh;
+        min-height: 100svh;
+    }
+
+    .pm-animate,
+    .pm-animate-left,
+    .pm-animate-right {
+        transform: none;
+        transition: opacity 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .pm-animate.pm-visible,
+    .pm-animate-left.pm-visible,
+    .pm-animate-right.pm-visible {
+        transform: none;
+    }
+
+    .btn-pm:hover,
+    .btn-pm-dorado:hover,
+    .btn-pm-outline:hover,
+    .btn-pm-outline--white:hover,
+    .pm-service-card:hover,
+    .pm-team-card:hover,
+    .pm-gallery-item:hover,
+    .pm-promo-card:hover,
+    .pm-testimonial-card:hover {
+        transform: none;
+    }
+
+    .pm-service-card:hover .pm-service-img-placeholder,
+    .pm-team-card:hover .pm-team-photo-placeholder,
+    .pm-gallery-item:hover .pm-gallery-placeholder,
+    .pm-gallery-item:hover .pm-gallery-overlay i {
+        transform: none;
+    }
+
+    .pm-team-card:hover .pm-team-photo::before {
+        opacity: 0;
+    }
+
+    .pm-gallery-item::before,
+    .pm-team-photo::before,
+    .pm-cta-title::before {
+        display: none;
+    }
+}
+
+@supports (height: 100dvh) {
+    @media (hover: none) and (pointer: coarse) {
+        .pm-hero-slide {
+            height: 100dvh;
+            min-height: 100dvh;
+        }
+    }
+}
+
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
     .pm-cta-section {
@@ -5306,4 +5404,3 @@ section#contacto .pm-contact-info-card:hover {
         animation: none;
     }
 }
-

@@ -278,6 +278,25 @@
     font-size: 1rem;
     border-radius: 14px;
 }
+
+.pm-hero-ctas .pm-hero-btn-secondary {
+    background: var(--pm-marfil);
+    border-color: var(--pm-arena);
+    color: var(--pm-tierra);
+    box-shadow: var(--pm-shadow-sm);
+}
+
+.pm-hero-ctas .pm-hero-btn-secondary:hover {
+    background: var(--pm-surface);
+    border-color: var(--pm-bronce);
+    color: var(--pm-bronce);
+    box-shadow: var(--pm-shadow-md);
+}
+
+.pm-hero-ctas .pm-hero-btn-secondary i {
+    color: inherit;
+}
+
 .pm-hero-ctas .btn-pm-outline:hover,
 .pm-hero-ctas .btn-pm-outline--white:hover {
     box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
@@ -526,6 +545,8 @@
 
 /* Promo card — warm glow shadow */
 .pm-promo-card {
+    position: relative;
+    isolation: isolate;
     box-shadow:
         var(--pm-shadow-lg),
         0 8px 40px rgba(255, 225, 175, 0.12);
@@ -537,6 +558,16 @@
         var(--pm-shadow-xl),
         0 12px 48px rgba(255, 225, 175, 0.2),
         0 0 0 1px rgba(138, 118, 80, 0.1);
+}
+
+.pm-promo-img-placeholder,
+.pm-promo-body {
+    position: relative;
+    z-index: 1;
+}
+
+.pm-promo-body {
+    background: var(--pm-surface);
 }
 
 /* Discount badge — more prominent with animated gradient */
@@ -1310,6 +1341,11 @@
         display: none;
     }
 
+    .pm-hero-ctas .pm-hero-btn-secondary {
+        width: 100%;
+        max-width: 280px;
+    }
+
     /* Testimonial quote — slightly smaller */
     .pm-testimonial-quote-icon {
         font-size: 5rem;
@@ -1430,6 +1466,35 @@
 
     .pm-promo-discount {
         font-size: 2.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .pm-promo-card .pm-promo-img-placeholder {
+        border-radius: var(--pm-radius-xl) 0 0 var(--pm-radius-xl);
+    }
+
+    .pm-promo-card .pm-promo-body {
+        border-radius: 0 var(--pm-radius-xl) var(--pm-radius-xl) 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .pm-hero-section::before,
+    .pm-hero-section::after {
+        display: none;
+    }
+
+    .pm-hero-ctas .pm-hero-btn-secondary {
+        align-self: center;
+    }
+
+    .pm-promo-card .pm-promo-img-placeholder {
+        border-radius: var(--pm-radius-xl) var(--pm-radius-xl) 0 0;
+    }
+
+    .pm-promo-card .pm-promo-body {
+        border-radius: 0 0 var(--pm-radius-xl) var(--pm-radius-xl);
     }
 }
 

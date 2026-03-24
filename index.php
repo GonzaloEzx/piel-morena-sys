@@ -24,7 +24,7 @@
                 <a href="#reservar" class="btn-pm-dorado btn-pm-lg">
                   <i class="bi bi-calendar-check me-2"></i>Reservar Cita
                 </a>
-                <a href="#servicios" class="btn-pm-outline btn-pm-lg ms-3">
+                <a href="#servicios" class="btn-pm-outline btn-pm-lg pm-hero-btn-secondary">
                   Ver Servicios <i class="bi bi-arrow-down ms-2"></i>
                 </a>
               </div>
@@ -811,8 +811,8 @@
           Agenda tu cita en menos de 1 minuto. Nuestro equipo de profesionales te espera
           para brindarte la mejor experiencia de cuidado personal.
         </p>
-        <div class="pm-animate">
-          <a href="reservar.php" class="btn-pm-dorado btn-pm-lg me-3">
+        <div class="pm-animate pm-cta-actions">
+          <a href="reservar.php" class="btn-pm-dorado btn-pm-lg">
             <i class="bi bi-calendar-check me-2"></i>Reservar Ahora
           </a>
           <a href="https://wa.me/5491100000000" class="btn-pm-outline btn-pm-outline--white btn-pm-lg" target="_blank" rel="noopener">

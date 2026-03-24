@@ -57,7 +57,7 @@ const PriceTooltip = {
     // Registrar la consulta de precio (fire and forget)
     this.trackClick(serviceId);
 
-    // Animacion visual de "+1" flotante
+    // Animacion visual de "$" flotante
     this._showFloatingFeedback(element);
   },
 
@@ -133,12 +133,12 @@ const PriceTooltip = {
   },
 
   /* ─────────────────────────────────────────────────────────
-     _showFloatingFeedback — animacion "+1" que sube y desaparece
+     _showFloatingFeedback — animacion "$" que sube y desaparece
      ───────────────────────────────────────────────────────── */
   _showFloatingFeedback(element) {
     const feedback = document.createElement('span');
     feedback.className = 'pm-price-feedback';
-    feedback.textContent = '+1';
+    feedback.textContent = '$';
 
     // Posicionar sobre el elemento
     const rect = element.getBoundingClientRect();
