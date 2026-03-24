@@ -44,15 +44,9 @@
     inset -1px 0 0 rgba(255,225,175,0.08);
 }
 
-/* Subtle texture overlay */
+/* Sidebar background stays clean — no texture overlay */
 .pm-sidebar::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 Q35 15 30 25 Q25 15 30 5z' fill='rgba(255,225,175,0.03)'/%3E%3C/svg%3E") repeat;
-  pointer-events: none;
-  z-index: 0;
+  content: none;
 }
 
 .pm-sidebar > * {
