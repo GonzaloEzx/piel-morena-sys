@@ -645,6 +645,256 @@ table.dataTable tbody tr:hover {
 }
 
 /* ============================================
+   NUEVA CITA MODAL
+   ============================================ */
+.nc-section {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--pm-border-light);
+}
+.nc-section-last {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.nc-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--pm-font-ui);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--pm-bronce);
+  margin-bottom: 12px;
+}
+.nc-section-label i { font-size: 0.875rem; }
+
+.nc-client-toggle {
+  display: flex;
+  gap: 0;
+  border: 1.5px solid var(--pm-border);
+  border-radius: 10px;
+  overflow: hidden;
+  width: fit-content;
+}
+.nc-toggle-btn {
+  border: none;
+  background: transparent;
+  font-family: var(--pm-font-ui);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--pm-text-muted);
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: all 200ms;
+}
+.nc-toggle-btn.active {
+  background: var(--pm-bronce);
+  color: var(--pm-text-inverse);
+}
+.nc-toggle-btn:not(.active):hover {
+  background: var(--pm-surface-hover);
+}
+
+.nc-search-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--pm-text-light);
+  font-size: 0.875rem;
+  pointer-events: none;
+}
+
+.nc-autocomplete-list {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--pm-surface);
+  border: 1.5px solid var(--pm-border);
+  border-radius: 10px;
+  box-shadow: var(--pm-shadow-md);
+  z-index: 1060;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.nc-autocomplete-list.show { display: block; }
+.nc-autocomplete-item {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 150ms;
+  border-bottom: 1px solid var(--pm-border-light);
+  font-size: 0.875rem;
+}
+.nc-autocomplete-item:last-child { border-bottom: none; }
+.nc-autocomplete-item:hover { background: var(--pm-surface-hover); }
+.nc-autocomplete-item strong { color: var(--pm-text); font-weight: 600; }
+.nc-autocomplete-item span { font-size: 0.75rem; color: var(--pm-text-muted); }
+.nc-autocomplete-empty {
+  padding: 12px 14px;
+  color: var(--pm-text-light);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.nc-selected-client {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(138,118,80,0.06);
+  border: 1.5px solid var(--pm-bronce);
+  border-radius: 10px;
+  margin-top: 8px;
+}
+.nc-selected-client-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.875rem;
+}
+.nc-selected-client-info span { font-size: 0.75rem; }
+.nc-selected-client-clear {
+  border: none;
+  background: transparent;
+  color: var(--pm-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 200ms;
+  font-size: 0.875rem;
+}
+.nc-selected-client-clear:hover {
+  background: rgba(168,95,82,0.1);
+  color: var(--pm-rojo);
+}
+
+.nc-service-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 10px;
+  background: var(--pm-surface-warm);
+  border: 1px solid var(--pm-border-light);
+  border-radius: 9999px;
+  padding: 5px 16px;
+  font-family: var(--pm-font-ui);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--pm-text-heading);
+}
+.nc-service-info-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.nc-service-info-item i { color: var(--pm-bronce); font-size: 0.75rem; }
+.nc-service-info-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--pm-border);
+  margin: 0 12px;
+}
+
+.nc-turnos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nc-turno-pill {
+  border: 1.5px solid var(--pm-border);
+  background: var(--pm-surface);
+  color: var(--pm-text);
+  font-family: var(--pm-font-ui);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 200ms;
+  white-space: nowrap;
+}
+.nc-turno-pill:hover {
+  border-color: var(--pm-bronce);
+  background: rgba(138,118,80,0.06);
+}
+.nc-turno-pill.selected {
+  border-color: var(--pm-bronce);
+  background: var(--pm-bronce);
+  color: var(--pm-text-inverse);
+}
+.nc-turno-pill:focus-visible {
+  outline: 2px solid var(--pm-rosa);
+  outline-offset: 2px;
+}
+
+.nc-turnos-placeholder {
+  font-size: 0.8125rem;
+  color: var(--pm-text-light);
+  padding: 8px 0;
+}
+.nc-turnos-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  color: var(--pm-text-muted);
+  padding: 8px 0;
+}
+.nc-turnos-loading .spinner-border {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+  color: var(--pm-bronce);
+}
+.nc-turnos-empty {
+  font-size: 0.8125rem;
+  color: var(--pm-rojo);
+  padding: 8px 0;
+}
+
+#modalNuevaCita .form-control,
+#modalNuevaCita .form-select {
+  border: 1.5px solid var(--pm-border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-family: var(--pm-font-body);
+  font-size: 0.875rem;
+  color: var(--pm-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+#modalNuevaCita .form-control:focus,
+#modalNuevaCita .form-select:focus {
+  border-color: var(--pm-bronce);
+  box-shadow: 0 0 0 3px rgba(138,118,80,0.18);
+  background-color: rgba(248, 244, 232, 0.3);
+}
+#modalNuevaCita .form-label {
+  font-family: var(--pm-font-ui);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--pm-text-heading);
+  margin-bottom: 4px;
+}
+#modalNuevaCita .form-text {
+  font-size: 0.75rem;
+  color: var(--pm-text-light);
+}
+
+@media (max-width: 575.98px) {
+  .nc-client-toggle { width: 100%; }
+  .nc-toggle-btn { flex: 1; text-align: center; }
+  .nc-turno-pill { padding: 8px 12px; font-size: 0.75rem; }
+  .nc-service-info { font-size: 0.75rem; padding: 4px 12px; }
+}
+
+/* ============================================
    PRINT — /harden
    ============================================ */
 @media print {
