@@ -1,9 +1,10 @@
 <?php
 /**
  * Piel Morena - API: Cancelar cita
- * POST { id_cita, token? } → JSON { success }
+ * POST { id_cita } → JSON { success }
  *
- * Cancela por sesión (usuario logueado dueño de la cita) o por token (invitado).
+ * Solo admin y empleados pueden cancelar citas.
+ * Los clientes deben contactar al salón por teléfono.
  */
 
 require_once __DIR__ . '/../../includes/init.php';
@@ -12,10 +13,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(false, null, 'Método no permitido', 405);
 }
 
+// Solo staff autenticado puede cancelar
+if (!esta_autenticado()) {
+    responder_json(false, null, 'Debe iniciar sesión', 401);
+}
+
+if (!tiene_rol('admin') && !tiene_rol('empleado')) {
+    responder_json(false, null, 'Solo el personal del salón puede cancelar citas. Para cancelar tu cita, contactanos por teléfono.', 403);
+}
+
 $input = json_decode(file_get_contents('php://input'), true);
 
 $id_cita = intval($input['id_cita'] ?? 0);
-$token   = trim($input['token'] ?? '');
 
 if ($id_cita <= 0) {
     responder_json(false, null, 'ID de cita inválido', 400);
@@ -24,7 +33,7 @@ if ($id_cita <= 0) {
 $db = getDB();
 
 // Obtener la cita
-$stmt = $db->prepare("SELECT id, id_cliente, estado, notas FROM citas WHERE id = ? LIMIT 1");
+$stmt = $db->prepare("SELECT id, id_cliente, estado FROM citas WHERE id = ? LIMIT 1");
 $stmt->execute([$id_cita]);
 $cita = $stmt->fetch();
 
@@ -38,44 +47,6 @@ if ($cita['estado'] === 'cancelada') {
 
 if ($cita['estado'] === 'completada') {
     responder_json(false, null, 'No se puede cancelar una cita completada', 400);
-}
-
-// Verificar restricción de tiempo mínimo (2 horas antes)
-$stmt_fecha = $db->prepare("SELECT fecha, hora_inicio FROM citas WHERE id = ?");
-$stmt_fecha->execute([$id_cita]);
-$cita_fecha = $stmt_fecha->fetch();
-if ($cita_fecha) {
-    $inicio_cita = strtotime($cita_fecha['fecha'] . ' ' . $cita_fecha['hora_inicio']);
-    $horas_restantes = ($inicio_cita - time()) / 3600;
-    if ($horas_restantes < 2 && $horas_restantes > 0) {
-        // Admin puede cancelar sin restricción
-        $es_admin = esta_autenticado() && tiene_rol('admin');
-        if (!$es_admin) {
-            responder_json(false, null, 'No se puede cancelar con menos de 2 horas de anticipación. Contactá al salón.', 400);
-        }
-    }
-}
-
-// Verificar autorización
-$autorizado = false;
-
-// Opción 1: Usuario logueado es dueño de la cita
-if (esta_autenticado() && usuario_actual_id() == $cita['id_cliente']) {
-    $autorizado = true;
-}
-
-// Opción 2: Admin puede cancelar cualquier cita
-if (esta_autenticado() && tiene_rol('admin')) {
-    $autorizado = true;
-}
-
-// Opción 3: Token de cancelación (invitados)
-if ($token && $cita['notas'] === 'token:' . $token) {
-    $autorizado = true;
-}
-
-if (!$autorizado) {
-    responder_json(false, null, 'No tienes permiso para cancelar esta cita', 403);
 }
 
 // Cancelar
@@ -102,7 +73,7 @@ try {
             'servicio'       => $datos_cita['servicio'],
             'fecha'          => $fecha_fmt,
             'hora'           => substr($datos_cita['hora_inicio'], 0, 5),
-            'cancelado_por'  => 'cliente',
+            'cancelado_por'  => 'staff',
         ]);
         registrar_notificacion($datos_cita['id_cliente'], 'sistema', 'Cita cancelada', 'Tu cita de ' . $datos_cita['servicio'] . ' para el ' . $fecha_fmt . ' fue cancelada.');
     }

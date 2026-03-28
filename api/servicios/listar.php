@@ -14,7 +14,7 @@ $db = getDB();
 
 $stmt = $db->prepare(
     "SELECT s.id, s.nombre, s.descripcion, s.precio, s.duracion_minutos, s.imagen,
-            c.nombre AS categoria, c.icono AS categoria_icono
+            s.id_categoria, c.nombre AS categoria, c.icono AS categoria_icono, c.orden AS categoria_orden
      FROM servicios s
      LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
      WHERE s.activo = 1

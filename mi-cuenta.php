@@ -177,6 +177,9 @@ $meses_es = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','
               </div>
             </div>
             <?php endforeach; ?>
+            <div class="pm-cita-cancelar-info">
+              <i class="bi bi-info-circle me-2"></i>Para cancelar o reprogramar una cita, contactanos al <a href="tel:+543624254052"><strong>3624 254052</strong></a>
+            </div>
           <?php endif; ?>
         </div>
 

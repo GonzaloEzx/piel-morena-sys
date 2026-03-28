@@ -132,6 +132,13 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
         </a>
       </li>
 
+      <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/galeria.php" class="pm-sidebar-link <?= $vista_actual === 'galeria' ? 'active' : '' ?>">
+          <i class="bi bi-images"></i>
+          <span>Galería</span>
+        </a>
+      </li>
+
       <li class="pm-sidebar-divider">Finanzas</li>
 
       <li class="pm-sidebar-item">

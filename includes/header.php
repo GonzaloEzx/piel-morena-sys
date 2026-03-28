@@ -147,6 +147,10 @@ $pagina_actual = basename($uri, '.php') ?: 'index';
         </li>
 
         <li class="nav-item">
+          <a class="nav-link pm-nav-link" href="<?= URL_BASE ?>/#tratamientos">Tratamientos</a>
+        </li>
+
+        <li class="nav-item">
           <a class="nav-link pm-nav-link <?= $pagina_actual === 'equipo' ? 'active' : '' ?>"
              href="<?= URL_BASE ?>/#equipo">Equipo</a>
         </li>
@@ -245,6 +249,12 @@ $pagina_actual = basename($uri, '.php') ?: 'index';
         <a class="nav-link pm-offcanvas-link pm-sheet-nav <?= $pagina_actual === 'servicios' ? 'active' : '' ?>"
            href="#servicios">
           <i class="bi bi-stars"></i><span>Servicios</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link pm-offcanvas-link pm-sheet-nav" href="#tratamientos">
+          <i class="bi bi-heart-pulse"></i><span>Tratamientos</span>
         </a>
       </li>
 

@@ -190,147 +190,75 @@
       <p class="pm-section-subtitle pm-animate">Tratamientos profesionales para realzar tu belleza natural</p>
     </div>
 
-    <!-- Grid de servicios: 3 cols desktop, 2 tablet, 1 mobile -->
+    <!-- Grid dinámico: 1 servicio destacado por categoría (máx 6) -->
+    <?php
+    // Cargar un servicio representativo por categoría desde BD
+    $db_landing = getDB();
+    $stmt_cats = $db_landing->query(
+      "SELECT c.id, c.nombre, c.icono,
+              (SELECT COUNT(*) FROM servicios WHERE id_categoria = c.id AND activo = 1) AS total_servicios
+       FROM categorias_servicios c
+       WHERE c.activo = 1
+       ORDER BY c.orden
+       LIMIT 6"
+    );
+    $categorias_landing = $stmt_cats->fetchAll();
+
+    // Un servicio destacado por categoría (el primero activo)
+    $stmt_serv = $db_landing->prepare(
+      "SELECT s.id, s.nombre, s.descripcion, s.precio, s.duracion_minutos,
+              c.nombre AS categoria, c.icono AS categoria_icono
+       FROM servicios s
+       JOIN categorias_servicios c ON s.id_categoria = c.id
+       WHERE s.id_categoria = ? AND s.activo = 1
+       ORDER BY s.nombre LIMIT 1"
+    );
+
+    $gradients = [
+      'linear-gradient(135deg, #FFE1AF 0%, #8A7650 100%)',
+      'linear-gradient(135deg, #B77466 0%, #8A7650 100%)',
+      'linear-gradient(135deg, #DBCEA5 0%, #957C62 100%)',
+      'linear-gradient(135deg, #8E977D 0%, #B7BEA7 100%)',
+      'linear-gradient(135deg, #E2B59A 0%, #B77466 100%)',
+      'linear-gradient(135deg, #DBCEA5 0%, #FFE1AF 100%)',
+    ];
+    ?>
     <div class="row g-4">
-
-      <!-- Servicio 1: Depilación Láser -->
+      <?php $ci = 0; foreach ($categorias_landing as $cat):
+        $stmt_serv->execute([$cat['id']]);
+        $serv = $stmt_serv->fetch();
+        if (!$serv) continue;
+        $icono = $cat['icono'] ?: 'bi-stars';
+        $gradient = $gradients[$ci % count($gradients)];
+        $precio_fmt = $serv['precio'] > 0 ? number_format($serv['precio'], 2, ',', '.') : null;
+      ?>
       <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-service-card">
           <div class="pm-service-img">
-            <div class="pm-service-img-placeholder" style="background: linear-gradient(135deg, #FFE1AF 0%, #8A7650 100%);">
-              <i class="bi bi-stars"></i>
+            <div class="pm-service-img-placeholder" style="background: <?= $gradient ?>;">
+              <i class="bi <?= $icono ?>"></i>
             </div>
-            <span class="pm-price-tooltip" data-service-id="1" data-service-name="Depilación Láser Axilas" data-price="350.00" data-duration="30" data-category="Depilación" title="Consultar precio">
+            <?php if ($precio_fmt): ?>
+            <span class="pm-price-tooltip" data-service-id="<?= $serv['id'] ?>" data-service-name="<?= sanitizar($serv['nombre']) ?>" data-price="<?= $serv['precio'] ?>" data-duration="<?= $serv['duracion_minutos'] ?>" data-category="<?= sanitizar($cat['nombre']) ?>" title="Consultar precio">
               <i class="bi bi-currency-dollar"></i>
             </span>
-            <span class="pm-badge">Depilación</span>
+            <?php endif; ?>
+            <span class="pm-badge"><?= sanitizar($cat['nombre']) ?></span>
           </div>
           <div class="pm-service-body">
-            <h4>Depilación Láser Axilas</h4>
-            <p>Resultados duraderos con tecnología de última generación. Sesiones rápidas, seguras y prácticamente indoloras.</p>
-            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> 30 min</span>
+            <h4><?= sanitizar($serv['nombre']) ?></h4>
+            <p><?= sanitizar(mb_strimwidth($serv['descripcion'], 0, 120, '...')) ?></p>
+            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> <?= $serv['duracion_minutos'] ?> min</span>
+            <?php if ($cat['total_servicios'] > 1): ?>
+            <span class="pm-service-count"><i class="bi bi-grid me-1"></i>+<?= $cat['total_servicios'] - 1 ?> servicios más</span>
+            <?php endif; ?>
           </div>
           <div class="pm-service-footer">
-            <a href="#reservar" class="btn-pm w-100">Reservar Cita <i class="bi bi-arrow-right ms-1"></i></a>
+            <a href="<?= URL_BASE ?>/reservar.php" class="btn-pm w-100">Reservar Cita <i class="bi bi-arrow-right ms-1"></i></a>
           </div>
         </div>
       </div>
-
-      <!-- Servicio 2: Limpieza Facial Profunda -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-service-card">
-          <div class="pm-service-img">
-            <div class="pm-service-img-placeholder" style="background: linear-gradient(135deg, #B77466 0%, #8A7650 100%);">
-              <i class="bi bi-droplet-half"></i>
-            </div>
-            <span class="pm-price-tooltip" data-service-id="2" data-service-name="Limpieza Facial Profunda" data-price="500.00" data-duration="60" data-category="Facial" title="Consultar precio">
-              <i class="bi bi-currency-dollar"></i>
-            </span>
-            <span class="pm-badge">Facial</span>
-          </div>
-          <div class="pm-service-body">
-            <h4>Limpieza Facial Profunda</h4>
-            <p>Limpieza profunda con extracción, exfoliación enzimática y mascarilla hidratante. Piel renovada y luminosa.</p>
-            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> 60 min</span>
-          </div>
-          <div class="pm-service-footer">
-            <a href="#reservar" class="btn-pm w-100">Reservar Cita <i class="bi bi-arrow-right ms-1"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Servicio 3: Masaje Relajante -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-service-card">
-          <div class="pm-service-img">
-            <div class="pm-service-img-placeholder" style="background: linear-gradient(135deg, #DBCEA5 0%, #957C62 100%);">
-              <i class="bi bi-person-arms-up"></i>
-            </div>
-            <span class="pm-price-tooltip" data-service-id="3" data-service-name="Masaje Relajante" data-price="600.00" data-duration="50" data-category="Corporal" title="Consultar precio">
-              <i class="bi bi-currency-dollar"></i>
-            </span>
-            <span class="pm-badge">Corporal</span>
-          </div>
-          <div class="pm-service-body">
-            <h4>Masaje Relajante</h4>
-            <p>Masaje descontracturante y relajante con aceites esenciales. Alivia tensiones y renueva tu energía.</p>
-            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> 50 min</span>
-          </div>
-          <div class="pm-service-footer">
-            <a href="#reservar" class="btn-pm w-100">Reservar Cita <i class="bi bi-arrow-right ms-1"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Servicio 4: Crioterapia Facial -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-service-card">
-          <div class="pm-service-img">
-            <div class="pm-service-img-placeholder" style="background: linear-gradient(135deg, #8E977D 0%, #B7BEA7 100%);">
-              <i class="bi bi-snow"></i>
-            </div>
-            <span class="pm-price-tooltip" data-service-id="4" data-service-name="Crioterapia Facial" data-price="450.00" data-duration="40" data-category="Frío" title="Consultar precio">
-              <i class="bi bi-currency-dollar"></i>
-            </span>
-            <span class="pm-badge pm-badge-frio">Frío</span>
-          </div>
-          <div class="pm-service-body">
-            <h4>Crioterapia Facial</h4>
-            <p>Tratamiento con frío controlado que estimula la producción de colágeno, reduce poros y rejuvenece la piel.</p>
-            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> 40 min</span>
-          </div>
-          <div class="pm-service-footer">
-            <a href="#reservar" class="btn-pm w-100">Reservar Cita <i class="bi bi-arrow-right ms-1"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Servicio 5: Maquillaje Social -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-service-card">
-          <div class="pm-service-img">
-            <div class="pm-service-img-placeholder" style="background: linear-gradient(135deg, #E2B59A 0%, #B77466 100%);">
-              <i class="bi bi-palette"></i>
-            </div>
-            <span class="pm-price-tooltip" data-service-id="5" data-service-name="Maquillaje Social" data-price="800.00" data-duration="45" data-category="Maquillaje" title="Consultar precio">
-              <i class="bi bi-currency-dollar"></i>
-            </span>
-            <span class="pm-badge">Maquillaje</span>
-          </div>
-          <div class="pm-service-body">
-            <h4>Maquillaje Social</h4>
-            <p>Maquillaje profesional para eventos, fiestas y ocasiones especiales. Luce radiante en cada momento.</p>
-            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> 45 min</span>
-          </div>
-          <div class="pm-service-footer">
-            <a href="#reservar" class="btn-pm w-100">Reservar Cita <i class="bi bi-arrow-right ms-1"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Servicio 6: Manicure Spa -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-service-card">
-          <div class="pm-service-img">
-            <div class="pm-service-img-placeholder" style="background: linear-gradient(135deg, #DBCEA5 0%, #FFE1AF 100%);">
-              <i class="bi bi-brush"></i>
-            </div>
-            <span class="pm-price-tooltip" data-service-id="6" data-service-name="Manicure Spa" data-price="300.00" data-duration="40" data-category="Uñas" title="Consultar precio">
-              <i class="bi bi-currency-dollar"></i>
-            </span>
-            <span class="pm-badge">Uñas</span>
-          </div>
-          <div class="pm-service-body">
-            <h4>Manicure Spa</h4>
-            <p>Tratamiento completo de manos: exfoliación, hidratación profunda, esmaltado y diseño personalizado.</p>
-            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> 40 min</span>
-          </div>
-          <div class="pm-service-footer">
-            <a href="#reservar" class="btn-pm w-100">Reservar Cita <i class="bi bi-arrow-right ms-1"></i></a>
-          </div>
-        </div>
-      </div>
-
+      <?php $ci++; endforeach; ?>
     </div>
 
   </div>
@@ -440,6 +368,165 @@
 
 
 <!-- ═══════════════════════════════════════════════════════════════
+     4b. INFO DE TRATAMIENTOS — bg: --pm-marfil
+     Sección informativa sobre los tratamientos estrella del salón.
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="tratamientos" class="pm-section" data-section="tratamientos">
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <h2 class="pm-section-title pm-animate">Conocé Nuestros Tratamientos</h2>
+      <div class="pm-divider"></div>
+      <p class="pm-section-subtitle pm-animate">Información detallada para que elijas el tratamiento ideal para vos</p>
+    </div>
+
+    <div class="row g-4">
+
+      <!-- Tratamiento 1: Limpieza Facial Profunda -->
+      <div class="col-lg-4 col-md-6 pm-animate">
+        <div class="pm-tratamiento-card">
+          <div class="pm-tratamiento-icon">
+            <i class="bi bi-droplet-half"></i>
+          </div>
+          <h4 class="pm-tratamiento-title">Limpieza Facial Profunda</h4>
+          <p class="pm-tratamiento-desc">
+            Tratamiento completo que limpia en profundidad los poros, elimina impurezas y células muertas. Incluye vapor de ozono, extracción profesional y mascarilla hidratante personalizada según tu tipo de piel.
+          </p>
+          <ul class="pm-tratamiento-beneficios">
+            <li><i class="bi bi-check2-circle"></i>Piel limpia, luminosa y oxigenada</li>
+            <li><i class="bi bi-check2-circle"></i>Previene puntos negros y acné</li>
+            <li><i class="bi bi-check2-circle"></i>Mejora la absorción de productos</li>
+          </ul>
+          <div class="pm-tratamiento-meta">
+            <span><i class="bi bi-clock me-1"></i>90 min</span>
+            <span><i class="bi bi-arrow-repeat me-1"></i>Mensual</span>
+          </div>
+          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
+        </div>
+      </div>
+
+      <!-- Tratamiento 2: Depilación Láser Soprano -->
+      <div class="col-lg-4 col-md-6 pm-animate">
+        <div class="pm-tratamiento-card">
+          <div class="pm-tratamiento-icon">
+            <i class="bi bi-stars"></i>
+          </div>
+          <h4 class="pm-tratamiento-title">Depilación Láser Soprano</h4>
+          <p class="pm-tratamiento-desc">
+            Tecnología Soprano de última generación para depilación definitiva. Indoloro y apto para todo tipo de piel y vello. Sesiones rápidas con resultados progresivos que reducen el vello hasta un 95%.
+          </p>
+          <ul class="pm-tratamiento-beneficios">
+            <li><i class="bi bi-check2-circle"></i>Prácticamente indoloro</li>
+            <li><i class="bi bi-check2-circle"></i>Apto para pieles sensibles</li>
+            <li><i class="bi bi-check2-circle"></i>Resultados desde la primera sesión</li>
+          </ul>
+          <div class="pm-tratamiento-meta">
+            <span><i class="bi bi-clock me-1"></i>15-60 min</span>
+            <span><i class="bi bi-arrow-repeat me-1"></i>Cada 4-6 semanas</span>
+          </div>
+          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
+        </div>
+      </div>
+
+      <!-- Tratamiento 3: Criolipólisis -->
+      <div class="col-lg-4 col-md-6 pm-animate">
+        <div class="pm-tratamiento-card">
+          <div class="pm-tratamiento-icon">
+            <i class="bi bi-snow"></i>
+          </div>
+          <h4 class="pm-tratamiento-title">Criolipólisis en Frío</h4>
+          <p class="pm-tratamiento-desc">
+            Tratamiento no invasivo que elimina grasa localizada mediante aplicación controlada de frío. Las células grasas se cristalizan y el cuerpo las elimina naturalmente. Sin cirugía, sin agujas, sin tiempo de recuperación.
+          </p>
+          <ul class="pm-tratamiento-beneficios">
+            <li><i class="bi bi-check2-circle"></i>Reduce grasa localizada sin cirugía</li>
+            <li><i class="bi bi-check2-circle"></i>Resultados visibles en 2-3 semanas</li>
+            <li><i class="bi bi-check2-circle"></i>Sin tiempo de recuperación</li>
+          </ul>
+          <div class="pm-tratamiento-meta">
+            <span><i class="bi bi-clock me-1"></i>60 min</span>
+            <span><i class="bi bi-arrow-repeat me-1"></i>1-3 sesiones</span>
+          </div>
+          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
+        </div>
+      </div>
+
+      <!-- Tratamiento 4: Dermapen -->
+      <div class="col-lg-4 col-md-6 pm-animate">
+        <div class="pm-tratamiento-card">
+          <div class="pm-tratamiento-icon">
+            <i class="bi bi-brush"></i>
+          </div>
+          <h4 class="pm-tratamiento-title">Dermapen</h4>
+          <p class="pm-tratamiento-desc">
+            Microagujas automatizadas que estimulan la regeneración natural de la piel. Activa la producción de colágeno y elastina, mejorando visiblemente cicatrices, poros dilatados, arrugas finas y manchas.
+          </p>
+          <ul class="pm-tratamiento-beneficios">
+            <li><i class="bi bi-check2-circle"></i>Rejuvenece y reafirma la piel</li>
+            <li><i class="bi bi-check2-circle"></i>Reduce cicatrices y marcas de acné</li>
+            <li><i class="bi bi-check2-circle"></i>Mejora textura y tono</li>
+          </ul>
+          <div class="pm-tratamiento-meta">
+            <span><i class="bi bi-clock me-1"></i>60 min</span>
+            <span><i class="bi bi-arrow-repeat me-1"></i>Cada 4 semanas</span>
+          </div>
+          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
+        </div>
+      </div>
+
+      <!-- Tratamiento 5: Radiofrecuencia Facial -->
+      <div class="col-lg-4 col-md-6 pm-animate">
+        <div class="pm-tratamiento-card">
+          <div class="pm-tratamiento-icon">
+            <i class="bi bi-lightning-charge"></i>
+          </div>
+          <h4 class="pm-tratamiento-title">Radiofrecuencia Facial</h4>
+          <p class="pm-tratamiento-desc">
+            Energía de radiofrecuencia que calienta las capas profundas de la piel estimulando la producción de colágeno. Efecto lifting inmediato, tensor y rejuvenecedor. Ideal para flacidez y líneas de expresión.
+          </p>
+          <ul class="pm-tratamiento-beneficios">
+            <li><i class="bi bi-check2-circle"></i>Efecto lifting desde la primera sesión</li>
+            <li><i class="bi bi-check2-circle"></i>Reduce arrugas y líneas finas</li>
+            <li><i class="bi bi-check2-circle"></i>Reafirma y tonifica el rostro</li>
+          </ul>
+          <div class="pm-tratamiento-meta">
+            <span><i class="bi bi-clock me-1"></i>60 min</span>
+            <span><i class="bi bi-arrow-repeat me-1"></i>Semanal (6-8 sesiones)</span>
+          </div>
+          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
+        </div>
+      </div>
+
+      <!-- Tratamiento 6: Masaje Descontracturante -->
+      <div class="col-lg-4 col-md-6 pm-animate">
+        <div class="pm-tratamiento-card">
+          <div class="pm-tratamiento-icon">
+            <i class="bi bi-hand-index-thumb"></i>
+          </div>
+          <h4 class="pm-tratamiento-title">Masaje Descontracturante</h4>
+          <p class="pm-tratamiento-desc">
+            Masaje terapéutico profundo que libera contracturas, nudos musculares y tensión acumulada. Trabaja puntos gatillo y cadenas musculares para aliviar dolor y restaurar movilidad. Ideal para estrés y malas posturas.
+          </p>
+          <ul class="pm-tratamiento-beneficios">
+            <li><i class="bi bi-check2-circle"></i>Alivia dolor muscular y tensión</li>
+            <li><i class="bi bi-check2-circle"></i>Mejora la circulación sanguínea</li>
+            <li><i class="bi bi-check2-circle"></i>Reduce el estrés y la ansiedad</li>
+          </ul>
+          <div class="pm-tratamiento-meta">
+            <span><i class="bi bi-clock me-1"></i>30-60 min</span>
+            <span><i class="bi bi-arrow-repeat me-1"></i>Semanal o quincenal</span>
+          </div>
+          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
      5. GALERÍA — bg: --pm-crema
      ═══════════════════════════════════════════════════════════════ -->
 <section id="galeria" class="pm-section-alt" data-section="galeria">
@@ -454,79 +541,37 @@
 
     <!-- Grid masonry-style: 3 cols -->
     <div class="row g-3">
-
-      <!-- Galería item 1 -->
+      <?php
+      $gallery_gradients = [
+        'linear-gradient(135deg, #DBCEA5, #8A7650)',
+        'linear-gradient(135deg, #FFE1AF, #957C62)',
+        'linear-gradient(135deg, #B77466, #8A7650)',
+        'linear-gradient(135deg, #8E977D, #B7BEA7)',
+        'linear-gradient(135deg, #E2B59A, #DBCEA5)',
+        'linear-gradient(135deg, #957C62, #7A654F)',
+      ];
+      $gallery_heights = [280, 340, 300, 320, 260, 340];
+      for ($gi = 1; $gi <= 6; $gi++):
+        $gimg = sprintf('galeria-%02d.jpg', $gi);
+        $gpath = __DIR__ . '/assets/img/gallery/' . $gimg;
+        $gexiste = file_exists($gpath);
+        $gurl = $gexiste ? URL_BASE . '/assets/img/gallery/' . $gimg . '?v=' . filemtime($gpath) : '';
+      ?>
       <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-gallery-item">
-          <div class="pm-gallery-placeholder" style="background: linear-gradient(135deg, #DBCEA5, #8A7650); height: 280px;">
-            <span class="pm-gallery-text">Piel Morena</span>
-          </div>
+          <?php if ($gexiste): ?>
+            <img src="<?= $gurl ?>" alt="Galería Piel Morena <?= $gi ?>" class="pm-gallery-real-img" loading="lazy" />
+          <?php else: ?>
+            <div class="pm-gallery-placeholder" style="background: <?= $gallery_gradients[$gi - 1] ?>; height: <?= $gallery_heights[$gi - 1] ?>px;">
+              <span class="pm-gallery-text">Piel Morena</span>
+            </div>
+          <?php endif; ?>
           <div class="pm-gallery-overlay">
             <i class="bi bi-zoom-in"></i>
           </div>
         </div>
       </div>
-
-      <!-- Galería item 2 -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-gallery-item">
-          <div class="pm-gallery-placeholder" style="background: linear-gradient(135deg, #FFE1AF, #957C62); height: 340px;">
-            <span class="pm-gallery-text">Piel Morena</span>
-          </div>
-          <div class="pm-gallery-overlay">
-            <i class="bi bi-zoom-in"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Galería item 3 -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-gallery-item">
-          <div class="pm-gallery-placeholder" style="background: linear-gradient(135deg, #B77466, #8A7650); height: 300px;">
-            <span class="pm-gallery-text">Piel Morena</span>
-          </div>
-          <div class="pm-gallery-overlay">
-            <i class="bi bi-zoom-in"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Galería item 4 -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-gallery-item">
-          <div class="pm-gallery-placeholder" style="background: linear-gradient(135deg, #8E977D, #B7BEA7); height: 320px;">
-            <span class="pm-gallery-text">Piel Morena</span>
-          </div>
-          <div class="pm-gallery-overlay">
-            <i class="bi bi-zoom-in"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Galería item 5 -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-gallery-item">
-          <div class="pm-gallery-placeholder" style="background: linear-gradient(135deg, #E2B59A, #DBCEA5); height: 260px;">
-            <span class="pm-gallery-text">Piel Morena</span>
-          </div>
-          <div class="pm-gallery-overlay">
-            <i class="bi bi-zoom-in"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Galería item 6 -->
-      <div class="col-lg-4 col-md-6 pm-animate">
-        <div class="pm-gallery-item">
-          <div class="pm-gallery-placeholder" style="background: linear-gradient(135deg, #957C62, #7A654F); height: 340px;">
-            <span class="pm-gallery-text">Piel Morena</span>
-          </div>
-          <div class="pm-gallery-overlay">
-            <i class="bi bi-zoom-in"></i>
-          </div>
-        </div>
-      </div>
-
+      <?php endfor; ?>
     </div>
 
   </div>

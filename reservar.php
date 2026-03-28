@@ -37,7 +37,7 @@ $logueado = esta_autenticado();
         <li><i class="bi bi-check-circle-fill"></i>Gestioná tus citas desde tu cuenta</li>
         <li><i class="bi bi-check-circle-fill"></i>Recibí recordatorios antes de tu turno</li>
         <li><i class="bi bi-check-circle-fill"></i>Accedé a tu historial de servicios</li>
-        <li><i class="bi bi-check-circle-fill"></i>Cancelá o reprogramá fácilmente</li>
+        <li><i class="bi bi-check-circle-fill"></i>Reservá de forma rápida y sencilla</li>
       </ul>
       <div class="pm-auth-required-actions">
         <a href="<?= URL_BASE ?>/registro.php?redirect=<?= urlencode('/reservar.php') ?>" class="btn btn-pm w-100">
@@ -209,20 +209,57 @@ const Wizard = {
         return;
       }
 
-      const iconMap = { 'Depilación': 'bi-stars', 'Tratamientos Faciales': 'bi-droplet-half', 'Tratamientos Corporales': 'bi-person-arms-up', 'Tratamientos de Frío': 'bi-snow', 'Maquillaje': 'bi-palette', 'Uñas': 'bi-brush' };
+      // Agrupar servicios por categoría
+      const categorias = {};
+      data.data.forEach(s => {
+        const cat = s.categoria || 'Otros';
+        if (!categorias[cat]) {
+          categorias[cat] = { icono: s.categoria_icono || 'bi-stars', servicios: [] };
+        }
+        categorias[cat].servicios.push(s);
+      });
 
-      container.innerHTML = data.data.map(s => {
-        const icon = s.categoria_icono || iconMap[s.categoria] || 'bi-stars';
-        const precio = parseFloat(s.precio).toLocaleString('es-AR', {minimumFractionDigits:2});
-        return `<div class="pm-servicio-option" data-id="${s.id}" data-name="${s.nombre}" data-price="${s.precio}" data-duration="${s.duracion_minutos}" onclick="Wizard.selectServicio(this)">
-          <div class="pm-so-icon"><i class="bi ${icon}"></i></div>
-          <div class="pm-so-info">
-            <div class="pm-so-name">${s.nombre}</div>
-            <div class="pm-so-meta"><i class="bi bi-clock me-1"></i>${s.duracion_minutos} min · ${s.categoria || ''}</div>
-          </div>
-          <div class="pm-so-price">$${precio}</div>
-        </div>`;
-      }).join('');
+      let html = '<div class="accordion pm-categorias-accordion" id="accordionServicios">';
+      let idx = 0;
+      for (const [catName, catData] of Object.entries(categorias)) {
+        const collapseId = 'cat-' + idx;
+        const count = catData.servicios.length;
+        html += `
+        <div class="accordion-item pm-cat-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button pm-cat-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+              <i class="bi ${catData.icono} me-2"></i>${catName}
+              <span class="pm-cat-count">${count}</span>
+            </button>
+          </h2>
+          <div id="${collapseId}" class="accordion-collapse collapse" data-bs-parent="#accordionServicios">
+            <div class="accordion-body p-0">`;
+        catData.servicios.forEach(s => {
+          const precio = parseFloat(s.precio) > 0
+            ? '$' + parseFloat(s.precio).toLocaleString('es-AR', {minimumFractionDigits:2})
+            : 'Consultar';
+          html += `<div class="pm-servicio-option" data-id="${s.id}" data-name="${s.nombre}" data-price="${s.precio}" data-duration="${s.duracion_minutos}" onclick="Wizard.selectServicio(this)">
+            <div class="pm-so-info">
+              <div class="pm-so-name">${s.nombre}</div>
+              <div class="pm-so-meta"><i class="bi bi-clock me-1"></i>${s.duracion_minutos} min</div>
+            </div>
+            <div class="pm-so-price">${precio}</div>
+          </div>`;
+        });
+        html += `</div></div></div>`;
+        idx++;
+      }
+      html += '</div>';
+      container.innerHTML = html;
+
+      // Si hay preselección, abrir la categoría correspondiente
+      if (this.preseleccionado) {
+        const opt = container.querySelector(`.pm-servicio-option[data-id="${this.preseleccionado}"]`);
+        if (opt) {
+          const collapse = opt.closest('.accordion-collapse');
+          if (collapse) new bootstrap.Collapse(collapse, { show: true });
+        }
+      }
     } catch(e) {
       document.getElementById('serviciosList').innerHTML = '<p class="text-center" style="color:var(--pm-rojo)">Error al cargar servicios</p>';
     }
@@ -316,8 +353,9 @@ const Wizard = {
         <div class="pm-resumen-row"><span>Hora:</span><strong>${data.data.hora}</strong></div>
         <div class="pm-resumen-row"><span>N° Reserva:</span><strong>#${data.data.id}</strong></div>
       `;
+      // Token informativo (uso interno)
       if (data.data.token) {
-        document.getElementById('exitoToken').textContent = 'Código de cancelación: ' + data.data.token;
+        document.getElementById('exitoToken').textContent = 'Referencia: #' + data.data.id;
       }
       this.goTo('exito');
     } catch(e) {
