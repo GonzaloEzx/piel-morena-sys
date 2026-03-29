@@ -288,22 +288,22 @@
       <p class="pm-section-subtitle pm-animate">Profesionales comprometidas con tu bienestar</p>
     </div>
 
-    <!-- Grid: 4 cols desktop, 2 tablet, 1 mobile -->
+    <!-- Grid: 3 cols desktop, 2 tablet, 1 mobile -->
     <div class="row g-4 justify-content-center">
 
-      <!-- Miembro 1 -->
-      <div class="col-lg-3 col-md-6 pm-animate">
+      <!-- Mariángeles Zudaire -->
+      <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-team-card">
           <div class="pm-team-photo">
             <div class="pm-team-photo-placeholder" style="background: linear-gradient(135deg, #DBCEA5, #8A7650);">
-              <span class="pm-team-initials">MG</span>
+              <span class="pm-team-initials">MZ</span>
             </div>
           </div>
           <div class="pm-team-info">
-            <h4 class="pm-team-name">María García</h4>
-            <p class="pm-team-role">Directora &amp; Esteticista</p>
+            <h4 class="pm-team-name">Mariángeles Zudaire</h4>
+            <p class="pm-team-role">Dermatocosmiatra &amp; Operadora Láser</p>
             <div class="pm-team-social">
-              <a href="#" class="pm-social-icon" aria-label="Instagram de María" target="_blank" rel="noopener">
+              <a href="https://www.instagram.com/pielmorenaesteticaok" class="pm-social-icon" aria-label="Instagram de Mariángeles" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
@@ -311,19 +311,19 @@
         </div>
       </div>
 
-      <!-- Miembro 2 -->
-      <div class="col-lg-3 col-md-6 pm-animate">
+      <!-- Rosario Prieto -->
+      <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-team-card">
           <div class="pm-team-photo">
             <div class="pm-team-photo-placeholder" style="background: linear-gradient(135deg, #FFE1AF, #957C62);">
-              <span class="pm-team-initials">LP</span>
+              <span class="pm-team-initials">RP</span>
             </div>
           </div>
           <div class="pm-team-info">
-            <h4 class="pm-team-name">Laura Pérez</h4>
-            <p class="pm-team-role">Especialista en Depilación Láser</p>
+            <h4 class="pm-team-name">Rosario Prieto</h4>
+            <p class="pm-team-role">Especialista en Manicuría</p>
             <div class="pm-team-social">
-              <a href="#" class="pm-social-icon" aria-label="Instagram de Laura" target="_blank" rel="noopener">
+              <a href="#" class="pm-social-icon" aria-label="Instagram de Rosario" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
@@ -331,19 +331,19 @@
         </div>
       </div>
 
-      <!-- Miembro 3 -->
-      <div class="col-lg-3 col-md-6 pm-animate">
+      <!-- Lucía Soto -->
+      <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-team-card">
           <div class="pm-team-photo">
             <div class="pm-team-photo-placeholder" style="background: linear-gradient(135deg, #B77466, #8A7650);">
-              <span class="pm-team-initials">AR</span>
+              <span class="pm-team-initials">LS</span>
             </div>
           </div>
           <div class="pm-team-info">
-            <h4 class="pm-team-name">Ana Rodríguez</h4>
-            <p class="pm-team-role">Cosmetóloga &amp; Crioterapia</p>
+            <h4 class="pm-team-name">Lucía Soto</h4>
+            <p class="pm-team-role">Lashista &amp; Cosmetología</p>
             <div class="pm-team-social">
-              <a href="#" class="pm-social-icon" aria-label="Instagram de Ana" target="_blank" rel="noopener">
+              <a href="#" class="pm-social-icon" aria-label="Instagram de Lucía" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
@@ -351,19 +351,59 @@
         </div>
       </div>
 
-      <!-- Miembro 4 -->
-      <div class="col-lg-3 col-md-6 pm-animate">
+      <!-- Nathalia Gómez -->
+      <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-team-card">
           <div class="pm-team-photo">
             <div class="pm-team-photo-placeholder" style="background: linear-gradient(135deg, #E2B59A, #DBCEA5);">
-              <span class="pm-team-initials">SL</span>
+              <span class="pm-team-initials">NG</span>
             </div>
           </div>
           <div class="pm-team-info">
-            <h4 class="pm-team-name">Sofía López</h4>
-            <p class="pm-team-role">Maquilladora Profesional</p>
+            <h4 class="pm-team-name">Nathalia Gómez</h4>
+            <p class="pm-team-role">Peluquera</p>
             <div class="pm-team-social">
-              <a href="#" class="pm-social-icon" aria-label="Instagram de Sofía" target="_blank" rel="noopener">
+              <a href="#" class="pm-social-icon" aria-label="Instagram de Nathalia" target="_blank" rel="noopener">
+                <i class="bi bi-instagram"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nuria Morinigo -->
+      <div class="col-lg-4 col-md-6 pm-animate">
+        <div class="pm-team-card">
+          <div class="pm-team-photo">
+            <div class="pm-team-photo-placeholder" style="background: linear-gradient(135deg, #8E977D, #6C5D43);">
+              <span class="pm-team-initials">NM</span>
+            </div>
+          </div>
+          <div class="pm-team-info">
+            <h4 class="pm-team-name">Nuria Morinigo</h4>
+            <p class="pm-team-role">Masajista</p>
+            <div class="pm-team-social">
+              <a href="#" class="pm-social-icon" aria-label="Instagram de Nuria" target="_blank" rel="noopener">
+                <i class="bi bi-instagram"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Naila Centurión -->
+      <div class="col-lg-4 col-md-6 pm-animate">
+        <div class="pm-team-card">
+          <div class="pm-team-photo">
+            <div class="pm-team-photo-placeholder" style="background: linear-gradient(135deg, #957C62, #B77466);">
+              <span class="pm-team-initials">NC</span>
+            </div>
+          </div>
+          <div class="pm-team-info">
+            <h4 class="pm-team-name">Naila Centurión</h4>
+            <p class="pm-team-role">Certificada en Pestañas</p>
+            <div class="pm-team-social">
+              <a href="#" class="pm-social-icon" aria-label="Instagram de Naila" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
