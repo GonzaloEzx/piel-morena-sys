@@ -1,5 +1,5 @@
-<?php $pagina_actual = 'inicio'; ?>
-<?php require_once 'includes/header.php'; ?>
+<?php $pagina_actual = "inicio"; ?>
+<?php require_once "includes/header.php"; ?>
 
 <!-- ═══════════════════════════════════════════════════════════════
      1. HERO — Carousel 3 slides, auto-play 7s
@@ -147,7 +147,7 @@
           <div class="col-sm-6">
             <div class="pm-about-feature">
               <i class="bi bi-check-circle-fill"></i>
-              <span>+10 años de experiencia</span>
+              <span>+5 años de experiencia</span>
             </div>
           </div>
           <div class="col-sm-6">
@@ -191,47 +191,49 @@
     </div>
 
     <!-- Grid dinámico: 1 servicio destacado por categoría (máx 6) -->
-    <?php
-    // Cargar un servicio representativo por categoría desde BD
+    <?php // Cargar un servicio representativo por categoría desde BD
+
+
     $db_landing = getDB();
-    $stmt_cats = $db_landing->query(
-      "SELECT c.id, c.nombre, c.icono,
+    $stmt_cats = $db_landing->query("SELECT c.id, c.nombre, c.icono,
               (SELECT COUNT(*) FROM servicios WHERE id_categoria = c.id AND activo = 1) AS total_servicios
        FROM categorias_servicios c
        WHERE c.activo = 1
        ORDER BY c.orden
-       LIMIT 6"
-    );
-    $categorias_landing = $stmt_cats->fetchAll();
-
-    // Un servicio destacado por categoría (el primero activo)
-    $stmt_serv = $db_landing->prepare(
-      "SELECT s.id, s.nombre, s.descripcion, s.precio, s.duracion_minutos,
+       LIMIT 6");
+    $categorias_landing = $stmt_cats->fetchAll(); // Un servicio destacado por categoría (el primero activo)
+    $stmt_serv = $db_landing->prepare("SELECT s.id, s.nombre, s.descripcion, s.precio, s.duracion_minutos,
               c.nombre AS categoria, c.icono AS categoria_icono
        FROM servicios s
        JOIN categorias_servicios c ON s.id_categoria = c.id
        WHERE s.id_categoria = ? AND s.activo = 1
-       ORDER BY s.nombre LIMIT 1"
-    );
-
+       ORDER BY s.nombre LIMIT 1");
     $gradients = [
-      'linear-gradient(135deg, #FFE1AF 0%, #8A7650 100%)',
-      'linear-gradient(135deg, #B77466 0%, #8A7650 100%)',
-      'linear-gradient(135deg, #DBCEA5 0%, #957C62 100%)',
-      'linear-gradient(135deg, #8E977D 0%, #B7BEA7 100%)',
-      'linear-gradient(135deg, #E2B59A 0%, #B77466 100%)',
-      'linear-gradient(135deg, #DBCEA5 0%, #FFE1AF 100%)',
+        "linear-gradient(135deg, #FFE1AF 0%, #8A7650 100%)",
+        "linear-gradient(135deg, #B77466 0%, #8A7650 100%)",
+        "linear-gradient(135deg, #DBCEA5 0%, #957C62 100%)",
+        "linear-gradient(135deg, #8E977D 0%, #B7BEA7 100%)",
+        "linear-gradient(135deg, #E2B59A 0%, #B77466 100%)",
+        "linear-gradient(135deg, #DBCEA5 0%, #FFE1AF 100%)",
     ];
     ?>
     <div class="row g-4">
-      <?php $ci = 0; foreach ($categorias_landing as $cat):
-        $stmt_serv->execute([$cat['id']]);
-        $serv = $stmt_serv->fetch();
-        if (!$serv) continue;
-        $icono = $cat['icono'] ?: 'bi-stars';
-        $gradient = $gradients[$ci % count($gradients)];
-        $precio_fmt = $serv['precio'] > 0 ? number_format($serv['precio'], 2, ',', '.') : null;
-      ?>
+      <?php
+      $ci = 0;
+      foreach ($categorias_landing as $cat):
+
+          $stmt_serv->execute([$cat["id"]]);
+          $serv = $stmt_serv->fetch();
+          if (!$serv) {
+              continue;
+          }
+          $icono = $cat["icono"] ?: "bi-stars";
+          $gradient = $gradients[$ci % count($gradients)];
+          $precio_fmt =
+              $serv["precio"] > 0
+                  ? number_format($serv["precio"], 2, ",", ".")
+                  : null;
+          ?>
       <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-service-card">
           <div class="pm-service-img">
@@ -239,18 +241,30 @@
               <i class="bi <?= $icono ?>"></i>
             </div>
             <?php if ($precio_fmt): ?>
-            <span class="pm-price-tooltip" data-service-id="<?= $serv['id'] ?>" data-service-name="<?= sanitizar($serv['nombre']) ?>" data-price="<?= $serv['precio'] ?>" data-duration="<?= $serv['duracion_minutos'] ?>" data-category="<?= sanitizar($cat['nombre']) ?>" title="Consultar precio">
+            <span class="pm-price-tooltip" data-service-id="<?= $serv[
+                "id"
+            ] ?>" data-service-name="<?= sanitizar(
+    $serv["nombre"],
+) ?>" data-price="<?= $serv["precio"] ?>" data-duration="<?= $serv[
+    "duracion_minutos"
+] ?>" data-category="<?= sanitizar($cat["nombre"]) ?>" title="Consultar precio">
               <i class="bi bi-currency-dollar"></i>
             </span>
             <?php endif; ?>
-            <span class="pm-badge"><?= sanitizar($cat['nombre']) ?></span>
+            <span class="pm-badge"><?= sanitizar($cat["nombre"]) ?></span>
           </div>
           <div class="pm-service-body">
-            <h4><?= sanitizar($serv['nombre']) ?></h4>
-            <p><?= sanitizar(mb_strimwidth($serv['descripcion'], 0, 120, '...')) ?></p>
-            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> <?= $serv['duracion_minutos'] ?> min</span>
-            <?php if ($cat['total_servicios'] > 1): ?>
-            <span class="pm-service-count"><i class="bi bi-grid me-1"></i>+<?= $cat['total_servicios'] - 1 ?> servicios más</span>
+            <h4><?= sanitizar($serv["nombre"]) ?></h4>
+            <p><?= sanitizar(
+                mb_strimwidth($serv["descripcion"], 0, 120, "..."),
+            ) ?></p>
+            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> <?= $serv[
+                "duracion_minutos"
+            ] ?> min</span>
+            <?php if ($cat["total_servicios"] > 1): ?>
+            <span class="pm-service-count"><i class="bi bi-grid me-1"></i>+<?= $cat[
+                "total_servicios"
+            ] - 1 ?> servicios más</span>
             <?php endif; ?>
           </div>
           <div class="pm-service-footer">
@@ -258,7 +272,9 @@
           </div>
         </div>
       </div>
-      <?php $ci++; endforeach; ?>
+      <?php $ci++;
+      endforeach;
+      ?>
     </div>
 
   </div>
@@ -543,26 +559,35 @@
     <div class="row g-3">
       <?php
       $gallery_gradients = [
-        'linear-gradient(135deg, #DBCEA5, #8A7650)',
-        'linear-gradient(135deg, #FFE1AF, #957C62)',
-        'linear-gradient(135deg, #B77466, #8A7650)',
-        'linear-gradient(135deg, #8E977D, #B7BEA7)',
-        'linear-gradient(135deg, #E2B59A, #DBCEA5)',
-        'linear-gradient(135deg, #957C62, #7A654F)',
+          "linear-gradient(135deg, #DBCEA5, #8A7650)",
+          "linear-gradient(135deg, #FFE1AF, #957C62)",
+          "linear-gradient(135deg, #B77466, #8A7650)",
+          "linear-gradient(135deg, #8E977D, #B7BEA7)",
+          "linear-gradient(135deg, #E2B59A, #DBCEA5)",
+          "linear-gradient(135deg, #957C62, #7A654F)",
       ];
       $gallery_heights = [280, 340, 300, 320, 260, 340];
       for ($gi = 1; $gi <= 6; $gi++):
-        $gimg = sprintf('galeria-%02d.jpg', $gi);
-        $gpath = __DIR__ . '/assets/img/gallery/' . $gimg;
-        $gexiste = file_exists($gpath);
-        $gurl = $gexiste ? URL_BASE . '/assets/img/gallery/' . $gimg . '?v=' . filemtime($gpath) : '';
-      ?>
+
+          $gimg = sprintf("galeria-%02d.jpg", $gi);
+          $gpath = __DIR__ . "/assets/img/gallery/" . $gimg;
+          $gexiste = file_exists($gpath);
+          $gurl = $gexiste
+              ? URL_BASE .
+                  "/assets/img/gallery/" .
+                  $gimg .
+                  "?v=" .
+                  filemtime($gpath)
+              : "";
+          ?>
       <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-gallery-item">
           <?php if ($gexiste): ?>
             <img src="<?= $gurl ?>" alt="Galería Piel Morena <?= $gi ?>" class="pm-gallery-real-img" loading="lazy" />
           <?php else: ?>
-            <div class="pm-gallery-placeholder" style="background: <?= $gallery_gradients[$gi - 1] ?>; height: <?= $gallery_heights[$gi - 1] ?>px;">
+            <div class="pm-gallery-placeholder" style="background: <?= $gallery_gradients[
+                $gi - 1
+            ] ?>; height: <?= $gallery_heights[$gi - 1] ?>px;">
               <span class="pm-gallery-text">Piel Morena</span>
             </div>
           <?php endif; ?>
@@ -571,7 +596,9 @@
           </div>
         </div>
       </div>
-      <?php endfor; ?>
+      <?php
+      endfor;
+      ?>
     </div>
 
   </div>
@@ -860,7 +887,11 @@
           <a href="reservar.php" class="btn-pm-dorado btn-pm-lg">
             <i class="bi bi-calendar-check me-2"></i>Reservar Ahora
           </a>
-          <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>" class="btn-pm-outline btn-pm-outline--white btn-pm-lg" target="_blank" rel="noopener">
+          <a href="https://wa.me/<?= preg_replace(
+              "/[^0-9]/",
+              "",
+              TELEFONO_NEGOCIO,
+          ) ?>" class="btn-pm-outline btn-pm-outline--white btn-pm-lg" target="_blank" rel="noopener">
             <i class="bi bi-whatsapp me-2"></i>Contáctanos por WhatsApp
           </a>
         </div>
@@ -937,7 +968,11 @@
             </div>
             <div>
               <strong>Teléfono</strong>
-              <p><a href="tel:+54<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>"><?= TELEFONO_NEGOCIO ?></a></p>
+              <p><a href="tel:+54<?= preg_replace(
+                  "/[^0-9]/",
+                  "",
+                  TELEFONO_NEGOCIO,
+              ) ?>"><?= TELEFONO_NEGOCIO ?></a></p>
             </div>
           </div>
 
@@ -966,10 +1001,16 @@
 
           <!-- Redes sociales -->
           <div class="pm-contact-social">
-            <a href="<?= defined('INSTAGRAM_NEGOCIO') ? INSTAGRAM_NEGOCIO : '#' ?>" class="pm-social-icon" aria-label="Instagram" target="_blank" rel="noopener">
+            <a href="<?= defined("INSTAGRAM_NEGOCIO")
+                ? INSTAGRAM_NEGOCIO
+                : "#" ?>" class="pm-social-icon" aria-label="Instagram" target="_blank" rel="noopener">
               <i class="bi bi-instagram"></i>
             </a>
-            <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>" class="pm-social-icon" aria-label="WhatsApp" target="_blank" rel="noopener">
+            <a href="https://wa.me/<?= preg_replace(
+                "/[^0-9]/",
+                "",
+                TELEFONO_NEGOCIO,
+            ) ?>" class="pm-social-icon" aria-label="WhatsApp" target="_blank" rel="noopener">
               <i class="bi bi-whatsapp"></i>
             </a>
           </div>
@@ -994,4 +1035,4 @@
 
 <!-- Estilos movidos a assets/css/style.css — JS movido a assets/js/main.js -->
 
-<?php require_once 'includes/footer.php'; ?>
+<?php require_once "includes/footer.php"; ?>

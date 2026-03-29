@@ -167,6 +167,37 @@ html {
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
     overflow-x: hidden;
+
+    /* ── Scrollbar overlay-style (Windows fix) ──────────────
+       On Windows the classic scrollbar (~17 px) breaks the
+       full-screen hero illusion. These rules make it thin
+       and nearly invisible, revealing it on interaction —
+       mirroring macOS overlay behaviour.
+       ───────────────────────────────────────────────────── */
+    scrollbar-width: thin;                                   /* Firefox */
+    scrollbar-color: transparent transparent;                /* Firefox: hidden at rest */
+}
+html:hover,
+html:focus-within {
+    scrollbar-color: rgba(138, 118, 80, 0.3) transparent;   /* Firefox: visible on interaction */
+}
+
+/* WebKit / Blink (Chrome, Edge, Safari, Opera) */
+::-webkit-scrollbar {
+    width: 6px;
+    background: transparent;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    border-radius: 3px;
+    transition: background-color 0.3s;
+}
+html:hover ::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(138, 118, 80, 0.35);
 }
 
 /* Prevent row gutters from causing horizontal overflow */
