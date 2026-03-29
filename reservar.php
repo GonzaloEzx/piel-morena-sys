@@ -318,7 +318,9 @@ const Wizard = {
     document.getElementById('resServicio').textContent = this.state.servicioNombre;
     document.getElementById('resFecha').textContent = formatearFechaAR(this.state.fecha, { largo: true });
     document.getElementById('resHora').textContent = inicio + ' - ' + fin;
-    document.getElementById('resPrecio').textContent = '$' + parseFloat(this.state.precio).toLocaleString('es-AR', {minimumFractionDigits:2});
+    document.getElementById('resPrecio').textContent = parseFloat(this.state.precio) > 0
+      ? '$' + parseFloat(this.state.precio).toLocaleString('es-AR', {minimumFractionDigits:2})
+      : 'Consultar';
 
     this.goTo(4);
   },

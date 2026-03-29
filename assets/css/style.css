@@ -687,6 +687,7 @@ main {
 .pm-hero-section {
     position: relative;
     width: 100%;
+    overflow: hidden;
 }
 
 .pm-hero-slide {
@@ -698,6 +699,13 @@ main {
     position: relative;
     background-size: cover;
     background-position: center;
+}
+
+@supports (height: 100svh) {
+    .pm-hero-slide { height: 100svh; }
+}
+@supports (height: 100dvh) {
+    .pm-hero-slide { height: 100dvh; }
 }
 
 .pm-hero-overlay {

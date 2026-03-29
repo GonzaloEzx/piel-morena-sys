@@ -18,11 +18,8 @@
           Tu espacio de belleza y confianza. Tratamientos profesionales para realzar tu mejor versión.
         </p>
         <div class="pm-footer-redes">
-          <a href="#" class="pm-footer-red-btn" aria-label="Instagram" target="_blank" rel="noopener">
+          <a href="<?= defined('INSTAGRAM_NEGOCIO') ? INSTAGRAM_NEGOCIO : '#' ?>" class="pm-footer-red-btn" aria-label="Instagram" target="_blank" rel="noopener">
             <i class="bi bi-instagram"></i>
-          </a>
-          <a href="#" class="pm-footer-red-btn" aria-label="Facebook" target="_blank" rel="noopener">
-            <i class="bi bi-facebook"></i>
           </a>
           <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>" class="pm-footer-red-btn" aria-label="WhatsApp" target="_blank" rel="noopener">
             <i class="bi bi-whatsapp"></i>
@@ -48,7 +45,7 @@
         <ul class="pm-footer-horarios">
           <li>
             <span class="pm-footer-dia">Lunes - Viernes</span>
-            <span class="pm-footer-hora">9:00 — 20:00</span>
+            <span class="pm-footer-hora">8:00 — 20:00</span>
           </li>
           <li>
             <span class="pm-footer-dia">Sábado</span>

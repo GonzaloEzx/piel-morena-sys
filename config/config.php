@@ -26,9 +26,10 @@ define('ASSETS_PATH', ROOT_PATH . 'assets/');
 
 // --- Información del negocio ---
 define('NOMBRE_NEGOCIO', 'Piel Morena');
-define('TELEFONO_NEGOCIO', '+XX XXX XXX XXXX');
-define('EMAIL_NEGOCIO', 'contacto@pielmorena.com');
-define('DIRECCION_NEGOCIO', 'Dirección del salón');
+define('TELEFONO_NEGOCIO', '3624 254052');
+define('EMAIL_NEGOCIO', 'zudaire83@gmail.com');
+define('DIRECCION_NEGOCIO', 'Vedia 459, Resistencia, Chaco');
+define('INSTAGRAM_NEGOCIO', 'https://www.instagram.com/pielmorenaesteticaok');
 
 // --- Sesiones ---
 define('SESSION_LIFETIME', 3600); // 1 hora en segundos

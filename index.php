@@ -371,7 +371,7 @@
      4b. INFO DE TRATAMIENTOS — bg: --pm-marfil
      Sección informativa sobre los tratamientos estrella del salón.
      ═══════════════════════════════════════════════════════════════ -->
-<section id="tratamientos" class="pm-section" data-section="tratamientos">
+<section id="tratamientos" class="pm-section-alt" data-section="tratamientos">
   <div class="container">
 
     <div class="text-center mb-5">
@@ -529,7 +529,7 @@
 <!-- ═══════════════════════════════════════════════════════════════
      5. GALERÍA — bg: --pm-crema
      ═══════════════════════════════════════════════════════════════ -->
-<section id="galeria" class="pm-section-alt" data-section="galeria">
+<section id="galeria" class="pm-section" data-section="galeria">
   <div class="container">
 
     <!-- Título de sección -->
@@ -581,7 +581,7 @@
 <!-- ═══════════════════════════════════════════════════════════════
      6. PROMOCIONES — bg: --pm-marfil
      ═══════════════════════════════════════════════════════════════ -->
-<section id="promos" class="pm-section" data-section="promos">
+<section id="promos" class="pm-section-alt" data-section="promos">
   <div class="container">
 
     <!-- Título de sección -->
@@ -709,7 +709,7 @@
 <!-- ═══════════════════════════════════════════════════════════════
      7. TESTIMONIOS — bg: --pm-crema
      ═══════════════════════════════════════════════════════════════ -->
-<section id="testimonios" class="pm-section-alt" data-section="testimonios">
+<section id="testimonios" class="pm-section" data-section="testimonios">
   <div class="container">
 
     <!-- Título de sección -->
@@ -845,7 +845,7 @@
 <!-- ═══════════════════════════════════════════════════════════════
      8. RESERVA TU CITA — bg: gradiente hero
      ═══════════════════════════════════════════════════════════════ -->
-<section id="reservar" class="pm-section pm-cta-section" data-section="reservar">
+<section id="reservar" class="pm-section-alt pm-cta-section" data-section="reservar">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8 text-center">
