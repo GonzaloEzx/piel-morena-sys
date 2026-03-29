@@ -860,7 +860,7 @@
           <a href="reservar.php" class="btn-pm-dorado btn-pm-lg">
             <i class="bi bi-calendar-check me-2"></i>Reservar Ahora
           </a>
-          <a href="https://wa.me/5491100000000" class="btn-pm-outline btn-pm-outline--white btn-pm-lg" target="_blank" rel="noopener">
+          <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>" class="btn-pm-outline btn-pm-outline--white btn-pm-lg" target="_blank" rel="noopener">
             <i class="bi bi-whatsapp me-2"></i>Contáctanos por WhatsApp
           </a>
         </div>
@@ -926,7 +926,7 @@
             </div>
             <div>
               <strong>Dirección</strong>
-              <p>Av. Principal #123, Col. Centro, Ciudad, CP 00000</p>
+              <p><?= DIRECCION_NEGOCIO ?></p>
             </div>
           </div>
 
@@ -937,7 +937,7 @@
             </div>
             <div>
               <strong>Teléfono</strong>
-              <p><a href="tel:+5200000000">+52 (000) 000-0000</a></p>
+              <p><a href="tel:+54<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>"><?= TELEFONO_NEGOCIO ?></a></p>
             </div>
           </div>
 
@@ -948,7 +948,7 @@
             </div>
             <div>
               <strong>Correo</strong>
-              <p><a href="mailto:contacto@pielmorena.com">contacto@pielmorena.com</a></p>
+              <p><a href="mailto:<?= EMAIL_NEGOCIO ?>"><?= EMAIL_NEGOCIO ?></a></p>
             </div>
           </div>
 
@@ -959,21 +959,17 @@
             </div>
             <div>
               <strong>Horarios</strong>
-              <p>Lun - Vie: 9:00 - 20:00</p>
-              <p>Sáb: 9:00 - 14:00</p>
-              <p>Dom: Cerrado</p>
+              <p>Lun - Vie: 8:00 - 20:00</p>
+              <p>Sáb - Dom: A confirmar</p>
             </div>
           </div>
 
           <!-- Redes sociales -->
           <div class="pm-contact-social">
-            <a href="#" class="pm-social-icon" aria-label="Instagram" target="_blank" rel="noopener">
+            <a href="<?= defined('INSTAGRAM_NEGOCIO') ? INSTAGRAM_NEGOCIO : '#' ?>" class="pm-social-icon" aria-label="Instagram" target="_blank" rel="noopener">
               <i class="bi bi-instagram"></i>
             </a>
-            <a href="#" class="pm-social-icon" aria-label="Facebook" target="_blank" rel="noopener">
-              <i class="bi bi-facebook"></i>
-            </a>
-            <a href="https://wa.me/5491100000000" class="pm-social-icon" aria-label="WhatsApp" target="_blank" rel="noopener">
+            <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>" class="pm-social-icon" aria-label="WhatsApp" target="_blank" rel="noopener">
               <i class="bi bi-whatsapp"></i>
             </a>
           </div>
