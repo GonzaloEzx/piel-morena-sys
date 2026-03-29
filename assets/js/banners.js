@@ -170,7 +170,7 @@ const PriceTooltip = {
      ───────────────────────────────────────────────────────── */
   _formatPrice(price) {
     const num = parseFloat(price);
-    if (isNaN(num)) return '$0.00';
+    if (isNaN(num) || num <= 0) return 'Consultar';
 
     return '$' + num.toLocaleString('es-MX', {
       minimumFractionDigits: 2,

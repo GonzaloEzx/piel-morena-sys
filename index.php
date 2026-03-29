@@ -229,10 +229,6 @@
           }
           $icono = $cat["icono"] ?: "bi-stars";
           $gradient = $gradients[$ci % count($gradients)];
-          $precio_fmt =
-              $serv["precio"] > 0
-                  ? number_format($serv["precio"], 2, ",", ".")
-                  : null;
           ?>
       <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-service-card">
@@ -240,7 +236,6 @@
             <div class="pm-service-img-placeholder" style="background: <?= $gradient ?>;">
               <i class="bi <?= $icono ?>"></i>
             </div>
-            <?php if ($precio_fmt): ?>
             <span class="pm-price-tooltip" data-service-id="<?= $serv[
                 "id"
             ] ?>" data-service-name="<?= sanitizar(
@@ -250,7 +245,6 @@
 ] ?>" data-category="<?= sanitizar($cat["nombre"]) ?>" title="Consultar precio">
               <i class="bi bi-currency-dollar"></i>
             </span>
-            <?php endif; ?>
             <span class="pm-badge"><?= sanitizar($cat["nombre"]) ?></span>
           </div>
           <div class="pm-service-body">
