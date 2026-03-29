@@ -1228,6 +1228,16 @@ main {
         0 0 0 6px rgba(255, 225, 175, 0.15);
 }
 
+/* -- Floating "$" feedback (created by JS on price-tooltip click) -- */
+.pm-price-feedback {
+    font-family: var(--pm-font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--pm-dorado);
+    pointer-events: none;
+    text-shadow: 0 1px 4px rgba(138, 118, 80, 0.3);
+}
+
 /* -- Category badge on service image -- */
 .pm-service-img .pm-badge {
     position: absolute;
