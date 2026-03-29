@@ -223,13 +223,11 @@ const Wizard = {
       let idx = 0;
       for (const [catName, catData] of Object.entries(categorias)) {
         const collapseId = 'cat-' + idx;
-        const count = catData.servicios.length;
         html += `
         <div class="accordion-item pm-cat-item">
           <h2 class="accordion-header">
             <button class="accordion-button pm-cat-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
               <i class="bi ${catData.icono} me-2"></i>${catName}
-              <span class="pm-cat-count">${count}</span>
             </button>
           </h2>
           <div id="${collapseId}" class="accordion-collapse collapse" data-bs-parent="#accordionServicios">
