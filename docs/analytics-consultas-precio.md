@@ -32,7 +32,7 @@ $stmt_serv = $db_landing->prepare(
 );
 ```
 
-Cada card incluye un tooltip de precio **solo si el servicio tiene precio > 0** (los servicios con precio 0 / "Consultar" no muestran el icono $):
+Cada card incluye un tooltip de precio para **todos los servicios** (si el precio es 0, el popup muestra "Consultar" en lugar del monto):
 
 ```html
 <span class="pm-price-tooltip"
@@ -62,7 +62,7 @@ Cada card incluye un tooltip de precio **solo si el servicio tiene precio > 0** 
 **Archivo:** `assets/js/banners.js`
 
 Al hacer clic en un `.pm-price-tooltip`:
-1. **Muestra popup SweetAlert2** con nombre, precio formateado, duracion y categoria del servicio
+1. **Muestra popup SweetAlert2** con nombre, precio formateado (o "Consultar" si precio = 0), duracion y categoria del servicio
 2. **Registra la consulta** via `fetch()` POST a la API (fire & forget)
 3. **Animacion "$" flotante** sobre el icono (feedback visual, clase `.pm-price-feedback`)
 4. El popup ofrece boton **"Reservar Ahora"** que redirige a `reservar.php?servicio={id}`
@@ -201,7 +201,7 @@ Las clases `pm-price-display`, `pm-price-amount`, `pm-price-category`, `pm-price
 - Solo registra clics en el tooltip de precio de la landing page
 - No registra consultas desde la pagina de reservas (`reservar.php`)
 - Un mismo visitante puede generar multiples consultas (no se deduplica por IP/sesion)
-- Solo se muestra el tooltip si el servicio tiene precio > 0 (servicios "Consultar" no se trackean)
+- El tooltip se muestra para todos los servicios; servicios con precio 0 muestran "Consultar" en el popup
 
 ## Archivos Relacionados
 
