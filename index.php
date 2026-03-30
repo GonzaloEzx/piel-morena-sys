@@ -295,10 +295,10 @@
             </div>
           </div>
           <div class="pm-team-info">
-            <h4 class="pm-team-name">Mariángeles Zudaire</h4>
+            <h4 class="pm-team-name">Mariangeles Zudaire</h4>
             <p class="pm-team-role">Dermatocosmiatra &amp; Operadora Láser</p>
             <div class="pm-team-social">
-              <a href="https://www.instagram.com/pielmorenaesteticaok" class="pm-social-icon" aria-label="Instagram de Mariángeles" target="_blank" rel="noopener">
+              <a href="https://www.instagram.com/pielmorenaesteticaok" class="pm-social-icon" aria-label="Instagram de Mariangeles" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
@@ -395,8 +395,9 @@
             </div>
           </div>
           <div class="pm-team-info">
-            <h4 class="pm-team-name">Naila Centurión</h4>
-            <p class="pm-team-role">Certificada en Pestañas</p>
+            <h4 class="pm-team-name">Nayla Centurión</h4>
+            <p class="pm-team-role">Certificada en extensiones de pestañas</p>
+            <p class="pm-team-role">MP 21997</p>
             <div class="pm-team-social">
               <a href="#" class="pm-social-icon" aria-label="Instagram de Naila" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
@@ -450,20 +451,24 @@
         </div>
       </div>
 
-      <!-- Tratamiento 2: Depilación Láser Soprano -->
+      <!-- Tratamiento 2: Depilación Definitiva -->
       <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-tratamiento-card">
           <div class="pm-tratamiento-icon">
             <i class="bi bi-stars"></i>
           </div>
-          <h4 class="pm-tratamiento-title">Depilación Láser Soprano</h4>
+          <h4 class="pm-tratamiento-title">Depilación Definitiva | Método ADSS</h4>
           <p class="pm-tratamiento-desc">
-            Tecnología Soprano de última generación para depilación definitiva. Indoloro y apto para todo tipo de piel y vello. Sesiones rápidas con resultados progresivos que reducen el vello hasta un 95%.
+            La depilación definitiva con tecnología ADSS utiliza láser de diodo de alta precisión (4 longitudes) para reducir el crecimiento del vello de forma progresiva, segura y duradera.
+            Actúa directamente sobre el folículo piloso, debilitando la raíz para lograr una piel más suave y libre de vello sesión tras sesión.
+            Su sistema de enfriamiento brinda mayor confort, haciendo el tratamiento rápido, cómodo y prácticamente indoloro.
           </p>
           <ul class="pm-tratamiento-beneficios">
-            <li><i class="bi bi-check2-circle"></i>Prácticamente indoloro</li>
-            <li><i class="bi bi-check2-circle"></i>Apto para pieles sensibles</li>
-            <li><i class="bi bi-check2-circle"></i>Resultados desde la primera sesión</li>
+            <li><i class="bi bi-check2-circle"></i>Apta para distintos tipos de piel</li>
+            <li><i class="bi bi-check2-circle"></i>Resultados visibles desde las primeras sesiones</li>
+            <li><i class="bi bi-check2-circle"></i>Menos irritación y foliculitis</li>
+            <li><i class="bi bi-check2-circle"></i>Tecnología avanzada y segura</li>
+            <li><i class="bi bi-check2-circle"></i>Elimina hasta el 90% del vello</li>
           </ul>
           <div class="pm-tratamiento-meta">
             <span><i class="bi bi-clock me-1"></i>15-60 min</span>
