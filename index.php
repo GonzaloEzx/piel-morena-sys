@@ -18,7 +18,7 @@
           <div class="container position-relative" style="z-index: 2;">
             <div class="pm-hero-content text-center">
               <span class="pm-hero-badge pm-animate"><i class="bi bi-gem me-2"></i>Estética Piel Morena Spa &amp; Beauty</span>
-              <h1 class="pm-hero-title pm-animate">Tu belleza,<br>belleza cuidado y binestar</h1>
+              <h1 class="pm-hero-title pm-animate">belleza,<br>cuidado y binestar</h1>
               <p class="pm-hero-subtitle pm-animate">Faciales &middot; Depilación &middot; Corporal</p>
               <div class="pm-hero-ctas pm-animate">
                 <a href="#reservar" class="btn-pm-dorado btn-pm-lg">
@@ -119,8 +119,9 @@
       <div class="col-lg-6 pm-animate">
         <div class="pm-about-img-placeholder">
           <div class="pm-placeholder-content">
-            <span class="pm-placeholder-icon">&#127832;</span>
-            <span class="pm-placeholder-text">Piel Morena</span>
+              <img src="<?= URL_BASE ?>/assets/img/nosotros/marca-logo.png" alt="Logo Piel Morena" class="pm-placeholder-logo" />
+            <!--<span class="pm-placeholder-icon">&#127832;</span>
+            <span class="pm-placeholder-text">Piel Morena</span>-->
           </div>
         </div>
       </div>
