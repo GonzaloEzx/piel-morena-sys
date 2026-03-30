@@ -18,8 +18,8 @@
           <div class="container position-relative" style="z-index: 2;">
             <div class="pm-hero-content text-center">
               <span class="pm-hero-badge pm-animate"><i class="bi bi-gem me-2"></i>Estética Piel Morena Spa &amp; Beauty</span>
-              <h1 class="pm-hero-title pm-animate">Tu belleza,<br>nuestra pasión</h1>
-              <p class="pm-hero-subtitle pm-animate">Estética &middot; Depilación &middot; Tratamientos de Frío</p>
+              <h1 class="pm-hero-title pm-animate">Tu belleza,<br>belleza cuidado y binestar</h1>
+              <p class="pm-hero-subtitle pm-animate">Faciales &middot; Depilación &middot; Corporal</p>
               <div class="pm-hero-ctas pm-animate">
                 <a href="#reservar" class="btn-pm-dorado btn-pm-lg">
                   <i class="bi bi-calendar-check me-2"></i>Reservar Cita
@@ -58,9 +58,9 @@
           <div class="pm-hero-overlay"></div>
           <div class="container position-relative" style="z-index: 2;">
             <div class="pm-hero-content text-center">
-              <span class="pm-hero-badge"><i class="bi bi-snow me-2"></i>Nuevo</span>
-              <h1 class="pm-hero-title pm-animate">Tratamientos<br>de Frío</h1>
-              <p class="pm-hero-subtitle pm-animate">Crioterapia facial y corporal</p>
+              <span class="pm-hero-badge"><i class="bi bi-snow me-2"></i>Personalizado</span>
+              <h1 class="pm-hero-title pm-animate">Tratamientos<br>faciales</h1>
+              <p class="pm-hero-subtitle pm-animate">Dermatocosmiatra certificada MP 21997</p>
               <div class="pm-hero-ctas pm-animate">
                 <a href="#servicios" class="btn-pm-dorado btn-pm-lg">
                   <i class="bi bi-arrow-right me-2"></i>Conocer Más

@@ -1,6 +1,6 @@
 -- =============================================
 -- Migration 004: Servicios reales de Piel Morena
--- Basado en docs/negocio.md — catálogo real del salón
+-- Basado en docs/negocio/README.md — catalogo real del salon
 -- =============================================
 -- NOTA: Precios en $0 son placeholder — el admin los configura
 -- desde el panel cuando Mari confirme los precios reales.
