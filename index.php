@@ -296,7 +296,7 @@
           </div>
           <div class="pm-team-info">
             <h4 class="pm-team-name">Mariangeles Zudaire</h4>
-            <p class="pm-team-role">Dermatocosmiatra &amp; Operadora Láser</p>
+            <p class="pm-team-role">Dermatocosmiatra &amp; Operadora Láser (MP 21997)</p>
             <div class="pm-team-social">
               <a href="https://www.instagram.com/pielmorenaesteticaok" class="pm-social-icon" aria-label="Instagram de Mariangeles" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
@@ -386,7 +386,7 @@
         </div>
       </div>
 
-      <!-- Naila Centurión -->
+      <!-- Nayla Centurión -->
       <div class="col-lg-4 col-md-6 pm-animate">
         <div class="pm-team-card">
           <div class="pm-team-photo">
@@ -397,7 +397,6 @@
           <div class="pm-team-info">
             <h4 class="pm-team-name">Nayla Centurión</h4>
             <p class="pm-team-role">Certificada en extensiones de pestañas</p>
-            <p class="pm-team-role">MP 21997</p>
             <div class="pm-team-social">
               <a href="#" class="pm-social-icon" aria-label="Instagram de Naila" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
