@@ -129,8 +129,10 @@
         </h3>
         <p>
           En <strong>Piel Morena</strong> creemos que la belleza comienza cuando te sentís cómoda con vos misma.
-          Creamos un espacio pensado para que puedas relajarte, desconectar de la rutina y dedicarte un momento solo para vos. Brindamos servicios como tratamientos faciales personalizados, tratamientos corporales adaptados, método depilación para mejorar tu piel en todos los aspectos, servicios de belleza como manicuria, cejas, pestañas y peluquería. Siempre acompañados de atención cálida y profesional.
+          Creamos un espacio pensado para que puedas relajarte, desconectar de la rutina y dedicarte un momento solo para vos.
         </p>
+        <p class="pm-small">
+          Brindamos servicios como tratamientos faciales personalizados, tratamientos corporales adaptados, método depilación para mejorar tu piel en todos los aspectos, servicios de belleza como manicuria, cejas, pestañas y peluquería. Siempre acompañados de atención cálida y profesional.        </p>
         <p class="pm-small">
           Nuestro objetivo es que cada visita sea una experiencia de bienestar, confianza y renovación, combinado con seguimiento en cada servicio
         </p>
