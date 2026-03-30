@@ -41,7 +41,7 @@ docu/
 web ejemplos/
 
 # --- Screenshots sueltos en raíz ---
-*.png
+/*.png
 
 # --- IDE ---
 .vscode/
