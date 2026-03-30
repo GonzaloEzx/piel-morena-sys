@@ -128,15 +128,11 @@
           Tu espacio de belleza y confianza
         </h3>
         <p>
-          En <strong>Piel Morena</strong> creemos que cada persona merece sentirse hermosa en su propia piel.
-          Somos un salón de belleza integral especializado en depilación láser, tratamientos faciales,
-          corporales, crioterapia y estética avanzada. Nuestro compromiso es ofrecer un servicio
-          personalizado, con calidez humana y tecnología de vanguardia.
+          En <strong>Piel Morena</strong> creemos que la belleza comienza cuando te sentís cómoda con vos misma.
+          Creamos un espacio pensado para que puedas relajarte, desconectar de la rutina y dedicarte un momento solo para vos. Brindamos servicios como tratamientos faciales personalizados, tratamientos corporales adaptados, método depilación para mejorar tu piel en todos los aspectos, servicios de belleza como manicuria, cejas, pestañas y peluquería. Siempre acompañados de atención cálida y profesional.
         </p>
         <p class="pm-small">
-          Nuestra misión es transformar la experiencia de cuidado personal en un momento de bienestar
-          y confianza. Trabajamos con productos de primera calidad y técnicas actualizadas para
-          garantizar los mejores resultados.
+          Nuestro objetivo es que cada visita sea una experiencia de bienestar, confianza y renovación, combinado con seguimiento en cada servicio
         </p>
 
         <!-- Features con checks -->
