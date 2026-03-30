@@ -115,14 +115,10 @@
 
     <div class="row align-items-center g-5">
 
-      <!-- Imagen placeholder -->
+      <!-- Imagen Sobre Nosotros -->
       <div class="col-lg-6 pm-animate">
-        <div class="pm-about-img-placeholder">
-          <div class="pm-placeholder-content">
-              <img src="<?= URL_BASE ?>/assets/img/nosotros/marca-logo.png" alt="Logo Piel Morena" class="pm-placeholder-logo" />
-            <!--<span class="pm-placeholder-icon">&#127832;</span>
-            <span class="pm-placeholder-text">Piel Morena</span>-->
-          </div>
+        <div class="pm-about-img-wrapper">
+          <img src="<?= URL_BASE ?>/assets/img/nosotros/marca-logo.PNG" alt="Logo Piel Morena" class="pm-about-img" />
         </div>
       </div>
 
