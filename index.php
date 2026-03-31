@@ -18,7 +18,7 @@
           <div class="container position-relative" style="z-index: 2;">
             <div class="pm-hero-content text-center">
               <span class="pm-hero-badge pm-animate"><i class="bi bi-gem me-2"></i>Estética Piel Morena Spa &amp; Beauty</span>
-              <h1 class="pm-hero-title pm-animate">belleza,<br>cuidado y binestar</h1>
+              <h1 class="pm-hero-title pm-animate">belleza,<br>cuidado y bienestar</h1>
               <p class="pm-hero-subtitle pm-animate">Faciales &middot; Depilación &middot; Corporal</p>
               <div class="pm-hero-ctas pm-animate">
                 <a href="#reservar" class="btn-pm-dorado btn-pm-lg">
@@ -188,16 +188,14 @@
     <!-- Grid dinámico: servicios marcados como destacados desde el admin (máx 6) -->
     <?php
     $db_landing = getDB();
-    $stmt_dest = $db_landing->query(
-        "SELECT s.id, s.nombre, s.descripcion, s.precio, s.duracion_minutos,
+    $stmt_dest = $db_landing->query("SELECT s.id, s.nombre, s.descripcion, s.precio, s.duracion_minutos,
                 c.nombre AS categoria, c.icono AS categoria_icono,
                 (SELECT COUNT(*) FROM servicios WHERE id_categoria = s.id_categoria AND activo = 1) AS total_servicios
          FROM servicios s
          LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
          WHERE s.destacado = 1 AND s.activo = 1
          ORDER BY s.nombre
-         LIMIT 6"
-    );
+         LIMIT 6");
     $servicios_destacados = $stmt_dest->fetchAll();
     $gradients = [
         "linear-gradient(135deg, #FFE1AF 0%, #8A7650 100%)",
@@ -212,6 +210,7 @@
       <?php
       $ci = 0;
       foreach ($servicios_destacados as $serv):
+
           $icono = $serv["categoria_icono"] ?: "bi-stars";
           $gradient = $gradients[$ci % count($gradients)];
           ?>
@@ -221,17 +220,33 @@
             <div class="pm-service-img-placeholder" style="background: <?= $gradient ?>;">
               <i class="bi <?= $icono ?>"></i>
             </div>
-            <span class="pm-price-tooltip" data-service-id="<?= $serv["id"] ?>" data-service-name="<?= sanitizar($serv["nombre"]) ?>" data-price="<?= $serv["precio"] ?>" data-duration="<?= $serv["duracion_minutos"] ?>" data-category="<?= sanitizar($serv["categoria"] ?? '') ?>" title="Consultar precio">
+            <span class="pm-price-tooltip" data-service-id="<?= $serv[
+                "id"
+            ] ?>" data-service-name="<?= sanitizar(
+    $serv["nombre"],
+) ?>" data-price="<?= $serv["precio"] ?>" data-duration="<?= $serv[
+    "duracion_minutos"
+] ?>" data-category="<?= sanitizar(
+    $serv["categoria"] ?? "",
+) ?>" title="Consultar precio">
               <i class="bi bi-currency-dollar"></i>
             </span>
-            <span class="pm-badge"><?= sanitizar($serv["categoria"] ?? 'General') ?></span>
+            <span class="pm-badge"><?= sanitizar(
+                $serv["categoria"] ?? "General",
+            ) ?></span>
           </div>
           <div class="pm-service-body">
             <h4><?= sanitizar($serv["nombre"]) ?></h4>
-            <p><?= sanitizar(mb_strimwidth($serv["descripcion"], 0, 120, "...")) ?></p>
-            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> <?= $serv["duracion_minutos"] ?> min</span>
+            <p><?= sanitizar(
+                mb_strimwidth($serv["descripcion"], 0, 120, "..."),
+            ) ?></p>
+            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> <?= $serv[
+                "duracion_minutos"
+            ] ?> min</span>
             <?php if ($serv["total_servicios"] > 1): ?>
-            <span class="pm-service-count"><i class="bi bi-grid me-1"></i>+<?= $serv["total_servicios"] - 1 ?> servicios más</span>
+            <span class="pm-service-count"><i class="bi bi-grid me-1"></i>+<?= $serv[
+                "total_servicios"
+            ] - 1 ?> servicios más</span>
             <?php endif; ?>
           </div>
           <div class="pm-service-footer">
