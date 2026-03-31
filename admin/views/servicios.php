@@ -72,6 +72,13 @@ require_once __DIR__ . '/../includes/admin_header.php';
             <input type="hidden" name="imagen" id="srvImagenUrl">
             <div id="srvImagenPreview" class="mt-2"></div>
           </div>
+          <div class="form-check mt-3">
+            <input class="form-check-input" type="checkbox" id="srvDestacado" name="destacado" value="1">
+            <label class="form-check-label" for="srvDestacado">
+              <i class="bi bi-star-fill text-warning me-1"></i>Servicio destacado
+              <small class="text-muted d-block">Se mostrará en la sección de servicios del sitio web (máx. 6)</small>
+            </label>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-pm-outline btn-pm-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -111,7 +118,10 @@ function initTabla() {
         },
         columns: [
             { data: 'id' },
-            { data: 'nombre' },
+            { data: 'nombre', render: (d, t, row) => row.destacado == 1
+                ? `${d} <i class="bi bi-star-fill text-warning ms-1" title="Destacado"></i>`
+                : d
+            },
             { data: 'categoria', defaultContent: '<span class="text-muted">—</span>' },
             { data: 'precio', render: (d) => formatPrecio(d) },
             { data: 'duracion_minutos', render: (d) => d + ' min' },
@@ -134,6 +144,7 @@ function abrirModalServicio() {
     document.getElementById('srvId').value = '';
     document.getElementById('srvImagenUrl').value = '';
     document.getElementById('srvImagenPreview').innerHTML = '';
+    document.getElementById('srvDestacado').checked = false;
     modalServicio.show();
 }
 
@@ -153,6 +164,7 @@ async function editarServicio(id) {
     document.getElementById('srvImagenPreview').innerHTML = s.imagen
         ? `<img src="${s.imagen}" class="rounded" style="max-height:80px">`
         : '';
+    document.getElementById('srvDestacado').checked = s.destacado == 1;
     modalServicio.show();
 }
 
@@ -178,7 +190,10 @@ document.getElementById('formServicio').addEventListener('submit', async (e) => 
     const id = fd.get('id');
     const url = '<?= URL_API ?>/admin/servicios.php';
 
-    const res = await apiCall(url, id ? 'PUT' : 'POST', Object.fromEntries(fd));
+    const data = Object.fromEntries(fd);
+    data.destacado = document.getElementById('srvDestacado').checked ? 1 : 0;
+
+    const res = await apiCall(url, id ? 'PUT' : 'POST', data);
 
     if (res.success) {
         PM.toast('success', id ? 'Servicio actualizado' : 'Servicio creado');

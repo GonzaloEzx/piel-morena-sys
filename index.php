@@ -185,24 +185,20 @@
       <p class="pm-section-subtitle pm-animate">Tratamientos profesionales para realzar tu belleza natural</p>
     </div>
 
-    <!-- Grid dinámico: 1 servicio destacado por categoría (máx 6) -->
-    <?php // Cargar un servicio representativo por categoría desde BD
-
-
+    <!-- Grid dinámico: servicios marcados como destacados desde el admin (máx 6) -->
+    <?php
     $db_landing = getDB();
-    $stmt_cats = $db_landing->query("SELECT c.id, c.nombre, c.icono,
-              (SELECT COUNT(*) FROM servicios WHERE id_categoria = c.id AND activo = 1) AS total_servicios
-       FROM categorias_servicios c
-       WHERE c.activo = 1
-       ORDER BY c.orden
-       LIMIT 6");
-    $categorias_landing = $stmt_cats->fetchAll(); // Un servicio destacado por categoría (el primero activo)
-    $stmt_serv = $db_landing->prepare("SELECT s.id, s.nombre, s.descripcion, s.precio, s.duracion_minutos,
-              c.nombre AS categoria, c.icono AS categoria_icono
-       FROM servicios s
-       JOIN categorias_servicios c ON s.id_categoria = c.id
-       WHERE s.id_categoria = ? AND s.activo = 1
-       ORDER BY s.nombre LIMIT 1");
+    $stmt_dest = $db_landing->query(
+        "SELECT s.id, s.nombre, s.descripcion, s.precio, s.duracion_minutos,
+                c.nombre AS categoria, c.icono AS categoria_icono,
+                (SELECT COUNT(*) FROM servicios WHERE id_categoria = s.id_categoria AND activo = 1) AS total_servicios
+         FROM servicios s
+         LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
+         WHERE s.destacado = 1 AND s.activo = 1
+         ORDER BY s.nombre
+         LIMIT 6"
+    );
+    $servicios_destacados = $stmt_dest->fetchAll();
     $gradients = [
         "linear-gradient(135deg, #FFE1AF 0%, #8A7650 100%)",
         "linear-gradient(135deg, #B77466 0%, #8A7650 100%)",
@@ -215,14 +211,8 @@
     <div class="row g-4">
       <?php
       $ci = 0;
-      foreach ($categorias_landing as $cat):
-
-          $stmt_serv->execute([$cat["id"]]);
-          $serv = $stmt_serv->fetch();
-          if (!$serv) {
-              continue;
-          }
-          $icono = $cat["icono"] ?: "bi-stars";
+      foreach ($servicios_destacados as $serv):
+          $icono = $serv["categoria_icono"] ?: "bi-stars";
           $gradient = $gradients[$ci % count($gradients)];
           ?>
       <div class="col-lg-4 col-md-6 pm-animate">
@@ -231,29 +221,17 @@
             <div class="pm-service-img-placeholder" style="background: <?= $gradient ?>;">
               <i class="bi <?= $icono ?>"></i>
             </div>
-            <span class="pm-price-tooltip" data-service-id="<?= $serv[
-                "id"
-            ] ?>" data-service-name="<?= sanitizar(
-    $serv["nombre"],
-) ?>" data-price="<?= $serv["precio"] ?>" data-duration="<?= $serv[
-    "duracion_minutos"
-] ?>" data-category="<?= sanitizar($cat["nombre"]) ?>" title="Consultar precio">
+            <span class="pm-price-tooltip" data-service-id="<?= $serv["id"] ?>" data-service-name="<?= sanitizar($serv["nombre"]) ?>" data-price="<?= $serv["precio"] ?>" data-duration="<?= $serv["duracion_minutos"] ?>" data-category="<?= sanitizar($serv["categoria"] ?? '') ?>" title="Consultar precio">
               <i class="bi bi-currency-dollar"></i>
             </span>
-            <span class="pm-badge"><?= sanitizar($cat["nombre"]) ?></span>
+            <span class="pm-badge"><?= sanitizar($serv["categoria"] ?? 'General') ?></span>
           </div>
           <div class="pm-service-body">
             <h4><?= sanitizar($serv["nombre"]) ?></h4>
-            <p><?= sanitizar(
-                mb_strimwidth($serv["descripcion"], 0, 120, "..."),
-            ) ?></p>
-            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> <?= $serv[
-                "duracion_minutos"
-            ] ?> min</span>
-            <?php if ($cat["total_servicios"] > 1): ?>
-            <span class="pm-service-count"><i class="bi bi-grid me-1"></i>+<?= $cat[
-                "total_servicios"
-            ] - 1 ?> servicios más</span>
+            <p><?= sanitizar(mb_strimwidth($serv["descripcion"], 0, 120, "...")) ?></p>
+            <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> <?= $serv["duracion_minutos"] ?> min</span>
+            <?php if ($serv["total_servicios"] > 1): ?>
+            <span class="pm-service-count"><i class="bi bi-grid me-1"></i>+<?= $serv["total_servicios"] - 1 ?> servicios más</span>
             <?php endif; ?>
           </div>
           <div class="pm-service-footer">

@@ -55,12 +55,14 @@ CREATE TABLE servicios (
     duracion_minutos INT NOT NULL DEFAULT 30,
     imagen VARCHAR(255) DEFAULT NULL,
     banner VARCHAR(255) DEFAULT NULL,
+    destacado TINYINT(1) NOT NULL DEFAULT 0,
     activo TINYINT(1) NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (id_categoria) REFERENCES categorias_servicios(id) ON DELETE SET NULL,
     INDEX idx_categoria (id_categoria),
-    INDEX idx_activo (activo)
+    INDEX idx_activo (activo),
+    INDEX idx_destacado (destacado)
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------

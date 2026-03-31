@@ -38,46 +38,69 @@ if ($method === 'GET') {
 // ── Leer body JSON para POST/PUT/DELETE ──
 $input = json_decode(file_get_contents('php://input'), true) ?: [];
 
+// ── Helper: contar destacados (excluyendo un ID opcional) ──
+function contarDestacados(PDO $db, ?int $excluir_id = null): int {
+    $sql = "SELECT COUNT(*) FROM servicios WHERE destacado = 1 AND activo = 1";
+    if ($excluir_id) {
+        $sql .= " AND id != ?";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([$excluir_id]);
+    } else {
+        $stmt = $db->query($sql);
+    }
+    return (int) $stmt->fetchColumn();
+}
+
 // ── POST (crear) ──
 if ($method === 'POST') {
-    $nombre   = trim($input['nombre'] ?? '');
-    $precio   = floatval($input['precio'] ?? 0);
-    $duracion = intval($input['duracion_minutos'] ?? 30);
-    $desc     = trim($input['descripcion'] ?? '');
-    $cat      = $input['id_categoria'] ?? null;
-    $imagen   = trim($input['imagen'] ?? '');
+    $nombre    = trim($input['nombre'] ?? '');
+    $precio    = floatval($input['precio'] ?? 0);
+    $duracion  = intval($input['duracion_minutos'] ?? 30);
+    $desc      = trim($input['descripcion'] ?? '');
+    $cat       = $input['id_categoria'] ?? null;
+    $imagen    = trim($input['imagen'] ?? '');
+    $destacado = intval($input['destacado'] ?? 0) ? 1 : 0;
 
     if (!$nombre || $precio <= 0) {
         responder_json(false, null, 'Nombre y precio son obligatorios', 400);
     }
 
+    if ($destacado && contarDestacados($db) >= 6) {
+        responder_json(false, null, 'Ya hay 6 servicios destacados. Desmarcá uno antes de destacar otro.', 400);
+    }
+
     $stmt = $db->prepare(
-        "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria, imagen)
-         VALUES (?, ?, ?, ?, ?, ?)"
+        "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria, imagen, destacado)
+         VALUES (?, ?, ?, ?, ?, ?, ?)"
     );
-    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null]);
+    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado]);
     responder_json(true, ['id' => $db->lastInsertId()]);
 }
 
 // ── PUT (editar) ──
 if ($method === 'PUT') {
-    $id       = intval($input['id'] ?? 0);
-    $nombre   = trim($input['nombre'] ?? '');
-    $precio   = floatval($input['precio'] ?? 0);
-    $duracion = intval($input['duracion_minutos'] ?? 30);
-    $desc     = trim($input['descripcion'] ?? '');
-    $cat      = $input['id_categoria'] ?? null;
-    $imagen   = trim($input['imagen'] ?? '');
+    $id        = intval($input['id'] ?? 0);
+    $nombre    = trim($input['nombre'] ?? '');
+    $precio    = floatval($input['precio'] ?? 0);
+    $duracion  = intval($input['duracion_minutos'] ?? 30);
+    $desc      = trim($input['descripcion'] ?? '');
+    $cat       = $input['id_categoria'] ?? null;
+    $imagen    = trim($input['imagen'] ?? '');
+    $destacado = intval($input['destacado'] ?? 0) ? 1 : 0;
 
     if (!$id || !$nombre || $precio <= 0) {
         responder_json(false, null, 'Datos incompletos', 400);
     }
 
+    if ($destacado && contarDestacados($db, $id) >= 6) {
+        responder_json(false, null, 'Ya hay 6 servicios destacados. Desmarcá uno antes de destacar otro.', 400);
+    }
+
     $stmt = $db->prepare(
-        "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, id_categoria=?, imagen=?
+        "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, id_categoria=?, imagen=?, destacado=?
          WHERE id=?"
     );
-    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $id]);
+    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado, $id]);
     responder_json(true);
 }
 
