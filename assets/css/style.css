@@ -2033,46 +2033,15 @@ main {
 }
 
 /* Map placeholder */
-.pm-map-placeholder {
-    border-radius: var(--pm-radius-lg);
-    overflow: hidden;
-}
-
-.pm-map-inner {
-    width: 100%;
-    height: 200px;
-    background: var(--pm-surface-alt);
-    border: 1px solid var(--pm-border-light);
-    border-radius: var(--pm-radius-lg);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.pm-map-inner i {
-    font-size: 2rem;
-    color: var(--pm-text-light);
-    margin-bottom: 0.5rem;
-}
-
-.pm-map-inner p {
-    color: var(--pm-text-muted);
-    margin: 0;
-}
-
-/* Real map container */
-.pm-map {
+/* Google Maps embed */
+.pm-map-wrapper {
     border-radius: var(--pm-radius-lg);
     overflow: hidden;
     border: 1px solid var(--pm-border-light);
     box-shadow: var(--pm-shadow-card);
 }
 
-.pm-map iframe {
-    width: 100%;
-    height: 300px;
-    border: none;
+.pm-map-wrapper iframe {
     display: block;
 }
 

@@ -1028,12 +1028,12 @@
 
         </div>
 
-        <!-- Mapa placeholder -->
-        <div class="pm-map-placeholder mt-4">
-          <div class="pm-map-inner">
-            <i class="bi bi-geo-alt"></i>
-            <p>Mapa - Próximamente</p>
-          </div>
+        <!-- Mapa Google -->
+        <div class="pm-map-wrapper mt-4">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4356.493697414219!2d-58.99473882367033!3d-27.45320591600523!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94450c8b78c54733%3A0xe6a7c6d335b00999!2sVedia%20459%2C%20H3500BMJ%20Resistencia%2C%20Chaco!5e1!3m2!1ses-419!2sar!4v1774923101741!5m2!1ses-419!2sar"
+                  width="100%" height="280" style="border:0; border-radius: 16px;"
+                  allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
       </div>
 
