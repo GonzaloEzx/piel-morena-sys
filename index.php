@@ -409,15 +409,17 @@
      4b. INFO DE TRATAMIENTOS — bg: --pm-marfil
      Sección informativa sobre los tratamientos estrella del salón.
      ═══════════════════════════════════════════════════════════════ -->
-<section id="tratamientos" class="pm-section-alt" data-section="tratamientos">
+<section id="tratamientos" class="pm-section-alt pm-tratamientos-section" data-section="tratamientos">
   <div class="container">
 
-    <div class="text-center mb-5">
+    <div class="pm-tratamientos-intro text-center mb-5">
+      <p class="pm-tratamientos-kicker pm-animate">Rituales de cuidado y bienestar</p>
       <h2 class="pm-section-title pm-animate">Conocé Nuestros Tratamientos</h2>
       <div class="pm-divider"></div>
-      <p class="pm-section-subtitle pm-animate">Una selección informativa de propuestas pensadas para cuidado facial, corporal y bienestar integral</p>
+      <p class="pm-section-subtitle pm-animate pm-tratamientos-subtitle">Una selección informativa de propuestas pensadas para cuidado facial, corporal y bienestar integral</p>
     </div>
 
+    <!-- Editá títulos y textos de ejemplo directamente en cada .pm-tratamiento-card -->
     <div class="row g-3 pm-tratamientos-grid">
 
       <!-- Card 1 -->

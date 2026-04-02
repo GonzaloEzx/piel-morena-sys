@@ -1550,43 +1550,132 @@ main {
    10b. INFO DE TRATAMIENTOS
    Cards informativas de tratamientos estrella del salón.
    ============================================================= */
+.pm-tratamientos-section {
+    overflow: hidden;
+}
+
+.pm-tratamientos-section::after {
+    content: '';
+    position: absolute;
+    inset: auto -8% 6% auto;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle,
+        color-mix(in srgb, var(--pm-arena) 30%, transparent) 0%,
+        color-mix(in srgb, var(--pm-rosa) 12%, transparent) 42%,
+        transparent 74%);
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+.pm-tratamientos-section > .container {
+    position: relative;
+    z-index: 1;
+}
+
+.pm-tratamientos-intro {
+    max-width: 760px;
+    margin: 0 auto var(--pm-space-6);
+}
+
+.pm-tratamientos-kicker {
+    margin: 0 0 var(--pm-space-3);
+    font-family: var(--pm-font-ui);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: var(--pm-tracking-wider);
+    text-transform: uppercase;
+    color: var(--pm-bronce);
+}
+
+.pm-tratamientos-subtitle {
+    max-width: 680px;
+}
+
+.pm-tratamientos-grid {
+    align-items: stretch;
+    position: relative;
+}
+
+.pm-tratamientos-grid > [class*='col-'] {
+    display: flex;
+}
+
+.pm-tratamientos-grid > [class*='col-'] > .pm-tratamiento-card {
+    width: 100%;
+}
+
 .pm-tratamiento-card {
+    --pm-tratamiento-accent: var(--pm-arena);
     background: var(--pm-surface);
-    border: 1px solid var(--pm-border-light);
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--pm-surface) 88%, var(--pm-tratamiento-accent) 12%) 0%,
+            var(--pm-surface) 100%
+        );
+    border: 1px solid color-mix(in srgb, var(--pm-border-light) 72%, var(--pm-tratamiento-accent) 28%);
     border-radius: var(--pm-radius-lg);
     box-shadow: var(--pm-shadow-card);
     padding: var(--pm-space-4);
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
+    gap: var(--pm-space-3);
     position: relative;
     overflow: hidden;
+    isolation: isolate;
     transition:
         transform var(--pm-transition-base),
         box-shadow var(--pm-transition-base),
         border-color var(--pm-transition-base);
 }
 
+.pm-tratamiento-card::before {
+    content: '';
+    position: absolute;
+    top: -34px;
+    right: -34px;
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle,
+        color-mix(in srgb, var(--pm-tratamiento-accent) 26%, var(--pm-surface) 74%) 0%,
+        transparent 72%);
+    opacity: 0.95;
+    transition: transform var(--pm-transition-base), opacity var(--pm-transition-base);
+    z-index: 0;
+}
+
 .pm-tratamiento-card::after {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
+    left: var(--pm-space-4);
+    width: calc(100% - (var(--pm-space-4) * 2));
     height: 3px;
-    background: linear-gradient(90deg, var(--pm-arena), var(--pm-rosa), var(--pm-arena));
+    background: linear-gradient(90deg, var(--pm-arena), var(--pm-rosa), var(--pm-verde));
     background-size: 200% 100%;
     transform: scaleX(0);
     transform-origin: center;
     transition: transform var(--pm-transition-base);
     border-radius: var(--pm-radius-lg) var(--pm-radius-lg) 0 0;
+    z-index: 1;
 }
 
 .pm-tratamiento-card:hover {
     transform: translateY(-6px);
     box-shadow: var(--pm-shadow-card-hover);
-    border-color: var(--pm-arena);
+    border-color: color-mix(in srgb, var(--pm-tratamiento-accent) 78%, var(--pm-bronce) 22%);
+}
+
+.pm-tratamiento-card:hover::before {
+    transform: scale(1.08) translate(-6px, 6px);
+    opacity: 1;
 }
 
 .pm-tratamiento-card:hover::after {
@@ -1594,14 +1683,21 @@ main {
     animation: pmGradientSlide 2s ease infinite;
 }
 
+.pm-tratamiento-card > * {
+    position: relative;
+    z-index: 1;
+}
+
 .pm-tratamiento-title {
     font-family: var(--pm-font-heading);
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     font-weight: 700;
     line-height: var(--pm-leading-tight);
     letter-spacing: var(--pm-tracking-tight);
     color: var(--pm-text-heading);
-    margin-bottom: var(--pm-space-2);
+    margin-bottom: 0;
+    max-width: 14ch;
+    text-wrap: balance;
 }
 
 .pm-tratamiento-desc {
@@ -1610,22 +1706,63 @@ main {
     line-height: var(--pm-leading-normal);
     color: var(--pm-text-muted);
     margin-bottom: 0;
+    max-width: 32ch;
 }
 
-.pm-tratamientos-grid {
-    align-items: stretch;
+.pm-tratamientos-grid > :nth-child(4n + 1) .pm-tratamiento-card {
+    --pm-tratamiento-accent: var(--pm-arena);
+}
+
+.pm-tratamientos-grid > :nth-child(4n + 2) .pm-tratamiento-card {
+    --pm-tratamiento-accent: var(--pm-rosa);
+}
+
+.pm-tratamientos-grid > :nth-child(4n + 3) .pm-tratamiento-card {
+    --pm-tratamiento-accent: var(--pm-verde);
+}
+
+.pm-tratamientos-grid > :nth-child(4n) .pm-tratamiento-card {
+    --pm-tratamiento-accent: var(--pm-dorado);
 }
 
 @media (min-width: 768px) {
+    .pm-tratamientos-section::after {
+        width: 360px;
+        height: 360px;
+    }
+
     .pm-tratamiento-card {
-        min-height: 190px;
+        min-height: 220px;
     }
 }
 
 @media (min-width: 1200px) {
+    .pm-tratamientos-grid > :nth-child(4n + 2) {
+        margin-top: var(--pm-space-4);
+    }
+
+    .pm-tratamientos-grid > :nth-child(4n + 3) {
+        margin-top: calc(var(--pm-space-4) * 2);
+    }
+
     .pm-tratamiento-card {
         padding: var(--pm-space-4) var(--pm-space-4) var(--pm-space-5);
-        min-height: 210px;
+        min-height: 230px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .pm-tratamientos-kicker {
+        font-size: 0.6875rem;
+    }
+
+    .pm-tratamiento-card {
+        min-height: 0;
+    }
+
+    .pm-tratamiento-title,
+    .pm-tratamiento-desc {
+        max-width: none;
     }
 }
 
