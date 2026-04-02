@@ -475,18 +475,16 @@ const TreatmentsCatalog = {
 
   badgeClassByCategory: {
     Facial: 'pm-tratamiento-badge--facial',
-    Corporal: 'pm-tratamiento-badge--corporal',
-    Relax: 'pm-tratamiento-badge--relax',
-    Diagnóstico: 'pm-tratamiento-badge--diagnostico',
     Mirada: 'pm-tratamiento-badge--mirada',
+    Capilar: 'pm-tratamiento-badge--corporal',
+    'Manicuría': 'pm-tratamiento-badge--relax',
   },
 
   modalClassByCategory: {
     Facial: 'pm-tratamiento-modal--facial',
-    Corporal: 'pm-tratamiento-modal--corporal',
-    Relax: 'pm-tratamiento-modal--relax',
-    Diagnóstico: 'pm-tratamiento-modal--diagnostico',
     Mirada: 'pm-tratamiento-modal--mirada',
+    Capilar: 'pm-tratamiento-modal--corporal',
+    'Manicuría': 'pm-tratamiento-modal--relax',
   },
 
   init() {
