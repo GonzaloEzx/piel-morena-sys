@@ -611,33 +611,13 @@ $tratamientos_catalogo_json = json_encode(
 >
   <div class="container">
 
-    <div class="pm-tratamientos-intro">
-      <div class="row g-4 align-items-end">
-        <div class="col-12 col-lg-7">
-          <p class="pm-tratamientos-kicker pm-animate">Curaduría de bienestar y estética</p>
-          <h2 class="pm-section-title pm-animate">Conocé Nuestros Tratamientos</h2>
-          <div class="pm-divider pm-animate"></div>
-          <p class="pm-section-subtitle pm-animate pm-tratamientos-subtitle">
-            Un catálogo pensado para explorar objetivos, sensaciones y tiempos con más claridad. Cada ficha resume lo esencial y deja el detalle completo listo para abrir en un modal.
-          </p>
-        </div>
-
-        <div class="col-12 col-lg-5">
-          <aside class="pm-tratamientos-note pm-animate" aria-label="Guía rápida del catálogo">
-            <p class="pm-tratamientos-note__eyebrow">Explorá por categoría</p>
-            <p class="pm-tratamientos-note__text">
-              Elegí según lo que hoy priorices: glow facial, trabajo corporal, pausa profunda, mirada o una evaluación personalizada antes de empezar.
-            </p>
-            <div class="pm-tratamientos-note__tags">
-              <span class="pm-tratamiento-badge pm-tratamiento-badge--facial">Facial</span>
-              <span class="pm-tratamiento-badge pm-tratamiento-badge--corporal">Corporal</span>
-              <span class="pm-tratamiento-badge pm-tratamiento-badge--relax">Relax</span>
-              <span class="pm-tratamiento-badge pm-tratamiento-badge--mirada">Mirada</span>
-              <span class="pm-tratamiento-badge pm-tratamiento-badge--diagnostico">Diagnóstico</span>
-            </div>
-          </aside>
-        </div>
-      </div>
+    <div class="pm-tratamientos-intro text-center">
+      <p class="pm-tratamientos-kicker pm-animate">Curaduría de bienestar y estética</p>
+      <h2 class="pm-section-title pm-animate">Conocé Nuestros Tratamientos</h2>
+      <div class="pm-divider pm-animate"></div>
+      <p class="pm-section-subtitle pm-animate pm-tratamientos-subtitle">
+        Un catálogo pensado para explorar objetivos, sensaciones y tiempos con más claridad. Cada ficha resume lo esencial y deja el detalle completo listo para abrir en un modal.
+      </p>
     </div>
 
     <div class="row g-3 g-lg-4 pm-tratamientos-grid">
