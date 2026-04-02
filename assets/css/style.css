@@ -168,21 +168,21 @@ html {
     -webkit-text-size-adjust: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    scrollbar-gutter: stable;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(138, 118, 80, 0.32) transparent;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 /* WebKit / Blink (Chrome, Edge, Safari, Opera) */
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 0;
+    height: 0;
     background: transparent;
 }
 ::-webkit-scrollbar-track {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(138, 118, 80, 0.32);
+    background-color: transparent;
     border-radius: 3px;
 }
 
