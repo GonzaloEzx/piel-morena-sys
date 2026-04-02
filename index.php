@@ -405,145 +405,291 @@
 </section>
 
 
+<?php
+$tratamientos_catalogo = [
+    [
+        "slug" => "limpieza-facial-inicial",
+        "categoria" => "Facial",
+        "icono" => "bi-droplet-half",
+        "titulo" => "Limpieza Facial Inicial",
+        "microbeneficio" => "Purifica, equilibra y devuelve frescura visible desde la primera sesión.",
+        "meta" => ["60 min", "Purificante", "Suave"],
+        "descripcion" => "Tratamiento de entrada pensado para limpiar en profundidad, retirar impurezas acumuladas y devolver una sensación de orden y frescura en la piel sin perder confort.",
+        "ideal_para" => "Pieles que necesitan reiniciar la rutina, mejorar limpieza visible o prepararse para protocolos posteriores.",
+        "beneficio_principal" => "Mejora la textura inmediata y deja la piel lista para absorber mejor activos complementarios.",
+        "sensacion" => "Se percibe liviana, prolija y con una terminación fresca.",
+        "duracion" => "60 minutos aproximados.",
+        "recomendacion" => "Suele funcionar muy bien como primera visita o como mantenimiento periódico del cuidado facial.",
+    ],
+    [
+        "slug" => "glow-hidratante",
+        "categoria" => "Facial",
+        "icono" => "bi-stars",
+        "titulo" => "Glow Hidratante",
+        "microbeneficio" => "Aporta confort, elasticidad y un acabado luminoso de aspecto descansado.",
+        "meta" => ["60 min", "Luminosidad", "Confort"],
+        "descripcion" => "Propuesta facial enfocada en nutrir, devolver suavidad y recuperar el brillo natural cuando la piel se percibe apagada, tirante o con signos de cansancio.",
+        "ideal_para" => "Pieles deshidratadas, opacas o que buscan una apariencia más fresca antes de un evento o cambio de estación.",
+        "beneficio_principal" => "Reequilibra hidratación y mejora la percepción de luminosidad en el rostro.",
+        "sensacion" => "La piel se siente acolchada, cómoda y con un brillo suave.",
+        "duracion" => "60 minutos aproximados.",
+        "recomendacion" => "Puede incorporarse como sesión puntual de glow o como apoyo entre tratamientos más intensivos.",
+    ],
+    [
+        "slug" => "peeling-renovador",
+        "categoria" => "Facial",
+        "icono" => "bi-brightness-high",
+        "titulo" => "Peeling Renovador",
+        "microbeneficio" => "Favorece una textura más uniforme y una piel visualmente más renovada.",
+        "meta" => ["50 min", "Textura", "Progresivo"],
+        "descripcion" => "Tratamiento orientado a estimular recambio superficial controlado para acompañar objetivos de mayor uniformidad, mejor tacto y un aspecto más despierto.",
+        "ideal_para" => "Pieles opacas, con textura irregular o que buscan una renovación gradual y acompañada profesionalmente.",
+        "beneficio_principal" => "Ayuda a suavizar la superficie y a mejorar la apariencia general del rostro.",
+        "sensacion" => "Se percibe renovación limpia, ligera y un rostro más parejo.",
+        "duracion" => "50 minutos aproximados.",
+        "recomendacion" => "Conviene evaluarlo dentro de una secuencia guiada para sostener resultados sin sobreestimular la piel.",
+    ],
+    [
+        "slug" => "dermapen-revitalizante",
+        "categoria" => "Facial",
+        "icono" => "bi-magic",
+        "titulo" => "Dermapen Revitalizante",
+        "microbeneficio" => "Estimula revitalización visible para una piel con más energía y mejor tono.",
+        "meta" => ["75 min", "Revitaliza", "Activos"],
+        "descripcion" => "Técnica pensada para acompañar protocolos de renovación y potenciar activos seleccionados según el objetivo estético de cada piel.",
+        "ideal_para" => "Quienes desean trabajar tonicidad, uniformidad y aspecto general con una estrategia más activa.",
+        "beneficio_principal" => "Impulsa una apariencia más firme, afinada y revitalizada.",
+        "sensacion" => "Deja una percepción de tratamiento profesional y recuperación progresiva del glow.",
+        "duracion" => "75 minutos aproximados.",
+        "recomendacion" => "Se sugiere programarlo con evaluación previa para ajustar intensidad, frecuencia y cuidados complementarios.",
+    ],
+    [
+        "slug" => "radiofrecuencia-tensora",
+        "categoria" => "Corporal",
+        "icono" => "bi-sunrise",
+        "titulo" => "Radiofrecuencia Tensora",
+        "microbeneficio" => "Acompaña objetivos de firmeza con una experiencia cálida y confortable.",
+        "meta" => ["60 min", "Firmeza", "Cálido"],
+        "descripcion" => "Tratamiento que trabaja con sensación térmica agradable para apoyar protocolos de tonificación y bienestar en zonas que buscan verse más tensas y prolijas.",
+        "ideal_para" => "Personas que priorizan firmeza visible y una experiencia corporal agradable, sin sensación invasiva.",
+        "beneficio_principal" => "Contribuye a la percepción de tonicidad y mejora de contorno en áreas tratadas.",
+        "sensacion" => "Cálida, relajante y de trabajo profundo pero amable.",
+        "duracion" => "60 minutos aproximados.",
+        "recomendacion" => "Suele dar mejores resultados cuando se integra a un plan corporal sostenido y personalizado.",
+    ],
+    [
+        "slug" => "crioterapia-localizada",
+        "categoria" => "Corporal",
+        "icono" => "bi-snow",
+        "titulo" => "Crioterapia Localizada",
+        "microbeneficio" => "Brinda una experiencia localizada de alivio, definición y frescura corporal.",
+        "meta" => ["45 min", "Frío", "Localizado"],
+        "descripcion" => "Propuesta orientada a trabajar zonas puntuales mediante frío controlado, dentro de protocolos corporales que priorizan confort y definición.",
+        "ideal_para" => "Quienes buscan una sensación de frescura activa y complementar rutinas corporales focalizadas.",
+        "beneficio_principal" => "Aporta una percepción de trabajo localizado y acompaña objetivos de recuperación y definición.",
+        "sensacion" => "Fresca, dinámica y tonificante.",
+        "duracion" => "45 minutos aproximados.",
+        "recomendacion" => "Conviene evaluarla según zona, sensibilidad personal y combinación con otras herramientas corporales.",
+    ],
+    [
+        "slug" => "drenaje-facial-manual",
+        "categoria" => "Facial",
+        "icono" => "bi-water",
+        "titulo" => "Drenaje Facial Manual",
+        "microbeneficio" => "Descongestiona suavemente y aporta liviandad al contorno del rostro.",
+        "meta" => ["45 min", "Liviano", "Manual"],
+        "descripcion" => "Sesión manual, lenta y precisa, pensada para acompañar sensación de desinflamación, descanso visual y armonía facial.",
+        "ideal_para" => "Rostros cansados, con sensación de pesadez o para quienes valoran maniobras delicadas y relajantes.",
+        "beneficio_principal" => "Ayuda a que el rostro se vea más descansado y liviano.",
+        "sensacion" => "Serena, liviana y muy descansante.",
+        "duracion" => "45 minutos aproximados.",
+        "recomendacion" => "Resulta ideal como sesión puntual de bienestar o como complemento de otros cuidados faciales.",
+    ],
+    [
+        "slug" => "masaje-relajante-integral",
+        "categoria" => "Relax",
+        "icono" => "bi-flower1",
+        "titulo" => "Masaje Relajante Integral",
+        "microbeneficio" => "Invita a bajar el ritmo y recuperar una sensación profunda de pausa.",
+        "meta" => ["60 min", "Pausa", "Envolvente"],
+        "descripcion" => "Experiencia corporal pensada para desconectar del movimiento diario, aliviar sobrecarga y crear un momento de bienestar completo.",
+        "ideal_para" => "Personas con jornadas exigentes, estrés acumulado o ganas de regalarse un espacio de calma real.",
+        "beneficio_principal" => "Favorece relajación global y sensación de descanso corporal y mental.",
+        "sensacion" => "Envolvente, tranquila y restauradora.",
+        "duracion" => "60 minutos aproximados.",
+        "recomendacion" => "Funciona muy bien como pausa periódica para sostener bienestar general.",
+    ],
+    [
+        "slug" => "masaje-descontracturante",
+        "categoria" => "Relax",
+        "icono" => "bi-hand-index-thumb",
+        "titulo" => "Masaje Descontracturante",
+        "microbeneficio" => "Trabaja zonas cargadas para devolver movilidad y alivio corporal.",
+        "meta" => ["60 min", "Alivio", "Profundo"],
+        "descripcion" => "Tratamiento corporal focalizado en tensiones frecuentes de espalda, cuello y otras zonas con sobrecarga muscular.",
+        "ideal_para" => "Quienes pasan muchas horas sentados, entrenan con frecuencia o acumulan tensión física sostenida.",
+        "beneficio_principal" => "Ayuda a liberar rigidez y mejorar la sensación de soltura.",
+        "sensacion" => "Profunda, liberadora y de alivio progresivo.",
+        "duracion" => "60 minutos aproximados.",
+        "recomendacion" => "Conviene adaptarlo a intensidad y zonas prioritarias según cada persona.",
+    ],
+    [
+        "slug" => "perfilado-de-cejas",
+        "categoria" => "Mirada",
+        "icono" => "bi-brush",
+        "titulo" => "Perfilado de Cejas",
+        "microbeneficio" => "Ordena la expresión y aporta equilibrio visual al rostro.",
+        "meta" => ["30 min", "Diseño", "Natural"],
+        "descripcion" => "Servicio de mirada enfocado en definir forma, mantener prolijidad y acompañar la expresión facial desde un acabado natural.",
+        "ideal_para" => "Quienes desean una ceja mejor definida sin perder armonía con sus rasgos.",
+        "beneficio_principal" => "Realza el marco del rostro con una terminación sutil y cuidada.",
+        "sensacion" => "Prolija, fresca y de rostro más ordenado.",
+        "duracion" => "30 minutos aproximados.",
+        "recomendacion" => "Ideal como mantenimiento regular o antes de eventos donde se busca un look pulido.",
+    ],
+    [
+        "slug" => "pestanas-efecto-natural",
+        "categoria" => "Mirada",
+        "icono" => "bi-eye",
+        "titulo" => "Pestañas Efecto Natural",
+        "microbeneficio" => "Acentúa la mirada con definición liviana y elegante para todos los días.",
+        "meta" => ["50 min", "Mirada", "Sutil"],
+        "descripcion" => "Propuesta pensada para destacar la mirada con un resultado cómodo, flexible y compatible con una estética natural.",
+        "ideal_para" => "Personas que quieren verse más arregladas sin sentir un efecto recargado.",
+        "beneficio_principal" => "Abre visualmente la mirada y aporta definición cotidiana.",
+        "sensacion" => "Liviana, femenina y fácil de sostener.",
+        "duracion" => "50 minutos aproximados.",
+        "recomendacion" => "Conviene para quienes buscan realce sutil y una rutina práctica de maquillaje.",
+    ],
+    [
+        "slug" => "diagnostico-estetico-personalizado",
+        "categoria" => "Diagnóstico",
+        "icono" => "bi-clipboard2-pulse",
+        "titulo" => "Diagnóstico Estético Personalizado",
+        "microbeneficio" => "Ordena objetivos y prioridades para elegir un plan de cuidado con criterio.",
+        "meta" => ["40 min", "Planifica", "Personal"],
+        "descripcion" => "Instancia de evaluación inicial para entender necesidades, prioridades y combinaciones posibles antes de avanzar con tratamientos específicos.",
+        "ideal_para" => "Quienes quieren empezar con claridad, evitar improvisaciones y recibir orientación profesional.",
+        "beneficio_principal" => "Ayuda a construir una estrategia realista y alineada con cada objetivo.",
+        "sensacion" => "Acompañada, clara y con una hoja de ruta concreta.",
+        "duracion" => "40 minutos aproximados.",
+        "recomendacion" => "Es la mejor puerta de entrada cuando todavía no está definido qué protocolo elegir.",
+    ],
+];
+
+$tratamiento_badges = [
+    "Facial" => "pm-tratamiento-badge--facial",
+    "Corporal" => "pm-tratamiento-badge--corporal",
+    "Relax" => "pm-tratamiento-badge--relax",
+    "Diagnóstico" => "pm-tratamiento-badge--diagnostico",
+    "Mirada" => "pm-tratamiento-badge--mirada",
+];
+
+$tratamiento_cards = [
+    "Facial" => "pm-tratamiento-card--facial",
+    "Corporal" => "pm-tratamiento-card--corporal",
+    "Relax" => "pm-tratamiento-card--relax",
+    "Diagnóstico" => "pm-tratamiento-card--diagnostico",
+    "Mirada" => "pm-tratamiento-card--mirada",
+];
+
+$tratamientos_catalogo_json = json_encode(
+    $tratamientos_catalogo,
+    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT,
+);
+?>
+
 <!-- ═══════════════════════════════════════════════════════════════
-     4b. INFO DE TRATAMIENTOS — bg: --pm-marfil
-     Sección informativa sobre los tratamientos estrella del salón.
+     4b. CATÁLOGO DE TRATAMIENTOS — bg: --pm-marfil
+     Editá contenidos de cards y modal en $tratamientos_catalogo.
      ═══════════════════════════════════════════════════════════════ -->
-<section id="tratamientos" class="pm-section-alt pm-tratamientos-section" data-section="tratamientos">
+<section
+  id="tratamientos"
+  class="pm-section-alt pm-tratamientos-section"
+  data-section="tratamientos"
+  data-whatsapp-number="<?= preg_replace("/[^0-9]/", "", TELEFONO_NEGOCIO) ?>"
+>
   <div class="container">
 
-    <div class="pm-tratamientos-intro text-center mb-5">
-      <p class="pm-tratamientos-kicker pm-animate">Rituales de cuidado y bienestar</p>
-      <h2 class="pm-section-title pm-animate">Conocé Nuestros Tratamientos</h2>
-      <div class="pm-divider"></div>
-      <p class="pm-section-subtitle pm-animate pm-tratamientos-subtitle">Una selección informativa de propuestas pensadas para cuidado facial, corporal y bienestar integral</p>
+    <div class="pm-tratamientos-intro">
+      <div class="row g-4 align-items-end">
+        <div class="col-12 col-lg-7">
+          <p class="pm-tratamientos-kicker pm-animate">Curaduría de bienestar y estética</p>
+          <h2 class="pm-section-title pm-animate">Conocé Nuestros Tratamientos</h2>
+          <div class="pm-divider pm-animate"></div>
+          <p class="pm-section-subtitle pm-animate pm-tratamientos-subtitle">
+            Un catálogo pensado para explorar objetivos, sensaciones y tiempos con más claridad. Cada ficha resume lo esencial y deja el detalle completo listo para abrir en un modal.
+          </p>
+        </div>
+
+        <div class="col-12 col-lg-5">
+          <aside class="pm-tratamientos-note pm-animate" aria-label="Guía rápida del catálogo">
+            <p class="pm-tratamientos-note__eyebrow">Explorá por categoría</p>
+            <p class="pm-tratamientos-note__text">
+              Elegí según lo que hoy priorices: glow facial, trabajo corporal, pausa profunda, mirada o una evaluación personalizada antes de empezar.
+            </p>
+            <div class="pm-tratamientos-note__tags">
+              <span class="pm-tratamiento-badge pm-tratamiento-badge--facial">Facial</span>
+              <span class="pm-tratamiento-badge pm-tratamiento-badge--corporal">Corporal</span>
+              <span class="pm-tratamiento-badge pm-tratamiento-badge--relax">Relax</span>
+              <span class="pm-tratamiento-badge pm-tratamiento-badge--mirada">Mirada</span>
+              <span class="pm-tratamiento-badge pm-tratamiento-badge--diagnostico">Diagnóstico</span>
+            </div>
+          </aside>
+        </div>
+      </div>
     </div>
 
-    <!-- Editá títulos y textos de ejemplo directamente en cada .pm-tratamiento-card -->
-    <div class="row g-3 pm-tratamientos-grid">
+    <div class="row g-3 g-lg-4 pm-tratamientos-grid">
+      <?php foreach ($tratamientos_catalogo as $tratamiento): ?>
+        <div class="col-12 col-md-6 col-lg-4 pm-animate">
+          <article class="pm-tratamiento-card <?= $tratamiento_cards[$tratamiento["categoria"]] ?? "" ?>">
+            <div class="pm-tratamiento-card__top">
+              <span class="pm-tratamiento-badge <?= $tratamiento_badges[$tratamiento["categoria"]] ?? "" ?>">
+                <?= htmlspecialchars($tratamiento["categoria"], ENT_QUOTES, "UTF-8") ?>
+              </span>
+              <span class="pm-tratamiento-card__icon" aria-hidden="true">
+                <i class="bi <?= htmlspecialchars($tratamiento["icono"], ENT_QUOTES, "UTF-8") ?>"></i>
+              </span>
+            </div>
 
-      <!-- Card 1 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Limpieza Facial Inicial</h4>
-          <p class="pm-tratamiento-desc">
-            Propuesta pensada para renovar la piel, mejorar la sensación de limpieza y acompañar rutinas de cuidado con una base profesional.
-          </p>
+            <div class="pm-tratamiento-card__body">
+              <h3 class="pm-tratamiento-card__title">
+                <?= htmlspecialchars($tratamiento["titulo"], ENT_QUOTES, "UTF-8") ?>
+              </h3>
+              <p class="pm-tratamiento-card__lead">
+                <?= htmlspecialchars($tratamiento["microbeneficio"], ENT_QUOTES, "UTF-8") ?>
+              </p>
+            </div>
+
+            <div class="pm-tratamiento-card__footer">
+              <div
+                class="pm-tratamiento-card__meta"
+                aria-label="Datos rápidos de <?= htmlspecialchars($tratamiento["titulo"], ENT_QUOTES, "UTF-8") ?>"
+              >
+                <?php foreach ($tratamiento["meta"] as $meta): ?>
+                  <span class="pm-tratamiento-card__meta-item">
+                    <?= htmlspecialchars($meta, ENT_QUOTES, "UTF-8") ?>
+                  </span>
+                <?php endforeach; ?>
+              </div>
+
+              <button
+                type="button"
+                class="pm-tratamiento-card__link js-pm-tratamiento-modal"
+                data-tratamiento-id="<?= htmlspecialchars($tratamiento["slug"], ENT_QUOTES, "UTF-8") ?>"
+                aria-label="Ver más sobre <?= htmlspecialchars($tratamiento["titulo"], ENT_QUOTES, "UTF-8") ?>"
+              >
+                Ver más
+                <i class="bi bi-arrow-up-right"></i>
+              </button>
+            </div>
+          </article>
         </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Glow Hidratante</h4>
-          <p class="pm-tratamiento-desc">
-            Alternativa enfocada en confort, luminosidad y textura uniforme para quienes buscan una piel con aspecto más fresca y descansada.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Peeling Renovador</h4>
-          <p class="pm-tratamiento-desc">
-            Opción de recambio superficial orientada a mejorar textura, aspecto opaco y uniformidad, con un enfoque progresivo y controlado.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Dermapen Revitalizante</h4>
-          <p class="pm-tratamiento-desc">
-            Técnica enfocada en estimular renovación y acompañar protocolos de mejora visible en textura, tonicidad y apariencia general.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Radiofrecuencia Tensora</h4>
-          <p class="pm-tratamiento-desc">
-            Propuesta orientada a una experiencia de firmeza y bienestar, pensada para acompañar objetivos de tonificación con sensación confortable.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 6 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Crioterapia Localizada</h4>
-          <p class="pm-tratamiento-desc">
-            Variante informativa sobre trabajo localizado con frío, indicada para quienes priorizan sensación de alivio, definición y recuperación corporal.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 7 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Drenaje Facial Manual</h4>
-          <p class="pm-tratamiento-desc">
-            Enfoque suave para acompañar sensación de desinflamación, descanso visual y armonía del contorno, con una experiencia serena y liviana.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 8 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Masaje Relajante Integral</h4>
-          <p class="pm-tratamiento-desc">
-            Alternativa enfocada en pausa, relajación y desconexión del ritmo diario, pensada para combinar bienestar corporal y descanso mental.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 9 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Masaje Descontracturante</h4>
-          <p class="pm-tratamiento-desc">
-            Propuesta dirigida a zonas de tensión acumulada, útil para complementar rutinas activas o contextos de estrés físico frecuente.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 10 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Perfilado de Cejas</h4>
-          <p class="pm-tratamiento-desc">
-            Servicio informativo pensado para realzar expresión y equilibrio facial mediante diseño prolijo y una terminación natural.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 11 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Pestañas Efecto Natural</h4>
-          <p class="pm-tratamiento-desc">
-            Opción de realce sutil para quienes prefieren una mirada definida, liviana y compatible con el uso cotidiano.
-          </p>
-        </div>
-      </div>
-
-      <!-- Card 12 -->
-      <div class="col-12 col-md-6 col-xl-3 pm-animate">
-        <div class="pm-tratamiento-card">
-          <h4 class="pm-tratamiento-title">Diagnóstico Estético Personalizado</h4>
-          <p class="pm-tratamiento-desc">
-            Espacio inicial de orientación para evaluar objetivos, prioridades y combinaciones posibles antes de avanzar con un plan real.
-          </p>
-        </div>
-      </div>
-
+      <?php endforeach; ?>
     </div>
 
+    <script id="pmTratamientosData" type="application/json"><?= $tratamientos_catalogo_json ?></script>
   </div>
 </section>
 

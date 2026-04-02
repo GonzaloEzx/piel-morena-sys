@@ -462,6 +462,166 @@ const GalleryLightbox = {
 
 
 /* ═══════════════════════════════════════════════════════════
+   TRATAMIENTOS — catálogo + modal enriquecido
+   Fuente única: #pmTratamientosData (JSON embebido en index.php)
+   ═══════════════════════════════════════════════════════════ */
+const TreatmentsCatalog = {
+  /** @type {HTMLElement|null} */
+  section: null,
+  /** @type {Map<string, any>} */
+  items: new Map(),
+  /** @type {string} */
+  whatsappNumber: '',
+
+  badgeClassByCategory: {
+    Facial: 'pm-tratamiento-badge--facial',
+    Corporal: 'pm-tratamiento-badge--corporal',
+    Relax: 'pm-tratamiento-badge--relax',
+    Diagnóstico: 'pm-tratamiento-badge--diagnostico',
+    Mirada: 'pm-tratamiento-badge--mirada',
+  },
+
+  modalClassByCategory: {
+    Facial: 'pm-tratamiento-modal--facial',
+    Corporal: 'pm-tratamiento-modal--corporal',
+    Relax: 'pm-tratamiento-modal--relax',
+    Diagnóstico: 'pm-tratamiento-modal--diagnostico',
+    Mirada: 'pm-tratamiento-modal--mirada',
+  },
+
+  init() {
+    this.section = document.querySelector('.pm-tratamientos-section');
+    const dataNode = document.getElementById('pmTratamientosData');
+
+    if (!this.section || !dataNode || typeof Swal === 'undefined') return;
+
+    this.whatsappNumber = this.section.dataset.whatsappNumber || '';
+
+    try {
+      const parsed = JSON.parse(dataNode.textContent || '[]');
+      this.items = new Map(parsed.map(item => [item.slug, item]));
+    } catch {
+      this.items = new Map();
+      return;
+    }
+
+    if (!this.items.size) return;
+
+    this.section.addEventListener('click', (event) => {
+      const trigger = event.target.closest('.js-pm-tratamiento-modal');
+      if (!trigger) return;
+
+      const treatmentId = trigger.dataset.tratamientoId;
+      if (!treatmentId) return;
+
+      const item = this.items.get(treatmentId);
+      if (!item) return;
+
+      this._openModal(item);
+    });
+  },
+
+  _openModal(item) {
+    Swal.fire({
+      titleText: item.titulo,
+      html: this._renderModalContent(item),
+      showConfirmButton: false,
+      showCloseButton: true,
+      focusConfirm: false,
+      customClass: {
+        popup: 'pm-modal pm-modal--tratamiento',
+        closeButton: 'pm-modal__close',
+      },
+    });
+  },
+
+  _renderModalContent(item) {
+    const badgeClass = this.badgeClassByCategory[item.categoria] || '';
+    const modalClass = this.modalClassByCategory[item.categoria] || '';
+    const metaItems = Array.isArray(item.meta)
+      ? item.meta
+        .map(meta => `
+          <span class="pm-tratamiento-modal__chip">
+            ${this._escapeHtml(meta)}
+          </span>
+        `)
+        .join('')
+      : '';
+
+    const whatsappHref = this._buildWhatsappHref(item.titulo);
+
+    return `
+      <div class="pm-tratamiento-modal ${modalClass}">
+        <div class="pm-tratamiento-modal__header">
+          <span class="pm-tratamiento-badge ${badgeClass}">
+            ${this._escapeHtml(item.categoria)}
+          </span>
+          <div class="pm-tratamiento-modal__chips" aria-label="Datos rápidos">
+            ${metaItems}
+          </div>
+        </div>
+
+        <p class="pm-tratamiento-modal__lead">
+          ${this._escapeHtml(item.descripcion)}
+        </p>
+
+        <div class="pm-tratamiento-modal__grid">
+          <article class="pm-tratamiento-modal__item">
+            <span class="pm-tratamiento-modal__label">Ideal para</span>
+            <p class="pm-tratamiento-modal__value">${this._escapeHtml(item.ideal_para)}</p>
+          </article>
+
+          <article class="pm-tratamiento-modal__item">
+            <span class="pm-tratamiento-modal__label">Beneficio principal</span>
+            <p class="pm-tratamiento-modal__value">${this._escapeHtml(item.beneficio_principal)}</p>
+          </article>
+
+          <article class="pm-tratamiento-modal__item">
+            <span class="pm-tratamiento-modal__label">Sensación esperada</span>
+            <p class="pm-tratamiento-modal__value">${this._escapeHtml(item.sensacion)}</p>
+          </article>
+
+          <article class="pm-tratamiento-modal__item">
+            <span class="pm-tratamiento-modal__label">Duración estimada</span>
+            <p class="pm-tratamiento-modal__value">${this._escapeHtml(item.duracion)}</p>
+          </article>
+        </div>
+
+        <div class="pm-tratamiento-modal__note">
+          <span class="pm-tratamiento-modal__label">Recomendación orientativa</span>
+          <p class="pm-tratamiento-modal__value">${this._escapeHtml(item.recomendacion)}</p>
+        </div>
+
+        <a
+          href="${whatsappHref}"
+          class="btn-pm-whatsapp btn-pm-sm pm-tratamiento-modal__cta"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="bi bi-whatsapp"></i>
+          Consultar por WhatsApp
+        </a>
+      </div>
+    `;
+  },
+
+  _buildWhatsappHref(title) {
+    const message = encodeURIComponent(`Hola, quiero consultar por el tratamiento ${title}.`);
+    return `https://wa.me/${this.whatsappNumber}?text=${message}`;
+  },
+
+  _escapeHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  },
+};
+
+
+/* ═══════════════════════════════════════════════════════════
    MOBILE MENU (Bottom Sheet) — manejo correcto de nav + close
    Resuelve bug de Bootstrap data-bs-dismiss en <a> tags
    ═══════════════════════════════════════════════════════════ */
@@ -555,5 +715,6 @@ document.addEventListener('DOMContentLoaded', () => {
   BackToTop.init();
   CarouselSync.init();
   GalleryLightbox.init();
+  TreatmentsCatalog.init();
   MobileMenu.init();
 });
