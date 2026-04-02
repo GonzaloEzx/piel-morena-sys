@@ -1593,16 +1593,6 @@ main {
     margin-bottom: var(--pm-space-6);
 }
 
-.pm-tratamientos-kicker {
-    margin: 0 0 var(--pm-space-3);
-    font-family: var(--pm-font-ui);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: var(--pm-tracking-wider);
-    text-transform: uppercase;
-    color: var(--pm-bronce);
-}
-
 .pm-tratamientos-subtitle {
     max-width: 38rem;
     margin-inline: auto;

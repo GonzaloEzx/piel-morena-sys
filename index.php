@@ -612,7 +612,6 @@ $tratamientos_catalogo_json = json_encode(
   <div class="container">
 
     <div class="pm-tratamientos-intro text-center">
-      <p class="pm-tratamientos-kicker pm-animate">Curaduría de bienestar y estética</p>
       <h2 class="pm-section-title pm-animate">Conocé Nuestros Tratamientos</h2>
       <div class="pm-divider pm-animate"></div>
       <p class="pm-section-subtitle pm-animate pm-tratamientos-subtitle">
@@ -643,17 +642,6 @@ $tratamientos_catalogo_json = json_encode(
             </div>
 
             <div class="pm-tratamiento-card__footer">
-              <div
-                class="pm-tratamiento-card__meta"
-                aria-label="Datos rápidos de <?= htmlspecialchars($tratamiento["titulo"], ENT_QUOTES, "UTF-8") ?>"
-              >
-                <?php foreach ($tratamiento["meta"] as $meta): ?>
-                  <span class="pm-tratamiento-card__meta-item">
-                    <?= htmlspecialchars($meta, ENT_QUOTES, "UTF-8") ?>
-                  </span>
-                <?php endforeach; ?>
-              </div>
-
               <button
                 type="button"
                 class="pm-tratamiento-card__link js-pm-tratamiento-modal"
