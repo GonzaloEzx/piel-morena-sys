@@ -616,7 +616,7 @@ $tratamientos_catalogo_json = json_encode(
       <h2 class="pm-section-title pm-animate">Conocé Nuestros Tratamientos</h2>
       <div class="pm-divider pm-animate"></div>
       <p class="pm-section-subtitle pm-animate pm-tratamientos-subtitle">
-        Un catálogo pensado para explorar objetivos, sensaciones y tiempos con más claridad. Cada ficha resume lo esencial y deja el detalle completo listo para abrir en un modal.
+        Una selección informativa de propuestas pensadas para cuidado facial, corporal y bienestar integral
       </p>
     </div>
 
