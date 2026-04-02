@@ -107,3 +107,34 @@ function formatear_fecha(string $fecha): string {
 function formatear_hora(string $hora): string {
     return date('g:i A', strtotime($hora));
 }
+
+/**
+ * Obtener iniciales a partir de un nombre.
+ */
+function obtener_iniciales(string $nombre, int $max = 2): string {
+    $nombre = trim(preg_replace('/\s+/', ' ', $nombre));
+    if ($nombre === '') {
+        return 'PM';
+    }
+
+    $partes = preg_split('/\s+/', $nombre) ?: [];
+    $iniciales = '';
+
+    foreach ($partes as $parte) {
+        if ($parte === '') {
+            continue;
+        }
+
+        if (function_exists('mb_substr')) {
+            $iniciales .= mb_strtoupper(mb_substr($parte, 0, 1, 'UTF-8'), 'UTF-8');
+        } else {
+            $iniciales .= strtoupper(substr($parte, 0, 1));
+        }
+
+        if (strlen($iniciales) >= $max) {
+            break;
+        }
+    }
+
+    return $iniciales !== '' ? $iniciales : 'PM';
+}

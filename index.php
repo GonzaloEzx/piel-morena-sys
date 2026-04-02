@@ -1,5 +1,50 @@
-<?php $pagina_actual = "inicio"; ?>
-<?php require_once "includes/header.php"; ?>
+<?php
+$pagina_actual = "inicio";
+require_once "includes/init.php";
+
+$pm_testimonios_fallback = [
+    [
+        'nombre' => 'Carolina López',
+        'rol' => 'Clienta frecuente',
+        'texto' => 'Desde que empecé mis sesiones de depilación láser en Piel Morena, mi vida cambió. El trato es increíble, me siento como en casa cada vez que voy. Los resultados son visibles desde la primera sesión. ¡100% recomendado!',
+        'orden' => 1,
+    ],
+    [
+        'nombre' => 'Valentina Martínez',
+        'rol' => 'Clienta de crioterapia',
+        'texto' => 'Me hice la crioterapia facial y quedé fascinada. Mi piel se ve más joven, más firme y radiante. Las chicas de Piel Morena son profesionales de verdad, te explican todo el proceso y te hacen sentir segura.',
+        'orden' => 2,
+    ],
+    [
+        'nombre' => 'Florencia Sánchez',
+        'rol' => 'Novia 2025',
+        'texto' => 'El maquillaje de mi boda fue perfecto. Sofía entendió exactamente lo que quería y el resultado superó mis expectativas. Aguantó toda la fiesta sin retoques. Piel Morena es sinónimo de calidad y profesionalismo.',
+        'orden' => 3,
+    ],
+];
+
+$pm_testimonial_gradients = [
+    'linear-gradient(135deg, #DBCEA5, #8A7650)',
+    'linear-gradient(135deg, #FFE1AF, #957C62)',
+    'linear-gradient(135deg, #B77466, #DBCEA5)',
+    'linear-gradient(135deg, #8E977D, #957C62)',
+];
+
+$pm_testimonios = $pm_testimonios_fallback;
+
+try {
+    $stmt = getDB()->query("SELECT id, nombre, rol, texto, orden FROM testimonios ORDER BY orden ASC, id ASC");
+    $rows = $stmt->fetchAll();
+
+    if (!empty($rows)) {
+        $pm_testimonios = $rows;
+    }
+} catch (Throwable $e) {
+    error_log('Piel Morena Testimonios Error: ' . $e->getMessage());
+}
+
+require_once "includes/header.php";
+?>
 
 <!-- ═══════════════════════════════════════════════════════════════
      1. HERO — Carousel 3 slides, auto-play 7s
@@ -867,20 +912,21 @@ $tratamientos_catalogo_json = json_encode(
     <!-- Carousel de testimonios -->
     <div id="testimoniosCarousel" class="carousel slide pm-animate" data-bs-ride="carousel" data-bs-interval="8000">
       <div class="carousel-inner">
-
-        <!-- Testimonio 1 -->
-        <div class="carousel-item active">
+        <?php foreach ($pm_testimonios as $i => $testimonio):
+          $gradient = $pm_testimonial_gradients[$i % count($pm_testimonial_gradients)];
+          $nombre_testimonio = sanitizar($testimonio['nombre'] ?? '');
+          $rol_testimonio = sanitizar($testimonio['rol'] ?? '');
+          $texto_testimonio = sanitizar($testimonio['texto'] ?? '');
+          $iniciales_testimonio = sanitizar(obtener_iniciales($testimonio['nombre'] ?? ''));
+        ?>
+        <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
           <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
               <div class="pm-testimonial-card text-center">
                 <div class="pm-testimonial-quote">
                   <i class="bi bi-quote pm-testimonial-quote-icon"></i>
                 </div>
-                <p class="pm-testimonial-text">
-                  "Desde que empecé mis sesiones de depilación láser en Piel Morena, mi vida cambió.
-                  El trato es increíble, me siento como en casa cada vez que voy. Los resultados
-                  son visibles desde la primera sesión. ¡100% recomendado!"
-                </p>
+                <p class="pm-testimonial-text">"<?= $texto_testimonio ?>"</p>
                 <div class="pm-testimonial-stars">
                   <i class="bi bi-star-fill"></i>
                   <i class="bi bi-star-fill"></i>
@@ -889,98 +935,33 @@ $tratamientos_catalogo_json = json_encode(
                   <i class="bi bi-star-fill"></i>
                 </div>
                 <div class="pm-testimonial-author">
-                  <div class="pm-testimonial-avatar" style="background: linear-gradient(135deg, #DBCEA5, #8A7650);">
-                    <span>CL</span>
+                  <div class="pm-testimonial-avatar" style="background: <?= $gradient ?>;">
+                    <span><?= $iniciales_testimonio ?></span>
                   </div>
                   <div class="pm-testimonial-info">
-                    <strong class="pm-testimonial-name">Carolina López</strong>
-                    <span class="pm-testimonial-role">Clienta frecuente</span>
+                    <strong class="pm-testimonial-name"><?= $nombre_testimonio ?></strong>
+                    <span class="pm-testimonial-role"><?= $rol_testimonio !== '' ? $rol_testimonio : 'Clienta de Piel Morena' ?></span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Testimonio 2 -->
-        <div class="carousel-item">
-          <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10">
-              <div class="pm-testimonial-card text-center">
-                <div class="pm-testimonial-quote">
-                  <i class="bi bi-quote pm-testimonial-quote-icon"></i>
-                </div>
-                <p class="pm-testimonial-text">
-                  "Me hice la crioterapia facial y quedé fascinada. Mi piel se ve más joven,
-                  más firme y radiante. Las chicas de Piel Morena son profesionales de verdad,
-                  te explican todo el proceso y te hacen sentir segura."
-                </p>
-                <div class="pm-testimonial-stars">
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                </div>
-                <div class="pm-testimonial-author">
-                  <div class="pm-testimonial-avatar" style="background: linear-gradient(135deg, #FFE1AF, #957C62);">
-                    <span>VM</span>
-                  </div>
-                  <div class="pm-testimonial-info">
-                    <strong class="pm-testimonial-name">Valentina Martínez</strong>
-                    <span class="pm-testimonial-role">Clienta de crioterapia</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Testimonio 3 -->
-        <div class="carousel-item">
-          <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10">
-              <div class="pm-testimonial-card text-center">
-                <div class="pm-testimonial-quote">
-                  <i class="bi bi-quote pm-testimonial-quote-icon"></i>
-                </div>
-                <p class="pm-testimonial-text">
-                  "El maquillaje de mi boda fue perfecto. Sofía entendió exactamente lo que quería
-                  y el resultado superó mis expectativas. Aguantó toda la fiesta sin retoques.
-                  Piel Morena es sinónimo de calidad y profesionalismo."
-                </p>
-                <div class="pm-testimonial-stars">
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
-                </div>
-                <div class="pm-testimonial-author">
-                  <div class="pm-testimonial-avatar" style="background: linear-gradient(135deg, #B77466, #DBCEA5);">
-                    <span>FS</span>
-                  </div>
-                  <div class="pm-testimonial-info">
-                    <strong class="pm-testimonial-name">Florencia Sánchez</strong>
-                    <span class="pm-testimonial-role">Novia 2025</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <?php endforeach; ?>
 
       </div>
 
       <!-- Indicadores -->
+      <?php if (count($pm_testimonios) > 1): ?>
       <div class="pm-testimonial-indicators">
-        <button type="button" data-bs-target="#testimoniosCarousel" data-bs-slide-to="0"
-                class="pm-testimonial-indicator active" aria-current="true" aria-label="Testimonio 1"></button>
-        <button type="button" data-bs-target="#testimoniosCarousel" data-bs-slide-to="1"
-                class="pm-testimonial-indicator" aria-label="Testimonio 2"></button>
-        <button type="button" data-bs-target="#testimoniosCarousel" data-bs-slide-to="2"
-                class="pm-testimonial-indicator" aria-label="Testimonio 3"></button>
+        <?php foreach ($pm_testimonios as $i => $testimonio): ?>
+        <button type="button" data-bs-target="#testimoniosCarousel" data-bs-slide-to="<?= $i ?>"
+                class="pm-testimonial-indicator <?= $i === 0 ? 'active' : '' ?>"
+                <?= $i === 0 ? 'aria-current="true"' : '' ?>
+                aria-label="Testimonio <?= $i + 1 ?>"></button>
+        <?php endforeach; ?>
       </div>
+      <?php endif; ?>
     </div>
 
   </div>

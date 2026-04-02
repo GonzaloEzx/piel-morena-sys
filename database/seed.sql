@@ -42,6 +42,14 @@ INSERT INTO servicios (id_categoria, nombre, descripcion, precio, duracion_minut
 (6, 'Pedicure Spa', 'Pedicure completo con tratamiento de pies y esmaltado.', 250.00, 60);
 
 -- -----------------------------------------
+-- Testimonios iniciales
+-- -----------------------------------------
+INSERT INTO testimonios (nombre, rol, texto, orden) VALUES
+('Carolina López', 'Clienta frecuente', 'Desde que empecé mis sesiones de depilación láser en Piel Morena, mi vida cambió. El trato es increíble, me siento como en casa cada vez que voy. Los resultados son visibles desde la primera sesión. ¡100% recomendado!', 1),
+('Valentina Martínez', 'Clienta de crioterapia', 'Me hice la crioterapia facial y quedé fascinada. Mi piel se ve más joven, más firme y radiante. Las chicas de Piel Morena son profesionales de verdad, te explican todo el proceso y te hacen sentir segura.', 2),
+('Florencia Sánchez', 'Novia 2025', 'El maquillaje de mi boda fue perfecto. Sofía entendió exactamente lo que quería y el resultado superó mis expectativas. Aguantó toda la fiesta sin retoques. Piel Morena es sinónimo de calidad y profesionalismo.', 3);
+
+-- -----------------------------------------
 -- Configuración inicial
 -- -----------------------------------------
 INSERT INTO configuracion (clave, valor, descripcion) VALUES

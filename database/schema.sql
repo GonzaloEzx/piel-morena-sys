@@ -216,6 +216,20 @@ CREATE TABLE promociones (
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------
+-- Tabla: testimonios
+-- -----------------------------------------
+CREATE TABLE testimonios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(120) NOT NULL,
+    rol VARCHAR(120) DEFAULT NULL,
+    texto TEXT NOT NULL,
+    orden INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_orden (orden)
+) ENGINE=InnoDB;
+
+-- -----------------------------------------
 -- Tabla: contacto_mensajes
 -- -----------------------------------------
 CREATE TABLE contacto_mensajes (

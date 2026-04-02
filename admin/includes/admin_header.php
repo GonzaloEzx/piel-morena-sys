@@ -139,6 +139,13 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
         </a>
       </li>
 
+      <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/testimonios.php" class="pm-sidebar-link <?= $vista_actual === 'testimonios' ? 'active' : '' ?>">
+          <i class="bi bi-chat-quote-fill"></i>
+          <span>Testimonios</span>
+        </a>
+      </li>
+
       <li class="pm-sidebar-divider">Finanzas</li>
 
       <li class="pm-sidebar-item">

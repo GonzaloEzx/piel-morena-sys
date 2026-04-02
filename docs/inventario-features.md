@@ -38,7 +38,7 @@ Pagina one-page con scroll suave y 10 secciones:
 | 4 | **Nuestro Equipo** | `#equipo` | Grid de 4 miembros del equipo (cards con foto placeholder, nombre, rol, link a Instagram). |
 | 5 | **Galeria** | `#galeria` | Grid masonry-style de 6 items con overlay de zoom, alturas variadas. |
 | 6 | **Promociones** | `#promos` | Carousel de 3 promociones con autoplay (6s). Cada promo: imagen, badge "OFERTA", porcentaje de descuento, descripcion, CTA. Promos: Pack Depilacion (-30%), Crioterapia Combo (-25%), Dia de Novia (-20%). |
-| 7 | **Testimonios** | `#testimonios` | Carousel de 3 testimonios con autoplay (8s). Cada uno: cita, 5 estrellas, avatar, nombre y rol del cliente. |
+| 7 | **Testimonios** | `#testimonios` | Carousel dinámico con autoplay (8s). Renderiza testimonios desde BD ordenados por `orden`. Cada slide mantiene cita, 5 estrellas, avatar por iniciales, nombre y rol. |
 | 8 | **Reserva tu Cita** (CTA) | `#reservar` | Seccion CTA con gradiente. Botones: "Reservar Ahora" (a reservar.php) y "WhatsApp". |
 | 9 | **Contacto** | `#contacto` | Formulario de contacto (nombre, email, telefono, mensaje) con envio AJAX a `api/contacto.php`. Info: direccion, telefono, email, horarios. Redes sociales (Instagram, Facebook, WhatsApp). |
 | 10 | **Footer** | footer | 4 columnas: info del negocio, enlaces rapidos, servicios, redes sociales. Copyright. |
@@ -644,7 +644,7 @@ Acceso: `admin/index.php` y `admin/views/*.php`
 - [ ] **Asignacion de horarios a empleados desde admin** (la tabla existe, falta interfaz)
 - [ ] **Asignacion de servicios a empleados desde admin** (la tabla existe, falta interfaz)
 - [ ] **Galeria dinamica** (actualmente son placeholders hardcodeados)
-- [ ] **Testimonios dinamicos** (actualmente hardcodeados en HTML)
+- [x] **Testimonios dinámicos** administrables desde panel
 - [ ] **Testing y QA formal**
 - [ ] **Facturacion/comprobantes** (fuera del alcance actual, solo control interno)
 
