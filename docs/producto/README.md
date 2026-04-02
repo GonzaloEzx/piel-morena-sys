@@ -194,10 +194,11 @@ Secciones en orden (con anclas):
 - Landing muestra imágenes reales con fallback a gradientes si el slot está vacío.
 
 #### Testimonios (Admin)
-- CRUD de testimonios: nombre, texto, rol y orden.
-- Eliminar borra definitivamente.
+- 6 slots fijos administrables desde panel.
+- Mari edita cada slot con `nombre`, `texto` y `rol`.
+- No hay creación libre ni acumulación de testimonios.
 - La landing renderiza el carrusel desde la tabla `testimonios`.
-- Lo que se muestra hoy en el sitio queda como base; se vuelve editable.
+- Cada slot reemplaza su contenido anterior, similar a la lógica operativa de Galería.
 
 #### Promociones (Admin)
 - CRUD de promos: título, descripción, descuento, fecha de vencimiento, imagen.

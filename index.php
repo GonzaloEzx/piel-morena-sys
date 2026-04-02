@@ -21,6 +21,24 @@ $pm_testimonios_fallback = [
         'texto' => 'El maquillaje de mi boda fue perfecto. Sofía entendió exactamente lo que quería y el resultado superó mis expectativas. Aguantó toda la fiesta sin retoques. Piel Morena es sinónimo de calidad y profesionalismo.',
         'orden' => 3,
     ],
+    [
+        'nombre' => 'Gonzalo',
+        'rol' => 'Cliente de depilación',
+        'texto' => 'Estoy encantado con la depilación para hombres que me hice en Piel Morena, el resultado fue excelente y el proceso fue muy cómodo. El personal fue muy amable y profesional, me hicieron sentir muy cómodo durante todo el tratamiento.',
+        'orden' => 4,
+    ],
+    [
+        'nombre' => 'Lucía Fernández',
+        'rol' => 'Clienta de lifting de pestañas',
+        'texto' => 'Me encantó cómo quedaron mis pestañas. El resultado fue natural, prolijo y duradero. La atención fue cálida desde el primer momento y me fui feliz con el servicio.',
+        'orden' => 5,
+    ],
+    [
+        'nombre' => 'María Gómez',
+        'rol' => 'Clienta de limpieza facial',
+        'texto' => 'La limpieza facial fue súper completa y delicada. Sentí la piel mucho más luminosa y fresca desde ese mismo día. Se nota el profesionalismo y el cuidado en cada detalle.',
+        'orden' => 6,
+    ],
 ];
 
 $pm_testimonial_gradients = [
@@ -36,7 +54,7 @@ try {
     $stmt = getDB()->query("SELECT id, nombre, rol, texto, orden FROM testimonios ORDER BY orden ASC, id ASC");
     $rows = $stmt->fetchAll();
 
-    if (!empty($rows)) {
+    if (count($rows) === 6) {
         $pm_testimonios = $rows;
     }
 } catch (Throwable $e) {

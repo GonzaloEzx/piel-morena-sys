@@ -4,41 +4,49 @@ Fecha: 2026-04-02
 
 ## Objetivo del documento
 
-Documentar la sección `#testimonios` del landing y su nueva autogestión desde admin para que cualquier agente o desarrollador pueda:
+Documentar la sección `#testimonios` del landing y su autogestión actual desde admin para que cualquier agente o desarrollador pueda:
 
 - entender qué busca el negocio con este bloque;
-- ubicar rápido la implementación actual;
+- ubicar rápido la implementación real;
 - identificar la fuente de verdad vigente;
-- modificarlo sin romper estilo, comportamiento ni intención comercial.
+- modificarlo sin romper estilo, comportamiento ni criterio editorial.
 
 ## Propósito de negocio
 
 La sección de testimonios existe para reforzar confianza y conversión.
 
-Su trabajo dentro de la landing es:
+Su función dentro de la landing es:
 
-- aportar prueba social real;
+- aportar prueba social;
 - bajar fricción antes de reservar;
 - transmitir calidez, profesionalismo y resultados;
-- darle a Mari una forma simple de publicar devoluciones de clientas;
-- convertir comentarios que llegan por WhatsApp, Instagram o en persona en contenido visible del sitio.
+- darle a Mari una forma simple de reciclar devoluciones reales que recibe por WhatsApp, Instagram o en persona;
+- mostrar siempre una selección curada, no un histórico infinito.
 
 ## Estado actual
 
-La sección ya no depende de contenido hardcodeado como única fuente.
+La sección ya no depende solo de contenido hardcodeado.
 
 Hoy el bloque funciona con:
 
 - persistencia en base de datos;
 - gestión desde admin;
 - render dinámico en la landing;
-- fallback seguro al contenido histórico si la tabla no existe o está vacía.
+- fallback seguro embebido en `index.php` si la tabla falla o no tiene exactamente 6 slots válidos.
 
-Eso permite:
+La decisión vigente es deliberada:
 
-- crear nuevos testimonios;
-- editar testimonios existentes para pisarlos con contenido nuevo;
-- eliminar testimonios viejos sin dejar datos innecesarios activos en la UI pública.
+- no hay acumulación libre de testimonios;
+- no hay botón de crear;
+- no hay borrado libre desde UI;
+- hay 6 slots fijos;
+- Mari reemplaza el contenido del slot existente cuando quiere publicar un testimonio nuevo.
+
+Este enfoque replica la lógica operativa de Galería:
+
+- contenido acotado;
+- reemplazo sobre una posición fija;
+- sin crecimiento innecesario de datos.
 
 ## Ubicación dentro del sitio
 
@@ -58,14 +66,15 @@ El bloque:
 
 - consulta testimonios desde tabla `testimonios`;
 - ordena por `orden ASC, id ASC`;
+- solo acepta la data de base si existen exactamente 6 registros válidos;
 - genera slides dinámicamente;
 - mantiene el carrusel Bootstrap actual;
 - conserva indicadores custom;
 - sigue mostrando una sola card protagonista por slide.
 
-Si la consulta falla o no devuelve filas:
+Si la consulta falla o no devuelve los 6 slots esperados:
 
-- cae al set histórico embebido como fallback seguro;
+- cae al set embebido como fallback seguro;
 - la sección no se rompe.
 
 ### Panel admin
@@ -74,19 +83,23 @@ La autogestión vive en [testimonios.php](C:/Users/ggest/OneDrive/Escritorio/pro
 
 Desde ahí Mari puede:
 
-- listar testimonios;
-- crear uno nuevo;
-- editar uno existente para reemplazar su contenido;
-- eliminar definitivamente un testimonio.
+- listar los 6 slots;
+- abrir el modal de edición desde el lápiz;
+- actualizar `nombre`, `rol` y `texto`;
+- reemplazar el contenido del slot sin generar filas nuevas.
+
+No puede:
+
+- crear un séptimo testimonio;
+- borrar slots desde UI;
+- desordenar la estructura fija del bloque.
 
 La API asociada es [testimonios.php API](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/api/admin/testimonios.php).
 
 Métodos implementados:
 
 - `GET`
-- `POST`
 - `PUT`
-- `DELETE`
 
 Acceso:
 
@@ -94,7 +107,7 @@ Acceso:
 
 ## Modelo de datos
 
-La tabla nueva es `testimonios`.
+La tabla es `testimonios`.
 
 Campos relevantes:
 
@@ -106,31 +119,54 @@ Campos relevantes:
 - `created_at`
 - `updated_at`
 
+Regla central del modelo:
+
+- `orden` representa el slot fijo;
+- solo existen slots `1..6`;
+- `orden` es único;
+- el sistema no debe crecer por encima de esos 6 registros.
+
 Decisión deliberada:
 
 - no hay histórico;
 - no hay soft delete;
 - no hay versionado;
-- borrar realmente elimina el testimonio;
-- editar pisa el contenido existente.
+- no hay acumulación de testimonios viejos.
 
-Esto responde a la necesidad de no ensuciar la base con testimonios viejos que ya no se quieren mostrar.
+Esto responde a la necesidad de no ensuciar la base con datos que no tienen valor operativo una vez reemplazados.
 
-## Seed inicial
+## Migraciones y seed
 
-La implementación crea el bloque dinámico con un seed inicial equivalente al contenido histórico:
+La evolución del módulo quedó así:
 
-1. Carolina López
-2. Valentina Martínez
-3. Florencia Sánchez
+- `007_create_testimonios.sql`
+  - crea la tabla base;
+  - introduce el bloque dinámico inicial.
 
-Ese seed está contemplado en:
+- `008_testimonios_slots_fijos.sql`
+  - normaliza el módulo a 6 slots fijos;
+  - reinserta 6 testimonios verificables;
+  - agrega unicidad sobre `orden`.
 
-- migración `007_create_testimonios.sql`
+También quedó alineado en:
+
 - `database/schema.sql`
 - `database/schema.hostinger.sql`
 - `database/seed.sql`
 - `database/seed.hostinger.sql`
+
+## Seed operativo actual
+
+Los 6 slots iniciales verificables son:
+
+1. Carolina López
+2. Valentina Martínez
+3. Florencia Sánchez
+4. Gonzalo
+5. Lucía Fernández
+6. María Gómez
+
+Estos datos son de arranque y están pensados para ser reemplazados por Mari desde admin cuando lleguen testimonios reales nuevos.
 
 ## Estructura técnica del markup público
 
@@ -161,7 +197,7 @@ Cada slide mantiene este patrón:
 </div>
 ```
 
-Campos de contenido administrables:
+Campos administrables:
 
 - `.pm-testimonial-text`
 - `.pm-testimonial-name`
@@ -171,7 +207,7 @@ Campos derivados automáticamente:
 
 - iniciales del avatar a partir del nombre;
 - gradiente del avatar a partir de una rotación fija en código;
-- indicadores según cantidad de testimonios cargados.
+- indicadores según cantidad de slides renderizados.
 
 ## Elementos visuales que se conservan
 
@@ -184,7 +220,7 @@ La versión administrable mantiene:
 - card única centrada;
 - indicadores inferiores del carrusel.
 
-No hay carga de foto de clienta en esta primera versión.
+No hay carga de foto real de clienta en esta versión.
 
 ## Estilos relevantes
 
@@ -230,7 +266,7 @@ Puntos relevantes:
 - el bloque debe seguir la paleta cálida del sitio;
 - la tipografía testimonial mantiene intención editorial;
 - la card debe seguir viéndose premium, aireada y cálida;
-- testimonios no debe mutar a una UI de panel o red social.
+- testimonios no debe mutar a una UI de red social ni a un listado administrativo visible para cliente.
 
 ## Comportamiento JavaScript
 
@@ -243,12 +279,12 @@ La sincronización extra de indicadores custom vive en [main.js](C:/Users/ggest/
 
 Implicancia práctica:
 
-- si cambia la cantidad de testimonios, los indicadores deben renderizarse con la misma cantidad;
+- la cantidad de indicadores depende de la cantidad de slides renderizados;
 - el JS no trae datos, solo acompaña la interacción visual.
 
 ## Fuente de verdad vigente
 
-La fuente de verdad principal del bloque ahora es la tabla `testimonios`.
+La fuente de verdad principal del bloque es la tabla `testimonios`, acotada a 6 slots fijos.
 
 La fuente operativa para negocio es:
 
@@ -284,27 +320,30 @@ Lo que se preserva visualmente:
   - rol;
 - los indicadores custom;
 - la continuidad entre `#promos`, `#testimonios` y `#reservar`;
-- el tono editorial y cálido del bloque.
+- el tono editorial y cálido del bloque;
+- la lógica de 6 slots fijos.
 
 ## Limitaciones actuales
 
 - no hay fotos reales de clientas;
 - no hay moderación ni workflow de aprobación;
 - no hay histórico de cambios;
-- no hay activo/inactivo: si no se quiere mostrar, se edita o se elimina;
+- no hay activo/inactivo;
+- no hay alta libre de testimonios;
 - el avatar sigue siendo derivado, no editable.
 
 ## Recomendaciones futuras
 
-- si algún día Mari quiere ocultar sin borrar, recién ahí agregar `activo`;
-- si quiere distinguir mejor testimonios, se podría sumar `canal_origen` o `destacado`;
-- si se agregan imágenes reales, deberían ser opcionales y no romper el diseño actual.
+- si algún día el negocio necesita más control editorial, se podría sumar `activo` por slot;
+- si se quiere distinguir origen, se podría sumar `canal_origen`;
+- si se agregan fotos reales, deberían ser opcionales y no romper el diseño actual.
 
 ## Archivos relevantes
 
 - [index.php](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/index.php)
 - [testimonios.php admin](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/admin/views/testimonios.php)
 - [testimonios.php API](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/api/admin/testimonios.php)
+- [008_testimonios_slots_fijos.sql](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/database/migrations/008_testimonios_slots_fijos.sql)
 - [main.js](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/assets/js/main.js)
 - [style.css](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/assets/css/style.css)
 - [premium-v3.css](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/assets/css/premium-v3.css)
@@ -315,9 +354,10 @@ Lo que se preserva visualmente:
 
 ## Resumen ejecutivo para agentes
 
-- `#testimonios` ya es dinámico.
+- `#testimonios` es dinámico.
 - Mari administra testimonios desde el panel.
-- Los campos mínimos gestionables son `nombre`, `rol`, `texto` y `orden`.
-- Editar sirve para pisar contenido viejo.
-- Eliminar borra definitivamente y evita basura en la base.
+- Los campos gestionables son `nombre`, `rol` y `texto`.
+- Existen 6 slots fijos.
+- Editar un slot pisa el contenido anterior.
+- No hay acumulación libre ni borrado desde UI.
 - El bloque público mantiene el mismo estilo, carrusel y jerarquía visual del sitio.

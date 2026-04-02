@@ -141,7 +141,7 @@ admin/
 - Mensajes de contacto.
 - Configuracion del negocio.
 - Galeria administrable.
-- Testimonios administrables.
+- Testimonios administrables con 6 slots fijos editables.
 - Campana de notificaciones en topbar.
 - Panel empleado con mis citas y mi horario.
 
