@@ -313,6 +313,9 @@
 .pm-section-title {
     font-size: clamp(1.875rem, 4.5vw, 2.875rem);
     letter-spacing: -0.025em;
+    line-height: 1.16;
+    padding-top: 0.12em;
+    overflow: visible;
     color: var(--pm-tierra);
     position: relative;
 }
