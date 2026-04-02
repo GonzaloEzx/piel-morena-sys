@@ -4,7 +4,7 @@
  * GET    → Listar / obtener uno (?id=X)
  * POST   → Crear
  * PUT    → Editar
- * DELETE → Soft-delete (activo=0)
+ * DELETE → Eliminar definitivamente (controlado)
  */
 
 require_once __DIR__ . '/../../includes/init.php';
@@ -104,13 +104,41 @@ if ($method === 'PUT') {
     responder_json(true);
 }
 
-// ── DELETE (soft) ──
+// ── DELETE (purge controlada) ──
 if ($method === 'DELETE') {
     $id = intval($input['id'] ?? 0);
     if (!$id) responder_json(false, null, 'ID requerido', 400);
 
-    $stmt = $db->prepare("UPDATE servicios SET activo = 0 WHERE id = ?");
+    $stmt = $db->prepare("SELECT id, nombre FROM servicios WHERE id = ? LIMIT 1");
     $stmt->execute([$id]);
+    $servicio = $stmt->fetch();
+    if (!$servicio) {
+        responder_json(false, null, 'Servicio no encontrado', 404);
+    }
+
+    // No permitir purge si el servicio ya tiene historial de citas asociado.
+    $stmt = $db->prepare("SELECT COUNT(*) FROM citas WHERE id_servicio = ?");
+    $stmt->execute([$id]);
+    $total_citas = (int) $stmt->fetchColumn();
+    if ($total_citas > 0) {
+        responder_json(false, null, 'No se puede eliminar definitivamente porque el servicio tiene citas asociadas.', 409);
+    }
+
+    try {
+        $db->beginTransaction();
+
+        $stmt = $db->prepare("DELETE FROM servicios WHERE id = ?");
+        $stmt->execute([$id]);
+
+        $db->commit();
+    } catch (Throwable $e) {
+        if ($db->inTransaction()) {
+            $db->rollBack();
+        }
+        error_log('Piel Morena Delete Servicio Error: ' . $e->getMessage());
+        responder_json(false, null, 'No se pudo eliminar el servicio', 500);
+    }
+
     responder_json(true);
 }
 

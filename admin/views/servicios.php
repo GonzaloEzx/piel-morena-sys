@@ -22,7 +22,6 @@ require_once __DIR__ . '/../includes/admin_header.php';
           <th>Categoría</th>
           <th>Precio</th>
           <th>Duración</th>
-          <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -125,10 +124,6 @@ function initTabla() {
             { data: 'categoria', defaultContent: '<span class="text-muted">—</span>' },
             { data: 'precio', render: (d) => formatPrecio(d) },
             { data: 'duracion_minutos', render: (d) => d + ' min' },
-            { data: 'activo', render: (d) => d == 1
-                ? '<span class="badge-estado badge-completada">Activo</span>'
-                : '<span class="badge-estado badge-cancelada">Inactivo</span>'
-            },
             { data: null, orderable: false, render: (d) => `
                 <button class="pm-action-btn edit" title="Editar" onclick="editarServicio(${d.id})"><i class="bi bi-pencil"></i></button>
                 <button class="pm-action-btn delete" title="Eliminar" onclick="eliminarServicio(${d.id}, '${d.nombre}')"><i class="bi bi-trash"></i></button>
