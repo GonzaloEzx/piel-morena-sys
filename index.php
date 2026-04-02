@@ -415,148 +415,128 @@
     <div class="text-center mb-5">
       <h2 class="pm-section-title pm-animate">Conocé Nuestros Tratamientos</h2>
       <div class="pm-divider"></div>
-      <p class="pm-section-subtitle pm-animate">Información detallada para que elijas el tratamiento ideal para vos</p>
+      <p class="pm-section-subtitle pm-animate">Una selección informativa de propuestas pensadas para cuidado facial, corporal y bienestar integral</p>
     </div>
 
-    <div class="row g-4">
+    <div class="row g-3 pm-tratamientos-grid">
 
-      <!-- Tratamiento 1: Limpieza Facial Profunda -->
-      <div class="col-lg-4 col-md-6 pm-animate">
+      <!-- Card 1 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
         <div class="pm-tratamiento-card">
-          <div class="pm-tratamiento-icon">
-            <i class="bi bi-droplet-half"></i>
-          </div>
-          <h4 class="pm-tratamiento-title">Limpieza Facial Profunda</h4>
+          <h4 class="pm-tratamiento-title">Limpieza Facial Inicial</h4>
           <p class="pm-tratamiento-desc">
-            Tratamiento completo que limpia en profundidad los poros, elimina impurezas y células muertas. Incluye vapor de ozono, extracción profesional y mascarilla hidratante personalizada según tu tipo de piel.
+            Propuesta pensada para renovar la piel, mejorar la sensación de limpieza y acompañar rutinas de cuidado con una base profesional.
           </p>
-          <ul class="pm-tratamiento-beneficios">
-            <li><i class="bi bi-check2-circle"></i>Piel limpia, luminosa y oxigenada</li>
-            <li><i class="bi bi-check2-circle"></i>Previene puntos negros y acné</li>
-            <li><i class="bi bi-check2-circle"></i>Mejora la absorción de productos</li>
-          </ul>
-          <div class="pm-tratamiento-meta">
-            <span><i class="bi bi-clock me-1"></i>90 min</span>
-            <span><i class="bi bi-arrow-repeat me-1"></i>Mensual</span>
-          </div>
-          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
         </div>
       </div>
 
-      <!-- Tratamiento 2: Depilación Definitiva -->
-      <div class="col-lg-4 col-md-6 pm-animate">
+      <!-- Card 2 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
         <div class="pm-tratamiento-card">
-          <div class="pm-tratamiento-icon">
-            <i class="bi bi-stars"></i>
-          </div>
-          <h4 class="pm-tratamiento-title">Depilación Definitiva | Método ADSS</h4>
+          <h4 class="pm-tratamiento-title">Glow Hidratante</h4>
           <p class="pm-tratamiento-desc">
-            La depilación definitiva con tecnología ADSS utiliza láser de diodo de alta precisión (4 longitudes) para reducir el crecimiento del vello de forma progresiva, segura y duradera.
-            Actúa directamente sobre el folículo piloso, debilitando la raíz para lograr una piel más suave y libre de vello sesión tras sesión.
-            Su sistema de enfriamiento brinda mayor confort, haciendo el tratamiento rápido, cómodo y prácticamente indoloro.
+            Alternativa enfocada en confort, luminosidad y textura uniforme para quienes buscan una piel con aspecto más fresca y descansada.
           </p>
-          <ul class="pm-tratamiento-beneficios">
-            <li><i class="bi bi-check2-circle"></i>Apta para distintos tipos de piel</li>
-            <li><i class="bi bi-check2-circle"></i>Menos irritación y foliculitis</li>
-            <li><i class="bi bi-check2-circle"></i>Elimina hasta el 90% del vello</li>
-          </ul>
-          <div class="pm-tratamiento-meta">
-            <span><i class="bi bi-clock me-1"></i>15-60 min</span>
-            <span><i class="bi bi-arrow-repeat me-1"></i>Cada 4-6 semanas</span>
-          </div>
-          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
         </div>
       </div>
 
-      <!-- Tratamiento 3: Criolipólisis -->
-      <div class="col-lg-4 col-md-6 pm-animate">
+      <!-- Card 3 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
         <div class="pm-tratamiento-card">
-          <div class="pm-tratamiento-icon">
-            <i class="bi bi-snow"></i>
-          </div>
-          <h4 class="pm-tratamiento-title">Criolipólisis en Frío</h4>
+          <h4 class="pm-tratamiento-title">Peeling Renovador</h4>
           <p class="pm-tratamiento-desc">
-            Tratamiento no invasivo que elimina grasa localizada mediante aplicación controlada de frío. Las células grasas se cristalizan y el cuerpo las elimina naturalmente. Sin cirugía, sin agujas, sin tiempo de recuperación.
+            Opción de recambio superficial orientada a mejorar textura, aspecto opaco y uniformidad, con un enfoque progresivo y controlado.
           </p>
-          <ul class="pm-tratamiento-beneficios">
-            <li><i class="bi bi-check2-circle"></i>Reduce grasa localizada sin cirugía</li>
-            <li><i class="bi bi-check2-circle"></i>Resultados visibles en 2-3 semanas</li>
-            <li><i class="bi bi-check2-circle"></i>Sin tiempo de recuperación</li>
-          </ul>
-          <div class="pm-tratamiento-meta">
-            <span><i class="bi bi-clock me-1"></i>60 min</span>
-            <span><i class="bi bi-arrow-repeat me-1"></i>1-3 sesiones</span>
-          </div>
-          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
         </div>
       </div>
 
-      <!-- Tratamiento 4: Dermapen -->
-      <div class="col-lg-4 col-md-6 pm-animate">
+      <!-- Card 4 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
         <div class="pm-tratamiento-card">
-          <div class="pm-tratamiento-icon">
-            <i class="bi bi-brush"></i>
-          </div>
-          <h4 class="pm-tratamiento-title">Dermapen</h4>
+          <h4 class="pm-tratamiento-title">Dermapen Revitalizante</h4>
           <p class="pm-tratamiento-desc">
-            Microagujas automatizadas que estimulan la regeneración natural de la piel. Activa la producción de colágeno y elastina, mejorando visiblemente cicatrices, poros dilatados, arrugas finas y manchas.
+            Técnica enfocada en estimular renovación y acompañar protocolos de mejora visible en textura, tonicidad y apariencia general.
           </p>
-          <ul class="pm-tratamiento-beneficios">
-            <li><i class="bi bi-check2-circle"></i>Rejuvenece y reafirma la piel</li>
-            <li><i class="bi bi-check2-circle"></i>Reduce cicatrices y marcas de acné</li>
-            <li><i class="bi bi-check2-circle"></i>Mejora textura y tono</li>
-          </ul>
-          <div class="pm-tratamiento-meta">
-            <span><i class="bi bi-clock me-1"></i>60 min</span>
-            <span><i class="bi bi-arrow-repeat me-1"></i>Cada 4 semanas</span>
-          </div>
-          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
         </div>
       </div>
 
-      <!-- Tratamiento 5: Radiofrecuencia Facial -->
-      <div class="col-lg-4 col-md-6 pm-animate">
+      <!-- Card 5 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
         <div class="pm-tratamiento-card">
-          <div class="pm-tratamiento-icon">
-            <i class="bi bi-lightning-charge"></i>
-          </div>
-          <h4 class="pm-tratamiento-title">Radiofrecuencia Facial</h4>
+          <h4 class="pm-tratamiento-title">Radiofrecuencia Tensora</h4>
           <p class="pm-tratamiento-desc">
-            Energía de radiofrecuencia que calienta las capas profundas de la piel estimulando la producción de colágeno. Efecto lifting inmediato, tensor y rejuvenecedor. Ideal para flacidez y líneas de expresión.
+            Propuesta orientada a una experiencia de firmeza y bienestar, pensada para acompañar objetivos de tonificación con sensación confortable.
           </p>
-          <ul class="pm-tratamiento-beneficios">
-            <li><i class="bi bi-check2-circle"></i>Efecto lifting desde la primera sesión</li>
-            <li><i class="bi bi-check2-circle"></i>Reduce arrugas y líneas finas</li>
-            <li><i class="bi bi-check2-circle"></i>Reafirma y tonifica el rostro</li>
-          </ul>
-          <div class="pm-tratamiento-meta">
-            <span><i class="bi bi-clock me-1"></i>60 min</span>
-            <span><i class="bi bi-arrow-repeat me-1"></i>Semanal (6-8 sesiones)</span>
-          </div>
-          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
         </div>
       </div>
 
-      <!-- Tratamiento 6: Masaje Descontracturante -->
-      <div class="col-lg-4 col-md-6 pm-animate">
+      <!-- Card 6 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
         <div class="pm-tratamiento-card">
-          <div class="pm-tratamiento-icon">
-            <i class="bi bi-hand-index-thumb"></i>
-          </div>
+          <h4 class="pm-tratamiento-title">Crioterapia Localizada</h4>
+          <p class="pm-tratamiento-desc">
+            Variante informativa sobre trabajo localizado con frío, indicada para quienes priorizan sensación de alivio, definición y recuperación corporal.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
+        <div class="pm-tratamiento-card">
+          <h4 class="pm-tratamiento-title">Drenaje Facial Manual</h4>
+          <p class="pm-tratamiento-desc">
+            Enfoque suave para acompañar sensación de desinflamación, descanso visual y armonía del contorno, con una experiencia serena y liviana.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
+        <div class="pm-tratamiento-card">
+          <h4 class="pm-tratamiento-title">Masaje Relajante Integral</h4>
+          <p class="pm-tratamiento-desc">
+            Alternativa enfocada en pausa, relajación y desconexión del ritmo diario, pensada para combinar bienestar corporal y descanso mental.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 9 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
+        <div class="pm-tratamiento-card">
           <h4 class="pm-tratamiento-title">Masaje Descontracturante</h4>
           <p class="pm-tratamiento-desc">
-            Masaje terapéutico profundo que libera contracturas, nudos musculares y tensión acumulada. Trabaja puntos gatillo y cadenas musculares para aliviar dolor y restaurar movilidad. Ideal para estrés y malas posturas.
+            Propuesta dirigida a zonas de tensión acumulada, útil para complementar rutinas activas o contextos de estrés físico frecuente.
           </p>
-          <ul class="pm-tratamiento-beneficios">
-            <li><i class="bi bi-check2-circle"></i>Alivia dolor muscular y tensión</li>
-            <li><i class="bi bi-check2-circle"></i>Mejora la circulación sanguínea</li>
-            <li><i class="bi bi-check2-circle"></i>Reduce el estrés y la ansiedad</li>
-          </ul>
-          <div class="pm-tratamiento-meta">
-            <span><i class="bi bi-clock me-1"></i>30-60 min</span>
-            <span><i class="bi bi-arrow-repeat me-1"></i>Semanal o quincenal</span>
-          </div>
-          <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm-outline btn-sm w-100 mt-auto">Reservar turno</a>
+        </div>
+      </div>
+
+      <!-- Card 10 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
+        <div class="pm-tratamiento-card">
+          <h4 class="pm-tratamiento-title">Perfilado de Cejas</h4>
+          <p class="pm-tratamiento-desc">
+            Servicio informativo pensado para realzar expresión y equilibrio facial mediante diseño prolijo y una terminación natural.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 11 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
+        <div class="pm-tratamiento-card">
+          <h4 class="pm-tratamiento-title">Pestañas Efecto Natural</h4>
+          <p class="pm-tratamiento-desc">
+            Opción de realce sutil para quienes prefieren una mirada definida, liviana y compatible con el uso cotidiano.
+          </p>
+        </div>
+      </div>
+
+      <!-- Card 12 -->
+      <div class="col-12 col-md-6 col-xl-3 pm-animate">
+        <div class="pm-tratamiento-card">
+          <h4 class="pm-tratamiento-title">Diagnóstico Estético Personalizado</h4>
+          <p class="pm-tratamiento-desc">
+            Espacio inicial de orientación para evaluar objetivos, prioridades y combinaciones posibles antes de avanzar con un plan real.
+          </p>
         </div>
       </div>
 
