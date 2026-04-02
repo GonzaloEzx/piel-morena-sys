@@ -288,10 +288,10 @@
             </div>
           </div>
           <div class="pm-team-info">
-            <h4 class="pm-team-name">Mariangeles Zudaire</h4>
+            <h4 class="pm-team-name">Mariangel Zudaire</h4>
             <p class="pm-team-role">Dermatocosmiatra &amp; Operadora Láser (MP 21997)</p>
             <div class="pm-team-social">
-              <a href="https://www.instagram.com/pielmorenaesteticaok" class="pm-social-icon" aria-label="Instagram de Mariangeles" target="_blank" rel="noopener">
+              <a href="https://www.instagram.com/pielmorenaesteticaok" class="pm-social-icon" aria-label="Instagram de Mariangel" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
@@ -311,7 +311,7 @@
             <h4 class="pm-team-name">Rosario Prieto</h4>
             <p class="pm-team-role">Especialista en Manicuría</p>
             <div class="pm-team-social">
-              <a href="#" class="pm-social-icon" aria-label="Instagram de Rosario" target="_blank" rel="noopener">
+              <a href="https://www.instagram.com/rosario.nailstudio" class="pm-social-icon" aria-label="Instagram de Rosario" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
@@ -331,7 +331,7 @@
             <h4 class="pm-team-name">Lucía Soto</h4>
             <p class="pm-team-role">Lashista &amp; Cosmetología</p>
             <div class="pm-team-social">
-              <a href="#" class="pm-social-icon" aria-label="Instagram de Lucía" target="_blank" rel="noopener">
+              <a href="https://www.instagram.com/p.beautyy_" class="pm-social-icon" aria-label="Instagram de Lucía" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
@@ -351,7 +351,7 @@
             <h4 class="pm-team-name">Nathalia Gómez</h4>
             <p class="pm-team-role">Peluquera</p>
             <div class="pm-team-social">
-              <a href="#" class="pm-social-icon" aria-label="Instagram de Nathalia" target="_blank" rel="noopener">
+              <a href="https://www.instagram.com/alisadosytratamientos_ng" class="pm-social-icon" aria-label="Instagram de Nathalia" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
@@ -391,7 +391,7 @@
             <h4 class="pm-team-name">Nayla Centurión</h4>
             <p class="pm-team-role">Certificada en extensiones de pestañas</p>
             <div class="pm-team-social">
-              <a href="#" class="pm-social-icon" aria-label="Instagram de Naila" target="_blank" rel="noopener">
+              <a href="https://www.instagram.com/by_nayla_lashes" class="pm-social-icon" aria-label="Instagram de Naila" target="_blank" rel="noopener">
                 <i class="bi bi-instagram"></i>
               </a>
             </div>
@@ -457,9 +457,7 @@
           </p>
           <ul class="pm-tratamiento-beneficios">
             <li><i class="bi bi-check2-circle"></i>Apta para distintos tipos de piel</li>
-            <li><i class="bi bi-check2-circle"></i>Resultados visibles desde las primeras sesiones</li>
             <li><i class="bi bi-check2-circle"></i>Menos irritación y foliculitis</li>
-            <li><i class="bi bi-check2-circle"></i>Tecnología avanzada y segura</li>
             <li><i class="bi bi-check2-circle"></i>Elimina hasta el 90% del vello</li>
           </ul>
           <div class="pm-tratamiento-meta">

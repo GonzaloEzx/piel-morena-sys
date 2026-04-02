@@ -4,52 +4,52 @@
  */
 
 // Evitar acceso directo
-if (!defined('PIEL_MORENA')) {
-    die('Acceso denegado');
+if (!defined("PIEL_MORENA")) {
+    die("Acceso denegado");
 }
 
 // --- Entorno ---
-define('ENVIRONMENT', 'production'); // 'development' | 'production'
+define("ENVIRONMENT", "production"); // 'development' | 'production'
 
 // --- URLs ---
-define('URL_BASE', 'https://skyneosec.kescom.com.ar');
-define('URL_ADMIN', URL_BASE . '/admin');
-define('URL_API', URL_BASE . '/api');
+define("URL_BASE", "https://pielmorenaestetica.com.ar");
+define("URL_ADMIN", URL_BASE . "/admin");
+define("URL_API", URL_BASE . "/api");
 
 // --- Rutas del sistema ---
-define('ROOT_PATH', dirname(__DIR__) . '/');
-define('CONFIG_PATH', ROOT_PATH . 'config/');
-define('INCLUDES_PATH', ROOT_PATH . 'includes/');
-define('ADMIN_PATH', ROOT_PATH . 'admin/');
-define('UPLOADS_PATH', ROOT_PATH . 'uploads/');
-define('ASSETS_PATH', ROOT_PATH . 'assets/');
+define("ROOT_PATH", dirname(__DIR__) . "/");
+define("CONFIG_PATH", ROOT_PATH . "config/");
+define("INCLUDES_PATH", ROOT_PATH . "includes/");
+define("ADMIN_PATH", ROOT_PATH . "admin/");
+define("UPLOADS_PATH", ROOT_PATH . "uploads/");
+define("ASSETS_PATH", ROOT_PATH . "assets/");
 
 // --- Información del negocio ---
-define('NOMBRE_NEGOCIO', 'Piel Morena');
-define('TELEFONO_NEGOCIO', '3624 254052');
-define('EMAIL_NEGOCIO', 'zudaire83@gmail.com');
-define('DIRECCION_NEGOCIO', 'Vedia 459, Resistencia, Chaco');
-define('INSTAGRAM_NEGOCIO', 'https://www.instagram.com/pielmorenaesteticaok');
+define("NOMBRE_NEGOCIO", "Piel Morena");
+define("TELEFONO_NEGOCIO", "+543624254052");
+define("EMAIL_NEGOCIO", "zudaire83@gmail.com");
+define("DIRECCION_NEGOCIO", "Vedia 459, Resistencia, Chaco");
+define("INSTAGRAM_NEGOCIO", "https://www.instagram.com/pielmorenaesteticaok");
 
 // --- Sesiones ---
-define('SESSION_LIFETIME', 3600); // 1 hora en segundos
+define("SESSION_LIFETIME", 3600); // 1 hora en segundos
 
 // --- Zona horaria ---
-date_default_timezone_set('America/Argentina/Buenos_Aires');
+date_default_timezone_set("America/Argentina/Buenos_Aires");
 
 // --- Errores según entorno ---
-if (ENVIRONMENT === 'development') {
+if (ENVIRONMENT === "development") {
     error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+    ini_set("display_errors", 1);
 } else {
     error_reporting(0);
-    ini_set('display_errors', 0);
+    ini_set("display_errors", 0);
 }
 
 // --- Google OAuth ---
-define('GOOGLE_CLIENT_ID', ''); // Configurar en Google Cloud Console
+define("GOOGLE_CLIENT_ID", ""); // Configurar en Google Cloud Console
 
 // --- Verificación de email ---
-define('CODIGO_EXPIRACION_MINUTOS', 15);
-define('CODIGO_MAX_INTENTOS', 3);
-define('CODIGO_MAX_POR_HORA', 5);
+define("CODIGO_EXPIRACION_MINUTOS", 15);
+define("CODIGO_MAX_INTENTOS", 3);
+define("CODIGO_MAX_POR_HORA", 5);
