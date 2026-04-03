@@ -48,10 +48,11 @@ piel-morena-sys/
 
 ## Documentación útil
 
+- `docs/README.md`: mapa oficial de la documentación.
 - `docs/negocio/README.md`: contexto real del negocio, operación y servicios.
 - `docs/producto/README.md`: visión del producto y decisiones generales.
 - `docs/contracts/README.md`: contratos funcionales por módulo.
-- `docs/deploy/`: guías y runbooks de despliegue.
+- `docs/operacion/deploy/`: guías y runbooks de despliegue.
 
 ## Desarrollo local
 
@@ -70,10 +71,10 @@ mysql -u <user> -p < database/seed.sql
 
 ## Deploy actual
 
-- Producción actual en `public_html/skyneosec/`
-- URL objetivo: `https://skyneosec.kescom.com.ar/`
-- Flujo vigente: subida manual por hPanel File Manager
-- Base de datos gestionada desde phpMyAdmin
+- Producción oficial en `~/domains/pielmorenaestetica.com.ar/public_html`
+- URL de producción: `https://pielmorenaestetica.com.ar/`
+- Flujo vigente: `git push origin main` + `ssh` + `git pull origin main`
+- Referencias operativas: `docs/operacion/deploy/`
 
 ## Estado del proyecto
 

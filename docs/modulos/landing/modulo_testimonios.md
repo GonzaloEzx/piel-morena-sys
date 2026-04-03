@@ -1,6 +1,10 @@
-# Bloque Testimonios
+# Modulo Testimonios
 
-Fecha: 2026-04-02
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: complementaria
+> Relacion: implementacion actual del bloque `#testimonios`
+> Ultima revision: 2026-04-03
 
 ## Objetivo del documento
 
@@ -258,7 +262,7 @@ Responsabilidad por capa:
 
 ## Relación con el design system
 
-[design-system.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/design-system.md) sigue siendo el marco visual del bloque.
+[design-system.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/diseno/design-system.md) sigue siendo el marco visual del bloque.
 
 Puntos relevantes:
 
@@ -298,7 +302,7 @@ La fuente de render público es:
 
 Captura de referencia:
 
-- [testimonios.png](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/screenshots/qa-02042026-1303/testimonios.png)
+- [testimonios.png](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/para-test/screenshots/qa-02042026-1303/testimonios.png)
 
 Lo que se preserva visualmente:
 
@@ -347,10 +351,16 @@ Lo que se preserva visualmente:
 - [main.js](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/assets/js/main.js)
 - [style.css](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/assets/css/style.css)
 - [premium-v3.css](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/assets/css/premium-v3.css)
-- [design-system.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/design-system.md)
+- [design-system.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/diseno/design-system.md)
 - [producto/README.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/producto/README.md)
 - [04-panel-administracion.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/contracts/04-panel-administracion.md)
 - [08-landing-page.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/contracts/08-landing-page.md)
+
+## Referencias cruzadas
+
+- UX del bloque: `docs/ux/landing/testimonios.md`
+- contrato funcional: `docs/contracts/08-landing-page.md`
+- marco visual: `docs/diseno/design-system.md`
 
 ## Resumen ejecutivo para agentes
 

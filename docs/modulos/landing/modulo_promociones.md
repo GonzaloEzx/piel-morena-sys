@@ -1,6 +1,10 @@
-# Bloque Promociones
+# Modulo Promociones
 
-Fecha: 2026-04-02
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: complementaria
+> Relacion: implementacion actual del bloque `#promos`
+> Ultima revision: 2026-04-03
 
 ## Objetivo del bloque
 
@@ -20,14 +24,14 @@ La sección de promociones existe para:
 - visibilizar descuentos por pack, estacionalidad o medio de pago;
 - ayudar a convertir visitas frías en consultas o turnos.
 
-Según `docs/negocio/README.md`, las promociones reales del negocio pueden incluir:
+Segun `docs/negocio/README.md`, las promociones reales del negocio pueden incluir:
 
 - descuentos por medio de pago;
 - packs de sesiones;
 - promociones estacionales;
 - ofertas con fecha de vencimiento visible.
 
-Según `docs/producto/README.md`, esta sección:
+Segun `docs/producto/README.md`, esta seccion:
 
 - sí debe mostrarse en el sitio;
 - hoy está implementada;
@@ -132,7 +136,7 @@ La sección no depende de un CSS aislado; usa estilos compuestos de:
 
 Además, hereda criterio visual y tokens base desde:
 
-- [design-system.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/design-system.md)
+- [design-system.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/diseno/design-system.md)
 
 ### Clases clave
 
@@ -169,7 +173,7 @@ Según CSS y capturas, el bloque:
 
 ## Relación con el design system
 
-`docs/design-system.md` sí interactúa con Promociones de forma indirecta pero importante. No define un bloque exclusivo de promos con contrato cerrado, pero sí establece piezas que esta sección consume:
+`docs/diseno/design-system.md` si interactua con Promociones de forma indirecta pero importante. No define un bloque exclusivo de promos con contrato cerrado, pero si establece piezas que esta seccion consume:
 
 - tokens de color cálidos usados por cards, fondos, bordes y acentos;
 - sombras de card y hover;
@@ -208,14 +212,14 @@ Si un agente modifica Promociones, debería mirar primero:
 1. `index.php`
 2. `assets/css/style.css`
 3. `assets/css/premium-v3.css`
-4. `docs/design-system.md`
+4. `docs/diseno/design-system.md`
 
 ## Referencias visuales QA
 
 Capturas revisadas:
 
-- [promo_desk.png](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/screenshots/qa-02042026-1303/promo_desk.png)
-- [promo_mob.png](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/screenshots/qa-02042026-1303/promo_mob.png)
+- [promo_desk.png](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/para-test/screenshots/qa-02042026-1303/promo_desk.png)
+- [promo_mob.png](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/para-test/screenshots/qa-02042026-1303/promo_mob.png)
 
 ### Lectura de las capturas
 
@@ -283,9 +287,15 @@ La capa de producto define que este bloque debería evolucionar a:
 - [index.php](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/index.php)
 - [style.css](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/assets/css/style.css)
 - [premium-v3.css](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/assets/css/premium-v3.css)
-- [design-system.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/design-system.md)
+- [design-system.md](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/diseno/design-system.md)
 - [README.md negocio](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/negocio/README.md)
 - [README.md producto](C:/Users/ggest/OneDrive/Escritorio/proyectos/piel-morena-sys/docs/producto/README.md)
+
+## Referencias cruzadas
+
+- UX del bloque: `docs/ux/landing/promociones.md`
+- contrato funcional: `docs/contracts/08-landing-page.md`
+- marco visual: `docs/diseno/design-system.md`
 
 ## Resumen ejecutivo para agentes
 

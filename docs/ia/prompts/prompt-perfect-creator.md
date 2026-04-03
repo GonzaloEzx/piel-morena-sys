@@ -147,7 +147,7 @@ Un prompt refinado esta bien hecho si:
 ### Pedido en bruto
 
 ```txt
-el fondo de "Conocé nuestros tratamientos" se muestra disparejo con referencia a toda la landing se debe acomodar o realizar alguna accion mas estetica, tengo la captura del issue en docs/screenshots/qa-28032026-1822/fondo-seccion-disparejo.png
+el fondo de "Conocé nuestros tratamientos" se muestra disparejo con referencia a toda la landing se debe acomodar o realizar alguna accion mas estetica, tengo la captura del issue en docs/para-test/screenshots/qa-28032026-1822/fondo-seccion-disparejo.png
 ```
 
 ### Tipo de tarea detectado
@@ -162,7 +162,7 @@ Necesito revisar y corregir un problema visual en la landing publica.
 Contexto:
 - Seccion afectada: "Conoce nuestros tratamientos"
 - Problema observado: el fondo de la seccion se percibe disparejo respecto del resto de la landing y rompe la continuidad visual general
-- Evidencia visual: docs/screenshots/qa-28032026-1822/fondo-seccion-disparejo.png
+- Evidencia visual: docs/para-test/screenshots/qa-28032026-1822/fondo-seccion-disparejo.png
 - Restriccion: respetar el design system actual y mantener coherencia con la estetica general del sitio
 
 Quiero que:

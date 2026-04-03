@@ -1,7 +1,7 @@
 # Producto — Piel Morena Estética
 > Documento vivo de referencia del producto digital.  
 > Audiencia: agentes de IA, desarrolladores, colaboradores.  
-> Última actualización: Marzo 2026 — **Inauguración: 6 de abril de 2026**
+> Última actualización: 3 de abril de 2026 — **Inauguración: 6 de abril de 2026**
 
 ---
 
@@ -20,7 +20,10 @@ El sistema debe ser fácil de operar por personal no técnico (Mari y su equipo)
 - `docs/negocio/README.md` pasa a ser la entrada de contexto del negocio real.
 - `docs/producto/README.md` pasa a ser la entrada de contexto del producto digital.
 - `docs/contracts/` sigue siendo la fuente de verdad funcional por modulo dentro de la capa de producto.
-- La aprobacion de consolidar el panel admin ya se materializa en esta capa: `docs/contracts/04-panel-administracion.md` es la fuente funcional vigente del modulo y `docs/bloque_admin_panel.md` queda solo como redireccion temporal.
+- `docs/modulos/` pasa a concentrar implementacion y dependencias reales por modulo.
+- `docs/ux/` pasa a concentrar recorridos visibles y criterios de experiencia.
+- `docs/diseno/` pasa a concentrar la capa visual compartida.
+- La aprobacion de consolidar el panel admin ya se materializa en esta capa: `docs/contracts/04-panel-administracion.md` es la fuente funcional vigente del modulo y `docs/temp/bloque_admin_panel.md` queda solo como legado local.
 - La documentacion operativa del producto debe alinearse con los contratos y evitar duplicaciones innecesarias.
 
 ---
@@ -35,9 +38,9 @@ El sistema debe ser fácil de operar por personal no técnico (Mari y su equipo)
 | Admin UI | DataTables + Chart.js |
 | CSS Premium | Capas `premium-v3.css` / `premium-auth.css` / `premium-admin.css` |
 | Hosting | Hostinger shared hosting (cuenta del primo) |
-| Deploy | SSH + Git pull desde PowerShell (ver `docs/deploy-ssh-git-setup.md`) |
+| Deploy | SSH + Git pull desde PowerShell (ver `docs/operacion/deploy/deploy-ssh-git-setup.md`) |
 | Repo | GitHub — `GonzaloEzx/piel-morena-sys` |
-| Design System | `docs/design-system.md` — fuente de verdad visual |
+| Design System | `docs/diseno/design-system.md` — fuente de verdad visual |
 
 ---
 
@@ -61,9 +64,13 @@ piel-morena-sys/
 ├── assets/                    # css, js, img
 └── docs/
     ├── negocio/              # contexto del negocio real
-    ├── producto/             # vision y estrategia documental de producto
+    ├── producto/             # vision y estrategia documental
     ├── contracts/            # contratos funcionales por modulo
-    └── ...                   # design system, runbooks y documentos operativos
+    ├── modulos/             # implementacion y dependencias por modulo
+    ├── ux/                  # recorridos visibles y experiencia
+    ├── diseno/              # design system y capa visual
+    ├── operacion/           # deploy y manuales
+    └── analisis/            # inventarios y diagnosticos
 ```
 
 ---
@@ -224,7 +231,7 @@ Secciones en orden (con anclas):
 - Roles: `admin`, `empleado`, `cliente`.
 - Sesiones PHP con regeneración de ID en login.
 - Rutas protegidas con `requerir_auth()` / `requerir_rol()`.
-- Ver detalle completo: `docs/bloque_auth_login.md`.
+- Ver detalle completo: `docs/modulos/auth/implementacion.md`.
 
 ---
 
@@ -301,11 +308,15 @@ deploy:   ajustes específicos de producción
 
 | Documento | Contenido |
 |---|---|
+| `docs/README.md` | Mapa oficial de la documentacion |
 | `docs/negocio/README.md` | Contexto del negocio real (este repo) |
-| `docs/design-system.md` | Sistema visual completo |
-| `docs/bloque_auth_login.md` | Flujo de autenticación |
-| `docs/bloque_reservas.md` | Lógica de reservas y disponibilidad |
+| `docs/diseno/design-system.md` | Sistema visual completo |
+| `docs/modulos/auth/implementacion.md` | Implementacion tecnica del modulo auth |
+| `docs/ux/auth/flujo-login-registro.md` | Recorrido visible de login y registro |
+| `docs/modulos/reservas/reservas-publicas.md` | Implementacion publica de reservas |
+| `docs/modulos/reservas/citas-internas.md` | Operacion interna del modulo de citas |
+| `docs/modulos/reservas/disponibilidad-y-reglas.md` | Reglas transversales de reservas |
+| `docs/ux/reservas/flujo-reserva-publica.md` | Pasos del usuario para reservar una cita |
 | `docs/contracts/04-panel-administracion.md` | Contrato funcional del panel admin |
-| `docs/bloque_citas.md` | Contexto y decisiones del módulo de citas |
-| `docs/deploy-ssh-git-setup.md` | Setup SSH + Git deploy |
-| `docs/deploy_runbook_hostinger.md` | Runbook de deploy en Hostinger |
+| `docs/operacion/deploy/deploy-ssh-git-setup.md` | Setup SSH + Git deploy |
+| `docs/operacion/deploy/deploy_runbook_hostinger.md` | Runbook de deploy en Hostinger |

@@ -1,7 +1,7 @@
 # Negocio — Piel Morena Estética
 > Documento vivo de referencia sobre el negocio real.  
 > Audiencia: agentes de IA, desarrolladores, colaboradores, onboarding de cliente.  
-> Última actualización: Marzo 2026
+> Última actualización: 3 de abril de 2026
 
 ---
 
@@ -36,7 +36,7 @@ El negocio opera actualmente gestionando turnos por WhatsApp e Instagram y lleva
 | Elemento | Detalle |
 |---|---|
 | **Logo** | `assets/img/piel-morena-instagram-logo.jpg` *(JPG actual, pendiente versión PNG/SVG con fondo transparente)* |
-| **Design System** | `docs/design-system.md` — documento de referencia completo |
+| **Design System** | `docs/diseno/design-system.md` — documento de referencia completo |
 | **Paleta principal** | "Oliva & Arcilla": Bronce `#8A7650`, Tierra `#7A654F`, Arena `#DBCEA5`, Crema `#ECE7D1`, Marfil `#F8F4E8` |
 | **Tipografía web** | Playfair Display (headings) + Lato (cuerpo) — Google Fonts |
 | **Referencia visual** | Sin referencias externas; el design-system es la fuente de verdad |

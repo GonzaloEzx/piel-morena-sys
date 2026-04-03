@@ -38,7 +38,7 @@ No incluye como fuente funcional principal:
 
 - el panel ya no debe pensarse como "solo admin": comparte shell y navegacion para `admin` y `empleado`;
 - las vistas y APIs de analytics se consumen desde el panel, pero su contrato funcional especifico sigue siendo `07-analytics-reportes.md`;
-- `docs/bloque_admin_panel.md` queda deprecado y redirige a este contrato.
+- `docs/temp/bloque_admin_panel.md` queda como material legado local y no debe tomarse como fuente oficial.
 
 ## Roles y proteccion
 

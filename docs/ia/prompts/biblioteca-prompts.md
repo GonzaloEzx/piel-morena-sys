@@ -289,7 +289,7 @@ Genera un plan de correccion mobile y luego ejecutalo.
 
 Contexto:
 - Las fallas se ven en dispositivos moviles reales.
-- Hay capturas de QA en `docs/screenshots/`.
+- Hay capturas de QA en `docs/para-test/screenshots/`.
 - Debes respetar el design system y validar con `playwright-cli`.
 
 Revisa, como minimo:
@@ -549,7 +549,7 @@ Devuelvelo con esta estructura:
 
 ### Referencia
 
-- `docs/prompts/prompt-perfect-creator.md`
+- `docs/ia/prompts/prompt-perfect-creator.md`
 
 ---
 

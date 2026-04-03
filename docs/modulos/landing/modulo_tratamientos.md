@@ -1,14 +1,18 @@
-# Bloque Tratamiento
+# Modulo Tratamientos
 
-Fecha: 2026-04-02
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: complementaria
+> Relacion: implementacion actual del bloque `#tratamientos`
+> Ultima revision: 2026-04-03
 
 ## Objetivo
 
-Actualizar la sección `#tratamientos` del landing para que las tarjetas y el modal de `Ver más` reflejen la lista real provista en `docs/tratamientos.txt`, manteniendo intactos los estilos y el comportamiento visual existentes.
+Actualizar la seccion `#tratamientos` del landing para que las tarjetas y el modal de `Ver mas` reflejen la lista real provista en `docs/temp/tratamientos.txt`, manteniendo intactos los estilos y el comportamiento visual existentes.
 
 ## Fuente de verdad usada
 
-- `docs/tratamientos.txt`
+- `docs/temp/tratamientos.txt`
 - `docs/negocio/README.md`
 - `docs/producto/README.md`
 - `database/migrations/004_servicios_reales.sql` para apoyar duraciones y denominaciones ya presentes en el sistema
@@ -49,10 +53,16 @@ Para no introducir estilos nuevos, las nuevas categorías funcionales se mapearo
 
 - `index.php`
 - `assets/js/main.js`
-- `docs/bloque_tratamiento.md`
+- `docs/modulos/landing/modulo_tratamientos.md`
 
 ## Validación esperada
 
 - La sección `#tratamientos` muestra 12 tarjetas.
 - Cada tarjeta abre un modal coherente con el tratamiento seleccionado.
 - El CTA de WhatsApp del modal mantiene el flujo actual de consulta.
+
+## Referencias cruzadas
+
+- UX del bloque: `docs/ux/landing/tratamientos.md`
+- contrato funcional: `docs/contracts/08-landing-page.md`
+- marco visual: `docs/diseno/design-system.md`
