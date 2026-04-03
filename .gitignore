@@ -33,8 +33,10 @@ node_modules/
 package.json
 package-lock.json
 
-# --- Documentación dev (no va a prod) ---
-docs/
+# --- Documentación auxiliar no versionada ---
+docs/para-test/
+docs/temp/
+docs/txt/
 docu/
 
 # --- Proyectos de referencia ---
