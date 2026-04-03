@@ -77,7 +77,7 @@ ssh -p 65002 u347774250@147.79.89.169 "cd ~/domains/pielmorenaestetica.com.ar/pu
 - [ ] `php -l` sobre todos los PHP modificados
 - [ ] revisar que no haya errores JS obvios en landing, auth o panel
 - [ ] verificar login / logout
-- [ ] verificar reservas si el cambio toca servicios, agenda o auth
+- [ ] verificar reservas/citas si el cambio toca servicios, disponibilidad, auth o panel de citas
 - [ ] verificar panel admin si el cambio toca CRUD, caja o reportes
 - [ ] revisar links absolutos o URLs hardcodeadas si el cambio toca assets o contenido
 

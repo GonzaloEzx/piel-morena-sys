@@ -3,12 +3,13 @@
  * Piel Morena - Página de Reservas Online
  * Flujo: Servicio → Fecha → Hora → Datos → Confirmar
  */
-$titulo_pagina = 'Reservar Cita — Piel Morena Estética';
-$meta_descripcion = 'Reserva tu cita online en Piel Morena Estética. Elige servicio, fecha y horario.';
-$pagina_actual = 'reservar';
-require_once 'includes/header.php';
+$titulo_pagina = "Reservar Cita — Piel Morena Estética";
+$meta_descripcion =
+    "Reserva tu cita online en Piel Morena Estética. Elige servicio, fecha y horario.";
+$pagina_actual = "reservar";
+require_once "includes/header.php";
 
-$servicio_preseleccionado = intval($_GET['servicio'] ?? 0);
+$servicio_preseleccionado = intval($_GET["servicio"] ?? 0);
 $logueado = esta_autenticado();
 ?>
 
@@ -40,11 +41,15 @@ $logueado = esta_autenticado();
         <li><i class="bi bi-check-circle-fill"></i>Reservá de forma rápida y sencilla</li>
       </ul>
       <div class="pm-auth-required-actions">
-        <a href="<?= URL_BASE ?>/registro.php?redirect=<?= urlencode('/reservar.php') ?>" class="btn btn-pm w-100">
+        <a href="<?= URL_BASE ?>/registro.php?redirect=<?= urlencode(
+    "/reservar.php",
+) ?>" class="btn btn-pm w-100">
           <i class="bi bi-person-plus me-2"></i>Crear cuenta
         </a>
         <div class="pm-auth-required-divider"><span>o</span></div>
-        <a href="<?= URL_BASE ?>/login.php?redirect=<?= urlencode('/reservar.php') ?>" class="btn btn-pm-outline w-100">
+        <a href="<?= URL_BASE ?>/login.php?redirect=<?= urlencode(
+    "/reservar.php",
+) ?>" class="btn btn-pm-outline w-100">
           <i class="bi bi-box-arrow-in-right me-2"></i>Ya tengo cuenta
         </a>
       </div>
@@ -84,8 +89,11 @@ $logueado = esta_autenticado();
       <p id="step2Servicio" style="color: var(--pm-text-muted);"></p>
       <div class="mt-3">
         <input type="date" id="fechaCita" class="input-pm w-100"
-               min="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d', strtotime('+60 days')) ?>"
-               value="<?= date('Y-m-d', strtotime('+1 day')) ?>">
+               min="<?= date("Y-m-d") ?>" max="<?= date(
+    "Y-m-d",
+    strtotime("+60 days"),
+) ?>"
+               value="<?= date("Y-m-d", strtotime("+1 day")) ?>">
       </div>
       <div class="d-flex gap-2 mt-4">
         <button class="btn btn-pm-outline flex-fill" onclick="Wizard.goTo(1)">
@@ -154,7 +162,9 @@ $logueado = esta_autenticado();
       </div>
     </div>
 
-    <?php endif; /* fin del check $logueado */ ?>
+    <?php endif;
+/* fin del check $logueado */
+?>
 
   </div>
 </section>
@@ -186,7 +196,7 @@ function formatearFechaAR(fechaISO, opciones = {}) {
 
 const Wizard = {
   state: { servicio: null, fecha: '', hora: '', turnoFin: '', precio: '', servicioNombre: '' },
-  logueado: <?= $logueado ? 'true' : 'false' ?>,
+  logueado: <?= $logueado ? "true" : "false" ?>,
   preseleccionado: <?= $servicio_preseleccionado ?>,
 
   async init() {
@@ -212,7 +222,7 @@ const Wizard = {
       // Agrupar servicios por categoría
       const categorias = {};
       data.data.forEach(s => {
-        const cat = s.categoria || 'Otros';
+        const cat = s.categoria || 'Packs';
         if (!categorias[cat]) {
           categorias[cat] = { icono: s.categoria_icono || 'bi-stars', servicios: [] };
         }
@@ -386,4 +396,4 @@ document.addEventListener('DOMContentLoaded', () => Wizard.init());
 </script>
 <?php endif; ?>
 
-<?php require_once 'includes/footer.php'; ?>
+<?php require_once "includes/footer.php"; ?>

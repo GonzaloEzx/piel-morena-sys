@@ -4,61 +4,69 @@ require_once "includes/init.php";
 
 $pm_testimonios_fallback = [
     [
-        'nombre' => 'Carolina López',
-        'rol' => 'Clienta frecuente',
-        'texto' => 'Desde que empecé mis sesiones de depilación láser en Piel Morena, mi vida cambió. El trato es increíble, me siento como en casa cada vez que voy. Los resultados son visibles desde la primera sesión. ¡100% recomendado!',
-        'orden' => 1,
+        "nombre" => "Carolina López",
+        "rol" => "Clienta frecuente",
+        "texto" =>
+            "Desde que empecé mis sesiones de depilación láser en Piel Morena, mi vida cambió. El trato es increíble, me siento como en casa cada vez que voy. Los resultados son visibles desde la primera sesión. ¡100% recomendado!",
+        "orden" => 1,
     ],
     [
-        'nombre' => 'Valentina Martínez',
-        'rol' => 'Clienta de crioterapia',
-        'texto' => 'Me hice la crioterapia facial y quedé fascinada. Mi piel se ve más joven, más firme y radiante. Las chicas de Piel Morena son profesionales de verdad, te explican todo el proceso y te hacen sentir segura.',
-        'orden' => 2,
+        "nombre" => "Valentina Martínez",
+        "rol" => "Clienta de crioterapia",
+        "texto" =>
+            "Me hice la crioterapia facial y quedé fascinada. Mi piel se ve más joven, más firme y radiante. Las chicas de Piel Morena son profesionales de verdad, te explican todo el proceso y te hacen sentir segura.",
+        "orden" => 2,
     ],
     [
-        'nombre' => 'Florencia Sánchez',
-        'rol' => 'Novia 2025',
-        'texto' => 'El maquillaje de mi boda fue perfecto. Sofía entendió exactamente lo que quería y el resultado superó mis expectativas. Aguantó toda la fiesta sin retoques. Piel Morena es sinónimo de calidad y profesionalismo.',
-        'orden' => 3,
+        "nombre" => "Florencia Sánchez",
+        "rol" => "Novia 2025",
+        "texto" =>
+            "El maquillaje de mi boda fue perfecto. Sofía entendió exactamente lo que quería y el resultado superó mis expectativas. Aguantó toda la fiesta sin retoques. Piel Morena es sinónimo de calidad y profesionalismo.",
+        "orden" => 3,
     ],
     [
-        'nombre' => 'Gonzalo',
-        'rol' => 'Cliente de depilación',
-        'texto' => 'Estoy encantado con la depilación para hombres que me hice en Piel Morena, el resultado fue excelente y el proceso fue muy cómodo. El personal fue muy amable y profesional, me hicieron sentir muy cómodo durante todo el tratamiento.',
-        'orden' => 4,
+        "nombre" => "Gonzalo",
+        "rol" => "Cliente de depilación",
+        "texto" =>
+            "Estoy encantado con la depilación para hombres que me hice en Piel Morena, el resultado fue excelente y el proceso fue muy cómodo. El personal fue muy amable y profesional, me hicieron sentir muy cómodo durante todo el tratamiento.",
+        "orden" => 4,
     ],
     [
-        'nombre' => 'Lucía Fernández',
-        'rol' => 'Clienta de lifting de pestañas',
-        'texto' => 'Me encantó cómo quedaron mis pestañas. El resultado fue natural, prolijo y duradero. La atención fue cálida desde el primer momento y me fui feliz con el servicio.',
-        'orden' => 5,
+        "nombre" => "Lucía Fernández",
+        "rol" => "Clienta de lifting de pestañas",
+        "texto" =>
+            "Me encantó cómo quedaron mis pestañas. El resultado fue natural, prolijo y duradero. La atención fue cálida desde el primer momento y me fui feliz con el servicio.",
+        "orden" => 5,
     ],
     [
-        'nombre' => 'María Gómez',
-        'rol' => 'Clienta de limpieza facial',
-        'texto' => 'La limpieza facial fue súper completa y delicada. Sentí la piel mucho más luminosa y fresca desde ese mismo día. Se nota el profesionalismo y el cuidado en cada detalle.',
-        'orden' => 6,
+        "nombre" => "María Gómez",
+        "rol" => "Clienta de limpieza facial",
+        "texto" =>
+            "La limpieza facial fue súper completa y delicada. Sentí la piel mucho más luminosa y fresca desde ese mismo día. Se nota el profesionalismo y el cuidado en cada detalle.",
+        "orden" => 6,
     ],
 ];
 
 $pm_testimonial_gradients = [
-    'linear-gradient(135deg, #DBCEA5, #8A7650)',
-    'linear-gradient(135deg, #FFE1AF, #957C62)',
-    'linear-gradient(135deg, #B77466, #DBCEA5)',
-    'linear-gradient(135deg, #8E977D, #957C62)',
+    "linear-gradient(135deg, #DBCEA5, #8A7650)",
+    "linear-gradient(135deg, #FFE1AF, #957C62)",
+    "linear-gradient(135deg, #B77466, #DBCEA5)",
+    "linear-gradient(135deg, #8E977D, #957C62)",
 ];
 
 $pm_testimonios = $pm_testimonios_fallback;
 
 try {
-    $stmt = getDB()->query("SELECT id, nombre, rol, texto, orden FROM testimonios ORDER BY orden ASC, id ASC");
+    $stmt = getDB()->query(
+        "SELECT id, nombre, rol, texto, orden FROM testimonios ORDER BY orden ASC, id ASC",
+    );
     $rows = $stmt->fetchAll();
 
     if (count($rows) === 6) {
         $pm_testimonios = $rows;
     }
 } catch (Throwable $e) {
-    error_log('Piel Morena Testimonios Error: ' . $e->getMessage());
+    error_log("Piel Morena Testimonios Error: " . $e->getMessage());
 }
 
 require_once "includes/header.php";
@@ -475,168 +483,235 @@ $tratamientos_catalogo = [
         "categoria" => "Facial",
         "icono" => "bi-droplet-half",
         "titulo" => "Limpieza Facial Profunda",
-        "microbeneficio" => "Elimina impurezas, puntos negros y células muertas para una piel más limpia, fresca y luminosa.",
+        "microbeneficio" =>
+            "Elimina impurezas, puntos negros y células muertas para una piel más limpia, fresca y luminosa.",
         "meta" => ["90 min", "Limpieza profunda", "Luminosidad"],
-        "descripcion" => "Tratamiento personalizado orientado a limpiar en profundidad, retirar impurezas visibles y renovar la superficie de la piel con un acabado fresco.",
-        "ideal_para" => "Pieles con puntos negros, impurezas acumuladas o falta de luminosidad que necesitan una limpieza completa.",
-        "beneficio_principal" => "Purifica la piel y mejora su aspecto general desde la primera sesión.",
-        "sensacion" => "La piel se siente fresca, liviana y visiblemente más limpia.",
+        "descripcion" =>
+            "Tratamiento personalizado orientado a limpiar en profundidad, retirar impurezas visibles y renovar la superficie de la piel con un acabado fresco.",
+        "ideal_para" =>
+            "Pieles con puntos negros, impurezas acumuladas o falta de luminosidad que necesitan una limpieza completa.",
+        "beneficio_principal" =>
+            "Purifica la piel y mejora su aspecto general desde la primera sesión.",
+        "sensacion" =>
+            "La piel se siente fresca, liviana y visiblemente más limpia.",
         "duracion" => "90 minutos aproximados.",
-        "recomendacion" => "Ideal como punto de partida para ordenar el cuidado facial o como mantenimiento periódico.",
+        "recomendacion" =>
+            "Ideal como punto de partida para ordenar el cuidado facial o como mantenimiento periódico.",
     ],
     [
         "slug" => "microneedling",
         "categoria" => "Facial",
         "icono" => "bi-magic",
         "titulo" => "Microneedling",
-        "microbeneficio" => "Estimula colágeno, mejora textura y acompaña el tratamiento de cicatrices, arrugas y marcas.",
+        "microbeneficio" =>
+            "Estimula colágeno, mejora textura y acompaña el tratamiento de cicatrices, arrugas y marcas.",
         "meta" => ["60 min", "Colágeno", "Textura"],
-        "descripcion" => "Aplicación de microagujas que promueve la regeneración natural de la piel y acompaña objetivos de renovación, firmeza y mejor textura.",
-        "ideal_para" => "Pieles con cicatrices, líneas finas, textura irregular o marcas que buscan una renovación más activa.",
-        "beneficio_principal" => "Estimula la producción de colágeno y mejora progresivamente el aspecto de la piel.",
-        "sensacion" => "Se percibe como un tratamiento intensivo enfocado en renovación y calidad de la piel.",
+        "descripcion" =>
+            "Aplicación de microagujas que promueve la regeneración natural de la piel y acompaña objetivos de renovación, firmeza y mejor textura.",
+        "ideal_para" =>
+            "Pieles con cicatrices, líneas finas, textura irregular o marcas que buscan una renovación más activa.",
+        "beneficio_principal" =>
+            "Estimula la producción de colágeno y mejora progresivamente el aspecto de la piel.",
+        "sensacion" =>
+            "Se percibe como un tratamiento intensivo enfocado en renovación y calidad de la piel.",
         "duracion" => "60 minutos aproximados.",
-        "recomendacion" => "Conviene realizar una evaluación previa para definir frecuencia y cuidados posteriores.",
+        "recomendacion" =>
+            "Conviene realizar una evaluación previa para definir frecuencia y cuidados posteriores.",
     ],
     [
         "slug" => "peeling-quimico",
         "categoria" => "Facial",
         "icono" => "bi-brightness-high",
         "titulo" => "Peeling Químico",
-        "microbeneficio" => "Ayuda a reducir manchas, acné, poros dilatados y líneas finas, renovando la piel en profundidad.",
+        "microbeneficio" =>
+            "Ayuda a reducir manchas, acné, poros dilatados y líneas finas, renovando la piel en profundidad.",
         "meta" => ["60 min", "Renovación", "Manchas"],
-        "descripcion" => "Aplicación de ácidos seleccionados de acuerdo con la piel para favorecer el recambio celular y mejorar visiblemente la textura del rostro.",
-        "ideal_para" => "Pieles con manchas, poros dilatados, acné o líneas finas que buscan una renovación profunda.",
-        "beneficio_principal" => "Renueva la piel y acompaña el tratamiento de imperfecciones visibles.",
-        "sensacion" => "La piel atraviesa un proceso de renovación progresiva con un aspecto más uniforme.",
+        "descripcion" =>
+            "Aplicación de ácidos seleccionados de acuerdo con la piel para favorecer el recambio celular y mejorar visiblemente la textura del rostro.",
+        "ideal_para" =>
+            "Pieles con manchas, poros dilatados, acné o líneas finas que buscan una renovación profunda.",
+        "beneficio_principal" =>
+            "Renueva la piel y acompaña el tratamiento de imperfecciones visibles.",
+        "sensacion" =>
+            "La piel atraviesa un proceso de renovación progresiva con un aspecto más uniforme.",
         "duracion" => "60 minutos aproximados.",
-        "recomendacion" => "Se personaliza según el tipo de piel y requiere cuidados posteriores indicados por la profesional.",
+        "recomendacion" =>
+            "Se personaliza según el tipo de piel y requiere cuidados posteriores indicados por la profesional.",
     ],
     [
         "slug" => "peeling-enzimatico",
         "categoria" => "Facial",
         "icono" => "bi-stars",
         "titulo" => "Peeling Enzimático",
-        "microbeneficio" => "Exfolia de forma suave, aporta luminosidad y mejora la textura sin irritar la piel.",
+        "microbeneficio" =>
+            "Exfolia de forma suave, aporta luminosidad y mejora la textura sin irritar la piel.",
         "meta" => ["60 min", "Suave", "Luminosidad"],
-        "descripcion" => "Exfoliación enzimática pensada para renovar la superficie de la piel de manera delicada, respetando su equilibrio natural.",
-        "ideal_para" => "Todo tipo de piel, especialmente pieles sensibles o que buscan una renovación suave sin agresión.",
-        "beneficio_principal" => "Mejora la textura y aporta luminosidad sin irritar.",
+        "descripcion" =>
+            "Exfoliación enzimática pensada para renovar la superficie de la piel de manera delicada, respetando su equilibrio natural.",
+        "ideal_para" =>
+            "Todo tipo de piel, especialmente pieles sensibles o que buscan una renovación suave sin agresión.",
+        "beneficio_principal" =>
+            "Mejora la textura y aporta luminosidad sin irritar.",
         "sensacion" => "La piel se percibe más suave, fresca y uniforme.",
         "duracion" => "60 minutos aproximados.",
-        "recomendacion" => "Muy buena opción cuando se busca una renovación amable o complementar otros cuidados faciales.",
+        "recomendacion" =>
+            "Muy buena opción cuando se busca una renovación amable o complementar otros cuidados faciales.",
     ],
     [
         "slug" => "tratamiento-anti-edad",
         "categoria" => "Facial",
         "icono" => "bi-heart-pulse",
         "titulo" => "Tratamiento Anti Edad",
-        "microbeneficio" => "Mejora firmeza, hidratación y elasticidad, atenuando líneas de expresión y arrugas.",
+        "microbeneficio" =>
+            "Mejora firmeza, hidratación y elasticidad, atenuando líneas de expresión y arrugas.",
         "meta" => ["90 min", "Firmeza", "Elasticidad"],
-        "descripcion" => "Protocolo facial enfocado en acompañar los signos de envejecimiento con activos y maniobras pensadas para devolver confort y tonicidad.",
-        "ideal_para" => "Pieles que buscan trabajar líneas de expresión, arrugas, hidratación y pérdida de firmeza.",
-        "beneficio_principal" => "Mejora la elasticidad de la piel y suaviza la apariencia de los signos de la edad.",
-        "sensacion" => "El rostro se siente más hidratado, firme y revitalizado.",
+        "descripcion" =>
+            "Protocolo facial enfocado en acompañar los signos de envejecimiento con activos y maniobras pensadas para devolver confort y tonicidad.",
+        "ideal_para" =>
+            "Pieles que buscan trabajar líneas de expresión, arrugas, hidratación y pérdida de firmeza.",
+        "beneficio_principal" =>
+            "Mejora la elasticidad de la piel y suaviza la apariencia de los signos de la edad.",
+        "sensacion" =>
+            "El rostro se siente más hidratado, firme y revitalizado.",
         "duracion" => "90 minutos aproximados.",
-        "recomendacion" => "Se adapta según el estado de la piel y puede integrarse en un plan antiage sostenido.",
+        "recomendacion" =>
+            "Se adapta según el estado de la piel y puede integrarse en un plan antiage sostenido.",
     ],
     [
         "slug" => "tratamiento-acne",
         "categoria" => "Facial",
         "icono" => "bi-shield-check",
         "titulo" => "Tratamiento Acné",
-        "microbeneficio" => "Ayuda a controlar brotes, disminuir inflamación y mejorar las marcas causadas por el acné.",
+        "microbeneficio" =>
+            "Ayuda a controlar brotes, disminuir inflamación y mejorar las marcas causadas por el acné.",
         "meta" => ["90 min", "Control acné", "Calmante"],
-        "descripcion" => "Tratamiento facial pensado para pieles con tendencia acneica, enfocado en limpiar, desinflamar y acompañar la recuperación de la piel.",
-        "ideal_para" => "Pieles con brotes activos, inflamación, exceso de sebo o marcas post acné.",
-        "beneficio_principal" => "Colabora en el control de brotes y en la mejora gradual del aspecto de la piel.",
-        "sensacion" => "La piel se percibe más equilibrada, calmada y ordenada.",
+        "descripcion" =>
+            "Tratamiento facial pensado para pieles con tendencia acneica, enfocado en limpiar, desinflamar y acompañar la recuperación de la piel.",
+        "ideal_para" =>
+            "Pieles con brotes activos, inflamación, exceso de sebo o marcas post acné.",
+        "beneficio_principal" =>
+            "Colabora en el control de brotes y en la mejora gradual del aspecto de la piel.",
+        "sensacion" =>
+            "La piel se percibe más equilibrada, calmada y ordenada.",
         "duracion" => "90 minutos aproximados.",
-        "recomendacion" => "Se define según el estado del acné y conviene acompañarlo con indicaciones específicas de cuidado diario.",
+        "recomendacion" =>
+            "Se define según el estado del acné y conviene acompañarlo con indicaciones específicas de cuidado diario.",
     ],
     [
         "slug" => "nanoplastia",
         "categoria" => "Capilar",
         "icono" => "bi-scissors",
         "titulo" => "Nanoplastia",
-        "microbeneficio" => "Alisa, hidrata y repara el cabello, dejándolo suave y brillante.",
+        "microbeneficio" =>
+            "Alisa, hidrata y repara el cabello, dejándolo suave y brillante.",
         "meta" => ["120 min", "Capilar", "Brillo"],
-        "descripcion" => "Tratamiento capilar de alisado y reparación que ayuda a controlar el volumen, mejorar la textura y devolver brillo al cabello.",
-        "ideal_para" => "Cabellos con frizz, resequedad, volumen o daño que buscan un acabado más suave y manejable.",
-        "beneficio_principal" => "Combina efecto de alisado con hidratación y reparación capilar.",
+        "descripcion" =>
+            "Tratamiento capilar de alisado y reparación que ayuda a controlar el volumen, mejorar la textura y devolver brillo al cabello.",
+        "ideal_para" =>
+            "Cabellos con frizz, resequedad, volumen o daño que buscan un acabado más suave y manejable.",
+        "beneficio_principal" =>
+            "Combina efecto de alisado con hidratación y reparación capilar.",
         "sensacion" => "El cabello se siente más suave, suelto y brillante.",
         "duracion" => "120 minutos aproximados.",
-        "recomendacion" => "Se evalúa según largo, cantidad de cabello y resultado esperado antes de realizarlo.",
+        "recomendacion" =>
+            "Se evalúa según largo, cantidad de cabello y resultado esperado antes de realizarlo.",
     ],
     [
         "slug" => "lifting-de-pestanas",
         "categoria" => "Mirada",
         "icono" => "bi-eye",
         "titulo" => "Lifting de Pestañas",
-        "microbeneficio" => "Realza y curva tus pestañas naturales para una mirada más abierta y definida.",
+        "microbeneficio" =>
+            "Realza y curva tus pestañas naturales para una mirada más abierta y definida.",
         "meta" => ["60 min", "Mirada", "Natural"],
-        "descripcion" => "Servicio que trabaja sobre las pestañas naturales para darles curvatura, definición y una apariencia más abierta sin extensiones.",
-        "ideal_para" => "Quienes quieren destacar su mirada con un resultado natural, prolijo y de bajo mantenimiento.",
-        "beneficio_principal" => "Realza las pestañas naturales y abre visualmente la mirada.",
+        "descripcion" =>
+            "Servicio que trabaja sobre las pestañas naturales para darles curvatura, definición y una apariencia más abierta sin extensiones.",
+        "ideal_para" =>
+            "Quienes quieren destacar su mirada con un resultado natural, prolijo y de bajo mantenimiento.",
+        "beneficio_principal" =>
+            "Realza las pestañas naturales y abre visualmente la mirada.",
         "sensacion" => "La mirada se ve más definida, despierta y expresiva.",
         "duracion" => "60 minutos aproximados.",
-        "recomendacion" => "Muy buena opción para quienes buscan un efecto natural sin depender del arqueador o máscara todos los días.",
+        "recomendacion" =>
+            "Muy buena opción para quienes buscan un efecto natural sin depender del arqueador o máscara todos los días.",
     ],
     [
         "slug" => "kapping",
         "categoria" => "Manicuría",
         "icono" => "bi-gem",
         "titulo" => "Kapping",
-        "microbeneficio" => "Crea una capa protectora sobre la uña natural que brinda mayor resistencia y duración.",
+        "microbeneficio" =>
+            "Crea una capa protectora sobre la uña natural que brinda mayor resistencia y duración.",
         "meta" => ["120 min", "Uñas", "Resistencia"],
-        "descripcion" => "Servicio de manicuría que recubre la uña natural con una capa protectora para reforzarla sin perder un aspecto prolijo.",
-        "ideal_para" => "Uñas naturales frágiles, quebradizas o que necesitan más resistencia para sostener el esmaltado.",
-        "beneficio_principal" => "Aporta protección, duración y una base más firme sobre la uña natural.",
+        "descripcion" =>
+            "Servicio de manicuría que recubre la uña natural con una capa protectora para reforzarla sin perder un aspecto prolijo.",
+        "ideal_para" =>
+            "Uñas naturales frágiles, quebradizas o que necesitan más resistencia para sostener el esmaltado.",
+        "beneficio_principal" =>
+            "Aporta protección, duración y una base más firme sobre la uña natural.",
         "sensacion" => "Las uñas se ven más prolijas, parejas y resistentes.",
         "duracion" => "120 minutos aproximados.",
-        "recomendacion" => "Ideal para quienes quieren fortalecer sus uñas naturales sin recurrir a extensiones.",
+        "recomendacion" =>
+            "Ideal para quienes quieren fortalecer sus uñas naturales sin recurrir a extensiones.",
     ],
     [
         "slug" => "alisado-sin-formol",
         "categoria" => "Capilar",
         "icono" => "bi-stars",
         "titulo" => "Alisado sin Formol",
-        "microbeneficio" => "Reduce el frizz, alisa y aporta brillo al cabello sin dañar la fibra capilar.",
+        "microbeneficio" =>
+            "Reduce el frizz, alisa y aporta brillo al cabello sin dañar la fibra capilar.",
         "meta" => ["2 a 3 h", "Capilar", "Frizz control"],
-        "descripcion" => "Tratamiento capilar pensado para alisar y disciplinar el cabello mientras mejora su brillo y manejabilidad sin recurrir al formol.",
-        "ideal_para" => "Cabellos con frizz, volumen o dificultad para peinar que buscan un alisado más prolijo y brillante.",
-        "beneficio_principal" => "Reduce el frizz y deja el cabello más lacio, suelto y fácil de mantener.",
-        "sensacion" => "El cabello luce más ordenado, brillante y suave al tacto.",
+        "descripcion" =>
+            "Tratamiento capilar pensado para alisar y disciplinar el cabello mientras mejora su brillo y manejabilidad sin recurrir al formol.",
+        "ideal_para" =>
+            "Cabellos con frizz, volumen o dificultad para peinar que buscan un alisado más prolijo y brillante.",
+        "beneficio_principal" =>
+            "Reduce el frizz y deja el cabello más lacio, suelto y fácil de mantener.",
+        "sensacion" =>
+            "El cabello luce más ordenado, brillante y suave al tacto.",
         "duracion" => "Entre 2 y 3 horas, según largo y volumen del cabello.",
-        "recomendacion" => "Se define de manera personalizada según el tipo de cabello y el resultado buscado.",
+        "recomendacion" =>
+            "Se define de manera personalizada según el tipo de cabello y el resultado buscado.",
     ],
     [
         "slug" => "laminado-de-cejas",
         "categoria" => "Mirada",
         "icono" => "bi-brush",
         "titulo" => "Laminado de Cejas",
-        "microbeneficio" => "Ordena, define y fija las cejas para lograr un efecto peinado natural y prolijo.",
+        "microbeneficio" =>
+            "Ordena, define y fija las cejas para lograr un efecto peinado natural y prolijo.",
         "meta" => ["45 min", "Cejas", "Definición"],
-        "descripcion" => "Tratamiento de cejas que alinea y fija el vello para conseguir una forma más definida, pareja y duradera.",
-        "ideal_para" => "Cejas rebeldes, con poco orden o que buscan un efecto peinado natural y sostenido.",
-        "beneficio_principal" => "Define y organiza las cejas para resaltar mejor la expresión del rostro.",
+        "descripcion" =>
+            "Tratamiento de cejas que alinea y fija el vello para conseguir una forma más definida, pareja y duradera.",
+        "ideal_para" =>
+            "Cejas rebeldes, con poco orden o que buscan un efecto peinado natural y sostenido.",
+        "beneficio_principal" =>
+            "Define y organiza las cejas para resaltar mejor la expresión del rostro.",
         "sensacion" => "Las cejas se ven más prolijas, llenas y direccionadas.",
         "duracion" => "45 minutos aproximados.",
-        "recomendacion" => "Muy útil cuando se quiere mantener la ceja alineada y con una forma más uniforme.",
+        "recomendacion" =>
+            "Muy útil cuando se quiere mantener la ceja alineada y con una forma más uniforme.",
     ],
     [
         "slug" => "semipermanente",
         "categoria" => "Manicuría",
         "icono" => "bi-palette",
         "titulo" => "Semipermanente",
-        "microbeneficio" => "Ofrece esmaltado de larga duración, brillo intenso y un acabado impecable por semanas.",
+        "microbeneficio" =>
+            "Ofrece esmaltado de larga duración, brillo intenso y un acabado impecable por semanas.",
         "meta" => ["90 min", "Uñas", "Brillo intenso"],
-        "descripcion" => "Servicio de esmaltado semipermanente pensado para mantener las uñas prolijas, brillantes y con buena duración en el tiempo.",
-        "ideal_para" => "Quienes buscan uñas arregladas por más tiempo, con brillo sostenido y menor mantenimiento diario.",
-        "beneficio_principal" => "Brinda un acabado prolijo y duradero con aspecto impecable durante semanas.",
-        "sensacion" => "Las uñas se ven brillantes, parejas y recién hechas por más tiempo.",
+        "descripcion" =>
+            "Servicio de esmaltado semipermanente pensado para mantener las uñas prolijas, brillantes y con buena duración en el tiempo.",
+        "ideal_para" =>
+            "Quienes buscan uñas arregladas por más tiempo, con brillo sostenido y menor mantenimiento diario.",
+        "beneficio_principal" =>
+            "Brinda un acabado prolijo y duradero con aspecto impecable durante semanas.",
+        "sensacion" =>
+            "Las uñas se ven brillantes, parejas y recién hechas por más tiempo.",
         "duracion" => "90 minutos aproximados.",
-        "recomendacion" => "Ideal para quienes priorizan practicidad y duración sin resignar terminación prolija.",
+        "recomendacion" =>
+            "Ideal para quienes priorizan practicidad y duración sin resignar terminación prolija.",
     ],
 ];
 
@@ -656,7 +731,12 @@ $tratamiento_cards = [
 
 $tratamientos_catalogo_json = json_encode(
     $tratamientos_catalogo,
-    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT,
+    JSON_UNESCAPED_UNICODE |
+        JSON_UNESCAPED_SLASHES |
+        JSON_HEX_TAG |
+        JSON_HEX_AMP |
+        JSON_HEX_APOS |
+        JSON_HEX_QUOT,
 );
 ?>
 
@@ -683,22 +763,42 @@ $tratamientos_catalogo_json = json_encode(
     <div class="row g-3 g-lg-4 pm-tratamientos-grid">
       <?php foreach ($tratamientos_catalogo as $tratamiento): ?>
         <div class="col-12 col-md-6 col-lg-4 pm-animate">
-          <article class="pm-tratamiento-card <?= $tratamiento_cards[$tratamiento["categoria"]] ?? "" ?>">
+          <article class="pm-tratamiento-card <?= $tratamiento_cards[
+              $tratamiento["categoria"]
+          ] ?? "" ?>">
             <div class="pm-tratamiento-card__top">
-              <span class="pm-tratamiento-badge <?= $tratamiento_badges[$tratamiento["categoria"]] ?? "" ?>">
-                <?= htmlspecialchars($tratamiento["categoria"], ENT_QUOTES, "UTF-8") ?>
+              <span class="pm-tratamiento-badge <?= $tratamiento_badges[
+                  $tratamiento["categoria"]
+              ] ?? "" ?>">
+                <?= htmlspecialchars(
+                    $tratamiento["categoria"],
+                    ENT_QUOTES,
+                    "UTF-8",
+                ) ?>
               </span>
               <span class="pm-tratamiento-card__icon" aria-hidden="true">
-                <i class="bi <?= htmlspecialchars($tratamiento["icono"], ENT_QUOTES, "UTF-8") ?>"></i>
+                <i class="bi <?= htmlspecialchars(
+                    $tratamiento["icono"],
+                    ENT_QUOTES,
+                    "UTF-8",
+                ) ?>"></i>
               </span>
             </div>
 
             <div class="pm-tratamiento-card__body">
               <h3 class="pm-tratamiento-card__title">
-                <?= htmlspecialchars($tratamiento["titulo"], ENT_QUOTES, "UTF-8") ?>
+                <?= htmlspecialchars(
+                    $tratamiento["titulo"],
+                    ENT_QUOTES,
+                    "UTF-8",
+                ) ?>
               </h3>
               <p class="pm-tratamiento-card__lead">
-                <?= htmlspecialchars($tratamiento["microbeneficio"], ENT_QUOTES, "UTF-8") ?>
+                <?= htmlspecialchars(
+                    $tratamiento["microbeneficio"],
+                    ENT_QUOTES,
+                    "UTF-8",
+                ) ?>
               </p>
             </div>
 
@@ -706,8 +806,16 @@ $tratamientos_catalogo_json = json_encode(
               <button
                 type="button"
                 class="pm-tratamiento-card__link js-pm-tratamiento-modal"
-                data-tratamiento-id="<?= htmlspecialchars($tratamiento["slug"], ENT_QUOTES, "UTF-8") ?>"
-                aria-label="Ver más sobre <?= htmlspecialchars($tratamiento["titulo"], ENT_QUOTES, "UTF-8") ?>"
+                data-tratamiento-id="<?= htmlspecialchars(
+                    $tratamiento["slug"],
+                    ENT_QUOTES,
+                    "UTF-8",
+                ) ?>"
+                aria-label="Ver más sobre <?= htmlspecialchars(
+                    $tratamiento["titulo"],
+                    ENT_QUOTES,
+                    "UTF-8",
+                ) ?>"
               >
                 Ver más
                 <i class="bi bi-arrow-up-right"></i>
@@ -819,9 +927,9 @@ $tratamientos_catalogo_json = json_encode(
                     <div class="pm-promo-body">
                       <h3 class="pm-promo-title">Pack Depilación Completa</h3>
                       <p class="pm-promo-desc">
-                        Axilas + bikini + piernas completas. Incluye 6 sesiones de depilación láser
-                        con la tecnología más avanzada del mercado.
-                      </p>
+                          Incluye 6 sesiones de depilación láser con tecnología ADSS, una sesion por mes.
+                          Axilas + Cavado C + Piernas C
+                        </p>
                       <a href="#reservar" class="btn-pm-dorado">
                         <i class="bi bi-calendar-check me-2"></i>Aprovechar Oferta
                       </a>
@@ -931,13 +1039,19 @@ $tratamientos_catalogo_json = json_encode(
     <div id="testimoniosCarousel" class="carousel slide pm-animate" data-bs-ride="carousel" data-bs-interval="8000">
       <div class="carousel-inner">
         <?php foreach ($pm_testimonios as $i => $testimonio):
-          $gradient = $pm_testimonial_gradients[$i % count($pm_testimonial_gradients)];
-          $nombre_testimonio = sanitizar($testimonio['nombre'] ?? '');
-          $rol_testimonio = sanitizar($testimonio['rol'] ?? '');
-          $texto_testimonio = sanitizar($testimonio['texto'] ?? '');
-          $iniciales_testimonio = sanitizar(obtener_iniciales($testimonio['nombre'] ?? ''));
-        ?>
-        <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
+
+            $gradient =
+                $pm_testimonial_gradients[
+                    $i % count($pm_testimonial_gradients)
+                ];
+            $nombre_testimonio = sanitizar($testimonio["nombre"] ?? "");
+            $rol_testimonio = sanitizar($testimonio["rol"] ?? "");
+            $texto_testimonio = sanitizar($testimonio["texto"] ?? "");
+            $iniciales_testimonio = sanitizar(
+                obtener_iniciales($testimonio["nombre"] ?? ""),
+            );
+            ?>
+        <div class="carousel-item <?= $i === 0 ? "active" : "" ?>">
           <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
               <div class="pm-testimonial-card text-center">
@@ -958,14 +1072,17 @@ $tratamientos_catalogo_json = json_encode(
                   </div>
                   <div class="pm-testimonial-info">
                     <strong class="pm-testimonial-name"><?= $nombre_testimonio ?></strong>
-                    <span class="pm-testimonial-role"><?= $rol_testimonio !== '' ? $rol_testimonio : 'Clienta de Piel Morena' ?></span>
+                    <span class="pm-testimonial-role"><?= $rol_testimonio !== ""
+                        ? $rol_testimonio
+                        : "Clienta de Piel Morena" ?></span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <?php endforeach; ?>
+        <?php
+        endforeach; ?>
 
       </div>
 
@@ -974,8 +1091,8 @@ $tratamientos_catalogo_json = json_encode(
       <div class="pm-testimonial-indicators">
         <?php foreach ($pm_testimonios as $i => $testimonio): ?>
         <button type="button" data-bs-target="#testimoniosCarousel" data-bs-slide-to="<?= $i ?>"
-                class="pm-testimonial-indicator <?= $i === 0 ? 'active' : '' ?>"
-                <?= $i === 0 ? 'aria-current="true"' : '' ?>
+                class="pm-testimonial-indicator <?= $i === 0 ? "active" : "" ?>"
+                <?= $i === 0 ? 'aria-current="true"' : "" ?>
                 aria-label="Testimonio <?= $i + 1 ?>"></button>
         <?php endforeach; ?>
       </div>
