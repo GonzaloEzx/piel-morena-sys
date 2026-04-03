@@ -1,6 +1,10 @@
 # Prompt Perfect Creator
 
-> Estandar operativo para transformar pedidos en bruto en prompts listos para usar. Creado el 2026-03-28.
+> Estado: vigente
+> Audiencia: agentes y colaboradores
+> Fuente de verdad: si, para refinado de prompts
+> Relacion: estandar para transformar pedidos en bruto
+> Ultima revision: 2026-04-03
 
 ## Objetivo
 

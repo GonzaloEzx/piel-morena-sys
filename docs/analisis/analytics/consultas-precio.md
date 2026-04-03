@@ -1,5 +1,11 @@
 # Analytics: Consultas de Precio — Servicios Mas Consultados
 
+> Estado: vigente
+> Audiencia: producto, desarrollo, analisis, agentes
+> Fuente de verdad: no
+> Relacion: analisis funcional del tracking de consultas de precio
+> Ultima revision: 2026-04-03
+
 ## Descripcion General
 
 El sistema de **Consultas de Precio** registra cada vez que un visitante hace clic en el icono de precio ($) de un servicio en la landing page. Esto permite al administrador identificar los servicios mas demandados y ajustar su estrategia de marketing.

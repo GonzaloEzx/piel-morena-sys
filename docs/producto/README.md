@@ -1,7 +1,10 @@
 # Producto — Piel Morena Estética
-> Documento vivo de referencia del producto digital.  
-> Audiencia: agentes de IA, desarrolladores, colaboradores.  
-> Última actualización: 3 de abril de 2026 — **Inauguración: 6 de abril de 2026**
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes, colaboradores
+> Fuente de verdad: si, a nivel de vision general
+> Relacion: marco de producto del sistema
+> Ultima revision: 2026-04-03
+> Hito clave: inauguracion prevista para 2026-04-06
 
 ---
 

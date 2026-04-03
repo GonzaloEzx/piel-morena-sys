@@ -1,6 +1,10 @@
 # Biblioteca de Prompts Reutilizables
 
-> Derivada de `docs/txt/nota` y normalizada como documento vivo el 2026-03-28.
+> Estado: vigente
+> Audiencia: agentes y colaboradores
+> Fuente de verdad: si, para prompts reutilizables concretos
+> Relacion: biblioteca normalizada derivada de notas historicas
+> Ultima revision: 2026-04-03
 
 ## Como leer esta biblioteca
 

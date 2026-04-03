@@ -1,5 +1,11 @@
 # Politica De Borrado Admin Y Empleado
 
+> Estado: propuesta vigente
+> Audiencia: negocio, producto, desarrollo, agentes
+> Fuente de verdad: si, para esta politica futura
+> Relacion: criterio de negocio para borrados y purga
+> Ultima revision: 2026-04-03
+
 ## Objetivo
 
 Definir una politica futura de borrado segura, con separacion clara entre desactivar y eliminar definitivamente, sin implementarla todavia.

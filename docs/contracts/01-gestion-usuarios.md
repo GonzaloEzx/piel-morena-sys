@@ -1,5 +1,11 @@
 # Contrato 01 - Gestion de Usuarios
 
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: si
+> Relacion: contrato funcional del modulo de usuarios
+> Ultima revision: 2026-04-03
+
 ## Alcance
 
 Define identidad, autenticacion, roles, sesiones y perfil.

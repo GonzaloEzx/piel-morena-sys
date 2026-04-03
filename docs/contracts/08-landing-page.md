@@ -1,5 +1,11 @@
 # Contrato 08 - Landing Publica
 
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: si
+> Relacion: contrato funcional del home publico
+> Ultima revision: 2026-04-03
+
 ## Alcance
 
 Pagina principal, secciones de marca, formulario de contacto y CTAs de reserva.

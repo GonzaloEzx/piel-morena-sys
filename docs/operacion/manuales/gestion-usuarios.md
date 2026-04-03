@@ -1,6 +1,10 @@
 # Manual de Gestion de Usuarios
 
-> Documento operativo alineado con el codigo actual del proyecto. Revision: 2026-03-24.
+> Estado: vigente
+> Audiencia: operacion, producto, desarrollo, agentes
+> Fuente de verdad: complementaria
+> Relacion: manual operativo del modulo de usuarios
+> Ultima revision: 2026-04-03
 
 ## Alcance
 
@@ -53,7 +57,7 @@ Este manual cubre:
 |---|---|
 | `admin` | Acceso total al panel, configuracion, caja, reportes, CRUD |
 | `empleado` | Acceso a `mis-citas` y `mi-horario`, puede pasar citas a `en_proceso` o `completada` |
-| `cliente` | Reservar, ver historial, editar perfil, cambiar password, cancelar sus citas |
+| `cliente` | Reservar, ver historial, editar perfil y cambiar password |
 
 Reglas vigentes:
 
@@ -160,7 +164,12 @@ APIs asociadas:
 
 - `api/clientes/actualizar-perfil.php`
 - `api/auth/cambiar-password.php`
-- `api/citas/cancelar.php`
+
+## Aclaracion importante
+
+- el cliente no tiene hoy un flujo publico de cancelacion por API;
+- la cancelacion vigente esta restringida a `admin` y `empleado`;
+- si este comportamiento cambia, primero debe actualizarse `docs/contracts/03-sistema-reservas.md`.
 
 ## Seguridad aplicada
 

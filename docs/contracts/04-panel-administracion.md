@@ -1,5 +1,11 @@
 # Contrato 04 - Panel de Administracion
 
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: si
+> Relacion: contrato funcional del panel interno
+> Ultima revision: 2026-04-03
+
 ## Alcance
 
 Modulo interno del sistema para operacion diaria del negocio.

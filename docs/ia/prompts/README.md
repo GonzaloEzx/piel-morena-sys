@@ -1,6 +1,10 @@
 # Biblioteca de Prompts
 
-> Fuente operativa para prompts reutilizables del proyecto. Actualizado el 2026-03-28.
+> Estado: vigente
+> Audiencia: agentes y colaboradores
+> Fuente de verdad: si, para prompts reutilizables
+> Relacion: biblioteca operativa de prompts del proyecto
+> Ultima revision: 2026-04-03
 
 ## Objetivo
 

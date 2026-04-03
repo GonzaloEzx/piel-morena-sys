@@ -1,5 +1,11 @@
 # Contrato 03 - Sistema de Reservas
 
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: si
+> Relacion: contrato funcional del modulo de reservas y citas
+> Ultima revision: 2026-04-03
+
 ## Alcance
 
 Reservas, disponibilidad, cancelacion, gestion de citas y asignacion de empleado.

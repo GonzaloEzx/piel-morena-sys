@@ -1,5 +1,11 @@
 # Contrato 06 - Notificaciones
 
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: si
+> Relacion: contrato funcional de notificaciones
+> Ultima revision: 2026-04-03
+
 ## Alcance
 
 Emails transaccionales, cron de recordatorios y notificaciones internas del sistema.

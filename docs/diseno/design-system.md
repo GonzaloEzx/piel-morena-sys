@@ -1,6 +1,10 @@
 # Piel Morena — Design System v3.1
-> Contrato de diseño para Claude Code + frontend-design skill
-> Salón de belleza, depilación, tratamientos estéticos — Resistencia, Chaco
+> Estado: vigente
+> Audiencia: diseno, frontend, producto, agentes
+> Fuente de verdad: si, para la capa visual compartida
+> Relacion: contrato de diseno del proyecto
+> Ultima revision: 2026-04-03
+> Contexto: salon de belleza, depilacion y tratamientos esteticos en Resistencia, Chaco
 
 ---
 

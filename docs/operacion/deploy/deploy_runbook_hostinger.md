@@ -1,7 +1,10 @@
 # Deploy Runbook Hostinger - Piel Morena
 
-> Documento operativo vigente.
-> Revision: 2026-04-02
+> Estado: vigente
+> Audiencia: operacion, desarrollo, agentes
+> Fuente de verdad: si, para el deploy operativo
+> Relacion: runbook de publicacion en produccion
+> Ultima revision: 2026-04-03
 
 ## Objetivo
 

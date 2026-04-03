@@ -1,7 +1,9 @@
 # Negocio — Piel Morena Estética
-> Documento vivo de referencia sobre el negocio real.  
-> Audiencia: agentes de IA, desarrolladores, colaboradores, onboarding de cliente.  
-> Última actualización: 3 de abril de 2026
+> Estado: vigente
+> Audiencia: negocio, producto, desarrollo, agentes, onboarding
+> Fuente de verdad: si, para contexto del negocio real
+> Relacion: marco comercial y operativo del salon
+> Ultima revision: 2026-04-03
 
 ---
 

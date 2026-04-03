@@ -1,5 +1,11 @@
 # Contrato 09 - Productos e Inventario
 
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: si
+> Relacion: contrato funcional de productos e inventario
+> Ultima revision: 2026-04-03
+
 ## Alcance
 
 CRUD de productos, stock y venta integrada con caja.

@@ -1,5 +1,11 @@
 # Diagnostico Delete Actual
 
+> Estado: diagnostico vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: no
+> Relacion: diagnostico del estado actual de borrados
+> Ultima revision: 2026-04-03
+
 ## Resumen
 
 El proyecto hoy mezcla soft-delete, hard-delete y cancelacion segun modulo. No existe una politica unica de borrado.

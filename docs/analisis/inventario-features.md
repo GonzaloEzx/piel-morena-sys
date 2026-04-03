@@ -1,6 +1,10 @@
 # Inventario Completo de Features — Piel Morena
 
-> Documento generado el 2026-03-24. Refleja el estado real del codigo fuente del proyecto.
+> Estado: snapshot tecnico
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: no
+> Relacion: inventario amplio del sistema implementado
+> Ultima revision: 2026-04-03
 
 ---
 

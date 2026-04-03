@@ -1,5 +1,11 @@
 # Contrato 05 - Control de Caja
 
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: si
+> Relacion: contrato funcional del modulo de caja
+> Ultima revision: 2026-04-03
+
 ## Alcance
 
 Movimientos, resumen, cierre diario, historico y ventas de productos.

@@ -1,5 +1,11 @@
 # Contrato 02 - Catalogo de Servicios
 
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: si
+> Relacion: contrato funcional del catalogo de servicios
+> Ultima revision: 2026-04-03
+
 ## Alcance
 
 Gestion de servicios, categorias, precios, duracion, imagenes y consultas de precio.

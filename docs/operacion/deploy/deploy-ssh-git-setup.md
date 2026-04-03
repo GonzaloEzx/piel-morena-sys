@@ -1,7 +1,10 @@
 # Deploy con SSH + Git - Setup Real
 
-> Documento tecnico vigente del deploy por SSH.
-> Revision: 2026-04-02
+> Estado: vigente
+> Audiencia: operacion, desarrollo, agentes
+> Fuente de verdad: si, para setup de deploy por SSH
+> Relacion: configuracion tecnica del checkout remoto
+> Ultima revision: 2026-04-03
 
 ## Datos del servidor
 

@@ -1,6 +1,10 @@
 # Contratos Funcionales
 
-> Fuente de verdad por modulo. Estado revisado contra codigo real el 2026-03-24.
+> Estado: vigente
+> Audiencia: producto, desarrollo, agentes
+> Fuente de verdad: si, por modulo
+> Relacion: capa funcional oficial del sistema
+> Ultima revision: 2026-04-03
 
 ## Indice
 
@@ -23,3 +27,8 @@ Si un modulo cambia de comportamiento:
 1. actualizar primero su contrato;
 2. luego tocar el codigo o dejar ambos cambios juntos en la misma entrega;
 3. registrar la decision abierta si el cambio queda parcial.
+
+## Regla editorial
+
+- `contracts/` define comportamiento esperado, no detalle de implementacion.
+- Si un documento de `modulos/` o `ux/` contradice a un contrato, el contrato manda hasta que se actualice.

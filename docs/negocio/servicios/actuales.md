@@ -1,8 +1,14 @@
 # Servicios Actuales del Sitio
 
-Fecha de captura: 2026-04-02
-Hora de captura local: 2026-04-02 11:55:16
-Fuente: `GET https://pielmorenaestetica.com.ar/api/servicios/listar.php`
+> Estado: snapshot operativo
+> Audiencia: negocio, producto, desarrollo, agentes
+> Fuente de verdad: no
+> Relacion: captura real de la API publica de servicios
+> Ultima revision: 2026-04-03
+> Fecha de captura: 2026-04-02
+> Hora de captura local: 2026-04-02 11:55:16
+> Fuente de captura: `GET https://pielmorenaestetica.com.ar/api/servicios/listar.php`
+
 ## Resumen
 
 - Total de servicios activos expuestos por el sitio: **69**
