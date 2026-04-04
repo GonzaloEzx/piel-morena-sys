@@ -58,6 +58,16 @@ WHERE id IN (96, 97);
 -- al crear jornadas; el wizard nunca la muestra (0 servicios).
 -- -----------------------------------------
 
--- Nota: Pack Depilacion Definitiva (id 100) tiene id_categoria NULL
--- y probablemente deberia tener id_grupo_jornada = 1 (Depilacion)
--- ya que usa la maquina laser. Evaluar con el equipo.
+-- -----------------------------------------
+-- Paso 5: Renombrar cat 13 a nombre más conciso
+-- -----------------------------------------
+
+UPDATE categorias_servicios SET nombre = 'Tratamiento con equipo' WHERE id = 13;
+
+-- -----------------------------------------
+-- Paso 6: Pack Depilación Definitiva → Packs + jornada Depilación
+-- -----------------------------------------
+
+UPDATE servicios
+SET id_categoria = NULL, id_grupo_jornada = 1
+WHERE id = 100;
