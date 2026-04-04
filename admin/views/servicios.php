@@ -93,6 +93,15 @@ require_once __DIR__ . '/../includes/admin_header.php';
 let dtServicios;
 let modalServicio;
 
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     modalServicio = new bootstrap.Modal(document.getElementById('modalServicio'));
     cargarCategorias();
@@ -124,12 +133,29 @@ function initTabla() {
             },
             { data: null, orderable: false, render: (d) => {
                 if (d.jornada_origen === 'grupo') {
-                    return '<span class="badge text-bg-warning" title="Usa jornadas por grupo"><i class="bi bi-diagram-3 me-1"></i>Grupo</span>';
+                    const grupo = escapeHtml(d.grupo_jornada || 'Grupo configurado');
+                    return `
+                        <div class="srv-jornada srv-jornada--grupo" title="Este servicio usa las jornadas del grupo ${grupo}">
+                            <span class="srv-jornada__pill"><i class="bi bi-diagram-3"></i>Por grupo</span>
+                            <span class="srv-jornada__meta">${grupo}</span>
+                        </div>
+                    `;
                 }
                 if (d.jornada_origen === 'categoria') {
-                    return '<span class="badge text-bg-info" title="Usa jornadas por categoría"><i class="bi bi-collection me-1"></i>Categoría</span>';
+                    const categoria = escapeHtml(d.categoria || 'Categoría configurada');
+                    return `
+                        <div class="srv-jornada srv-jornada--categoria" title="Este servicio hereda jornadas por su categoría ${categoria}">
+                            <span class="srv-jornada__pill"><i class="bi bi-collection"></i>Por categoría</span>
+                            <span class="srv-jornada__meta">${categoria}</span>
+                        </div>
+                    `;
                 }
-                return '<span class="text-muted">—</span>';
+                return `
+                    <div class="srv-jornada srv-jornada--libre" title="Este servicio usa el calendario normal, sin jornadas asociadas">
+                        <span class="srv-jornada__pill"><i class="bi bi-calendar3"></i>Sin jornada</span>
+                        <span class="srv-jornada__meta">Calendario normal</span>
+                    </div>
+                `;
             }},
             { data: 'categoria', defaultContent: '<span class="text-muted">—</span>' },
             { data: 'precio', render: (d) => formatPrecio(d) },

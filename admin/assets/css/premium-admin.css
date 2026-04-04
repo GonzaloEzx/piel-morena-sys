@@ -403,6 +403,34 @@ table.dataTable tbody tr:nth-child(even) {
 }
 
 /* ============================================================
+   6.1 SERVICIOS — JORNADA CELL
+   ============================================================ */
+.srv-jornada__pill {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+table.dataTable tbody tr:hover .srv-jornada__pill {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(74, 64, 52, 0.08);
+}
+
+.srv-jornada--grupo .srv-jornada__pill {
+  background: linear-gradient(135deg, rgba(255,225,175,0.36), rgba(255,225,175,0.14));
+  border-color: rgba(212,147,90,0.22);
+}
+
+.srv-jornada--categoria .srv-jornada__pill {
+  background: linear-gradient(135deg, rgba(142,151,125,0.22), rgba(142,151,125,0.10));
+  border-color: rgba(142,151,125,0.22);
+}
+
+.srv-jornada--libre .srv-jornada__pill {
+  background: linear-gradient(135deg, rgba(248,244,232,0.95), rgba(236,231,209,0.85));
+  border-color: rgba(219,206,165,0.42);
+}
+
+/* ============================================================
    7. BUTTONS — Warm glow + transitions
    ============================================================ */
 .pm-admin-body .btn-pm {
