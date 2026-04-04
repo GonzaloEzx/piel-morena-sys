@@ -151,7 +151,5 @@ window.addEventListener('load', () => {
 <script src="<?= URL_BASE ?>/assets/js/main.js?v=<?= @filemtime(ROOT_PATH . 'assets/js/main.js') ?: time() ?>"></script>
 <script src="<?= URL_BASE ?>/assets/js/auth.js?v=<?= @filemtime(ROOT_PATH . 'assets/js/auth.js') ?: time() ?>"></script>
 <script src="<?= URL_BASE ?>/assets/js/banners.js?v=<?= @filemtime(ROOT_PATH . 'assets/js/banners.js') ?: time() ?>"></script>
-
-<!-- deploy-check: 2026-04-04 footer-marker -->
 </body>
 </html>
