@@ -57,3 +57,9 @@ Estas carpetas existen, pero no deben tomarse como fuente oficial:
 - `txt/`: notas sueltas sin normalizar
 
 Si un agente o colaborador necesita contexto confiable, debe ignorarlas salvo instruccion explicita.
+
+## Atajos utiles
+
+- setup local del proyecto: `operacion/manuales/desarrollo-local.md`
+- deploy y publicacion: `operacion/deploy/`
+- contratos funcionales vigentes: `contracts/`

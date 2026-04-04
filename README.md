@@ -52,21 +52,21 @@ piel-morena-sys/
 - `docs/negocio/README.md`: contexto real del negocio, operación y servicios.
 - `docs/producto/README.md`: visión del producto y decisiones generales.
 - `docs/contracts/README.md`: contratos funcionales por módulo.
+- `docs/operacion/manuales/desarrollo-local.md`: setup local con XAMPP/MySQL y troubleshooting.
 - `docs/operacion/deploy/`: guías y runbooks de despliegue.
 
 ## Desarrollo local
+
+Guía oficial:
+
+- `docs/operacion/manuales/desarrollo-local.md`
+
+Comandos mínimos:
 
 ```bash
 php -S localhost:8000
 php -l index.php
 php -l includes/auth.php
-```
-
-Carga de base local:
-
-```bash
-mysql -u <user> -p < database/schema.sql
-mysql -u <user> -p < database/seed.sql
 ```
 
 ## Deploy actual

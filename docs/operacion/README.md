@@ -13,3 +13,9 @@ Reunir documentacion necesaria para publicar, operar y administrar el sistema.
 
 - `deploy/`: runbooks y setup de publicacion
 - `manuales/`: manuales operativos del sistema
+
+## Guias clave
+
+- `manuales/desarrollo-local.md`: setup local con `php -S`, XAMPP, MySQL y troubleshooting de Windows
+- `manuales/gestion-usuarios.md`: operacion del modulo de usuarios y permisos
+- `deploy/deploy_runbook_hostinger.md`: procedimiento operativo de deploy a Hostinger

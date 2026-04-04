@@ -6,6 +6,7 @@
 # --- Configuración sensible ---
 config/database.php
 config/mail.php
+config/*.local.php
 
 # --- Uploads de usuarios ---
 uploads/*

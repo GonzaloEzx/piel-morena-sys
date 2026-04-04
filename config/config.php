@@ -8,11 +8,51 @@ if (!defined("PIEL_MORENA")) {
     die("Acceso denegado");
 }
 
-// --- Entorno ---
-define("ENVIRONMENT", "production"); // 'development' | 'production'
+// --- Overrides locales opcionales ---
+$pm_local_config = [];
+$pm_local_config_path = __DIR__ . "/config.local.php";
+if (file_exists($pm_local_config_path)) {
+    $pm_local_config = require $pm_local_config_path;
+    if (!is_array($pm_local_config)) {
+        $pm_local_config = [];
+    }
+}
+
+// --- Detección de entorno ---
+$pm_http_host = $_SERVER["HTTP_HOST"] ?? "";
+$pm_server_name = $_SERVER["SERVER_NAME"] ?? "";
+$pm_request_host = $pm_http_host !== "" ? $pm_http_host : $pm_server_name;
+$pm_cli_server = PHP_SAPI === "cli-server";
+$pm_is_local_request =
+    $pm_request_host === "localhost" ||
+    $pm_request_host === "127.0.0.1" ||
+    $pm_request_host === "[::1]" ||
+    str_starts_with($pm_request_host, "localhost:") ||
+    str_starts_with($pm_request_host, "127.0.0.1:") ||
+    str_starts_with($pm_request_host, "[::1]:");
+
+$pm_environment =
+    $pm_local_config["environment"] ??
+    (getenv("PIEL_MORENA_ENV") ?: ($pm_cli_server || $pm_is_local_request ? "development" : "production"));
+
+if (!in_array($pm_environment, ["development", "production"], true)) {
+    $pm_environment = "production";
+}
+
+define("ENVIRONMENT", $pm_environment); // 'development' | 'production'
 
 // --- URLs ---
-define("URL_BASE", "https://pielmorenaestetica.com.ar");
+$pm_scheme = (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off") ? "https" : "http";
+$pm_default_url_base =
+    ENVIRONMENT === "development"
+        ? ($pm_request_host !== "" ? $pm_scheme . "://" . $pm_request_host : "http://localhost:8000")
+        : "https://pielmorenaestetica.com.ar";
+
+$pm_url_base =
+    $pm_local_config["url_base"] ??
+    (getenv("PIEL_MORENA_URL_BASE") ?: $pm_default_url_base);
+
+define("URL_BASE", rtrim($pm_url_base, "/"));
 define("URL_ADMIN", URL_BASE . "/admin");
 define("URL_API", URL_BASE . "/api");
 
