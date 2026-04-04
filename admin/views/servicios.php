@@ -19,7 +19,7 @@ require_once __DIR__ . '/../includes/admin_header.php';
         <tr>
           <th>ID</th>
           <th>Servicio</th>
-          <th>Jornada</th>
+          <th>Disponibilidad</th>
           <th>Categoría</th>
           <th>Precio</th>
           <th>Duración</th>
@@ -132,28 +132,29 @@ function initTabla() {
                 : d
             },
             { data: null, orderable: false, render: (d) => {
-                if (d.jornada_origen === 'grupo') {
-                    const grupo = escapeHtml(d.grupo_jornada || 'Grupo configurado');
+                const usaGrupoExterno = d.jornada_origen === 'grupo' && d.grupo_jornada && (!d.categoria || d.grupo_jornada !== d.categoria);
+
+                if (usaGrupoExterno) {
+                    const grupo = escapeHtml(d.grupo_jornada);
                     return `
                         <div class="srv-jornada srv-jornada--grupo" title="Este servicio usa las jornadas del grupo ${grupo}">
-                            <span class="srv-jornada__pill"><i class="bi bi-diagram-3"></i>Por grupo</span>
-                            <span class="srv-jornada__meta">${grupo}</span>
+                            <span class="srv-jornada__pill"><i class="bi bi-calendar-check"></i>Con jornadas</span>
+                            <span class="srv-jornada__meta">Fechas de ${grupo}</span>
                         </div>
                     `;
                 }
-                if (d.jornada_origen === 'categoria') {
-                    const categoria = escapeHtml(d.categoria || 'Categoría configurada');
+
+                if (d.jornada_origen === 'grupo' || d.jornada_origen === 'categoria') {
                     return `
-                        <div class="srv-jornada srv-jornada--categoria" title="Este servicio hereda jornadas por su categoría ${categoria}">
-                            <span class="srv-jornada__pill"><i class="bi bi-collection"></i>Por categoría</span>
-                            <span class="srv-jornada__meta">${categoria}</span>
+                        <div class="srv-jornada srv-jornada--categoria" title="Este servicio solo se reserva en fechas con jornada activa">
+                            <span class="srv-jornada__pill"><i class="bi bi-calendar-check"></i>Con jornadas</span>
                         </div>
                     `;
                 }
+
                 return `
                     <div class="srv-jornada srv-jornada--libre" title="Este servicio usa el calendario normal, sin jornadas asociadas">
-                        <span class="srv-jornada__pill"><i class="bi bi-calendar3"></i>Sin jornada</span>
-                        <span class="srv-jornada__meta">Calendario normal</span>
+                        <span class="srv-jornada__pill"><i class="bi bi-calendar3"></i>Normal</span>
                     </div>
                 `;
             }},
