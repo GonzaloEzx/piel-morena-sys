@@ -45,6 +45,7 @@ CREATE TABLE categorias_servicios (
 CREATE TABLE servicios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_categoria INT DEFAULT NULL,
+    id_grupo_jornada INT DEFAULT NULL COMMENT 'Si no es NULL, el servicio requiere jornada del grupo indicado',
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT,
     precio DECIMAL(10,2) NOT NULL,
@@ -55,6 +56,7 @@ CREATE TABLE servicios (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (id_categoria) REFERENCES categorias_servicios(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_grupo_jornada) REFERENCES categorias_servicios(id) ON DELETE SET NULL,
     INDEX idx_categoria (id_categoria),
     INDEX idx_activo (activo)
 ) ENGINE=InnoDB;

@@ -22,12 +22,13 @@ $db = getDB();
 $id_servicio  = intval($_GET['id_servicio'] ?? 0);
 $id_categoria = intval($_GET['id_categoria'] ?? 0);
 
-// Resolver categoría desde servicio si no se pasa directamente
+// Resolver categoría de jornada desde servicio si no se pasa directamente
+// Prioridad: id_grupo_jornada (nivel servicio) > requiere_jornada (nivel categoría)
 if ($id_servicio && !$id_categoria) {
     $stmt = $db->prepare(
-        "SELECT s.id_categoria, c.requiere_jornada
+        "SELECT s.id_categoria, s.id_grupo_jornada, c.requiere_jornada AS cat_requiere
          FROM servicios s
-         JOIN categorias_servicios c ON s.id_categoria = c.id
+         LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
          WHERE s.id = ? AND s.activo = 1"
     );
     $stmt->execute([$id_servicio]);
@@ -36,14 +37,18 @@ if ($id_servicio && !$id_categoria) {
     if (!$srv) {
         responder_json(false, null, 'Servicio no encontrado', 404);
     }
-    if (!$srv['requiere_jornada']) {
+
+    $grupo = $srv['id_grupo_jornada'] ?? null;
+    $cat_requiere = $srv['cat_requiere'] ?? 0;
+
+    if (!$grupo && !$cat_requiere) {
         responder_json(true, [
             'requiere_jornada' => false,
             'fechas'           => [],
             'mensaje'          => 'Este servicio no requiere jornada. Usar calendario normal.',
         ]);
     }
-    $id_categoria = (int) $srv['id_categoria'];
+    $id_categoria = $grupo ?: (int) $srv['id_categoria'];
 }
 
 if (!$id_categoria) {

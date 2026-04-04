@@ -42,25 +42,35 @@ if (!$servicio) {
 }
 
 // ── Chequeo de jornada ──
-// Si la categoría del servicio requiere jornada, verificar que exista una activa para esa fecha
+// Un servicio requiere jornada si:
+//   1) tiene id_grupo_jornada (nivel servicio), o
+//   2) su categoría tiene requiere_jornada = 1 (nivel categoría)
 $jornada_activa = null;
-$stmt_cat = $db->prepare(
-    "SELECT c.requiere_jornada, c.nombre AS categoria_nombre
-     FROM categorias_servicios c
-     WHERE c.id = (SELECT id_categoria FROM servicios WHERE id = ? LIMIT 1)"
+$stmt_jcheck = $db->prepare(
+    "SELECT s.id_grupo_jornada, s.id_categoria,
+            c.requiere_jornada AS cat_requiere, c.nombre AS categoria_nombre,
+            g.nombre AS grupo_nombre
+     FROM servicios s
+     LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
+     LEFT JOIN categorias_servicios g ON s.id_grupo_jornada = g.id
+     WHERE s.id = ? LIMIT 1"
 );
-$stmt_cat->execute([$id_servicio]);
-$cat_info = $stmt_cat->fetch();
+$stmt_jcheck->execute([$id_servicio]);
+$jcheck = $stmt_jcheck->fetch();
 
-if ($cat_info && $cat_info['requiere_jornada']) {
+$grupo_jornada = $jcheck['id_grupo_jornada'] ?? null;
+$cat_requiere  = $jcheck['cat_requiere'] ?? 0;
+
+if ($grupo_jornada || $cat_requiere) {
+    $jornada_cat_id = $grupo_jornada ?: $jcheck['id_categoria'];
+    $jornada_nombre = $grupo_jornada ? $jcheck['grupo_nombre'] : $jcheck['categoria_nombre'];
+
     $stmt_j = $db->prepare(
-        "SELECT j.hora_inicio, j.hora_fin
-         FROM jornadas j
-         JOIN servicios s ON j.id_categoria = s.id_categoria
-         WHERE s.id = ? AND j.fecha = ? AND j.estado = 'activa'
+        "SELECT hora_inicio, hora_fin FROM jornadas
+         WHERE id_categoria = ? AND fecha = ? AND estado = 'activa'
          LIMIT 1"
     );
-    $stmt_j->execute([$id_servicio, $fecha]);
+    $stmt_j->execute([$jornada_cat_id, $fecha]);
     $jornada_activa = $stmt_j->fetch();
 
     if (!$jornada_activa) {
@@ -70,7 +80,7 @@ if ($cat_info && $cat_info['requiere_jornada']) {
             'precio'   => $servicio['precio'],
             'duracion' => $servicio['duracion_minutos'],
             'turnos'   => [],
-            'mensaje'  => 'No hay jornada programada para ' . $cat_info['categoria_nombre'] . ' en esta fecha',
+            'mensaje'  => 'No hay jornada programada para ' . $jornada_nombre . ' en esta fecha',
         ]);
     }
 }
