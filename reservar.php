@@ -87,7 +87,9 @@ $logueado = esta_autenticado();
         <i class="bi bi-calendar3 me-2"></i>Elige una fecha
       </h3>
       <p id="step2Servicio" style="color: var(--pm-text-muted);"></p>
-      <div class="mt-3">
+
+      <!-- Fecha libre (servicios sin jornada) -->
+      <div class="mt-3" id="step2FechaLibre">
         <input type="date" id="fechaCita" class="input-pm w-100"
                min="<?= date("Y-m-d") ?>" max="<?= date(
     "Y-m-d",
@@ -95,11 +97,21 @@ $logueado = esta_autenticado();
 ) ?>"
                value="<?= date("Y-m-d", strtotime("+1 day")) ?>">
       </div>
+
+      <!-- Fechas de jornada (servicios con jornada) -->
+      <div class="mt-3 d-none" id="step2Jornadas">
+        <p class="pm-jornada-aviso">
+          <i class="bi bi-info-circle me-1"></i>
+          <span id="step2JornadaMsg">Este servicio tiene fechas específicas disponibles</span>
+        </p>
+        <div id="jornadasGrid" class="pm-jornadas-grid"></div>
+      </div>
+
       <div class="d-flex gap-2 mt-4">
         <button class="btn btn-pm-outline flex-fill" onclick="Wizard.goTo(1)">
           <i class="bi bi-arrow-left me-1"></i>Atrás
         </button>
-        <button class="btn btn-pm flex-fill" onclick="Wizard.selectFecha()">
+        <button class="btn btn-pm flex-fill" id="btnVerTurnos" onclick="Wizard.selectFecha()">
           Ver turnos<i class="bi bi-arrow-right ms-1"></i>
         </button>
       </div>
@@ -195,7 +207,7 @@ function formatearFechaAR(fechaISO, opciones = {}) {
 }
 
 const Wizard = {
-  state: { servicio: null, fecha: '', hora: '', turnoFin: '', precio: '', servicioNombre: '' },
+  state: { servicio: null, fecha: '', hora: '', turnoFin: '', precio: '', servicioNombre: '', requiereJornada: false },
   logueado: <?= $logueado ? "true" : "false" ?>,
   preseleccionado: <?= $servicio_preseleccionado ?>,
 
@@ -273,14 +285,68 @@ const Wizard = {
     }
   },
 
-  selectServicio(el) {
+  async selectServicio(el) {
     document.querySelectorAll('.pm-servicio-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     this.state.servicio = el.dataset.id;
     this.state.servicioNombre = el.dataset.name;
     this.state.precio = el.dataset.price;
+    this.state.requiereJornada = false;
     document.getElementById('step2Servicio').textContent = el.dataset.name + ' · ' + el.dataset.duration + ' min';
+
+    // Chequear si el servicio requiere jornada
+    try {
+      const r = await fetch('api/jornadas/disponibles.php?id_servicio=' + el.dataset.id);
+      const data = await r.json();
+      if (data.success && data.data.requiere_jornada) {
+        this.state.requiereJornada = true;
+        this.renderJornadas(data.data);
+      }
+    } catch(e) { /* falla silenciosa, usa fecha libre */ }
+
+    // Mostrar/ocultar UI según tipo
+    const fechaLibre = document.getElementById('step2FechaLibre');
+    const jornadas   = document.getElementById('step2Jornadas');
+    const btnTurnos  = document.getElementById('btnVerTurnos');
+    if (this.state.requiereJornada) {
+      fechaLibre.classList.add('d-none');
+      jornadas.classList.remove('d-none');
+      btnTurnos.classList.add('d-none');
+    } else {
+      fechaLibre.classList.remove('d-none');
+      jornadas.classList.add('d-none');
+      btnTurnos.classList.remove('d-none');
+    }
+
     this.goTo(2);
+  },
+
+  renderJornadas(data) {
+    const grid = document.getElementById('jornadasGrid');
+    document.getElementById('step2JornadaMsg').textContent =
+      data.fechas.length > 0
+        ? `Fechas disponibles para ${data.categoria}`
+        : `No hay fechas programadas para ${data.categoria} próximamente`;
+
+    if (!data.fechas.length) {
+      grid.innerHTML = '<div class="pm-no-turnos"><i class="bi bi-calendar-x"></i>No hay jornadas programadas<br><small>Consultá por WhatsApp para más información</small></div>';
+      return;
+    }
+
+    grid.innerHTML = data.fechas.map(f => `
+      <button class="pm-jornada-card" onclick="Wizard.selectJornadaFecha(this, '${f.fecha}')">
+        <span class="pm-jornada-dia">${f.dia_semana}</span>
+        <span class="pm-jornada-num">${f.dia_numero}</span>
+        <span class="pm-jornada-mes">${f.mes}</span>
+      </button>
+    `).join('');
+  },
+
+  selectJornadaFecha(el, fecha) {
+    document.querySelectorAll('.pm-jornada-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    this.state.fecha = fecha;
+    this.loadTurnos();
   },
 
   selectFecha() {

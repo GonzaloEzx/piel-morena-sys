@@ -41,6 +41,40 @@ if (!$servicio) {
     responder_json(false, null, 'Servicio no encontrado', 404);
 }
 
+// ── Chequeo de jornada ──
+// Si la categoría del servicio requiere jornada, verificar que exista una activa para esa fecha
+$jornada_activa = null;
+$stmt_cat = $db->prepare(
+    "SELECT c.requiere_jornada, c.nombre AS categoria_nombre
+     FROM categorias_servicios c
+     WHERE c.id = (SELECT id_categoria FROM servicios WHERE id = ? LIMIT 1)"
+);
+$stmt_cat->execute([$id_servicio]);
+$cat_info = $stmt_cat->fetch();
+
+if ($cat_info && $cat_info['requiere_jornada']) {
+    $stmt_j = $db->prepare(
+        "SELECT j.hora_inicio, j.hora_fin
+         FROM jornadas j
+         JOIN servicios s ON j.id_categoria = s.id_categoria
+         WHERE s.id = ? AND j.fecha = ? AND j.estado = 'activa'
+         LIMIT 1"
+    );
+    $stmt_j->execute([$id_servicio, $fecha]);
+    $jornada_activa = $stmt_j->fetch();
+
+    if (!$jornada_activa) {
+        responder_json(true, [
+            'fecha'    => $fecha,
+            'servicio' => $servicio['nombre'],
+            'precio'   => $servicio['precio'],
+            'duracion' => $servicio['duracion_minutos'],
+            'turnos'   => [],
+            'mensaje'  => 'No hay jornada programada para ' . $cat_info['categoria_nombre'] . ' en esta fecha',
+        ]);
+    }
+}
+
 // Obtener configuración de horarios del negocio
 $stmt = $db->prepare("SELECT valor FROM configuracion WHERE clave = ?");
 
@@ -49,6 +83,12 @@ $apertura = $stmt->fetchColumn() ?: '09:00';
 
 $stmt->execute(['horario_cierre']);
 $cierre = $stmt->fetchColumn() ?: '20:00';
+
+// Si hay jornada activa, usar sus horarios en vez de los generales
+if ($jornada_activa) {
+    $apertura = substr($jornada_activa['hora_inicio'], 0, 5);
+    $cierre   = substr($jornada_activa['hora_fin'], 0, 5);
+}
 
 $stmt->execute(['dias_laborales']);
 $dias_laborales = $stmt->fetchColumn() ?: '1,2,3,4,5,6';
@@ -60,7 +100,8 @@ $intervalo = intval($stmt->fetchColumn() ?: 30);
 $dia_semana = intval(date('N', $fecha_ts));
 $dias_array = array_map('intval', explode(',', $dias_laborales));
 
-if (!in_array($dia_semana, $dias_array)) {
+// Si hay jornada activa, el día laboral no aplica (la jornada define su propio día)
+if (!$jornada_activa && !in_array($dia_semana, $dias_array)) {
     responder_json(true, [
         'fecha'    => $fecha,
         'servicio' => $servicio['nombre'],

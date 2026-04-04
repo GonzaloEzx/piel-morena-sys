@@ -39,6 +39,7 @@ CREATE TABLE categorias_servicios (
     icono VARCHAR(50) DEFAULT NULL,
     orden INT NOT NULL DEFAULT 0,
     activo TINYINT(1) NOT NULL DEFAULT 1,
+    requiere_jornada TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'Si es 1, los servicios de esta categoria solo se reservan en fechas con jornada activa',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
@@ -252,4 +253,23 @@ CREATE TABLE configuracion (
     valor TEXT,
     descripcion VARCHAR(255) DEFAULT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- -----------------------------------------
+-- Tabla: jornadas (dias con equipo/personal disponible)
+-- -----------------------------------------
+CREATE TABLE jornadas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_categoria INT NOT NULL,
+    fecha DATE NOT NULL,
+    hora_inicio TIME NOT NULL DEFAULT '08:00:00',
+    hora_fin TIME NOT NULL DEFAULT '20:00:00',
+    estado ENUM('activa', 'cancelada') NOT NULL DEFAULT 'activa',
+    notas TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_categoria) REFERENCES categorias_servicios(id) ON DELETE CASCADE,
+    UNIQUE KEY uk_categoria_fecha (id_categoria, fecha),
+    INDEX idx_fecha_estado (fecha, estado),
+    INDEX idx_categoria (id_categoria)
 ) ENGINE=InnoDB;

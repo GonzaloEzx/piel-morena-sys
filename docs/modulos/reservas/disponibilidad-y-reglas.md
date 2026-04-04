@@ -30,8 +30,12 @@ Evitar `agenda` como nombre principal de modulo nuevo.
 - acepta solo `GET`;
 - valida fecha e id de servicio;
 - exige servicio activo;
-- usa configuracion general del negocio;
-- no devuelve slots para dias no laborables;
+- **chequea si la categoria tiene `requiere_jornada = 1`:**
+  - si requiere jornada y no hay jornada activa para esa fecha → devuelve turnos vacios con mensaje;
+  - si hay jornada activa → usa horarios de la jornada (sobreescribe apertura/cierre general);
+  - si hay jornada activa → salta chequeo de dia laboral;
+- usa configuracion general del negocio (para servicios sin jornada);
+- no devuelve slots para dias no laborables (excepto con jornada activa);
 - si la fecha es hoy, aplica margen de 30 minutos;
 - genera slots con `max(duracion_servicio, intervalo_citas)`;
 - bloquea solapamientos contra citas `pendiente`, `confirmada` y `en_proceso`.
@@ -89,7 +93,7 @@ El codigo vigente ya no funciona asi. La realidad actual es cancelacion solo por
 
 ### Jornadas especificas
 
-El producto quiere soportar mejor jornadas especiales por servicio, pero esa capa no esta todavia cerrada por completo en la experiencia publica.
+Implementado. Ver `docs/contracts/10-jornadas.md` para el contrato funcional completo y `docs/modulos/reservas/jornadas.md` para detalle tecnico.
 
 ## Recomendacion de lectura
 

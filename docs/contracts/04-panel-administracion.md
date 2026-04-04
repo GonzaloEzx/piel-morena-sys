@@ -32,6 +32,7 @@ No incluye como fuente funcional principal:
 - soporte de layout para `admin` y `empleado`;
 - CRUD de servicios, clientes, empleados y productos;
 - gestion de citas con cambio de estado y alta manual desde panel;
+- gestion de jornadas con calendario, tabla, creacion multi-fecha y cancelacion con preview;
 - caja con movimientos, ventas, cierres e historico;
 - mensajes de contacto;
 - configuracion del negocio;
@@ -85,6 +86,7 @@ admin/
 │   ├── configuracion.php
 │   ├── galeria.php
 │   ├── testimonios.php
+│   ├── jornadas.php
 │   ├── reportes.php
 │   ├── mis-citas.php
 │   └── mi-horario.php
@@ -118,6 +120,7 @@ admin/
 - `api/admin/configuracion.php`
 - `api/admin/galeria.php`
 - `api/admin/testimonios.php`
+- `api/admin/jornadas.php`
 - `api/admin/upload.php`
 
 ### Empleado
@@ -142,6 +145,7 @@ admin/
 - Dashboard con estadisticas y graficos.
 - Gestion de servicios, clientes, empleados y productos.
 - Gestion de citas con cambio de estado, asignacion de empleado y alta manual desde panel.
+- Gestion de jornadas con calendario, tabla y modales.
 - Caja con movimientos, cierres e historico.
 - Reportes con filtros por fecha y exportacion CSV.
 - Mensajes de contacto.
@@ -157,6 +161,7 @@ admin/
 - `05-control-caja.md`: define el comportamiento funcional especifico de caja.
 - `06-notificaciones.md`: define notificaciones internas y emails.
 - `07-analytics-reportes.md`: define metricas, filtros y exportacion de analytics/reportes.
+- `10-jornadas.md`: define el sistema de jornadas gestionado desde este panel.
 
 Este contrato describe al panel como contenedor operativo y punto de acceso a esos modulos.
 
@@ -174,3 +179,4 @@ Este contrato describe al panel como contenedor operativo y punto de acceso a es
 - [x] reportes
 - [x] campana de notificaciones
 - [x] proteccion por rol
+- [x] gestion de jornadas

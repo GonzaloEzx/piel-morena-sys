@@ -42,6 +42,14 @@ El equipo debe unificar este criterio antes de seguir ampliando el modulo.
 - `completada`
 - `cancelada`
 
+## Jornadas
+
+Servicios de categorias con `requiere_jornada = 1` tienen flujo de reserva alternativo:
+
+- paso 2 del wizard muestra grid de fechas con jornada activa en vez de date picker libre;
+- `disponibilidad.php` verifica jornada activa y usa sus horarios;
+- ver contrato `10-jornadas.md` para detalle completo.
+
 ## Checklist
 
 - [x] disponibilidad
@@ -51,4 +59,5 @@ El equipo debe unificar este criterio antes de seguir ampliando el modulo.
 - [x] calendario admin
 - [x] restriccion de cancelacion
 - [x] notificaciones base
+- [x] soporte de jornadas en disponibilidad y wizard
 - [ ] definicion final auth vs invitado

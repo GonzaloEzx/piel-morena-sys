@@ -97,6 +97,15 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
         </a>
       </li>
 
+      <?php if ($esAdmin): ?>
+      <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/jornadas.php" class="pm-sidebar-link <?= $vista_actual === 'jornadas' ? 'active' : '' ?>">
+          <i class="bi bi-calendar-event"></i>
+          <span>Jornadas</span>
+        </a>
+      </li>
+      <?php endif; ?>
+
       <?php if (!$esAdmin): ?>
       <li class="pm-sidebar-item">
         <a href="<?= URL_ADMIN ?>/views/mi-horario.php" class="pm-sidebar-link <?= $vista_actual === 'mi-horario' ? 'active' : '' ?>">

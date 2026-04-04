@@ -34,6 +34,7 @@ package.json
 package-lock.json
 
 # --- Documentación auxiliar no versionada ---
+# Incluye notas locales, setup de entorno y material transitorio.
 docs/para-test/
 docs/temp/
 docs/txt/
