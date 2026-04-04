@@ -19,6 +19,7 @@ require_once __DIR__ . '/../includes/admin_header.php';
         <tr>
           <th>ID</th>
           <th>Servicio</th>
+          <th>Jornada</th>
           <th>Categoría</th>
           <th>Precio</th>
           <th>Duración</th>
@@ -121,6 +122,15 @@ function initTabla() {
                 ? `${d} <i class="bi bi-star-fill text-warning ms-1" title="Destacado"></i>`
                 : d
             },
+            { data: null, orderable: false, render: (d) => {
+                if (d.jornada_origen === 'grupo') {
+                    return '<span class="badge text-bg-warning" title="Usa jornadas por grupo"><i class="bi bi-diagram-3 me-1"></i>Grupo</span>';
+                }
+                if (d.jornada_origen === 'categoria') {
+                    return '<span class="badge text-bg-info" title="Usa jornadas por categoría"><i class="bi bi-collection me-1"></i>Categoría</span>';
+                }
+                return '<span class="text-muted">—</span>';
+            }},
             { data: 'categoria', defaultContent: '<span class="text-muted">—</span>' },
             { data: 'precio', render: (d) => formatPrecio(d) },
             { data: 'duracion_minutos', render: (d) => d + ' min' },

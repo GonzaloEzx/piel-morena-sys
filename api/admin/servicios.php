@@ -27,9 +27,23 @@ if ($method === 'GET') {
     }
 
     $stmt = $db->query(
-        "SELECT s.*, c.nombre AS categoria
+        "SELECT s.*,
+                c.nombre AS categoria,
+                c.requiere_jornada AS categoria_requiere_jornada,
+                g.nombre AS grupo_jornada,
+                CASE
+                    WHEN s.id_grupo_jornada IS NOT NULL THEN 1
+                    WHEN c.requiere_jornada = 1 THEN 1
+                    ELSE 0
+                END AS tiene_jornada_asociada,
+                CASE
+                    WHEN s.id_grupo_jornada IS NOT NULL THEN 'grupo'
+                    WHEN c.requiere_jornada = 1 THEN 'categoria'
+                    ELSE 'ninguna'
+                END AS jornada_origen
          FROM servicios s
          LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
+         LEFT JOIN categorias_servicios g ON s.id_grupo_jornada = g.id
          ORDER BY s.id DESC"
     );
     responder_json(true, $stmt->fetchAll());
