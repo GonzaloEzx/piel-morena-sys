@@ -587,13 +587,11 @@
     background: var(--pm-surface);
 }
 
-/* Discount badge — more prominent with animated gradient */
+/* Discount badge — enhanced shadow glow (font-size via clamp en style.css) */
 .pm-promo-discount {
-    font-size: 4rem;
     text-shadow:
         0 2px 16px rgba(0, 0, 0, 0.35),
         0 0 60px rgba(255, 225, 175, 0.2);
-    letter-spacing: -0.02em;
 }
 
 /* Promo "OFERTA" badge — animated gradient background */
@@ -876,7 +874,13 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
+    padding: 1px;
+    background: rgba(248, 244, 232, 0.96);
+    box-shadow:
+        0 0 0 1px rgba(219, 206, 165, 0.18),
+        0 4px 10px rgba(74, 64, 52, 0.12);
 }
 
 .pm-footer-nombre {
@@ -1435,11 +1439,6 @@
         display: none;
     }
 
-    /* Promo discount — slightly smaller */
-    .pm-promo-discount {
-        font-size: 3rem;
-    }
-
     /* Contact gradient — more subtle on mobile */
     #contacto.pm-section {
         background: var(--pm-marfil);
@@ -1479,10 +1478,6 @@
 
     .pm-testimonial-quote-icon {
         font-size: 3rem;
-    }
-
-    .pm-promo-discount {
-        font-size: 2.5rem;
     }
 }
 
@@ -1796,11 +1791,19 @@
 }
 
 .pm-offcanvas-title .pm-navbar-logo {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
+    padding: 1px;
+    background: rgba(248, 244, 232, 0.96);
     filter: drop-shadow(0 0 6px rgba(255, 225, 175, 0.4));
+}
+
+.pm-offcanvas-title .pm-navbar-wordmark {
+    font-size: 1.1rem;
+    letter-spacing: 0.01em;
 }
 
 /* Close button */

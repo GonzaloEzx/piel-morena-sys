@@ -978,7 +978,7 @@ $tratamientos_catalogo_json = json_encode(
             return `
             <div class="carousel-item${i === 0 ? ' active' : ''}">
               <div class="row justify-content-center">
-                <div class="col-lg-8">
+                <div class="col-lg-10 col-xl-9">
                   <div class="pm-promo-card">
                     <div class="row g-0 align-items-center">
                       <div class="col-md-5">

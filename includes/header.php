@@ -85,7 +85,7 @@ $navbar_light  = $pagina_actual !== 'index';
   <link rel="preconnect" href="https://accounts.google.com" crossorigin />
 
   <!-- ── Google Fonts ─────────────────────────────────────── -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600;6..96,700&family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&family=Poppins:wght@500;600&display=swap" rel="stylesheet" />
 
   <!-- ── Bootstrap 5.3.3 CSS ──────────────────────────────── -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
@@ -122,8 +122,8 @@ $navbar_light  = $pagina_actual !== 'index';
 
     <!-- ── Brand ──────────────────────────────────────────── -->
     <a class="navbar-brand pm-navbar-brand" href="<?= URL_BASE ?>/" aria-label="Inicio — Piel Morena Estética">
-      <img src="<?= URL_BASE ?>/assets/img/piel-morena-instagram-logo.jpg" alt="Piel Morena" class="pm-navbar-logo">
-      <span class="pm-navbar-nombre">Piel Morena</span>
+      <img src="<?= URL_BASE ?>/assets/img/logo-mark.png" alt="Piel Morena" class="pm-navbar-logo">
+      <span class="pm-navbar-nombre pm-navbar-wordmark">Piel Morena</span>
     </a>
 
     <!-- ── Toggler mobile (abre offcanvas) ────────────────── -->
@@ -230,7 +230,8 @@ $navbar_light  = $pagina_actual !== 'index';
   <!-- Header -->
   <div class="offcanvas-header pm-offcanvas-header">
     <h5 class="offcanvas-title pm-offcanvas-title" id="pmOffcanvasLabel">
-      <img src="<?= URL_BASE ?>/assets/img/piel-morena-instagram-logo.jpg" alt="Piel Morena" class="pm-navbar-logo"> Piel Morena
+      <img src="<?= URL_BASE ?>/assets/img/logo-mark.png" alt="Piel Morena" class="pm-navbar-logo">
+      <span class="pm-navbar-wordmark">Piel Morena</span>
     </h5>
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
   </div>

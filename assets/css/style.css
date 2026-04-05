@@ -472,6 +472,7 @@ main {
     align-items: center;
     gap: var(--pm-space-2);
     text-decoration: none;
+    min-width: 0;
 }
 
 .pm-navbar-brand-icon {
@@ -481,14 +482,22 @@ main {
 
 /* Logo image in navbar */
 .pm-navbar-logo {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
+    flex-shrink: 0;
+    padding: 1px;
+    background: rgba(248, 244, 232, 0.96);
+    box-shadow:
+        0 0 0 1px rgba(122, 101, 79, 0.08),
+        0 4px 10px rgba(74, 64, 52, 0.12);
     transition:
         transform var(--pm-transition-base),
         width var(--pm-transition-slow),
-        height var(--pm-transition-slow);
+        height var(--pm-transition-slow),
+        box-shadow var(--pm-transition-base);
 }
 
 .pm-navbar-brand:hover .pm-navbar-logo {
@@ -496,8 +505,8 @@ main {
 }
 
 .pm-navbar.scrolled .pm-navbar-logo {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
 }
 
 .pm-navbar-brand-text {
@@ -515,6 +524,15 @@ main {
     transition:
         color var(--pm-transition-base),
         font-size var(--pm-transition-slow);
+}
+
+.pm-navbar-wordmark {
+    font-family: "Bodoni Moda", var(--pm-font-heading);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-wrap: nowrap;
+    text-rendering: geometricPrecision;
+    font-optical-sizing: auto;
 }
 
 .pm-navbar-brand-tagline {
@@ -546,6 +564,10 @@ main {
 
 .pm-navbar.pm-navbar--light .pm-navbar-brand-tagline {
     color: var(--pm-text-muted);
+}
+
+.pm-navbar.pm-navbar--light .pm-navbar-logo {
+    background: rgba(248, 244, 232, 0.98);
 }
 
 /* -- Nav Links -- */
@@ -694,6 +716,26 @@ main {
         display: flex;
     }
 
+    .pm-navbar-brand {
+        gap: 10px;
+    }
+
+    .pm-navbar-logo {
+        width: 36px;
+        height: 36px;
+    }
+
+    .pm-navbar.scrolled .pm-navbar-logo {
+        width: 32px;
+        height: 32px;
+    }
+
+    .pm-navbar-wordmark {
+        font-family: "Playfair Display", var(--pm-font-heading);
+        font-size: 1.05rem;
+        letter-spacing: 0.005em;
+    }
+
     .pm-navbar .navbar-collapse {
         background-color: var(--pm-surface);
         border: 1px solid var(--pm-border);
@@ -731,6 +773,22 @@ main {
     .pm-navbar-login-btn {
         border-color: var(--pm-bronce);
         color: var(--pm-bronce);
+    }
+}
+
+@media (max-width: 420px) {
+    .pm-navbar-brand {
+        gap: 8px;
+    }
+
+    .pm-navbar-logo {
+        width: 34px;
+        height: 34px;
+    }
+
+    .pm-navbar-wordmark {
+        font-family: "Playfair Display", var(--pm-font-heading);
+        font-size: 0.98rem;
     }
 }
 
@@ -2261,6 +2319,13 @@ main {
     align-items: center;
     justify-content: center;
     position: relative;
+    padding: var(--pm-space-5) var(--pm-space-4);
+}
+
+@media (min-width: 992px) {
+    .pm-promo-img-placeholder {
+        min-height: 300px;
+    }
 }
 
 .pm-promo-badge {
@@ -2281,22 +2346,43 @@ main {
 
 .pm-promo-discount {
     font-family: var(--pm-font-heading);
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 3vw + 0.75rem, 3rem);
     font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
     color: var(--pm-text-inverse);
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    max-width: 100%;
+    text-align: center;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    hyphens: none;
 }
 
 .pm-promo-body {
     padding: 2rem;
 }
 
+@media (min-width: 992px) {
+    .pm-promo-body {
+        padding: 2.5rem;
+    }
+}
+
 .pm-promo-title {
     font-family: var(--pm-font-heading);
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: clamp(1.25rem, 1.5vw + 1rem, 1.75rem);
+    line-height: var(--pm-leading-tight);
     color: var(--pm-text-heading);
     margin-bottom: 0.75rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .pm-promo-desc {
@@ -2304,6 +2390,10 @@ main {
     color: var(--pm-text-muted);
     line-height: var(--pm-leading-relaxed);
     margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 /* Promo carousel nav */

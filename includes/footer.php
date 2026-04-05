@@ -10,7 +10,7 @@
       <!-- ── Columna 1: Brand + tagline + redes ──────────── -->
       <div class="col-12 col-md-6 col-lg-3">
         <div class="pm-footer-brand">
-          <img src="<?= URL_BASE ?>/assets/img/piel-morena-instagram-logo.jpg" alt="Piel Morena" class="pm-footer-logo">
+          <img src="<?= URL_BASE ?>/assets/img/logo-mark.png" alt="Piel Morena" class="pm-footer-logo">
           <span class="pm-footer-nombre">Piel Morena</span>
         </div>
         <p class="pm-footer-lema">Estética Piel Morena Spa &amp; Beauty</p>
