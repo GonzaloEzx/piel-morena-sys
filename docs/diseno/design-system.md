@@ -413,12 +413,17 @@ xxl         1400px      xxl     Desktop ultra wide
     font-family: var(--pm-font-heading);
     font-size: 1.125rem;
     font-weight: 600;
+    line-height: var(--pm-leading-tight);
     color: var(--pm-text-heading);
     margin-bottom: var(--pm-space-2);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    /* Altura reservada de 2 líneas → alinea cards cuando el título es de 1 sola línea */
+    min-height: calc(1.125rem * var(--pm-leading-tight) * 2);
+    word-break: break-word;
+    hyphens: none;
 }
 .pm-service-card__desc {
     font-family: var(--pm-font-body);
@@ -426,11 +431,22 @@ xxl         1400px      xxl     Desktop ultra wide
     color: var(--pm-text-muted);
     line-height: var(--pm-leading-normal);
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3; /* desktop/tablet */
     -webkit-box-orient: vertical;
     overflow: hidden;
     margin-bottom: var(--pm-space-3);
 }
+/* Mobile: más líneas porque las columnas son angostas y cada línea contiene menos chars */
+@media (max-width: 767px) {
+    .pm-service-card__desc { -webkit-line-clamp: 4; }
+}
+
+/*
+ * NOTA: el landing (index.php) usa clases legadas `.pm-service-body h4` / `.pm-service-body p`
+ * que aplican las mismas reglas. Al tocar el spec de arriba, sincronizar también `style.css`
+ * (sección 8. CARDS DE SERVICIOS) y el truncado PHP de la descripción (`mb_strimwidth` a 180 chars
+ * para que el clamp CSS sea el que decide el corte, no PHP).
+ */
 .pm-service-card__meta {
     font-family: var(--pm-font-body);
     font-size: 0.8125rem;

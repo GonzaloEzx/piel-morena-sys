@@ -309,7 +309,7 @@ require_once "includes/header.php";
           <div class="pm-service-body">
             <h4><?= sanitizar($serv["nombre"]) ?></h4>
             <p><?= sanitizar(
-                mb_strimwidth($serv["descripcion"], 0, 120, "..."),
+                mb_strimwidth($serv["descripcion"], 0, 180, "..."),
             ) ?></p>
             <span class="pm-service-duration"><i class="bi bi-clock me-1"></i> <?= $serv[
                 "duracion_minutos"
