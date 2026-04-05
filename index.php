@@ -907,100 +907,14 @@ $tratamientos_catalogo_json = json_encode(
       <p class="pm-section-subtitle pm-animate">Aprovecha nuestras ofertas especiales</p>
     </div>
 
-    <!-- Carousel de promociones -->
+    <!-- Carousel de promociones (carga dinámica) -->
     <div id="promosCarousel" class="carousel slide pm-animate" data-bs-ride="carousel" data-bs-interval="6000">
-      <div class="carousel-inner">
-
-        <!-- Promo 1 -->
-        <div class="carousel-item active">
-          <div class="row justify-content-center">
-            <div class="col-lg-8">
-              <div class="pm-promo-card">
-                <div class="row g-0 align-items-center">
-                  <div class="col-md-5">
-                    <div class="pm-promo-img-placeholder" style="background: linear-gradient(135deg, #FFE1AF, #8A7650);">
-                      <span class="pm-promo-badge">OFERTA</span>
-                      <div class="pm-promo-discount">-30%</div>
-                    </div>
-                  </div>
-                  <div class="col-md-7">
-                    <div class="pm-promo-body">
-                      <h3 class="pm-promo-title">Pack Depilación Completa</h3>
-                      <p class="pm-promo-desc">
-                          Incluye 6 sesiones de depilación láser con tecnología ADSS, una sesion por mes.
-                          Axilas + Cavado C + Piernas C
-                        </p>
-                      <a href="#reservar" class="btn-pm-dorado">
-                        <i class="bi bi-calendar-check me-2"></i>Aprovechar Oferta
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div class="carousel-inner" id="promosCarouselInner">
+        <div class="text-center py-4">
+          <div class="spinner-border" style="color: var(--pm-bronce);" role="status">
+            <span class="visually-hidden">Cargando...</span>
           </div>
         </div>
-
-        <!-- Promo 2 -->
-        <div class="carousel-item">
-          <div class="row justify-content-center">
-            <div class="col-lg-8">
-              <div class="pm-promo-card">
-                <div class="row g-0 align-items-center">
-                  <div class="col-md-5">
-                    <div class="pm-promo-img-placeholder" style="background: linear-gradient(135deg, #8E977D, #B7BEA7);">
-                      <span class="pm-promo-badge">OFERTA</span>
-                      <div class="pm-promo-discount">-25%</div>
-                    </div>
-                  </div>
-                  <div class="col-md-7">
-                    <div class="pm-promo-body">
-                      <h3 class="pm-promo-title">Crioterapia Facial + Corporal</h3>
-                      <p class="pm-promo-desc">
-                        Combo de tratamientos de frío: rejuvenecimiento facial con crioterapia
-                        más sesión corporal reductora. Resultados visibles desde la primera sesión.
-                      </p>
-                      <a href="#reservar" class="btn-pm-dorado">
-                        <i class="bi bi-calendar-check me-2"></i>Aprovechar Oferta
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Promo 3 -->
-        <div class="carousel-item">
-          <div class="row justify-content-center">
-            <div class="col-lg-8">
-              <div class="pm-promo-card">
-                <div class="row g-0 align-items-center">
-                  <div class="col-md-5">
-                    <div class="pm-promo-img-placeholder" style="background: linear-gradient(135deg, #B77466, #DBCEA5);">
-                      <span class="pm-promo-badge">OFERTA</span>
-                      <div class="pm-promo-discount">-20%</div>
-                    </div>
-                  </div>
-                  <div class="col-md-7">
-                    <div class="pm-promo-body">
-                      <h3 class="pm-promo-title">Día de Novia</h3>
-                      <p class="pm-promo-desc">
-                        Paquete completo para novias: limpieza facial, maquillaje profesional,
-                        manicure spa y peinado. Tu día especial merece lo mejor.
-                      </p>
-                      <a href="#reservar" class="btn-pm-dorado">
-                        <i class="bi bi-calendar-check me-2"></i>Aprovechar Oferta
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
 
       <!-- Flechas de navegación -->
@@ -1017,6 +931,97 @@ $tratamientos_catalogo_json = json_encode(
         </span>
       </button>
     </div>
+
+    <script>
+    (function() {
+      const GRADIENTS = [
+        'linear-gradient(135deg, #FFE1AF, #8A7650)',
+        'linear-gradient(135deg, #8E977D, #B7BEA7)',
+        'linear-gradient(135deg, #B77466, #DBCEA5)',
+        'linear-gradient(135deg, #DBCEA5, #957C62)',
+        'linear-gradient(135deg, #8A7650, #FFE1AF)'
+      ];
+      const BASE = '<?= URL_BASE ?>';
+
+      function esc(s) {
+        const d = document.createElement('div');
+        d.textContent = s ?? '';
+        return d.innerHTML;
+      }
+
+      function formatPrecio(n) {
+        return '$' + parseFloat(n).toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      }
+
+      async function cargarPromos() {
+        const inner = document.getElementById('promosCarouselInner');
+        try {
+          const r = await fetch(BASE + '/api/promociones/listar.php');
+          const json = await r.json();
+          if (!json.success || !json.data.length) {
+            inner.innerHTML = `<div class="carousel-item active">
+              <div class="text-center py-4">
+                <p style="color:var(--pm-text-muted)">Muy pronto tendremos ofertas especiales para vos</p>
+              </div>
+            </div>`;
+            return;
+          }
+
+          inner.innerHTML = json.data.map((p, i) => {
+            const grad = GRADIENTS[i % GRADIENTS.length];
+            const reservaUrl = p.id_servicio_generado
+              ? `${BASE}/reservar.php?servicio=${p.id_servicio_generado}`
+              : `${BASE}/reservar.php`;
+            const desc = p.descripcion
+              ? esc(p.descripcion)
+              : (p.servicios_incluidos ? 'Incluye: ' + esc(p.servicios_incluidos) : '');
+            return `
+            <div class="carousel-item${i === 0 ? ' active' : ''}">
+              <div class="row justify-content-center">
+                <div class="col-lg-8">
+                  <div class="pm-promo-card">
+                    <div class="row g-0 align-items-center">
+                      <div class="col-md-5">
+                        ${p.imagen
+                          ? `<img src="${esc(p.imagen)}" alt="${esc(p.nombre)}" class="pm-promo-img" style="width:100%;height:100%;object-fit:cover;min-height:220px;border-radius:.75rem 0 0 .75rem">`
+                          : `<div class="pm-promo-img-placeholder" style="background:${grad}">
+                              <span class="pm-promo-badge">PACK</span>
+                              <div class="pm-promo-discount">${esc(formatPrecio(p.precio_pack))}</div>
+                            </div>`
+                        }
+                      </div>
+                      <div class="col-md-7">
+                        <div class="pm-promo-body">
+                          <h3 class="pm-promo-title">${esc(p.nombre)}</h3>
+                          ${desc ? `<p class="pm-promo-desc">${desc}</p>` : ''}
+                          <a href="${reservaUrl}" class="btn-pm-dorado">
+                            <i class="bi bi-calendar-check me-2"></i>Reservar Pack
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          }).join('');
+
+        } catch(e) {
+          inner.innerHTML = `<div class="carousel-item active">
+            <div class="text-center py-4">
+              <p style="color:var(--pm-text-muted)">Muy pronto tendremos ofertas especiales para vos</p>
+            </div>
+          </div>`;
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', cargarPromos);
+      } else {
+        cargarPromos();
+      }
+    })();
+    </script>
 
   </div>
 </section>

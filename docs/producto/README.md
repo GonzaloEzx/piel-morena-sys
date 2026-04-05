@@ -3,7 +3,7 @@
 > Audiencia: producto, desarrollo, agentes, colaboradores
 > Fuente de verdad: si, a nivel de vision general
 > Relacion: marco de producto del sistema
-> Ultima revision: 2026-04-03
+> Ultima revision: 2026-04-04
 > Hito clave: inauguracion prevista para 2026-04-06
 
 ---
@@ -121,7 +121,7 @@ Secciones en orden (con anclas):
 
 **Estructura implementada:**
 - **Categorías** (tabla `categorias_servicios`): 9 categorías activas (Depilación, Trat. Faciales, Trat. Corporales, Trat. de Frío, Manicuría, Cejas y Pestañas, Peluquería, Masajes).
-- **Servicios** (tabla `servicios`): cada tratamiento es un servicio individual con `id_categoria`. ~40+ servicios reales del negocio.
+- **Servicios** (tabla `servicios`): cada tratamiento es un servicio individual con `id_categoria` y soporte opcional de `id_grupo_jornada` para restricciones operativas de agenda. ~40+ servicios reales del negocio.
 - Sin subcategorías — estructura plana de 1 nivel (categoría → servicio). Escalable y práctica.
 - Todos los servicios se muestran en el sitio (ninguno oculto por ahora).
 - El admin configura: servicios, duraciones, precios, empleada asignada.
@@ -150,7 +150,7 @@ Secciones en orden (con anclas):
 - Emails de confirmación se envían best-effort (no bloquean la reserva).
 - Anticipación máxima: 60 días.
 - Anti-solapamiento: verificación en backend antes de confirmar (responde 409 si ocupado).
-- Soporte para jornadas específicas (ej: extensiones de pestañas solo miércoles).
+- Soporte para jornadas específicas por categoría o por grupo operativo (ej: extensiones de pestañas en fechas puntuales, packs que usan la jornada de depilación o de equipamiento).
 - Staff puede registrar citas manualmente para clientes que no tienen cuenta (modal "Nueva Cita").
 
 ---
@@ -165,7 +165,7 @@ Secciones en orden (con anclas):
 #### Gestión de Servicios
 - CRUD completo: categorías, subcategorías, duración, precio, descripción.
 - Asignación de empleada por servicio/subcategoría.
-- Configuración de jornadas (días en que se ofrece el servicio).
+- Configuración de jornadas (días en que se ofrece una categoría o grupo operativo de servicios).
 - Activar/desactivar servicios.
 
 #### Gestión de Citas
@@ -263,7 +263,7 @@ Secciones en orden (con anclas):
 - [x] Testimonios administrables desde admin
 - [ ] Promociones administrables desde admin
 - [ ] Hero configurable desde admin
-- [ ] Gestión de jornadas específicas por servicio (depilación láser, extensiones miércoles)
+- [x] Gestión de jornadas por categoría y por grupo de jornada a nivel servicio
 - [ ] Hover con foto en sección Equipo
 - [ ] Foto de equipo reales (pendiente de Mari)
 - [ ] Precios reales en todos los servicios (pendiente de Mari)

@@ -31,24 +31,24 @@ if ($method === 'GET') {
         $jornada = $stmt->fetch();
         if (!$jornada) responder_json(false, null, 'Jornada no encontrada', 404);
 
-        // Contar citas en esa jornada
+        // Contar citas en esa jornada (incluye servicios con id_grupo_jornada)
         $stmt = $db->prepare(
             "SELECT COUNT(*) FROM citas ci
              JOIN servicios s ON ci.id_servicio = s.id
-             WHERE s.id_categoria = ? AND ci.fecha = ?
+             WHERE (s.id_categoria = ? OR s.id_grupo_jornada = ?) AND ci.fecha = ?
                AND ci.estado NOT IN ('cancelada')"
         );
-        $stmt->execute([$jornada['id_categoria'], $jornada['fecha']]);
+        $stmt->execute([$jornada['id_categoria'], $jornada['id_categoria'], $jornada['fecha']]);
         $jornada['citas_reservadas'] = (int) $stmt->fetchColumn();
 
         responder_json(true, $jornada);
     }
 
-    // Listar categorías con jornada (para selects)
+    // Listar categorías disponibles para jornadas (todas las activas)
     if (isset($_GET['categorias_jornada'])) {
         $stmt = $db->query(
-            "SELECT id, nombre, icono FROM categorias_servicios
-             WHERE requiere_jornada = 1 AND activo = 1
+            "SELECT id, nombre, icono, requiere_jornada FROM categorias_servicios
+             WHERE activo = 1
              ORDER BY orden"
         );
         responder_json(true, $stmt->fetchAll());
@@ -78,7 +78,7 @@ if ($method === 'GET') {
     $sql = "SELECT j.*, c.nombre AS categoria, c.icono AS categoria_icono,
                    (SELECT COUNT(*) FROM citas ci
                     JOIN servicios s ON ci.id_servicio = s.id
-                    WHERE s.id_categoria = j.id_categoria AND ci.fecha = j.fecha
+                    WHERE (s.id_categoria = j.id_categoria OR s.id_grupo_jornada = j.id_categoria) AND ci.fecha = j.fecha
                       AND ci.estado NOT IN ('cancelada')) AS citas_reservadas
             FROM jornadas j
             JOIN categorias_servicios c ON j.id_categoria = c.id";
@@ -109,10 +109,10 @@ if ($method === 'POST') {
         responder_json(false, null, 'Categoría requerida', 400);
     }
 
-    $stmt = $db->prepare("SELECT id, nombre FROM categorias_servicios WHERE id = ? AND requiere_jornada = 1 AND activo = 1");
+    $stmt = $db->prepare("SELECT id, nombre FROM categorias_servicios WHERE id = ? AND activo = 1");
     $stmt->execute([$id_categoria]);
     if (!$stmt->fetch()) {
-        responder_json(false, null, 'La categoría no existe o no requiere jornada', 400);
+        responder_json(false, null, 'La categoría no existe o no está activa', 400);
     }
 
     // Aceptar fecha única o array de fechas
@@ -216,7 +216,7 @@ if ($method === 'PATCH') {
         responder_json(false, null, 'La jornada ya está cancelada', 400);
     }
 
-    // Buscar citas afectadas (no canceladas)
+    // Buscar citas afectadas (no canceladas) — incluye servicios con id_grupo_jornada
     $stmt = $db->prepare(
         "SELECT ci.id, ci.hora_inicio, ci.hora_fin, ci.estado,
                 u.nombre AS cliente_nombre, u.apellidos AS cliente_apellidos,
@@ -224,11 +224,11 @@ if ($method === 'PATCH') {
          FROM citas ci
          JOIN servicios s ON ci.id_servicio = s.id
          JOIN usuarios u ON ci.id_cliente = u.id
-         WHERE s.id_categoria = ? AND ci.fecha = ?
+         WHERE (s.id_categoria = ? OR s.id_grupo_jornada = ?) AND ci.fecha = ?
            AND ci.estado NOT IN ('cancelada')
          ORDER BY ci.hora_inicio"
     );
-    $stmt->execute([$jornada['id_categoria'], $jornada['fecha']]);
+    $stmt->execute([$jornada['id_categoria'], $jornada['id_categoria'], $jornada['fecha']]);
     $citas_afectadas = $stmt->fetchAll();
 
     // Si solo quiere info (confirmacion previa)

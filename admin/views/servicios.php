@@ -42,6 +42,13 @@ require_once __DIR__ . '/../includes/admin_header.php';
       <form id="formServicio">
         <div class="modal-body">
           <input type="hidden" name="id" id="srvId">
+          <div class="mb-3 d-none" id="srvPromoBadgeWrap">
+            <div class="alert alert-info py-2 px-3 mb-0 d-flex align-items-center gap-2">
+              <i class="bi bi-gift"></i>
+              <span>Este servicio es generado por la promoción <strong id="srvPromoNombre"></strong></span>
+              <a href="#" id="srvPromoLink" class="btn btn-sm btn-outline-primary ms-auto">Ver promo</a>
+            </div>
+          </div>
           <div class="mb-3">
             <label class="form-label">Nombre</label>
             <input type="text" class="form-control" name="nombre" id="srvNombre" required>
@@ -51,6 +58,22 @@ require_once __DIR__ . '/../includes/admin_header.php';
             <select class="form-select" name="id_categoria" id="srvCategoria">
               <option value="">Sin categoría</option>
             </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Disponibilidad</label>
+            <select class="form-select" name="disponibilidad" id="srvDisponibilidad" onchange="toggleGrupoJornada()">
+              <option value="auto">Según categoría</option>
+              <option value="normal">Normal (calendario libre)</option>
+              <option value="jornada">Con Jornada (fechas específicas)</option>
+            </select>
+            <small class="form-text text-muted" id="srvDispoHelp">Determina cómo se reserva este servicio</small>
+          </div>
+          <div class="mb-3 d-none" id="grupoJornadaWrap">
+            <label class="form-label">Grupo de Jornada</label>
+            <select class="form-select" name="id_grupo_jornada" id="srvGrupoJornada">
+              <option value="">Misma categoría del servicio</option>
+            </select>
+            <small class="form-text text-muted">Usará las jornadas cargadas para esta categoría</small>
           </div>
           <div class="mb-3">
             <label class="form-label">Descripción</label>
@@ -112,9 +135,22 @@ async function cargarCategorias() {
     const res = await apiCall('<?= URL_API ?>/admin/categorias.php');
     if (res.success) {
         const sel = document.getElementById('srvCategoria');
+        const selGrupo = document.getElementById('srvGrupoJornada');
         res.data.forEach(c => {
             sel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`;
+            selGrupo.innerHTML += `<option value="${c.id}">${c.nombre}</option>`;
         });
+    }
+}
+
+function toggleGrupoJornada() {
+    const val = document.getElementById('srvDisponibilidad').value;
+    const wrap = document.getElementById('grupoJornadaWrap');
+    if (val === 'jornada') {
+        wrap.classList.remove('d-none');
+    } else {
+        wrap.classList.add('d-none');
+        document.getElementById('srvGrupoJornada').value = '';
     }
 }
 
@@ -132,6 +168,29 @@ function initTabla() {
                 : d
             },
             { data: null, orderable: false, render: (d) => {
+                // Resolver disponibilidad efectiva
+                const dispo = d.disponibilidad || 'auto';
+
+                if (dispo === 'normal') {
+                    return `
+                        <div class="srv-jornada srv-jornada--libre" title="Este servicio usa el calendario normal (override manual)">
+                            <span class="srv-jornada__pill"><i class="bi bi-calendar3"></i>Normal</span>
+                        </div>
+                    `;
+                }
+
+                if (dispo === 'jornada') {
+                    const grupo = d.grupo_jornada ? escapeHtml(d.grupo_jornada) : escapeHtml(d.categoria || '');
+                    const esGrupoExterno = d.grupo_jornada && (!d.categoria || d.grupo_jornada !== d.categoria);
+                    return `
+                        <div class="srv-jornada srv-jornada--${esGrupoExterno ? 'grupo' : 'categoria'}" title="Este servicio requiere jornada (override manual)">
+                            <span class="srv-jornada__pill"><i class="bi bi-calendar-check"></i>Con jornadas</span>
+                            ${esGrupoExterno ? `<span class="srv-jornada__meta">Fechas de ${grupo}</span>` : ''}
+                        </div>
+                    `;
+                }
+
+                // 'auto' — comportamiento legacy
                 const usaGrupoExterno = d.jornada_origen === 'grupo' && d.grupo_jornada && (!d.categoria || d.grupo_jornada !== d.categoria);
 
                 if (usaGrupoExterno) {
@@ -177,6 +236,10 @@ function abrirModalServicio() {
     document.getElementById('srvImagenUrl').value = '';
     document.getElementById('srvImagenPreview').innerHTML = '';
     document.getElementById('srvDestacado').checked = false;
+    document.getElementById('srvDisponibilidad').value = 'auto';
+    document.getElementById('srvGrupoJornada').value = '';
+    document.getElementById('srvPromoBadgeWrap').classList.add('d-none');
+    toggleGrupoJornada();
     modalServicio.show();
 }
 
@@ -197,6 +260,20 @@ async function editarServicio(id) {
         ? `<img src="${s.imagen}" class="rounded" style="max-height:80px">`
         : '';
     document.getElementById('srvDestacado').checked = s.destacado == 1;
+    document.getElementById('srvDisponibilidad').value = s.disponibilidad || 'auto';
+    document.getElementById('srvGrupoJornada').value = s.id_grupo_jornada || '';
+    toggleGrupoJornada();
+
+    // Badge de promo asociada
+    const badgeWrap = document.getElementById('srvPromoBadgeWrap');
+    if (s.promo_id) {
+        document.getElementById('srvPromoNombre').textContent = s.promo_nombre;
+        document.getElementById('srvPromoLink').href = '<?= URL_ADMIN ?>/views/promociones.php';
+        badgeWrap.classList.remove('d-none');
+    } else {
+        badgeWrap.classList.add('d-none');
+    }
+
     modalServicio.show();
 }
 
@@ -224,6 +301,7 @@ document.getElementById('formServicio').addEventListener('submit', async (e) => 
 
     const data = Object.fromEntries(fd);
     data.destacado = document.getElementById('srvDestacado').checked ? 1 : 0;
+    if (!data.id_grupo_jornada) data.id_grupo_jornada = null;
 
     const res = await apiCall(url, id ? 'PUT' : 'POST', data);
 

@@ -4,7 +4,7 @@
 > Audiencia: producto, desarrollo, agentes
 > Fuente de verdad: si
 > Relacion: contrato funcional del sistema de jornadas
-> Ultima revision: 2026-04-03
+> Ultima revision: 2026-04-04
 
 ## Alcance
 
@@ -23,9 +23,9 @@ Algunas categorias de servicios no operan todos los dias. Ejemplos:
 - **Depilacion:** maquina laser alquilada por jornada (12 hs, 08:00 a 20:00);
 - **Extensiones de Pestanas:** Naila asiste dias puntuales;
 - **Peluqueria:** Nathalia asiste dias puntuales;
-- **Trat. Corporales con Equipo:** equipos de Criolipólisis y VelaSlim disponibles por jornada.
+- **Tratamiento con equipo:** equipos de Criolipolisis y VelaSlim disponibles por jornada.
 
-La admin (Mariangeles) define las fechas mes a mes desde el panel.
+La admin (Mariangel) define las fechas mes a mes desde el panel.
 
 ## Modelo de datos
 
@@ -33,7 +33,14 @@ La admin (Mariangeles) define las fechas mes a mes desde el panel.
 
 - campo `TINYINT(1)` en tabla `categorias_servicios`;
 - si es `1`, los servicios de esa categoria solo pueden reservarse en fechas con jornada activa;
-- la decision es a nivel categoria, no a nivel servicio individual.
+
+### `servicios.id_grupo_jornada`
+
+- campo `INT NULL` en tabla `servicios`;
+- FK opcional a `categorias_servicios`;
+- si no es `NULL`, el servicio requiere jornada del grupo indicado aunque su categoria natural no requiera jornada;
+- tiene prioridad sobre `categorias_servicios.requiere_jornada`;
+- permite que un servicio siga visible en su categoria natural o en Packs, pero use la agenda de otro grupo de jornada.
 
 ### Tabla `jornadas`
 
@@ -50,14 +57,29 @@ La admin (Mariangeles) define las fechas mes a mes desde el panel.
 - constraint UNIQUE en `(id_categoria, fecha)`: una categoria tiene como maximo una jornada por dia;
 - FK a `categorias_servicios` con `ON DELETE CASCADE`.
 
-## Categorias con jornada (estado actual)
+## Categorias y grupos de jornada (estado actual)
 
 1. Depilacion (id 1)
 2. Extensiones de Pestanas (nueva)
-3. Peluqueria (id 8)
-4. Trat. Corporales con Equipo (nueva)
+3. Peluqueria (id 10)
+4. Tratamiento con equipo (id 13)
 
-Las categorias nuevas se crearon en migration 009 al separar servicios que requieren jornada de los que no.
+Las categorias nuevas se crearon en migration 009 y la migration 010 agrego grupos de jornada a nivel servicio para los casos mixtos.
+
+## Grupos de jornada y casos especiales
+
+El sistema hoy soporta dos modos:
+
+1. **Categoria completa con jornada:** toda la categoria depende de fechas cargadas en `jornadas`.
+2. **Servicio con grupo de jornada:** un servicio individual apunta a `servicios.id_grupo_jornada` y usa las jornadas de ese grupo.
+
+Casos reales actuales:
+
+- Criolipolisis Plana y VelaSlim siguen en su categoria natural de tratamientos corporales, pero usan el grupo de jornada "Tratamiento con equipo";
+- PACK REDUCTOR y PACK CELULITIS viven en Packs, pero usan el mismo grupo de jornada "Tratamiento con equipo";
+- Pack Depilacion Definitiva vive en Packs, pero usa las jornadas del grupo Depilacion.
+
+Esto evita duplicar servicios o moverlos de su categoria comercial solo por una restriccion operativa de agenda.
 
 ## APIs
 
@@ -72,12 +94,14 @@ Las categorias nuevas se crearon en migration 009 al separar servicios que requi
 
 - **GET:** recibe `id_servicio` o `id_categoria`;
 - resuelve si el servicio requiere jornada;
+- prioridad de resolucion: `servicios.id_grupo_jornada` > `categorias_servicios.requiere_jornada`;
 - devuelve lista de fechas con jornada activa en los proximos 60 dias;
 - si no requiere jornada, devuelve `requiere_jornada: false`.
 
 ### Interaccion con `api/citas/disponibilidad.php`
 
-- si la categoria del servicio tiene `requiere_jornada = 1`:
+- si el servicio tiene `id_grupo_jornada` o su categoria tiene `requiere_jornada = 1`:
+  - si existe `id_grupo_jornada`, usa ese grupo como categoria operativa de jornada;
   - verifica existencia de jornada activa para esa fecha;
   - si no hay jornada, devuelve turnos vacios con mensaje;
   - si hay jornada, usa sus horarios en vez de los generales del negocio;

@@ -17,6 +17,7 @@ $rolUsuario    = $_SESSION['usuario_rol'] ?? '';
 // ── Página actual (para nav activo) ──────────────────────
 $uri           = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $pagina_actual = basename($uri, '.php') ?: 'index';
+$navbar_light  = $pagina_actual !== 'index';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -111,12 +112,12 @@ $pagina_actual = basename($uri, '.php') ?: 'index';
 
 </head>
 
-<body>
+<body class="pm-page-<?= sanitizar($pagina_actual) ?>">
 
 <!-- ════════════════════════════════════════════════════════════
      NAVBAR — .pm-navbar
      ════════════════════════════════════════════════════════════ -->
-<nav id="pm-navbar" class="pm-navbar navbar navbar-expand-lg fixed-top" aria-label="Navegación principal">
+<nav id="pm-navbar" class="pm-navbar <?= $navbar_light ? 'pm-navbar--light ' : '' ?>navbar navbar-expand-lg fixed-top" aria-label="Navegación principal">
   <div class="container">
 
     <!-- ── Brand ──────────────────────────────────────────── -->

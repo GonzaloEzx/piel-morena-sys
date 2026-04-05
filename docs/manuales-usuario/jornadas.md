@@ -29,7 +29,7 @@ No todos los servicios necesitan jornadas. Solo estas 4 categorias:
 | Depilacion | Maquina laser alquilada por dia |
 | Extensiones de Pestanas | Naila asiste dias puntuales |
 | Peluqueria | Nathalia asiste dias puntuales |
-| Trat. Corporales con Equipo | Equipos Crio/VelaSlim por dia |
+| Tratamiento con equipo | Equipos Crio/VelaSlim por dia |
 
 El resto de servicios (Cejas y Pestanas, Tratamientos Faciales, Unas, etc.) funcionan con el calendario normal de todos los dias laborales.
 

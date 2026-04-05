@@ -160,6 +160,20 @@
     transform: translateY(-2px);
 }
 
+/* Inner public pages start on warm/light backgrounds, not over the dark hero */
+.pm-navbar.pm-navbar--light .pm-navbar-actions .btn-pm-outline {
+    border-color: var(--pm-v3-rosewood);
+    color: var(--pm-v3-rosewood);
+    background-color: rgba(248, 244, 232, 0.72);
+}
+
+.pm-navbar.pm-navbar--light .pm-navbar-actions .btn-pm-outline:hover {
+    background-color: var(--pm-v3-rosewood);
+    border-color: var(--pm-v3-rosewood);
+    color: var(--pm-text-inverse);
+    box-shadow: 0 4px 16px var(--pm-v3-rosewood-glow);
+}
+
 /* Scrolled state (cream glass): rosewood outline for contrast */
 .pm-navbar.scrolled .pm-navbar-actions .btn-pm-outline {
     border-color: var(--pm-v3-rosewood);

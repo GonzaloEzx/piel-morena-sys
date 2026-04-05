@@ -42,12 +42,13 @@ if (!$servicio) {
 }
 
 // ── Chequeo de jornada ──
-// Un servicio requiere jornada si:
-//   1) tiene id_grupo_jornada (nivel servicio), o
-//   2) su categoría tiene requiere_jornada = 1 (nivel categoría)
+// Resolución: servicios.disponibilidad > id_grupo_jornada > categorias.requiere_jornada
+//   'normal'  → calendario libre, no chequear jornada
+//   'jornada' → requiere jornada activa (usa id_grupo_jornada o su categoría)
+//   'auto'    → comportamiento legacy (id_grupo_jornada > categorias.requiere_jornada)
 $jornada_activa = null;
 $stmt_jcheck = $db->prepare(
-    "SELECT s.id_grupo_jornada, s.id_categoria,
+    "SELECT s.id_grupo_jornada, s.id_categoria, s.disponibilidad,
             c.requiere_jornada AS cat_requiere, c.nombre AS categoria_nombre,
             g.nombre AS grupo_nombre
      FROM servicios s
@@ -58,10 +59,20 @@ $stmt_jcheck = $db->prepare(
 $stmt_jcheck->execute([$id_servicio]);
 $jcheck = $stmt_jcheck->fetch();
 
-$grupo_jornada = $jcheck['id_grupo_jornada'] ?? null;
-$cat_requiere  = $jcheck['cat_requiere'] ?? 0;
+$disponibilidad = $jcheck['disponibilidad'] ?? 'auto';
+$grupo_jornada  = $jcheck['id_grupo_jornada'] ?? null;
+$cat_requiere   = $jcheck['cat_requiere'] ?? 0;
 
-if ($grupo_jornada || $cat_requiere) {
+$necesita_jornada = false;
+if ($disponibilidad === 'jornada') {
+    $necesita_jornada = true;
+} elseif ($disponibilidad === 'normal') {
+    $necesita_jornada = false;
+} else {
+    $necesita_jornada = $grupo_jornada || $cat_requiere;
+}
+
+if ($necesita_jornada) {
     $jornada_cat_id = $grupo_jornada ?: $jcheck['id_categoria'];
     $jornada_nombre = $grupo_jornada ? $jcheck['grupo_nombre'] : $jcheck['categoria_nombre'];
 

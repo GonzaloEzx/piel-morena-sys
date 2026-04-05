@@ -538,6 +538,16 @@ main {
     color: var(--pm-text-muted);
 }
 
+/* Light-start variant for inner public pages with pale backgrounds */
+.pm-navbar.pm-navbar--light .pm-navbar-brand-name,
+.pm-navbar.pm-navbar--light .pm-navbar-nombre {
+    color: var(--pm-tierra);
+}
+
+.pm-navbar.pm-navbar--light .pm-navbar-brand-tagline {
+    color: var(--pm-text-muted);
+}
+
 /* -- Nav Links -- */
 .pm-navbar .nav-link {
     font-family: var(--pm-font-ui);
@@ -592,6 +602,23 @@ main {
 }
 
 .pm-navbar.scrolled .nav-link.active::after {
+    background-color: var(--pm-bronce);
+}
+
+.pm-navbar.pm-navbar--light .nav-link {
+    color: var(--pm-text-muted);
+}
+
+.pm-navbar.pm-navbar--light .nav-link:hover {
+    color: var(--pm-tierra);
+    background-color: rgba(236, 231, 209, 0.9);
+}
+
+.pm-navbar.pm-navbar--light .nav-link.active {
+    color: var(--pm-tierra);
+}
+
+.pm-navbar.pm-navbar--light .nav-link.active::after {
     background-color: var(--pm-bronce);
 }
 
@@ -652,6 +679,12 @@ main {
 .pm-navbar.scrolled .pm-navbar-toggler {
     color: var(--pm-tierra);
     background: rgba(122, 101, 79, 0.08);
+    border-radius: var(--pm-radius-sm);
+}
+
+.pm-navbar.pm-navbar--light .pm-navbar-toggler {
+    color: var(--pm-tierra);
+    background: rgba(248, 244, 232, 0.88);
     border-radius: var(--pm-radius-sm);
 }
 

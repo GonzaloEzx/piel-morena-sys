@@ -123,6 +123,12 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
         </a>
       </li>
       <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/promociones.php" class="pm-sidebar-link <?= $vista_actual === 'promociones' ? 'active' : '' ?>">
+          <i class="bi bi-gift"></i>
+          <span>Promociones</span>
+        </a>
+      </li>
+      <li class="pm-sidebar-item">
         <a href="<?= URL_ADMIN ?>/views/clientes.php" class="pm-sidebar-link <?= $vista_actual === 'clientes' ? 'active' : '' ?>">
           <i class="bi bi-people-fill"></i>
           <span>Clientes</span>

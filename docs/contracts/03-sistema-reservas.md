@@ -4,7 +4,7 @@
 > Audiencia: producto, desarrollo, agentes
 > Fuente de verdad: si
 > Relacion: contrato funcional del modulo de reservas y citas
-> Ultima revision: 2026-04-03
+> Ultima revision: 2026-04-04
 
 ## Alcance
 
@@ -44,9 +44,10 @@ El equipo debe unificar este criterio antes de seguir ampliando el modulo.
 
 ## Jornadas
 
-Servicios de categorias con `requiere_jornada = 1` tienen flujo de reserva alternativo:
+Servicios que requieren jornada, ya sea por `categorias_servicios.requiere_jornada = 1` o por `servicios.id_grupo_jornada`, tienen flujo de reserva alternativo:
 
 - paso 2 del wizard muestra grid de fechas con jornada activa en vez de date picker libre;
+- la resolucion del grupo de jornada prioriza `id_grupo_jornada` sobre la categoria natural del servicio;
 - `disponibilidad.php` verifica jornada activa y usa sus horarios;
 - ver contrato `10-jornadas.md` para detalle completo.
 

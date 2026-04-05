@@ -4,7 +4,7 @@
 > Audiencia: producto, desarrollo, agentes
 > Fuente de verdad: complementaria
 > Relacion: reglas transversales del modulo de reservas
-> Ultima revision: 2026-04-03
+> Ultima revision: 2026-04-04
 
 ## Objetivo
 
@@ -30,7 +30,8 @@ Evitar `agenda` como nombre principal de modulo nuevo.
 - acepta solo `GET`;
 - valida fecha e id de servicio;
 - exige servicio activo;
-- **chequea si la categoria tiene `requiere_jornada = 1`:**
+- **chequea si el servicio requiere jornada:**
+  - prioridad: `servicios.id_grupo_jornada` > `categorias_servicios.requiere_jornada`;
   - si requiere jornada y no hay jornada activa para esa fecha → devuelve turnos vacios con mensaje;
   - si hay jornada activa → usa horarios de la jornada (sobreescribe apertura/cierre general);
   - si hay jornada activa → salta chequeo de dia laboral;

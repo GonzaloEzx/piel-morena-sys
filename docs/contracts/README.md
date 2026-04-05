@@ -4,14 +4,14 @@
 > Audiencia: producto, desarrollo, agentes
 > Fuente de verdad: si, por modulo
 > Relacion: capa funcional oficial del sistema
-> Ultima revision: 2026-04-03
+> Ultima revision: 2026-04-05
 
 ## Indice
 
 | # | Contrato | Estado actual |
 |---|---|---|
 | 01 | Gestion de usuarios | Implementado con observacion sobre Google UI |
-| 02 | Catalogo de servicios | Implementado |
+| 02 | Catalogo de servicios | Implementado con override de disponibilidad |
 | 03 | Sistema de reservas | Implementado con decision abierta auth vs invitado |
 | 04 | Panel de administracion | Implementado |
 | 05 | Control de caja | Implementado |
@@ -19,6 +19,8 @@
 | 07 | Analytics y reportes | Implementado |
 | 08 | Landing publica | Implementado con placeholders de contenido |
 | 09 | Productos e inventario | Implementado con mejoras pendientes |
+| 10 | Jornadas | Implementado con apertura a todas las categorias |
+| 11 | Promociones y packs | Implementado |
 
 ## Regla de uso
 
