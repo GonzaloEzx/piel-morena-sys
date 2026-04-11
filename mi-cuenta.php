@@ -58,7 +58,8 @@ $meses_es = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','
     <div class="row g-4">
 
       <!-- ── Col izquierda: Datos + Password ───────────────── -->
-      <div class="col-12 col-lg-5">
+      <!-- order: mobile=2 (debajo de citas), desktop=1 (izquierda) -->
+      <div class="col-12 col-lg-5 order-2 order-lg-1">
 
         <!-- Datos personales -->
         <div class="pm-cuenta-card">
@@ -141,7 +142,8 @@ $meses_es = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','
       </div>
 
       <!-- ── Col derecha: Citas ────────────────────────────── -->
-      <div class="col-12 col-lg-7">
+      <!-- order: mobile=1 (arriba), desktop=2 (derecha) -->
+      <div class="col-12 col-lg-7 order-1 order-lg-2">
 
         <!-- Próximas citas -->
         <div class="pm-cuenta-card">
