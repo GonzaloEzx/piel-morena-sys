@@ -2,9 +2,10 @@
 /**
  * Piel Morena — API Admin: Gestión de Jornadas
  * GET    → Listar jornadas (filtro: categoria, fecha_desde, fecha_hasta, estado)
+ *          GET ?id=X → detalle + lista de citas activas afectadas
  * POST   → Crear jornada(s) — soporta múltiples fechas
  * PUT    → Editar jornada (horarios, notas)
- * PATCH  → Cancelar jornada (con info de citas afectadas)
+ * DELETE → Eliminar jornada + cancelar sus citas activas
  */
 
 require_once __DIR__ . '/../../includes/init.php';
@@ -31,15 +32,22 @@ if ($method === 'GET') {
         $jornada = $stmt->fetch();
         if (!$jornada) responder_json(false, null, 'Jornada no encontrada', 404);
 
-        // Contar citas en esa jornada (incluye servicios con id_grupo_jornada)
+        // Citas activas afectadas (lista completa para confirmación de borrado)
         $stmt = $db->prepare(
-            "SELECT COUNT(*) FROM citas ci
+            "SELECT ci.id, ci.hora_inicio, ci.hora_fin, ci.estado,
+                    u.nombre AS cliente_nombre, u.apellidos AS cliente_apellidos,
+                    s.nombre AS servicio
+             FROM citas ci
              JOIN servicios s ON ci.id_servicio = s.id
+             JOIN usuarios u ON ci.id_cliente = u.id
              WHERE (s.id_categoria = ? OR s.id_grupo_jornada = ?) AND ci.fecha = ?
-               AND ci.estado NOT IN ('cancelada')"
+               AND ci.estado NOT IN ('cancelada')
+             ORDER BY ci.hora_inicio"
         );
         $stmt->execute([$jornada['id_categoria'], $jornada['id_categoria'], $jornada['fecha']]);
-        $jornada['citas_reservadas'] = (int) $stmt->fetchColumn();
+        $citas = $stmt->fetchAll();
+        $jornada['citas_reservadas'] = count($citas);
+        $jornada['citas_afectadas']  = $citas;
 
         responder_json(true, $jornada);
     }
@@ -197,8 +205,8 @@ if ($method === 'PUT') {
     responder_json(true);
 }
 
-// ── PATCH (cancelar) ──
-if ($method === 'PATCH') {
+// ── DELETE (eliminar definitivamente + cancelar citas activas) ──
+if ($method === 'DELETE') {
     $id = intval($input['id'] ?? 0);
     if (!$id) responder_json(false, null, 'ID requerido', 400);
 
@@ -212,43 +220,27 @@ if ($method === 'PATCH') {
     $jornada = $stmt->fetch();
     if (!$jornada) responder_json(false, null, 'Jornada no encontrada', 404);
 
-    if ($jornada['estado'] === 'cancelada') {
-        responder_json(false, null, 'La jornada ya está cancelada', 400);
-    }
-
-    // Buscar citas afectadas (no canceladas) — incluye servicios con id_grupo_jornada
+    // Cancelar citas activas de esa fecha+categoría
     $stmt = $db->prepare(
-        "SELECT ci.id, ci.hora_inicio, ci.hora_fin, ci.estado,
-                u.nombre AS cliente_nombre, u.apellidos AS cliente_apellidos,
-                s.nombre AS servicio
-         FROM citas ci
+        "UPDATE citas ci
          JOIN servicios s ON ci.id_servicio = s.id
-         JOIN usuarios u ON ci.id_cliente = u.id
-         WHERE (s.id_categoria = ? OR s.id_grupo_jornada = ?) AND ci.fecha = ?
-           AND ci.estado NOT IN ('cancelada')
-         ORDER BY ci.hora_inicio"
+         SET ci.estado = 'cancelada'
+         WHERE (s.id_categoria = ? OR s.id_grupo_jornada = ?)
+           AND ci.fecha = ?
+           AND ci.estado NOT IN ('cancelada')"
     );
     $stmt->execute([$jornada['id_categoria'], $jornada['id_categoria'], $jornada['fecha']]);
-    $citas_afectadas = $stmt->fetchAll();
+    $citas_canceladas = $stmt->rowCount();
 
-    // Si solo quiere info (confirmacion previa)
-    if (!empty($input['solo_info'])) {
-        responder_json(true, [
-            'jornada'          => $jornada,
-            'citas_afectadas'  => $citas_afectadas,
-            'total_afectadas'  => count($citas_afectadas),
-        ]);
-    }
-
-    // Cancelar la jornada
-    $stmt = $db->prepare("UPDATE jornadas SET estado = 'cancelada' WHERE id = ?");
+    // Eliminar la jornada
+    $stmt = $db->prepare("DELETE FROM jornadas WHERE id = ?");
     $stmt->execute([$id]);
 
     responder_json(true, [
-        'citas_afectadas' => count($citas_afectadas),
-        'mensaje'         => count($citas_afectadas) > 0
-            ? 'Jornada cancelada. Hay ' . count($citas_afectadas) . ' cita(s) que deberías gestionar manualmente.'
-            : 'Jornada cancelada sin citas afectadas.',
+        'citas_canceladas' => $citas_canceladas,
+        'mensaje'          => $citas_canceladas > 0
+            ? "Jornada eliminada. Se cancelaron {$citas_canceladas} cita(s) asociadas."
+            : 'Jornada eliminada.',
     ]);
 }
 

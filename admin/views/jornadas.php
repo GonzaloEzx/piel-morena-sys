@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (d.estado === 'cancelada') return '<span class="text-muted">—</span>';
                 return `
                     <button class="pm-action-btn edit" title="Editar" onclick="abrirEditar(${d.id})"><i class="bi bi-pencil"></i></button>
-                    <button class="pm-action-btn delete" title="Cancelar" onclick="cancelarJornada(${d.id})"><i class="bi bi-x-circle"></i></button>
+                    <button class="pm-action-btn delete" title="Eliminar" onclick="eliminarJornada(${d.id})"><i class="bi bi-trash"></i></button>
                 `;
             }}
         ],
@@ -514,23 +514,23 @@ async function guardarEdicion() {
 }
 
 // ══════════════════════════════════════════
-//  CANCELAR JORNADA
+//  ELIMINAR JORNADA
 // ══════════════════════════════════════════
 
-async function cancelarJornada(id) {
-    // Paso 1: obtener info de citas afectadas
-    const info = await apiCall('<?= URL_API ?>/admin/jornadas.php', 'PATCH', { id, solo_info: true });
+async function eliminarJornada(id) {
+    // Paso 1: obtener detalle + citas afectadas
+    const info = await apiCall('<?= URL_API ?>/admin/jornadas.php?id=' + id);
     if (!info.success) { PM.error('Error', info.error); return; }
 
-    const j = info.data.jornada;
-    const citas = info.data.citas_afectadas;
-    const total = info.data.total_afectadas;
+    const j = info.data;
+    const citas = j.citas_afectadas || [];
+    const total = citas.length;
 
     let htmlCitas = '';
     if (total > 0) {
         htmlCitas = `
             <div class="alert alert-warning mt-3 mb-0 py-2 px-3" style="font-size:.82rem">
-                <strong><i class="bi bi-exclamation-triangle me-1"></i>${total} cita(s) afectada(s):</strong>
+                <strong><i class="bi bi-exclamation-triangle me-1"></i>${total} cita(s) que serán canceladas:</strong>
                 <div class="jn-citas-afectadas mt-2">
                     ${citas.map(c => `
                         <div class="jn-cita-item">
@@ -539,35 +539,35 @@ async function cancelarJornada(id) {
                         </div>
                     `).join('')}
                 </div>
-                <div class="mt-2 text-muted" style="font-size:.75rem">Las citas NO se cancelan automáticamente. Deberás gestionarlas manualmente.</div>
             </div>
         `;
     }
 
     // Paso 2: confirmar
     const result = await Swal.fire({
-        title: 'Cancelar jornada',
+        title: 'Eliminar jornada',
         html: `
             <div style="text-align:left">
                 <p><strong>${j.categoria}</strong> — ${formatFechaJornada(j.fecha)}</p>
                 <p style="font-size:.85rem">${formatHora(j.hora_inicio)} a ${formatHora(j.hora_fin)}</p>
                 ${htmlCitas}
+                <p class="mt-3 mb-0" style="font-size:.82rem;color:#A85F52">Esta acción no se puede deshacer.</p>
             </div>
         `,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#A85F52',
         cancelButtonColor: '#8A7650',
-        confirmButtonText: total > 0 ? `Cancelar jornada (${total} citas afectadas)` : 'Sí, cancelar',
+        confirmButtonText: total > 0 ? `Eliminar (cancela ${total} cita(s))` : 'Sí, eliminar',
         cancelButtonText: 'Volver'
     });
 
     if (!result.isConfirmed) return;
 
-    // Paso 3: cancelar
-    const res = await apiCall('<?= URL_API ?>/admin/jornadas.php', 'PATCH', { id });
+    // Paso 3: eliminar
+    const res = await apiCall('<?= URL_API ?>/admin/jornadas.php', 'DELETE', { id });
     if (res.success) {
-        PM.toast('success', res.data.mensaje || 'Jornada cancelada');
+        PM.toast('success', res.data.mensaje || 'Jornada eliminada');
         dtJornadas.ajax.reload();
         if (calendar) calendar.refetchEvents();
     } else {
