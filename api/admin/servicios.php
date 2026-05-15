@@ -45,24 +45,15 @@ if ($method === 'GET') {
         "SELECT s.*,
                 c.nombre AS categoria,
                 c.requiere_jornada AS categoria_requiere_jornada,
-                g.nombre AS grupo_jornada,
                 m.nombre AS maquina_nombre,
                 m.color AS maquina_color,
                 CASE
                     WHEN s.id_maquina IS NOT NULL THEN 'maquina'
-                    WHEN s.id_grupo_jornada IS NOT NULL THEN 'grupo'
-                    WHEN c.requiere_jornada = 1 THEN 'categoria'
-                    ELSE 'ninguna'
-                END AS disponibilidad_origen,
-                CASE
-                    WHEN s.id_maquina IS NOT NULL THEN 1
-                    WHEN s.id_grupo_jornada IS NOT NULL THEN 1
-                    WHEN c.requiere_jornada = 1 THEN 1
-                    ELSE 0
-                END AS tiene_disponibilidad_asociada
+                    WHEN c.requiere_jornada = 1 THEN 'jornada'
+                    ELSE 'libre'
+                END AS disponibilidad_origen
          FROM servicios s
          LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
-         LEFT JOIN categorias_servicios g ON s.id_grupo_jornada = g.id
          LEFT JOIN maquinas m ON s.id_maquina = m.id
          ORDER BY s.id DESC"
     );
@@ -87,28 +78,14 @@ function contarDestacados(PDO $db, ?int $excluir_id = null): int {
 
 // ── POST (crear) ──
 if ($method === 'POST') {
-    $nombre         = trim($input['nombre'] ?? '');
-    $precio         = floatval($input['precio'] ?? 0);
-    $duracion       = intval($input['duracion_minutos'] ?? 30);
-    $desc           = trim($input['descripcion'] ?? '');
-    $cat            = $input['id_categoria'] ?? null;
-    $imagen         = trim($input['imagen'] ?? '');
-    $destacado      = intval($input['destacado'] ?? 0) ? 1 : 0;
-    $id_maquina     = $input['id_maquina'] ?? null;
-    $disponibilidad = $input['disponibilidad'] ?? 'auto';
-    $grupo_jornada  = $input['id_grupo_jornada'] ?? null;
-
-    if (!in_array($disponibilidad, ['auto', 'normal', 'jornada'])) {
-        $disponibilidad = 'auto';
-    }
-    if ($disponibilidad !== 'jornada') {
-        $grupo_jornada = null;
-    }
-    // Si tiene maquina, los campos legacy quedan nulos para evitar conflicto
-    if ($id_maquina) {
-        $disponibilidad = 'auto';
-        $grupo_jornada  = null;
-    }
+    $nombre     = trim($input['nombre'] ?? '');
+    $precio     = floatval($input['precio'] ?? 0);
+    $duracion   = intval($input['duracion_minutos'] ?? 30);
+    $desc       = trim($input['descripcion'] ?? '');
+    $cat        = $input['id_categoria'] ?? null;
+    $imagen     = trim($input['imagen'] ?? '');
+    $destacado  = intval($input['destacado'] ?? 0) ? 1 : 0;
+    $id_maquina = $input['id_maquina'] ?? null;
 
     if (!$nombre || $precio <= 0) {
         responder_json(false, null, 'Nombre y precio son obligatorios', 400);
@@ -119,37 +96,24 @@ if ($method === 'POST') {
     }
 
     $stmt = $db->prepare(
-        "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria, imagen, destacado, disponibilidad, id_grupo_jornada, id_maquina)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria, imagen, destacado, id_maquina)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
     );
-    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado, $disponibilidad, $grupo_jornada ?: null, $id_maquina ?: null]);
+    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado, $id_maquina ?: null]);
     responder_json(true, ['id' => $db->lastInsertId()]);
 }
 
 // ── PUT (editar) ──
 if ($method === 'PUT') {
-    $id              = intval($input['id'] ?? 0);
-    $nombre          = trim($input['nombre'] ?? '');
-    $precio          = floatval($input['precio'] ?? 0);
-    $duracion        = intval($input['duracion_minutos'] ?? 30);
-    $desc            = trim($input['descripcion'] ?? '');
-    $cat             = $input['id_categoria'] ?? null;
-    $imagen          = trim($input['imagen'] ?? '');
-    $destacado       = intval($input['destacado'] ?? 0) ? 1 : 0;
-    $id_maquina      = $input['id_maquina'] ?? null;
-    $disponibilidad  = $input['disponibilidad'] ?? 'auto';
-    $grupo_jornada   = $input['id_grupo_jornada'] ?? null;
-
-    if (!in_array($disponibilidad, ['auto', 'normal', 'jornada'])) {
-        $disponibilidad = 'auto';
-    }
-    if ($disponibilidad !== 'jornada') {
-        $grupo_jornada = null;
-    }
-    if ($id_maquina) {
-        $disponibilidad = 'auto';
-        $grupo_jornada  = null;
-    }
+    $id         = intval($input['id'] ?? 0);
+    $nombre     = trim($input['nombre'] ?? '');
+    $precio     = floatval($input['precio'] ?? 0);
+    $duracion   = intval($input['duracion_minutos'] ?? 30);
+    $desc       = trim($input['descripcion'] ?? '');
+    $cat        = $input['id_categoria'] ?? null;
+    $imagen     = trim($input['imagen'] ?? '');
+    $destacado  = intval($input['destacado'] ?? 0) ? 1 : 0;
+    $id_maquina = $input['id_maquina'] ?? null;
 
     if (!$id || !$nombre || $precio <= 0) {
         responder_json(false, null, 'Datos incompletos', 400);
@@ -160,10 +124,10 @@ if ($method === 'PUT') {
     }
 
     $stmt = $db->prepare(
-        "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, id_categoria=?, imagen=?, destacado=?, disponibilidad=?, id_grupo_jornada=?, id_maquina=?
+        "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, id_categoria=?, imagen=?, destacado=?, id_maquina=?
          WHERE id=?"
     );
-    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado, $disponibilidad, $grupo_jornada ?: null, $id_maquina ?: null, $id]);
+    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado, $id_maquina ?: null, $id]);
     responder_json(true);
 }
 

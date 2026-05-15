@@ -41,28 +41,23 @@ if (!$servicio) {
     responder_json(false, null, 'Servicio no encontrado', 404);
 }
 
-// ── Resolucion de disponibilidad (regla unica) ──
-// 1. Si servicios.id_maquina IS NOT NULL → requiere alquiler activo de esa maquina.
-// 2. Sino, si la categoria tiene requiere_jornada=1 → requiere jornada activa (personal externo).
+// ── Resolucion de disponibilidad ──
+// 1. servicios.id_maquina IS NOT NULL → requiere alquiler activo de esa maquina.
+// 2. Sino, si categoria tiene requiere_jornada=1 → requiere jornada activa (personal externo).
 // 3. Sino → calendario libre.
-// (Campos legacy id_grupo_jornada y disponibilidad se siguen consultando como fallback
-//  durante la coexistencia; se eliminan en migration 015.)
-$ventana_activa = null;  // { hora_inicio, hora_fin } si hay maquina o jornada
+$ventana_activa = null;
 $stmt_check = $db->prepare(
-    "SELECT s.id_maquina, s.id_grupo_jornada, s.id_categoria, s.disponibilidad,
+    "SELECT s.id_maquina, s.id_categoria,
             m.nombre AS maquina_nombre, m.activo AS maquina_activa,
-            c.requiere_jornada AS cat_requiere, c.nombre AS categoria_nombre,
-            g.nombre AS grupo_nombre
+            c.requiere_jornada AS cat_requiere, c.nombre AS categoria_nombre
      FROM servicios s
      LEFT JOIN maquinas m ON s.id_maquina = m.id
      LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
-     LEFT JOIN categorias_servicios g ON s.id_grupo_jornada = g.id
      WHERE s.id = ? LIMIT 1"
 );
 $stmt_check->execute([$id_servicio]);
 $rcheck = $stmt_check->fetch();
 
-// Caso 1: maquina alquilada
 if (!empty($rcheck['id_maquina'])) {
     if (!$rcheck['maquina_activa']) {
         responder_json(true, [
@@ -93,44 +88,24 @@ if (!empty($rcheck['id_maquina'])) {
             'mensaje'  => 'No hay alquiler activo de la maquina ' . $rcheck['maquina_nombre'] . ' para esta fecha',
         ]);
     }
-} else {
-    // Caso 2: jornada (legacy + personal externo)
-    // Mantengo la resolucion legacy (disponibilidad + id_grupo_jornada) hasta migration 015.
-    $disponibilidad = $rcheck['disponibilidad'] ?? 'auto';
-    $grupo_jornada  = $rcheck['id_grupo_jornada'] ?? null;
-    $cat_requiere   = $rcheck['cat_requiere'] ?? 0;
+} elseif (!empty($rcheck['cat_requiere'])) {
+    $stmt_j = $db->prepare(
+        "SELECT hora_inicio, hora_fin FROM jornadas
+         WHERE id_categoria = ? AND fecha = ? AND estado = 'activa'
+         LIMIT 1"
+    );
+    $stmt_j->execute([(int) $rcheck['id_categoria'], $fecha]);
+    $ventana_activa = $stmt_j->fetch();
 
-    $necesita_jornada = false;
-    if ($disponibilidad === 'jornada') {
-        $necesita_jornada = true;
-    } elseif ($disponibilidad === 'normal') {
-        $necesita_jornada = false;
-    } else {
-        $necesita_jornada = $grupo_jornada || $cat_requiere;
-    }
-
-    if ($necesita_jornada) {
-        $jornada_cat_id = $grupo_jornada ?: $rcheck['id_categoria'];
-        $jornada_nombre = $grupo_jornada ? $rcheck['grupo_nombre'] : $rcheck['categoria_nombre'];
-
-        $stmt_j = $db->prepare(
-            "SELECT hora_inicio, hora_fin FROM jornadas
-             WHERE id_categoria = ? AND fecha = ? AND estado = 'activa'
-             LIMIT 1"
-        );
-        $stmt_j->execute([$jornada_cat_id, $fecha]);
-        $ventana_activa = $stmt_j->fetch();
-
-        if (!$ventana_activa) {
-            responder_json(true, [
-                'fecha'    => $fecha,
-                'servicio' => $servicio['nombre'],
-                'precio'   => $servicio['precio'],
-                'duracion' => $servicio['duracion_minutos'],
-                'turnos'   => [],
-                'mensaje'  => 'No hay jornada programada para ' . $jornada_nombre . ' en esta fecha',
-            ]);
-        }
+    if (!$ventana_activa) {
+        responder_json(true, [
+            'fecha'    => $fecha,
+            'servicio' => $servicio['nombre'],
+            'precio'   => $servicio['precio'],
+            'duracion' => $servicio['duracion_minutos'],
+            'turnos'   => [],
+            'mensaje'  => 'No hay jornada programada para ' . $rcheck['categoria_nombre'] . ' en esta fecha',
+        ]);
     }
 }
 

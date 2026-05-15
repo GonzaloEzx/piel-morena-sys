@@ -83,22 +83,13 @@ require_once __DIR__ . '/../includes/admin_header.php';
             <small class="form-text text-muted">Seleccioná los servicios y la cantidad de sesiones incluidas</small>
           </div>
 
-          <!-- Disponibilidad -->
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label">Disponibilidad</label>
-              <select class="form-select" name="disponibilidad" id="promoDisponibilidad" onchange="togglePromoGrupo()">
-                <option value="auto">Según categoría</option>
-                <option value="normal">Normal (calendario libre)</option>
-                <option value="jornada">Con Jornada (fechas específicas)</option>
-              </select>
-            </div>
-            <div class="col-md-6 d-none" id="promoGrupoWrap">
-              <label class="form-label">Grupo de Jornada</label>
-              <select class="form-select" name="id_grupo_jornada" id="promoGrupoJornada">
-                <option value="">Misma categoría (Packs)</option>
-              </select>
-            </div>
+          <!-- Maquina asociada al pack -->
+          <div class="mb-3">
+            <label class="form-label">Máquina alquilada (opcional)</label>
+            <select class="form-select" name="id_maquina" id="promoMaquina">
+              <option value="">(Ninguna — calendario libre)</option>
+            </select>
+            <small class="form-text text-muted">Si el pack requiere una máquina alquilada, seleccionala. Solo se podrá reservar en fechas con alquiler activo de esa máquina.</small>
           </div>
         </div>
         <div class="modal-footer">
@@ -127,7 +118,7 @@ function escapeHtml(value) {
 document.addEventListener('DOMContentLoaded', () => {
     modalPromo = new bootstrap.Modal(document.getElementById('modalPromo'));
     cargarServiciosCatalogo();
-    cargarCategoriasGrupo();
+    cargarMaquinasPromo();
     initTabla();
 });
 
@@ -191,25 +182,14 @@ function renderServiciosSelector(seleccionados = []) {
     });
 }
 
-// ── Cargar categorías para grupo jornada ──
-async function cargarCategoriasGrupo() {
-    const res = await apiCall('<?= URL_API ?>/admin/categorias.php');
+// ── Cargar maquinas activas para selector del pack ──
+async function cargarMaquinasPromo() {
+    const res = await apiCall('<?= URL_API ?>/admin/maquinas.php?activo=1');
     if (!res.success) return;
-    const sel = document.getElementById('promoGrupoJornada');
-    res.data.forEach(c => {
-        sel.innerHTML += `<option value="${c.id}">${escapeHtml(c.nombre)}</option>`;
+    const sel = document.getElementById('promoMaquina');
+    res.data.forEach(m => {
+        sel.innerHTML += `<option value="${m.id}">${escapeHtml(m.nombre)}</option>`;
     });
-}
-
-function togglePromoGrupo() {
-    const val = document.getElementById('promoDisponibilidad').value;
-    const wrap = document.getElementById('promoGrupoWrap');
-    if (val === 'jornada') {
-        wrap.classList.remove('d-none');
-    } else {
-        wrap.classList.add('d-none');
-        document.getElementById('promoGrupoJornada').value = '';
-    }
 }
 
 // ── Recoger servicios seleccionados del modal ──
@@ -278,9 +258,7 @@ function abrirModalPromo() {
     document.getElementById('modalPromoTitle').textContent = 'Nueva Promoción';
     document.getElementById('formPromo').reset();
     document.getElementById('promoId').value = '';
-    document.getElementById('promoDisponibilidad').value = 'auto';
-    document.getElementById('promoGrupoJornada').value = '';
-    togglePromoGrupo();
+    document.getElementById('promoMaquina').value = '';
     renderServiciosSelector();
     modalPromo.show();
 }
@@ -299,9 +277,7 @@ async function editarPromo(id) {
     document.getElementById('promoDuracion').value = p.duracion_estimada;
     document.getElementById('promoFechaInicio').value = p.fecha_inicio || '';
     document.getElementById('promoFechaFin').value = p.fecha_fin || '';
-    document.getElementById('promoDisponibilidad').value = p.disponibilidad || 'auto';
-    document.getElementById('promoGrupoJornada').value = p.id_grupo_jornada || '';
-    togglePromoGrupo();
+    document.getElementById('promoMaquina').value = p.id_maquina || '';
 
     // Renderizar servicios con seleccionados
     renderServiciosSelector(p.servicios || []);
@@ -322,7 +298,7 @@ document.getElementById('formPromo').addEventListener('submit', async (e) => {
         return PM.error('Error', 'Seleccioná al menos un servicio para el pack');
     }
 
-    if (!data.id_grupo_jornada) data.id_grupo_jornada = null;
+    if (!data.id_maquina) data.id_maquina = null;
 
     const res = await apiCall('<?= URL_API ?>/admin/promociones.php', id ? 'PUT' : 'POST', data);
     if (res.success) {

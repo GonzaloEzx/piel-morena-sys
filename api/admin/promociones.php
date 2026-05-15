@@ -46,11 +46,10 @@ if ($method === 'GET') {
 
         // Datos del servicio generado para el modal
         if ($promo['id_servicio_generado']) {
-            $stmt = $db->prepare("SELECT disponibilidad, id_grupo_jornada FROM servicios WHERE id = ?");
+            $stmt = $db->prepare("SELECT id_maquina FROM servicios WHERE id = ?");
             $stmt->execute([$promo['id_servicio_generado']]);
             $srv_data = $stmt->fetch();
-            $promo['disponibilidad'] = $srv_data['disponibilidad'] ?? 'auto';
-            $promo['id_grupo_jornada'] = $srv_data['id_grupo_jornada'];
+            $promo['id_maquina'] = $srv_data['id_maquina'];
         }
 
         responder_json(true, $promo);
@@ -94,15 +93,14 @@ function obtenerCatPacks(PDO $db): int {
 
 // ── POST (crear) ──
 if ($method === 'POST') {
-    $nombre          = trim($input['nombre'] ?? '');
-    $descripcion     = trim($input['descripcion'] ?? '');
-    $precio          = floatval($input['precio_pack'] ?? 0);
-    $duracion        = intval($input['duracion_estimada'] ?? 60);
-    $fecha_inicio    = $input['fecha_inicio'] ?? null;
-    $fecha_fin       = $input['fecha_fin'] ?? null;
-    $servicios       = $input['servicios'] ?? [];  // [{id_servicio, cantidad}]
-    $disponibilidad  = $input['disponibilidad'] ?? 'auto';
-    $grupo_jornada   = $input['id_grupo_jornada'] ?? null;
+    $nombre       = trim($input['nombre'] ?? '');
+    $descripcion  = trim($input['descripcion'] ?? '');
+    $precio       = floatval($input['precio_pack'] ?? 0);
+    $duracion     = intval($input['duracion_estimada'] ?? 60);
+    $fecha_inicio = $input['fecha_inicio'] ?? null;
+    $fecha_fin    = $input['fecha_fin'] ?? null;
+    $servicios    = $input['servicios'] ?? [];
+    $id_maquina   = $input['id_maquina'] ?? null;
 
     if (!$nombre || $precio <= 0) {
         responder_json(false, null, 'Nombre y precio son obligatorios', 400);
@@ -110,14 +108,7 @@ if ($method === 'POST') {
     if (empty($servicios)) {
         responder_json(false, null, 'Seleccioná al menos un servicio para el pack', 400);
     }
-    if (!in_array($disponibilidad, ['auto', 'normal', 'jornada'])) {
-        $disponibilidad = 'auto';
-    }
-    if ($disponibilidad !== 'jornada') {
-        $grupo_jornada = null;
-    }
 
-    // Validar fechas
     if ($fecha_inicio && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_inicio)) $fecha_inicio = null;
     if ($fecha_fin && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_fin)) $fecha_fin = null;
 
@@ -128,10 +119,10 @@ if ($method === 'POST') {
 
         // 1. Crear servicio-pack
         $stmt = $db->prepare(
-            "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria, disponibilidad, id_grupo_jornada, activo)
-             VALUES (?, ?, ?, ?, ?, ?, ?, 1)"
+            "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria, id_maquina, activo)
+             VALUES (?, ?, ?, ?, ?, ?, 1)"
         );
-        $stmt->execute([$nombre, $descripcion, $precio, $duracion, $cat_packs, $disponibilidad, $grupo_jornada ?: null]);
+        $stmt->execute([$nombre, $descripcion, $precio, $duracion, $cat_packs, $id_maquina ?: null]);
         $id_servicio = (int) $db->lastInsertId();
 
         // 2. Crear promoción
@@ -166,25 +157,18 @@ if ($method === 'POST') {
 
 // ── PUT (editar) ──
 if ($method === 'PUT') {
-    $id              = intval($input['id'] ?? 0);
-    $nombre          = trim($input['nombre'] ?? '');
-    $descripcion     = trim($input['descripcion'] ?? '');
-    $precio          = floatval($input['precio_pack'] ?? 0);
-    $duracion        = intval($input['duracion_estimada'] ?? 60);
-    $fecha_inicio    = $input['fecha_inicio'] ?? null;
-    $fecha_fin       = $input['fecha_fin'] ?? null;
-    $servicios       = $input['servicios'] ?? [];
-    $disponibilidad  = $input['disponibilidad'] ?? 'auto';
-    $grupo_jornada   = $input['id_grupo_jornada'] ?? null;
+    $id           = intval($input['id'] ?? 0);
+    $nombre       = trim($input['nombre'] ?? '');
+    $descripcion  = trim($input['descripcion'] ?? '');
+    $precio       = floatval($input['precio_pack'] ?? 0);
+    $duracion     = intval($input['duracion_estimada'] ?? 60);
+    $fecha_inicio = $input['fecha_inicio'] ?? null;
+    $fecha_fin    = $input['fecha_fin'] ?? null;
+    $servicios    = $input['servicios'] ?? [];
+    $id_maquina   = $input['id_maquina'] ?? null;
 
     if (!$id || !$nombre || $precio <= 0) {
         responder_json(false, null, 'Datos incompletos', 400);
-    }
-    if (!in_array($disponibilidad, ['auto', 'normal', 'jornada'])) {
-        $disponibilidad = 'auto';
-    }
-    if ($disponibilidad !== 'jornada') {
-        $grupo_jornada = null;
     }
     if ($fecha_inicio && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_inicio)) $fecha_inicio = null;
     if ($fecha_fin && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_fin)) $fecha_fin = null;
@@ -208,10 +192,10 @@ if ($method === 'PUT') {
         // 2. Actualizar servicio-pack si existe
         if ($promo['id_servicio_generado']) {
             $stmt = $db->prepare(
-                "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, disponibilidad=?, id_grupo_jornada=?
+                "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, id_maquina=?
                  WHERE id=?"
             );
-            $stmt->execute([$nombre, $descripcion, $precio, $duracion, $disponibilidad, $grupo_jornada ?: null, $promo['id_servicio_generado']]);
+            $stmt->execute([$nombre, $descripcion, $precio, $duracion, $id_maquina ?: null, $promo['id_servicio_generado']]);
         }
 
         // 3. Sincronizar pivot

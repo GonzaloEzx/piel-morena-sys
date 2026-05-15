@@ -61,28 +61,10 @@ require_once __DIR__ . '/../includes/admin_header.php';
           </div>
           <div class="mb-3">
             <label class="form-label">Máquina alquilada</label>
-            <select class="form-select" name="id_maquina" id="srvMaquina" onchange="toggleMaquinaLegacy()">
+            <select class="form-select" name="id_maquina" id="srvMaquina">
               <option value="">(Ninguna — usa jornada o calendario libre)</option>
             </select>
-            <small class="form-text text-muted">Si el servicio requiere una máquina alquilada, seleccionala aquí. Solo se reservará en fechas con alquiler activo.</small>
-          </div>
-          <div id="legacyDisponibilidadWrap">
-            <div class="mb-3">
-              <label class="form-label">Disponibilidad (legacy)</label>
-              <select class="form-select" name="disponibilidad" id="srvDisponibilidad" onchange="toggleGrupoJornada()">
-                <option value="auto">Según categoría</option>
-                <option value="normal">Normal (calendario libre)</option>
-                <option value="jornada">Con Jornada (fechas específicas)</option>
-              </select>
-              <small class="form-text text-muted" id="srvDispoHelp">Solo aplica si NO hay máquina asignada. Se eliminará en futuras versiones.</small>
-            </div>
-            <div class="mb-3 d-none" id="grupoJornadaWrap">
-              <label class="form-label">Grupo de Jornada (legacy)</label>
-              <select class="form-select" name="id_grupo_jornada" id="srvGrupoJornada">
-                <option value="">Misma categoría del servicio</option>
-              </select>
-              <small class="form-text text-muted">Usará las jornadas cargadas para esta categoría</small>
-            </div>
+            <small class="form-text text-muted">Si el servicio requiere una máquina alquilada, seleccionala aquí. Solo se reservará en fechas con alquiler activo. Si no, la disponibilidad depende de la categoría: con jornada (personal externo) o calendario libre.</small>
           </div>
           <div class="mb-3">
             <label class="form-label">Descripción</label>
@@ -144,46 +126,16 @@ async function cargarCategorias() {
     const res = await apiCall('<?= URL_API ?>/admin/categorias.php');
     if (res.success) {
         const sel = document.getElementById('srvCategoria');
-        const selGrupo = document.getElementById('srvGrupoJornada');
         res.data.forEach(c => {
             sel.innerHTML += `<option value="${c.id}">${c.nombre}</option>`;
-            selGrupo.innerHTML += `<option value="${c.id}">${c.nombre}</option>`;
         });
     }
-    // Cargar maquinas activas
     const rm = await apiCall('<?= URL_API ?>/admin/maquinas.php?activo=1');
     if (rm.success) {
         const sel = document.getElementById('srvMaquina');
         rm.data.forEach(m => {
             sel.innerHTML += `<option value="${m.id}">${escapeHtml(m.nombre)}</option>`;
         });
-    }
-}
-
-function toggleGrupoJornada() {
-    const val = document.getElementById('srvDisponibilidad').value;
-    const wrap = document.getElementById('grupoJornadaWrap');
-    if (val === 'jornada') {
-        wrap.classList.remove('d-none');
-    } else {
-        wrap.classList.add('d-none');
-        document.getElementById('srvGrupoJornada').value = '';
-    }
-}
-
-function toggleMaquinaLegacy() {
-    const tieneMaquina = !!document.getElementById('srvMaquina').value;
-    const wrap = document.getElementById('legacyDisponibilidadWrap');
-    if (tieneMaquina) {
-        // Reset y ocultar campos legacy
-        document.getElementById('srvDisponibilidad').value = 'auto';
-        document.getElementById('srvGrupoJornada').value = '';
-        document.getElementById('grupoJornadaWrap').classList.add('d-none');
-        wrap.style.opacity = '.5';
-        wrap.style.pointerEvents = 'none';
-    } else {
-        wrap.style.opacity = '';
-        wrap.style.pointerEvents = '';
     }
 }
 
@@ -201,51 +153,23 @@ function initTabla() {
                 : d
             },
             { data: null, orderable: false, render: (d) => {
-                // Resolver disponibilidad efectiva
-                const dispo = d.disponibilidad || 'auto';
-
-                if (dispo === 'normal') {
+                if (d.disponibilidad_origen === 'maquina') {
+                    const maq = escapeHtml(d.maquina_nombre || '');
                     return `
-                        <div class="srv-jornada srv-jornada--libre" title="Este servicio usa el calendario normal (override manual)">
-                            <span class="srv-jornada__pill"><i class="bi bi-calendar3"></i>Normal</span>
+                        <div class="srv-jornada srv-jornada--grupo" title="Este servicio depende de la maquina ${maq}">
+                            <span class="srv-jornada__pill"><i class="bi bi-cpu"></i>${maq}</span>
                         </div>
                     `;
                 }
-
-                if (dispo === 'jornada') {
-                    const grupo = d.grupo_jornada ? escapeHtml(d.grupo_jornada) : escapeHtml(d.categoria || '');
-                    const esGrupoExterno = d.grupo_jornada && (!d.categoria || d.grupo_jornada !== d.categoria);
+                if (d.disponibilidad_origen === 'jornada') {
                     return `
-                        <div class="srv-jornada srv-jornada--${esGrupoExterno ? 'grupo' : 'categoria'}" title="Este servicio requiere jornada (override manual)">
-                            <span class="srv-jornada__pill"><i class="bi bi-calendar-check"></i>Con jornadas</span>
-                            ${esGrupoExterno ? `<span class="srv-jornada__meta">Fechas de ${grupo}</span>` : ''}
+                        <div class="srv-jornada srv-jornada--categoria" title="Este servicio depende de jornada de personal externo">
+                            <span class="srv-jornada__pill"><i class="bi bi-calendar-check"></i>Con jornada</span>
                         </div>
                     `;
                 }
-
-                // 'auto' — comportamiento legacy
-                const usaGrupoExterno = d.jornada_origen === 'grupo' && d.grupo_jornada && (!d.categoria || d.grupo_jornada !== d.categoria);
-
-                if (usaGrupoExterno) {
-                    const grupo = escapeHtml(d.grupo_jornada);
-                    return `
-                        <div class="srv-jornada srv-jornada--grupo" title="Este servicio usa las jornadas del grupo ${grupo}">
-                            <span class="srv-jornada__pill"><i class="bi bi-calendar-check"></i>Con jornadas</span>
-                            <span class="srv-jornada__meta">Fechas de ${grupo}</span>
-                        </div>
-                    `;
-                }
-
-                if (d.jornada_origen === 'grupo' || d.jornada_origen === 'categoria') {
-                    return `
-                        <div class="srv-jornada srv-jornada--categoria" title="Este servicio solo se reserva en fechas con jornada activa">
-                            <span class="srv-jornada__pill"><i class="bi bi-calendar-check"></i>Con jornadas</span>
-                        </div>
-                    `;
-                }
-
                 return `
-                    <div class="srv-jornada srv-jornada--libre" title="Este servicio usa el calendario normal, sin jornadas asociadas">
+                    <div class="srv-jornada srv-jornada--libre" title="Calendario normal">
                         <span class="srv-jornada__pill"><i class="bi bi-calendar3"></i>Normal</span>
                     </div>
                 `;
@@ -269,12 +193,8 @@ function abrirModalServicio() {
     document.getElementById('srvImagenUrl').value = '';
     document.getElementById('srvImagenPreview').innerHTML = '';
     document.getElementById('srvDestacado').checked = false;
-    document.getElementById('srvDisponibilidad').value = 'auto';
-    document.getElementById('srvGrupoJornada').value = '';
     document.getElementById('srvMaquina').value = '';
     document.getElementById('srvPromoBadgeWrap').classList.add('d-none');
-    toggleGrupoJornada();
-    toggleMaquinaLegacy();
     modalServicio.show();
 }
 
@@ -295,11 +215,7 @@ async function editarServicio(id) {
         ? `<img src="${s.imagen}" class="rounded" style="max-height:80px">`
         : '';
     document.getElementById('srvDestacado').checked = s.destacado == 1;
-    document.getElementById('srvDisponibilidad').value = s.disponibilidad || 'auto';
-    document.getElementById('srvGrupoJornada').value = s.id_grupo_jornada || '';
     document.getElementById('srvMaquina').value = s.id_maquina || '';
-    toggleGrupoJornada();
-    toggleMaquinaLegacy();
 
     // Badge de promo asociada
     const badgeWrap = document.getElementById('srvPromoBadgeWrap');
@@ -338,7 +254,6 @@ document.getElementById('formServicio').addEventListener('submit', async (e) => 
 
     const data = Object.fromEntries(fd);
     data.destacado = document.getElementById('srvDestacado').checked ? 1 : 0;
-    if (!data.id_grupo_jornada) data.id_grupo_jornada = null;
     if (!data.id_maquina) data.id_maquina = null;
 
     const res = await apiCall(url, id ? 'PUT' : 'POST', data);

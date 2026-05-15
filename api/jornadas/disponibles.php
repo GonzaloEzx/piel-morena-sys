@@ -22,13 +22,12 @@ $db = getDB();
 $id_servicio  = intval($_GET['id_servicio'] ?? 0);
 $id_categoria = intval($_GET['id_categoria'] ?? 0);
 
-// Resolver si el servicio requiere jornada y qué categoría de jornada usar
-// Resolución: servicios.disponibilidad > id_grupo_jornada > categorias.requiere_jornada
-$requiere_jornada_resuelta = false;
-
+// Resolver categoria de jornada a consultar.
+// Reglas: si el servicio tiene maquina, este endpoint no aplica.
+//         si la categoria del servicio tiene requiere_jornada=1, devolver sus fechas.
 if ($id_servicio && !$id_categoria) {
     $stmt = $db->prepare(
-        "SELECT s.id_categoria, s.id_grupo_jornada, s.disponibilidad, s.id_maquina,
+        "SELECT s.id_categoria, s.id_maquina,
                 c.requiere_jornada AS cat_requiere
          FROM servicios s
          LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
@@ -41,8 +40,6 @@ if ($id_servicio && !$id_categoria) {
         responder_json(false, null, 'Servicio no encontrado', 404);
     }
 
-    // Si el servicio tiene maquina asignada, la disponibilidad se maneja
-    // por api/maquinas/disponibles.php — este endpoint no aplica.
     if (!empty($srv['id_maquina'])) {
         responder_json(true, [
             'requiere_jornada' => false,
@@ -51,38 +48,21 @@ if ($id_servicio && !$id_categoria) {
         ]);
     }
 
-    $disponibilidad = $srv['disponibilidad'] ?? 'auto';
-    $grupo = $srv['id_grupo_jornada'] ?? null;
-    $cat_requiere = $srv['cat_requiere'] ?? 0;
-
-    if ($disponibilidad === 'normal') {
+    if (empty($srv['cat_requiere'])) {
         responder_json(true, [
             'requiere_jornada' => false,
             'fechas'           => [],
-            'mensaje'          => 'Este servicio usa calendario normal.',
+            'mensaje'          => 'Este servicio no requiere jornada. Usar calendario normal.',
         ]);
-    } elseif ($disponibilidad === 'jornada') {
-        $requiere_jornada_resuelta = true;
-    } else {
-        // 'auto': comportamiento legacy
-        if (!$grupo && !$cat_requiere) {
-            responder_json(true, [
-                'requiere_jornada' => false,
-                'fechas'           => [],
-                'mensaje'          => 'Este servicio no requiere jornada. Usar calendario normal.',
-            ]);
-        }
-        $requiere_jornada_resuelta = true;
     }
 
-    $id_categoria = $grupo ?: (int) $srv['id_categoria'];
+    $id_categoria = (int) $srv['id_categoria'];
 }
 
 if (!$id_categoria) {
     responder_json(false, null, 'Se requiere id_servicio o id_categoria', 400);
 }
 
-// Verificar categoría — si ya se resolvió por servicio, no rechazar por flag de categoría
 $stmt = $db->prepare(
     "SELECT id, nombre, requiere_jornada FROM categorias_servicios WHERE id = ? AND activo = 1"
 );
@@ -92,8 +72,7 @@ $cat = $stmt->fetch();
 if (!$cat) {
     responder_json(false, null, 'Categoría no encontrada', 404);
 }
-// Solo rechazar por flag de categoría si NO se resolvió explícitamente por servicio
-if (!$requiere_jornada_resuelta && !$cat['requiere_jornada']) {
+if (!$cat['requiere_jornada']) {
     responder_json(true, [
         'requiere_jornada' => false,
         'fechas'           => [],

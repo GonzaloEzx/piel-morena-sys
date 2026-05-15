@@ -66,9 +66,7 @@ CREATE TABLE maquinas (
 CREATE TABLE servicios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_categoria INT DEFAULT NULL,
-    id_grupo_jornada INT DEFAULT NULL COMMENT 'DEPRECATED: usar id_maquina',
     id_maquina INT DEFAULT NULL COMMENT 'FK a maquinas: si no es NULL, el servicio requiere alquiler activo',
-    disponibilidad ENUM('auto','normal','jornada') NOT NULL DEFAULT 'auto' COMMENT 'DEPRECATED: usar id_maquina IS NULL',
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT,
     precio DECIMAL(10,2) NOT NULL,
@@ -80,7 +78,6 @@ CREATE TABLE servicios (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (id_categoria) REFERENCES categorias_servicios(id) ON DELETE SET NULL,
-    FOREIGN KEY (id_grupo_jornada) REFERENCES categorias_servicios(id) ON DELETE SET NULL,
     FOREIGN KEY (id_maquina) REFERENCES maquinas(id) ON DELETE SET NULL,
     INDEX idx_categoria (id_categoria),
     INDEX idx_maquina (id_maquina),
