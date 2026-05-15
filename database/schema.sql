@@ -45,12 +45,30 @@ CREATE TABLE categorias_servicios (
 ) ENGINE=InnoDB;
 
 -- -----------------------------------------
+-- Tabla: maquinas (instrumentos alquilados; catalogo dinamico que gestiona Mari)
+-- -----------------------------------------
+CREATE TABLE maquinas (
+    id          INT AUTO_INCREMENT PRIMARY KEY,
+    nombre      VARCHAR(150) NOT NULL,
+    descripcion TEXT NULL,
+    color       VARCHAR(7) NOT NULL DEFAULT '#8A7650',
+    icono       VARCHAR(50) NULL,
+    activo      TINYINT(1) NOT NULL DEFAULT 1,
+    notas       TEXT NULL,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_nombre (nombre)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------
 -- Tabla: servicios
 -- -----------------------------------------
 CREATE TABLE servicios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_categoria INT DEFAULT NULL,
-    id_grupo_jornada INT DEFAULT NULL COMMENT 'Si no es NULL, el servicio requiere jornada del grupo indicado',
+    id_grupo_jornada INT DEFAULT NULL COMMENT 'DEPRECATED: usar id_maquina',
+    id_maquina INT DEFAULT NULL COMMENT 'FK a maquinas: si no es NULL, el servicio requiere alquiler activo',
+    disponibilidad ENUM('auto','normal','jornada') NOT NULL DEFAULT 'auto' COMMENT 'DEPRECATED: usar id_maquina IS NULL',
     nombre VARCHAR(150) NOT NULL,
     descripcion TEXT,
     precio DECIMAL(10,2) NOT NULL,
@@ -63,7 +81,9 @@ CREATE TABLE servicios (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (id_categoria) REFERENCES categorias_servicios(id) ON DELETE SET NULL,
     FOREIGN KEY (id_grupo_jornada) REFERENCES categorias_servicios(id) ON DELETE SET NULL,
+    FOREIGN KEY (id_maquina) REFERENCES maquinas(id) ON DELETE SET NULL,
     INDEX idx_categoria (id_categoria),
+    INDEX idx_maquina (id_maquina),
     INDEX idx_activo (activo),
     INDEX idx_destacado (destacado)
 ) ENGINE=InnoDB;
@@ -275,3 +295,22 @@ CREATE TABLE jornadas (
     INDEX idx_fecha_estado (fecha, estado),
     INDEX idx_categoria (id_categoria)
 ) ENGINE=InnoDB;
+
+-- -----------------------------------------
+-- Tabla: maquinas_alquileres (dias con maquina alquilada)
+-- -----------------------------------------
+CREATE TABLE maquinas_alquileres (
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    id_maquina   INT NOT NULL,
+    fecha        DATE NOT NULL,
+    hora_inicio  TIME NOT NULL DEFAULT '08:00:00',
+    hora_fin     TIME NOT NULL DEFAULT '20:00:00',
+    estado       ENUM('activo','cancelado') NOT NULL DEFAULT 'activo',
+    notas        TEXT NULL,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_maquina_fecha (id_maquina, fecha),
+    INDEX idx_fecha_estado (fecha, estado),
+    INDEX idx_maquina (id_maquina),
+    FOREIGN KEY (id_maquina) REFERENCES maquinas(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

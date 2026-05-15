@@ -19,8 +19,9 @@
 | 07 | Analytics y reportes | Implementado |
 | 08 | Landing publica | Implementado con placeholders de contenido |
 | 09 | Productos e inventario | Implementado con mejoras pendientes |
-| 10 | Jornadas | Implementado con apertura a todas las categorias |
+| 10 | Jornadas | Alcance reducido a personal externo (desde mayo 2026) |
 | 11 | Promociones y packs | Implementado |
+| 12 | Maquinas alquiladas | Implementado (mayo 2026); mapping inicial post-deploy pendiente |
 
 ## Regla de uso
 

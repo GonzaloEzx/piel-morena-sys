@@ -98,8 +98,21 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
       </li>
 
       <?php if ($esAdmin): ?>
+      <li class="pm-sidebar-divider">Equipamiento</li>
       <li class="pm-sidebar-item">
-        <a href="<?= URL_ADMIN ?>/views/jornadas.php" class="pm-sidebar-link <?= $vista_actual === 'jornadas' ? 'active' : '' ?>">
+        <a href="<?= URL_ADMIN ?>/views/maquinas.php" class="pm-sidebar-link <?= $vista_actual === 'maquinas' ? 'active' : '' ?>">
+          <i class="bi bi-cpu"></i>
+          <span>M&aacute;quinas</span>
+        </a>
+      </li>
+      <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/alquileres.php" class="pm-sidebar-link <?= $vista_actual === 'alquileres' ? 'active' : '' ?>">
+          <i class="bi bi-calendar-week"></i>
+          <span>Alquileres</span>
+        </a>
+      </li>
+      <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/jornadas.php" class="pm-sidebar-link <?= $vista_actual === 'jornadas' ? 'active' : '' ?>" title="Jornadas de personal externo">
           <i class="bi bi-calendar-event"></i>
           <span>Jornadas</span>
         </a>

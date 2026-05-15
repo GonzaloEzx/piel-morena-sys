@@ -19,7 +19,12 @@ $method = $_SERVER['REQUEST_METHOD'];
 // ── GET ──
 if ($method === 'GET') {
     if (!empty($_GET['id'])) {
-        $stmt = $db->prepare("SELECT * FROM servicios WHERE id = ?");
+        $stmt = $db->prepare(
+            "SELECT s.*, m.nombre AS maquina_nombre, m.color AS maquina_color
+             FROM servicios s
+             LEFT JOIN maquinas m ON s.id_maquina = m.id
+             WHERE s.id = ?"
+        );
         $stmt->execute([$_GET['id']]);
         $srv = $stmt->fetch();
         if (!$srv) responder_json(false, null, 'Servicio no encontrado', 404);
@@ -41,19 +46,24 @@ if ($method === 'GET') {
                 c.nombre AS categoria,
                 c.requiere_jornada AS categoria_requiere_jornada,
                 g.nombre AS grupo_jornada,
+                m.nombre AS maquina_nombre,
+                m.color AS maquina_color,
                 CASE
-                    WHEN s.id_grupo_jornada IS NOT NULL THEN 1
-                    WHEN c.requiere_jornada = 1 THEN 1
-                    ELSE 0
-                END AS tiene_jornada_asociada,
-                CASE
+                    WHEN s.id_maquina IS NOT NULL THEN 'maquina'
                     WHEN s.id_grupo_jornada IS NOT NULL THEN 'grupo'
                     WHEN c.requiere_jornada = 1 THEN 'categoria'
                     ELSE 'ninguna'
-                END AS jornada_origen
+                END AS disponibilidad_origen,
+                CASE
+                    WHEN s.id_maquina IS NOT NULL THEN 1
+                    WHEN s.id_grupo_jornada IS NOT NULL THEN 1
+                    WHEN c.requiere_jornada = 1 THEN 1
+                    ELSE 0
+                END AS tiene_disponibilidad_asociada
          FROM servicios s
          LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
          LEFT JOIN categorias_servicios g ON s.id_grupo_jornada = g.id
+         LEFT JOIN maquinas m ON s.id_maquina = m.id
          ORDER BY s.id DESC"
     );
     responder_json(true, $stmt->fetchAll());
@@ -84,6 +94,7 @@ if ($method === 'POST') {
     $cat            = $input['id_categoria'] ?? null;
     $imagen         = trim($input['imagen'] ?? '');
     $destacado      = intval($input['destacado'] ?? 0) ? 1 : 0;
+    $id_maquina     = $input['id_maquina'] ?? null;
     $disponibilidad = $input['disponibilidad'] ?? 'auto';
     $grupo_jornada  = $input['id_grupo_jornada'] ?? null;
 
@@ -92,6 +103,11 @@ if ($method === 'POST') {
     }
     if ($disponibilidad !== 'jornada') {
         $grupo_jornada = null;
+    }
+    // Si tiene maquina, los campos legacy quedan nulos para evitar conflicto
+    if ($id_maquina) {
+        $disponibilidad = 'auto';
+        $grupo_jornada  = null;
     }
 
     if (!$nombre || $precio <= 0) {
@@ -103,10 +119,10 @@ if ($method === 'POST') {
     }
 
     $stmt = $db->prepare(
-        "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria, imagen, destacado, disponibilidad, id_grupo_jornada)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO servicios (nombre, descripcion, precio, duracion_minutos, id_categoria, imagen, destacado, disponibilidad, id_grupo_jornada, id_maquina)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
     );
-    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado, $disponibilidad, $grupo_jornada ?: null]);
+    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado, $disponibilidad, $grupo_jornada ?: null, $id_maquina ?: null]);
     responder_json(true, ['id' => $db->lastInsertId()]);
 }
 
@@ -120,6 +136,7 @@ if ($method === 'PUT') {
     $cat             = $input['id_categoria'] ?? null;
     $imagen          = trim($input['imagen'] ?? '');
     $destacado       = intval($input['destacado'] ?? 0) ? 1 : 0;
+    $id_maquina      = $input['id_maquina'] ?? null;
     $disponibilidad  = $input['disponibilidad'] ?? 'auto';
     $grupo_jornada   = $input['id_grupo_jornada'] ?? null;
 
@@ -128,6 +145,10 @@ if ($method === 'PUT') {
     }
     if ($disponibilidad !== 'jornada') {
         $grupo_jornada = null;
+    }
+    if ($id_maquina) {
+        $disponibilidad = 'auto';
+        $grupo_jornada  = null;
     }
 
     if (!$id || !$nombre || $precio <= 0) {
@@ -139,10 +160,10 @@ if ($method === 'PUT') {
     }
 
     $stmt = $db->prepare(
-        "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, id_categoria=?, imagen=?, destacado=?, disponibilidad=?, id_grupo_jornada=?
+        "UPDATE servicios SET nombre=?, descripcion=?, precio=?, duracion_minutos=?, id_categoria=?, imagen=?, destacado=?, disponibilidad=?, id_grupo_jornada=?, id_maquina=?
          WHERE id=?"
     );
-    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado, $disponibilidad, $grupo_jornada ?: null, $id]);
+    $stmt->execute([$nombre, $desc, $precio, $duracion, $cat ?: null, $imagen ?: null, $destacado, $disponibilidad, $grupo_jornada ?: null, $id_maquina ?: null, $id]);
     responder_json(true);
 }
 

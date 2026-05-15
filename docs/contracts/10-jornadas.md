@@ -1,10 +1,17 @@
 # Contrato 10 - Jornadas
 
-> Estado: vigente
+> Estado: vigente, alcance reducido a personal externo desde 2026-05-15
 > Audiencia: producto, desarrollo, agentes
-> Fuente de verdad: si
+> Fuente de verdad: si (para personal externo)
 > Relacion: contrato funcional del sistema de jornadas
-> Ultima revision: 2026-04-04
+> Ultima revision: 2026-05-15
+> Ver tambien: `12-maquinas-alquileres.md` (sistema paralelo para instrumentos fisicos)
+
+## Aviso (2026-05-15)
+
+A partir de la migracion 013, las jornadas aplican **unicamente a personal externo** (Naila, Nathalia). Para instrumentos fisicos alquilados (Laser, Criolipolisis, VelaSlim) se usa el sistema de **maquinas y alquileres** (ver contrato 12).
+
+Los campos `servicios.id_grupo_jornada` y `servicios.disponibilidad` quedan deprecados y se eliminan en la migracion 015. Tambien queda deprecado `categorias_servicios.requiere_jornada` en las categorias que originalmente representaban maquinas (Depilacion id 1, "Tratamiento con equipo" id 13).
 
 ## Alcance
 

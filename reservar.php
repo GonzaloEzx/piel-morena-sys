@@ -294,17 +294,29 @@ const Wizard = {
     this.state.requiereJornada = false;
     document.getElementById('step2Servicio').textContent = el.dataset.name + ' · ' + el.dataset.duration + ' min';
 
-    // Chequear si el servicio requiere jornada
+    // 1. Chequear si el servicio depende de una maquina alquilada
     try {
-      const r = await fetch('api/jornadas/disponibles.php?id_servicio=' + el.dataset.id);
+      const r = await fetch('api/maquinas/disponibles.php?id_servicio=' + el.dataset.id);
       const data = await r.json();
-      if (data.success && data.data.requiere_jornada) {
+      if (data.success && data.data.requiere_maquina) {
         this.state.requiereJornada = true;
-        this.renderJornadas(data.data);
+        this.renderFechasDisponibles(data.data, 'maquina');
       }
-    } catch(e) { /* falla silenciosa, usa fecha libre */ }
+    } catch(e) { /* silencioso, sigue a jornadas */ }
 
-    // Mostrar/ocultar UI según tipo
+    // 2. Si no es por maquina, chequear jornada (personal externo)
+    if (!this.state.requiereJornada) {
+      try {
+        const r = await fetch('api/jornadas/disponibles.php?id_servicio=' + el.dataset.id);
+        const data = await r.json();
+        if (data.success && data.data.requiere_jornada) {
+          this.state.requiereJornada = true;
+          this.renderFechasDisponibles(data.data, 'jornada');
+        }
+      } catch(e) { /* silencioso, usa fecha libre */ }
+    }
+
+    // Mostrar/ocultar UI segun tipo
     const fechaLibre = document.getElementById('step2FechaLibre');
     const jornadas   = document.getElementById('step2Jornadas');
     const btnTurnos  = document.getElementById('btnVerTurnos');
@@ -321,15 +333,21 @@ const Wizard = {
     this.goTo(2);
   },
 
-  renderJornadas(data) {
+  renderFechasDisponibles(data, tipo) {
     const grid = document.getElementById('jornadasGrid');
+    const nombre = tipo === 'maquina' ? (data.maquina || 'esta maquina') : (data.categoria || 'este servicio');
+    const intro  = tipo === 'maquina'
+      ? `Este servicio se realiza con la maquina ${nombre}, disponible los siguientes dias:`
+      : `Fechas disponibles para ${nombre}`;
+    const empty  = tipo === 'maquina'
+      ? `No hay alquileres programados de ${nombre} proximamente`
+      : `No hay fechas programadas para ${nombre} proximamente`;
+
     document.getElementById('step2JornadaMsg').textContent =
-      data.fechas.length > 0
-        ? `Fechas disponibles para ${data.categoria}`
-        : `No hay fechas programadas para ${data.categoria} próximamente`;
+      data.fechas.length > 0 ? intro : empty;
 
     if (!data.fechas.length) {
-      grid.innerHTML = '<div class="pm-no-turnos"><i class="bi bi-calendar-x"></i>No hay jornadas programadas<br><small>Consultá por WhatsApp para más información</small></div>';
+      grid.innerHTML = '<div class="pm-no-turnos"><i class="bi bi-calendar-x"></i>Sin fechas disponibles<br><small>Consultá por WhatsApp para más información</small></div>';
       return;
     }
 

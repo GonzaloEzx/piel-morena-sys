@@ -41,58 +41,96 @@ if (!$servicio) {
     responder_json(false, null, 'Servicio no encontrado', 404);
 }
 
-// ── Chequeo de jornada ──
-// Resolución: servicios.disponibilidad > id_grupo_jornada > categorias.requiere_jornada
-//   'normal'  → calendario libre, no chequear jornada
-//   'jornada' → requiere jornada activa (usa id_grupo_jornada o su categoría)
-//   'auto'    → comportamiento legacy (id_grupo_jornada > categorias.requiere_jornada)
-$jornada_activa = null;
-$stmt_jcheck = $db->prepare(
-    "SELECT s.id_grupo_jornada, s.id_categoria, s.disponibilidad,
+// ── Resolucion de disponibilidad (regla unica) ──
+// 1. Si servicios.id_maquina IS NOT NULL → requiere alquiler activo de esa maquina.
+// 2. Sino, si la categoria tiene requiere_jornada=1 → requiere jornada activa (personal externo).
+// 3. Sino → calendario libre.
+// (Campos legacy id_grupo_jornada y disponibilidad se siguen consultando como fallback
+//  durante la coexistencia; se eliminan en migration 015.)
+$ventana_activa = null;  // { hora_inicio, hora_fin } si hay maquina o jornada
+$stmt_check = $db->prepare(
+    "SELECT s.id_maquina, s.id_grupo_jornada, s.id_categoria, s.disponibilidad,
+            m.nombre AS maquina_nombre, m.activo AS maquina_activa,
             c.requiere_jornada AS cat_requiere, c.nombre AS categoria_nombre,
             g.nombre AS grupo_nombre
      FROM servicios s
+     LEFT JOIN maquinas m ON s.id_maquina = m.id
      LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
      LEFT JOIN categorias_servicios g ON s.id_grupo_jornada = g.id
      WHERE s.id = ? LIMIT 1"
 );
-$stmt_jcheck->execute([$id_servicio]);
-$jcheck = $stmt_jcheck->fetch();
+$stmt_check->execute([$id_servicio]);
+$rcheck = $stmt_check->fetch();
 
-$disponibilidad = $jcheck['disponibilidad'] ?? 'auto';
-$grupo_jornada  = $jcheck['id_grupo_jornada'] ?? null;
-$cat_requiere   = $jcheck['cat_requiere'] ?? 0;
-
-$necesita_jornada = false;
-if ($disponibilidad === 'jornada') {
-    $necesita_jornada = true;
-} elseif ($disponibilidad === 'normal') {
-    $necesita_jornada = false;
-} else {
-    $necesita_jornada = $grupo_jornada || $cat_requiere;
-}
-
-if ($necesita_jornada) {
-    $jornada_cat_id = $grupo_jornada ?: $jcheck['id_categoria'];
-    $jornada_nombre = $grupo_jornada ? $jcheck['grupo_nombre'] : $jcheck['categoria_nombre'];
-
-    $stmt_j = $db->prepare(
-        "SELECT hora_inicio, hora_fin FROM jornadas
-         WHERE id_categoria = ? AND fecha = ? AND estado = 'activa'
-         LIMIT 1"
-    );
-    $stmt_j->execute([$jornada_cat_id, $fecha]);
-    $jornada_activa = $stmt_j->fetch();
-
-    if (!$jornada_activa) {
+// Caso 1: maquina alquilada
+if (!empty($rcheck['id_maquina'])) {
+    if (!$rcheck['maquina_activa']) {
         responder_json(true, [
             'fecha'    => $fecha,
             'servicio' => $servicio['nombre'],
             'precio'   => $servicio['precio'],
             'duracion' => $servicio['duracion_minutos'],
             'turnos'   => [],
-            'mensaje'  => 'No hay jornada programada para ' . $jornada_nombre . ' en esta fecha',
+            'mensaje'  => 'La maquina ' . $rcheck['maquina_nombre'] . ' esta inactiva',
         ]);
+    }
+
+    $stmt_a = $db->prepare(
+        "SELECT hora_inicio, hora_fin FROM maquinas_alquileres
+         WHERE id_maquina = ? AND fecha = ? AND estado = 'activo'
+         LIMIT 1"
+    );
+    $stmt_a->execute([(int) $rcheck['id_maquina'], $fecha]);
+    $ventana_activa = $stmt_a->fetch();
+
+    if (!$ventana_activa) {
+        responder_json(true, [
+            'fecha'    => $fecha,
+            'servicio' => $servicio['nombre'],
+            'precio'   => $servicio['precio'],
+            'duracion' => $servicio['duracion_minutos'],
+            'turnos'   => [],
+            'mensaje'  => 'No hay alquiler activo de la maquina ' . $rcheck['maquina_nombre'] . ' para esta fecha',
+        ]);
+    }
+} else {
+    // Caso 2: jornada (legacy + personal externo)
+    // Mantengo la resolucion legacy (disponibilidad + id_grupo_jornada) hasta migration 015.
+    $disponibilidad = $rcheck['disponibilidad'] ?? 'auto';
+    $grupo_jornada  = $rcheck['id_grupo_jornada'] ?? null;
+    $cat_requiere   = $rcheck['cat_requiere'] ?? 0;
+
+    $necesita_jornada = false;
+    if ($disponibilidad === 'jornada') {
+        $necesita_jornada = true;
+    } elseif ($disponibilidad === 'normal') {
+        $necesita_jornada = false;
+    } else {
+        $necesita_jornada = $grupo_jornada || $cat_requiere;
+    }
+
+    if ($necesita_jornada) {
+        $jornada_cat_id = $grupo_jornada ?: $rcheck['id_categoria'];
+        $jornada_nombre = $grupo_jornada ? $rcheck['grupo_nombre'] : $rcheck['categoria_nombre'];
+
+        $stmt_j = $db->prepare(
+            "SELECT hora_inicio, hora_fin FROM jornadas
+             WHERE id_categoria = ? AND fecha = ? AND estado = 'activa'
+             LIMIT 1"
+        );
+        $stmt_j->execute([$jornada_cat_id, $fecha]);
+        $ventana_activa = $stmt_j->fetch();
+
+        if (!$ventana_activa) {
+            responder_json(true, [
+                'fecha'    => $fecha,
+                'servicio' => $servicio['nombre'],
+                'precio'   => $servicio['precio'],
+                'duracion' => $servicio['duracion_minutos'],
+                'turnos'   => [],
+                'mensaje'  => 'No hay jornada programada para ' . $jornada_nombre . ' en esta fecha',
+            ]);
+        }
     }
 }
 
@@ -105,10 +143,10 @@ $apertura = $stmt->fetchColumn() ?: '09:00';
 $stmt->execute(['horario_cierre']);
 $cierre = $stmt->fetchColumn() ?: '20:00';
 
-// Si hay jornada activa, usar sus horarios en vez de los generales
-if ($jornada_activa) {
-    $apertura = substr($jornada_activa['hora_inicio'], 0, 5);
-    $cierre   = substr($jornada_activa['hora_fin'], 0, 5);
+// Si hay ventana activa (alquiler de maquina o jornada), sus horarios mandan
+if ($ventana_activa) {
+    $apertura = substr($ventana_activa['hora_inicio'], 0, 5);
+    $cierre   = substr($ventana_activa['hora_fin'], 0, 5);
 }
 
 $stmt->execute(['dias_laborales']);
@@ -121,8 +159,8 @@ $intervalo = intval($stmt->fetchColumn() ?: 30);
 $dia_semana = intval(date('N', $fecha_ts));
 $dias_array = array_map('intval', explode(',', $dias_laborales));
 
-// Si hay jornada activa, el día laboral no aplica (la jornada define su propio día)
-if (!$jornada_activa && !in_array($dia_semana, $dias_array)) {
+// Si hay ventana activa (alquiler o jornada), el dia laboral no aplica
+if (!$ventana_activa && !in_array($dia_semana, $dias_array)) {
     responder_json(true, [
         'fecha'    => $fecha,
         'servicio' => $servicio['nombre'],

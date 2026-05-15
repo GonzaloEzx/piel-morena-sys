@@ -28,7 +28,7 @@ $requiere_jornada_resuelta = false;
 
 if ($id_servicio && !$id_categoria) {
     $stmt = $db->prepare(
-        "SELECT s.id_categoria, s.id_grupo_jornada, s.disponibilidad,
+        "SELECT s.id_categoria, s.id_grupo_jornada, s.disponibilidad, s.id_maquina,
                 c.requiere_jornada AS cat_requiere
          FROM servicios s
          LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
@@ -39,6 +39,16 @@ if ($id_servicio && !$id_categoria) {
 
     if (!$srv) {
         responder_json(false, null, 'Servicio no encontrado', 404);
+    }
+
+    // Si el servicio tiene maquina asignada, la disponibilidad se maneja
+    // por api/maquinas/disponibles.php — este endpoint no aplica.
+    if (!empty($srv['id_maquina'])) {
+        responder_json(true, [
+            'requiere_jornada' => false,
+            'fechas'           => [],
+            'mensaje'          => 'Este servicio se reserva por maquina alquilada.',
+        ]);
     }
 
     $disponibilidad = $srv['disponibilidad'] ?? 'auto';
