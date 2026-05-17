@@ -4,7 +4,8 @@
 > Audiencia: desarrollo, agentes
 > Fuente de verdad: complementaria
 > Relacion: detalle tecnico del modulo de jornadas
-> Ultima revision: 2026-04-04
+> Ultima revision: 2026-04-25
+> Ver tambien: docs/manuales-tecnicos/jornadas.md (manual tecnico completo y actualizado)
 
 ## Contexto
 
@@ -20,7 +21,7 @@ El contrato funcional vive en `docs/contracts/10-jornadas.md`. Este documento cu
 
 ### APIs
 
-- `api/admin/jornadas.php` — CRUD admin (GET/POST/PUT/PATCH)
+- `api/admin/jornadas.php` — CRUD admin (GET/POST/PUT/DELETE)
 - `api/jornadas/disponibles.php` — endpoint publico para fechas con jornada
 - `api/citas/disponibilidad.php` — modificado para chequear jornada antes de generar slots
 
@@ -60,15 +61,15 @@ reservar.php paso 1: selecciona servicio
               └── genera slots y devuelve turnos
 ```
 
-### Cancelacion de jornada (admin)
+### Eliminacion de jornada (admin)
 
 ```
-admin/views/jornadas.php → PATCH api/admin/jornadas.php {id, solo_info: true}
-  ├── devuelve preview con citas afectadas
-  └── SweetAlert2 muestra confirmacion
-      └── PATCH api/admin/jornadas.php {id}
-          └── UPDATE jornadas SET estado = 'cancelada'
-          (citas NO se cancelan automaticamente)
+admin/views/jornadas.php → GET api/admin/jornadas.php?id=X
+  ├── devuelve jornada + citas_afectadas (lista)
+  └── SweetAlert2 muestra confirmacion con citas que seran canceladas
+      └── DELETE api/admin/jornadas.php {id}
+          ├── UPDATE citas SET estado='cancelada' (citas activas de esa fecha+categoria)
+          └── DELETE FROM jornadas WHERE id = ?
 ```
 
 ## Logica en disponibilidad.php
@@ -94,4 +95,4 @@ Se asignan dinamicamente desde un array fijo de 8 colores, basado en el indice d
 - **Prioridad del grupo de jornada:** si un servicio tiene `id_grupo_jornada`, ese grupo manda aunque su `id_categoria` natural no requiera jornada.
 - **Grupos sin servicios visibles:** una categoria puede existir solo como grupo operativo de jornada para el admin, aunque no tenga servicios listados directamente en el wizard.
 - **Multi-fecha en creacion:** Mari define varias fechas a la vez para el mes. El POST acepta array y reporta duplicados sin fallar.
-- **Cancel no cascadea:** cancelar jornada no toca las citas. Decision de negocio: Mari prefiere gestionar caso por caso.
+- **Eliminacion cascadea citas:** al eliminar una jornada, las citas activas de esa fecha+categoria quedan automaticamente canceladas en el mismo request. El registro de jornada se borra fisicamente (hard delete), lo que libera la combinacion fecha+categoria para recrearse sin conflicto con el UNIQUE.
