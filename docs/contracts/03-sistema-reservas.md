@@ -15,7 +15,7 @@ Reservas, disponibilidad, cancelacion, gestion de citas y asignacion de empleado
 ### Implementado
 
 - wizard en `reservar.php`;
-- `api/citas/disponibilidad.php`;
+- `api/citas/disponibilidad.php` (cálculo en `includes/agenda.php`, compartido con la agenda pública de la landing, contrato 08);
 - `api/citas/crear.php`;
 - `api/citas/cancelar.php`;
 - vista admin de citas;

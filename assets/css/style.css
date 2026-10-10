@@ -6249,3 +6249,262 @@ section#contacto .pm-contact-info-card:hover {
         animation: none;
     }
 }
+
+
+/* =============================================================
+   E37. Agenda pública (landing, sección #reservar)
+   Turnos libres de la semana; cada turno abre WhatsApp.
+   Mobile-first: la cinta de días scrollea de costado en celular
+   y pasa a 7 columnas fijas desde tablet.
+   ============================================================= */
+.pm-agenda-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pm-agenda {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto var(--pm-space-6);
+    padding: var(--pm-space-5) var(--pm-space-4);
+    background: var(--pm-surface);
+    border-radius: var(--pm-radius-xl);
+    box-shadow: var(--pm-shadow-lg);
+    color: var(--pm-text);
+    text-align: left;
+}
+
+.pm-agenda__label {
+    display: block;
+    margin-bottom: var(--pm-space-2);
+    font-family: var(--pm-font-ui);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--pm-text-heading);
+}
+
+.pm-agenda__select {
+    min-height: 48px;
+    border: 2px solid var(--pm-border);
+    border-radius: var(--pm-radius-md);
+    font-family: var(--pm-font-body);
+    font-size: 1rem; /* 16px: evita el zoom automático de iOS */
+    color: var(--pm-text);
+    background-color: var(--pm-surface-warm);
+}
+
+.pm-agenda__select:focus {
+    border-color: var(--pm-bronce);
+    box-shadow: 0 0 0 3px rgba(138, 118, 80, 0.2);
+}
+
+.pm-agenda__estado {
+    margin: var(--pm-space-5) 0 var(--pm-space-3);
+    font-family: var(--pm-font-body);
+    font-size: 0.9375rem;
+    color: var(--pm-text-muted);
+}
+
+.pm-agenda__estado strong {
+    color: var(--pm-text-heading);
+}
+
+.pm-agenda__vivo {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 var(--pm-space-2) 2px 2px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--pm-verde);
+    box-shadow: 0 0 0 0 rgba(142, 151, 125, 0.6);
+    animation: pmAgendaPulso 2s ease-out infinite;
+}
+
+@keyframes pmAgendaPulso {
+    0%   { box-shadow: 0 0 0 0 rgba(142, 151, 125, 0.6); }
+    70%  { box-shadow: 0 0 0 8px rgba(142, 151, 125, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(142, 151, 125, 0); }
+}
+
+/* Cinta de días */
+.pm-agenda__dias {
+    display: flex;
+    gap: var(--pm-space-2);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 0 calc(-1 * var(--pm-space-4));
+    padding: 2px var(--pm-space-4) var(--pm-space-2);
+    scrollbar-width: none;
+}
+
+.pm-agenda__dias::-webkit-scrollbar {
+    display: none;
+}
+
+.pm-agenda__dia {
+    flex: 0 0 68px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: var(--pm-space-2) var(--pm-space-1);
+    border: 2px solid var(--pm-border-light);
+    border-radius: var(--pm-radius-md);
+    background: var(--pm-surface);
+    color: var(--pm-text);
+    font-family: var(--pm-font-ui);
+    scroll-snap-align: start;
+    cursor: pointer;
+    transition: border-color 200ms ease, background 200ms ease, color 200ms ease;
+}
+
+.pm-agenda__dia span {
+    font-size: 0.75rem;
+    text-transform: capitalize;
+    color: var(--pm-text-muted);
+}
+
+.pm-agenda__dia strong {
+    font-size: 1.25rem;
+    line-height: 1.1;
+}
+
+.pm-agenda__dia em {
+    font-style: normal;
+    font-size: 0.6875rem;
+    color: var(--pm-text-light);
+    white-space: nowrap;
+}
+
+.pm-agenda__dia:hover:not(:disabled) {
+    border-color: var(--pm-bronce);
+}
+
+.pm-agenda__dia.is-activo {
+    border-color: var(--pm-bronce);
+    background: var(--pm-bronce);
+    color: var(--pm-text-inverse);
+}
+
+.pm-agenda__dia.is-activo span,
+.pm-agenda__dia.is-activo em {
+    color: var(--pm-dorado);
+}
+
+.pm-agenda__dia:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.pm-agenda__dia:focus-visible,
+.pm-agenda__chip:focus-visible,
+.pm-agenda__aviso:focus-visible {
+    outline: 3px solid var(--pm-bronce);
+    outline-offset: 2px;
+}
+
+/* Turnos del día elegido */
+.pm-agenda__turnos {
+    margin-top: var(--pm-space-4);
+    min-height: 56px;
+    transition: opacity 200ms ease;
+}
+
+.pm-agenda.is-cargando .pm-agenda__turnos,
+.pm-agenda.is-cargando .pm-agenda__dias {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.pm-agenda__chips {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: var(--pm-space-2);
+}
+
+.pm-agenda__chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    border: 2px solid var(--pm-border);
+    border-radius: var(--pm-radius-md);
+    background: var(--pm-surface);
+    color: var(--pm-text);
+    font-family: var(--pm-font-ui);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: border-color 200ms ease, background 200ms ease, transform 200ms ease;
+}
+
+a.pm-agenda__chip:hover {
+    border-color: var(--pm-bronce);
+    background: var(--pm-crema);
+    color: var(--pm-text);
+    transform: translateY(-1px);
+}
+
+.pm-agenda__chip.is-ocupado {
+    border-color: transparent;
+    background: var(--pm-surface-alt);
+    color: var(--pm-text-light);
+    text-decoration: line-through;
+}
+
+.pm-agenda__nota {
+    margin-bottom: var(--pm-space-3);
+    font-size: 0.9375rem;
+    color: var(--pm-text-muted);
+}
+
+.pm-agenda__aviso {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--pm-space-2) var(--pm-space-4);
+    border: 2px solid var(--pm-bronce);
+    border-radius: var(--pm-radius-full);
+    color: var(--pm-bronce-dark);
+    font-family: var(--pm-font-ui);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    text-decoration: none;
+}
+
+.pm-agenda__aviso:hover {
+    background: var(--pm-bronce);
+    color: var(--pm-text-inverse);
+}
+
+.pm-agenda__micro {
+    margin: var(--pm-space-4) 0 0;
+    font-size: 0.8125rem;
+    color: var(--pm-text-light);
+}
+
+@media (min-width: 768px) {
+    .pm-agenda {
+        padding: var(--pm-space-6);
+    }
+
+    .pm-agenda__dias {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        overflow: visible;
+        margin: 0;
+        padding: 2px 0 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pm-agenda__vivo {
+        animation: none;
+    }
+
+    a.pm-agenda__chip:hover {
+        transform: none;
+    }
+}

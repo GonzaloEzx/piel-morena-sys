@@ -71,6 +71,18 @@ define("EMAIL_NEGOCIO", "zudaire83@gmail.com");
 define("DIRECCION_NEGOCIO", "Vedia 459, Resistencia, Chaco");
 define("INSTAGRAM_NEGOCIO", "https://www.instagram.com/pielmorenaesteticaok");
 
+// --- Agenda pública (turnos libres en la landing) ---
+// 'google' = las citas del sistema + el Google Calendar del salón. Sin
+//            calendario configurado, o si Google no contesta, la landing
+//            muestra solo el horario de atención: nunca afirma un turno libre
+//            que no puede verificar.
+// 'db'     = solo las citas del sistema (cuando todo se cargue en el panel).
+// Calendario y clave van en config.local.php, nunca en el repo.
+define("AGENDA_FUENTE", $pm_local_config["agenda_fuente"] ?? "google");
+define("AGENDA_GOOGLE_CALENDAR_ID", $pm_local_config["google_calendar_id"] ?? "");
+define("AGENDA_GOOGLE_API_KEY", $pm_local_config["google_api_key"] ?? "");
+define("AGENDA_DIAS", 7);
+
 // --- Sesiones ---
 define("SESSION_LIFETIME", 3600); // 1 hora en segundos
 

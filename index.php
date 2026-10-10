@@ -1109,32 +1109,67 @@ $tratamientos_catalogo_json = json_encode(
 
 
 <!-- ═══════════════════════════════════════════════════════════════
-     8. RESERVA TU CITA — bg: gradiente hero
+     8. RESERVA TU CITA — agenda pública: turnos libres → WhatsApp
+     Los turnos salen de api/citas/agenda-publica.php y el JS vive en
+     main.js (AgendaPublica). Los textos de los mensajes, ahí mismo.
      ═══════════════════════════════════════════════════════════════ -->
-<section id="reservar" class="pm-section-alt pm-cta-section" data-section="reservar">
+<?php
+$stmt_agenda = $db_landing->query("SELECT s.id, s.nombre, s.duracion_minutos, c.nombre AS categoria
+     FROM servicios s
+     LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
+     WHERE s.activo = 1
+     ORDER BY c.orden IS NULL, c.orden, c.nombre, s.nombre");
+$servicios_agenda = [];
+foreach ($stmt_agenda->fetchAll() as $s) {
+    $servicios_agenda[$s["categoria"] ?? "Otros"][] = $s;
+}
+$wa_numero = preg_replace("/[^0-9]/", "", TELEFONO_NEGOCIO);
+?>
+<section id="reservar" class="pm-section-alt pm-cta-section pm-agenda-section" data-section="reservar">
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-8 text-center">
-        <h2 class="pm-cta-title pm-animate">
-          ¿Lista para transformar tu belleza?
-        </h2>
-        <p class="pm-cta-subtitle pm-animate">
-          Agenda tu cita en menos de 1 minuto. Nuestro equipo de profesionales te espera
-          para brindarte la mejor experiencia de cuidado personal.
-        </p>
-        <div class="pm-animate pm-cta-actions">
-          <a href="reservar.php" class="btn-pm-dorado btn-pm-lg">
-            <i class="bi bi-calendar-check me-2"></i>Reservar Ahora
-          </a>
-          <a href="https://wa.me/<?= preg_replace(
-              "/[^0-9]/",
-              "",
-              TELEFONO_NEGOCIO,
-          ) ?>" class="btn-pm-outline btn-pm-outline--white btn-pm-lg" target="_blank" rel="noopener">
-            <i class="bi bi-whatsapp me-2"></i>Contáctanos por WhatsApp
-          </a>
-        </div>
-      </div>
+    <div class="text-center">
+      <h2 class="pm-cta-title pm-animate">Elegí tu tratamiento y tu horario</h2>
+      <p class="pm-cta-subtitle pm-animate pm-agenda-subtitle">
+        Mirá los turnos libres de esta semana. Tocá el que te sirve y te abrimos
+        WhatsApp con el mensaje ya escrito.
+      </p>
+    </div>
+
+    <div class="pm-agenda pm-animate" id="pmAgenda"
+         data-api="<?= URL_API ?>/citas/agenda-publica.php"
+         data-whatsapp-number="<?= $wa_numero ?>">
+      <label class="pm-agenda__label" for="pmAgendaServicio">¿Qué te querés hacer?</label>
+      <select id="pmAgendaServicio" class="form-select pm-agenda__select">
+        <option value="">Todavía no sé, quiero consultar</option>
+        <?php foreach ($servicios_agenda as $categoria => $items): ?>
+          <optgroup label="<?= htmlspecialchars($categoria) ?>">
+            <?php foreach ($items as $s): ?>
+              <option value="<?= (int) $s["id"] ?>" data-nombre="<?= htmlspecialchars($s["nombre"]) ?>">
+                <?= htmlspecialchars($s["nombre"]) ?> · <?= (int) $s["duracion_minutos"] ?> min
+              </option>
+            <?php endforeach; ?>
+          </optgroup>
+        <?php endforeach; ?>
+      </select>
+
+      <p class="pm-agenda__estado" aria-live="polite">Mirando la agenda…</p>
+      <div class="pm-agenda__dias" role="group" aria-label="Días de la semana"></div>
+      <div class="pm-agenda__turnos"></div>
+
+      <p class="pm-agenda__micro">
+        El turno queda confirmado cuando te respondemos por WhatsApp.
+        ¿No ves el horario que buscás? Escribinos igual.
+      </p>
+    </div>
+
+    <div class="pm-animate pm-cta-actions">
+      <a href="https://wa.me/<?= $wa_numero ?>" class="btn-pm-dorado btn-pm-lg"
+         target="_blank" rel="noopener" data-agenda-wa-general>
+        <i class="bi bi-whatsapp me-2"></i>Escribinos por WhatsApp
+      </a>
+      <a href="reservar.php" class="btn-pm-outline btn-pm-outline--white btn-pm-lg">
+        <i class="bi bi-calendar-check me-2"></i>Prefiero reservar online
+      </a>
     </div>
   </div>
 </section>
