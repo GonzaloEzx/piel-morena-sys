@@ -133,10 +133,12 @@ function pm_turnos_del_dia(PDO $db, array $servicio, string $fecha, array $ocupa
         $inicio = date('H:i', $hora_actual);
         $fin    = date('H:i', $hora_actual + ($duracion * 60));
 
-        // Verificar si el slot se solapa con alguna cita existente
+        // Verificar si el slot se solapa con alguna cita existente.
+        // MySQL devuelve "11:30:00": sin recortar, "11:30" < "11:30:00" y el
+        // turno que arranca justo cuando termina una cita salía ocupado.
         $libre = true;
         foreach ($citas_ocupadas as $cita) {
-            if ($inicio < $cita['hora_fin'] && $fin > $cita['hora_inicio']) {
+            if ($inicio < substr($cita['hora_fin'], 0, 5) && $fin > substr($cita['hora_inicio'], 0, 5)) {
                 $libre = false;
                 break;
             }
