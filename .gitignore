@@ -66,3 +66,6 @@ error_log
 *.tmp
 *.bak
 *.swp
+
+# Credenciales locales (no versionar)
+.env

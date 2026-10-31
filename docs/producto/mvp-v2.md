@@ -71,8 +71,9 @@ y desplegado (verificado en producción). Probar una rama no prueba producción.
 |---|---|---|
 | Deploy `9fbe7f4` (agenda de la landing, 10-10) | Integrado, no desplegado | `origin/main`; producción sin verificar. Con el cambio a WhatsApp, su agenda pública queda reemplazada: se puede publicar directo el commit integrado siguiente |
 | v2.0 agenda (`d9eb1cf`) | Reemplazado en lo público | Su reserva online y `mi-turno` no se publicaron; el panel y el cálculo siguen |
-| Pedir turno por WhatsApp + panel | Preparado (commit local en `v2-agenda`) | Verificación del 31-10 abajo |
-| `/test` en producción | En curso | Falta la base de prueba creada en hPanel |
+| Pedir turno por WhatsApp + panel | Desplegado en `/test` (rama `v2-agenda`), no en la raíz | Verificación local y en `/test` abajo |
+| `/test` en producción | Desplegado | Worktree `public_html/test`; usa la base de producción (autorizado por Gonzalo, sitio sin uso) |
+| Raíz de producción | Integrado en `0c75b1d` (mayo) | Sigue con el wizard viejo; comparte base con `/test`, ya con la 016 |
 
 Cada verificación nueva registra alcance, resultado y fecha propios.
 Cuando este proyecto quede sin ediciones simultáneas, es candidato para la
@@ -84,7 +85,13 @@ prueba de continuidad del marco (dos sesiones nuevas reconstruyen el estado).
 - curl sin sesión: `crear`, `gestionar`, `agenda-publica`, `mi-turno` y `maquinas/disponibles` dan 404; `disponibilidad` y `profesionales` dan 403.
 - Playwright (Edge) a 390, 768 y 1440 px sobre una base de prueba armada con `database/demo/armar_base_test.php`: `#reservar` abre WhatsApp con el servicio; tarjetas con mensaje; `reservar.php?servicio=` destaca; id inválido sin destacado; sin pedidos a endpoints retirados ni errores JS. Sin JS: formulario y categorías funcionan.
 - Panel a 390 px: abrir WhatsApp no cambia el estado, "Marcar confirmado" sí; alta rápida con horarios libres; disponibilidad con sesión.
-- No verificado: número de WhatsApp desde un celular real; producción.
+- No verificado: número de WhatsApp desde un celular real.
+
+### Verificación — `/test` en producción (2026-10-31)
+
+- Base de producción respaldada en `~/backups/pielmorena-pre-v2-20261031.sql.gz` antes de tocarla; migración 016 aplicada (MariaDB 11.8) y datos de demo de `database/demo/seed_demo_produccion.sql` (asignaciones por categoría a las profesionales reales, horario de Naila, dos citas `demo-v2`).
+- Playwright contra `https://pielmorenaestetica.com.ar/test`: los 22 pasos OK (público a 390/768/1440 px, sin JS y panel con admin temporal borrada al terminar).
+- `/test` envía `X-Robots-Tag: noindex`; `.sql` y `database/` dan 403/404. La raíz sigue respondiendo con su código de mayo.
 
 ## Versiones
 
