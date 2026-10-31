@@ -154,7 +154,7 @@ $meses_es = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','
               <i class="bi bi-calendar-x" style="font-size:2.5rem;color:var(--pm-arena);"></i>
               <p class="mt-2 mb-3" style="color:var(--pm-text-muted);font-size:0.9rem;">No tenés citas próximas.</p>
               <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm btn-pm-sm">
-                <i class="bi bi-plus-circle me-1"></i>Reservar cita
+                <i class="bi bi-whatsapp me-1"></i>Pedir turno
               </a>
             </div>
           <?php else: ?>

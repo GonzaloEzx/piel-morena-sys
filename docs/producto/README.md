@@ -52,7 +52,7 @@ El sistema debe ser fácil de operar por personal no técnico (Mari y su equipo)
 ```
 piel-morena-sys/
 ├── index.php                  # Landing pública
-├── reservar.php               # Flujo de reserva de citas
+├── reservar.php               # Pedir turno por WhatsApp
 ├── includes/                  # Auth, funciones, header, footer
 ├── api/                       # Endpoints REST (JSON)
 │   ├── auth/                  # login, registro, logout
@@ -84,13 +84,13 @@ piel-morena-sys/
 |---|---|
 | **Admin** (Mariángeles) | Acceso total: configuración, CRUD completo, caja, reportes, cancelar citas |
 | **Staff / Empleada** | Ver y crear citas propias; ver clientes asignados; cancelar citas |
-| **Cliente registrado** | Reservar citas (requiere cuenta); ver historial propio |
+| **Cliente registrado** | Ver historial propio (el turno se pide por WhatsApp) |
 
 - Cada empleada tiene su propio acceso al sistema.
 - Admin puede crear/editar empleadas y asignarles servicios y horarios.
 - **Solo admin y staff pueden cancelar citas.** El cliente debe contactar al salón por teléfono.
 - Staff NO puede acceder a caja ni configuración.
-- No hay rol "invitado" — se requiere cuenta para reservar.
+- No hace falta cuenta para pedir turno: se coordina por WhatsApp.
 
 ---
 
@@ -134,24 +134,11 @@ Secciones en orden (con anclas):
 
 ---
 
-### 5.3 Módulo de Reservas (`reservar.php`)
+### 5.3 Pedir turno (`reservar.php`) — desde 2026-10-31
 
-**Flujo UI (wizard 4 pasos):**
-1. Selección de categoría (accordion) → servicio específico dentro de la categoría
-2. Selección de fecha (hoy + máx. 60 días)
-3. Selección de horario disponible (grilla de slots)
-4. Confirmación con resumen (servicio, fecha, hora, precio)
-
-**Reglas de negocio:**
-- **Requiere cuenta** — los usuarios no logueados ven aviso con CTA de registro/login.
-- Sin pago/seña online.
-- Slots generados según duración del servicio seleccionado.
-- **Solo admin y staff pueden cancelar citas** — el cliente contacta por teléfono.
-- Emails de confirmación se envían best-effort (no bloquean la reserva).
-- Anticipación máxima: 60 días.
-- Anti-solapamiento: verificación en backend antes de confirmar (responde 409 si ocupado).
-- Soporte para jornadas específicas por categoría o por grupo operativo (ej: extensiones de pestañas en fechas puntuales, packs que usan la jornada de depilación o de equipamiento).
-- Staff puede registrar citas manualmente para clientes que no tienen cuenta (modal "Nueva Cita").
+La web no reserva: cada servicio abre WhatsApp con su nombre escrito y el
+turno se coordina con el salón, que lo carga en el panel. Detalle en el
+contrato 03 y en `docs/modulos/reservas/reservas-publicas.md`.
 
 ---
 
@@ -249,7 +236,7 @@ Secciones en orden (con anclas):
 ## 6. Funcionalidades Pendientes / Backlog
 
 ### MVP (antes del 6 de abril) — ✅ Completado
-- [x] Reserva de citas operativa end-to-end (requiere cuenta)
+- [x] Pedir turno por WhatsApp desde la web; alta del turno en el panel
 - [x] Panel admin: citas, caja, servicios, clientes, empleados, productos
 - [x] Galería administrable (6 slots, upload desde admin)
 - [x] Servicios reales con 9 categorías (~40+ servicios de `docs/negocio/README.md`)
@@ -283,7 +270,7 @@ Secciones en orden (con anclas):
 
 - **Cancelación de citas:** solo admin y staff pueden cancelar vía API. El cliente contacta por teléfono (3624 254052).
 - **Anticipación máxima de reserva:** 60 días.
-- **Requiere cuenta:** reserva online solo para usuarios registrados. Staff registra clientes sin cuenta desde el panel.
+- **Sin reserva online (2026-10-31):** la clienta pide turno por WhatsApp; el staff lo carga desde el panel.
 - **Sin pago online:** reserva sin seña.
 - **Galería:** máximo 6 imágenes administrables desde panel admin. Reemplazo por slot (sin historial de archivos).
 - **Servicios:** estructura plana (categoría → servicio), sin subcategorías. ~40+ servicios reales en 9 categorías.

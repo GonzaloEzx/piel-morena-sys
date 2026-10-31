@@ -11,7 +11,7 @@ pielmorenaestetica.com.ar.
 
 Tres capas:
 - Pública: landing one-page
-- Clientes: reservas online con autenticación
+- Clientas: piden turno por WhatsApp desde la web (la web no reserva)
 - Operativa: panel admin y empleado
 
 ## Stack
@@ -45,5 +45,6 @@ Leer en este orden:
 
 Ver progress en docs/contracts/README.md.
 Módulos con pendiente real: 06, 09, 10, 12.
-Decisiones abiertas: auth vs invitado (03), 
-Google OAuth UX (01).
+Reservas: la web abre WhatsApp y el salón carga
+el turno en el panel (contrato 03, 2026-10-31).
+Decisión abierta: Google OAuth UX (01).

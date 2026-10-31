@@ -32,7 +32,8 @@ No incluye como fuente funcional principal:
 - soporte de layout para `admin` y `empleado`;
 - CRUD de servicios, clientes, empleados y productos;
 - gestion de citas con cambio de estado y alta manual desde panel;
-- **agenda del dia** (`admin/views/agenda.php`, admin y empleado): turnos por profesional en columnas (en el celular, filtro por profesional), bandeja de pendientes con confirmacion por WhatsApp prearmada, recordatorios de manana por WhatsApp y alta rapida del turno tomado por WhatsApp (busca a la clienta por telefono y sugiere horarios libres);
+- **agenda del dia** (`admin/views/agenda.php`, admin y empleado): turnos por profesional en columnas (en el celular, filtro por profesional), pendientes (turnos cargados sin confirmar), recordatorios de manana y alta rapida del turno acordado por WhatsApp (busca a la clienta por telefono y sugiere horarios libres);
+- WhatsApp desde el panel: "Abrir WhatsApp" y "Abrir recordatorio" solo abren el mensaje armado; el estado se cambia aparte con "Marcar confirmado". Abrir un mensaje no se registra como enviado;
 - el alta manual usa el calculo de disponibilidad de `includes/agenda.php` (contrato 03) y admite horarios fuera de grilla; ya no bloquea todo el salon por una cita;
 - gestion de jornadas con calendario, tabla, creacion multi-fecha y cancelacion con preview;
 - caja con movimientos, ventas, cierres e historico;

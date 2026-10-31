@@ -1,6 +1,6 @@
 # Reservas por WhatsApp — plan para revisión de Claude Code
 
-> Estado: análisis de Codex y revisión de Claude recopilados; cierre con alcance simplificado, sin implementar.
+> Estado: implementado y verificado en local por Claude (2026-10-31, rama `v2-agenda`); ver [estado de entrega](mvp-v2.md#estado-de-entrega). Lo que sigue es el antecedente del análisis.
 > Relevo: Codex, 2026-10-31T16:34:39-03:00.
 > Base revisada: `v2-agenda`, commit local `d9eb1cf`.
 > Alcance de este bloque: documentar y analizar; sin cambios de aplicación, migraciones, commit, push ni deploy.

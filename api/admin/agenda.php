@@ -4,11 +4,12 @@
  * GET ?fecha=YYYY-MM-DD → JSON { success, data: { fecha, profesionales[], citas[], pendientes[], manana[] } }
  *
  * citas      → turnos de esa fecha (sin cancelados), con su profesional.
- * pendientes → turnos pendientes desde hoy, para confirmar por WhatsApp.
+ * pendientes → turnos cargados sin confirmar, desde hoy.
  * manana     → turnos de mañana, para mandar el recordatorio.
  *
  * Cada turno trae `wa_confirmar` y `wa_recordar`: links de WhatsApp a la
  * clienta con el mensaje armado (vacíos si no tiene teléfono válido).
+ * Abrir un link no cambia nada: el estado se marca aparte.
  */
 
 require_once __DIR__ . '/../../includes/init.php';
@@ -38,7 +39,7 @@ $fecha_texto = function (string $f): string {
 
 $turnos = function (string $where, array $params) use ($db, $fecha_texto): array {
     $stmt = $db->prepare(
-        "SELECT c.id, c.fecha, c.hora_inicio, c.hora_fin, c.estado, c.id_empleado, c.id_servicio, c.token_gestion,
+        "SELECT c.id, c.fecha, c.hora_inicio, c.hora_fin, c.estado, c.id_empleado, c.id_servicio,
                 s.nombre AS servicio, s.precio,
                 u.nombre AS cliente_nombre, TRIM(CONCAT(u.nombre, ' ', u.apellidos)) AS cliente, u.telefono,
                 TRIM(CONCAT(COALESCE(e.nombre, ''), ' ', COALESCE(e.apellidos, ''))) AS profesional
@@ -54,7 +55,7 @@ $turnos = function (string $where, array $params) use ($db, $fecha_texto): array
     return array_map(function ($c) use ($fecha_texto) {
         $hora = substr($c['hora_inicio'], 0, 5);
         $dia = $fecha_texto($c['fecha']);
-        $link = $c['token_gestion'] ? "\nSi necesitás cambiarlo o cancelarlo: " . URL_BASE . '/mi-turno.php?t=' . $c['token_gestion'] : '';
+        $cierre = "\nSi necesitás cambiarlo o cancelarlo, respondé este mensaje.";
         $con = $c['profesional'] !== '' ? ' con ' . explode(' ', $c['profesional'])[0] : '';
         return [
             'id'           => (int) $c['id'],
@@ -71,9 +72,9 @@ $turnos = function (string $where, array $params) use ($db, $fecha_texto): array
             'telefono'     => $c['telefono'],
             'profesional'  => $c['profesional'] !== '' ? $c['profesional'] : null,
             'wa_confirmar' => pm_link_whatsapp((string) $c['telefono'],
-                "Hola {$c['cliente_nombre']}! Te confirmamos tu turno de {$c['servicio']}$con el $dia a las $hora en Piel Morena (Vedia 459). Te esperamos!$link"),
+                "Hola {$c['cliente_nombre']}! Te confirmamos tu turno de {$c['servicio']}$con el $dia a las $hora en Piel Morena (Vedia 459). Te esperamos!$cierre"),
             'wa_recordar'  => pm_link_whatsapp((string) $c['telefono'],
-                "Hola {$c['cliente_nombre']}! Te recordamos tu turno de {$c['servicio']} $dia a las $hora en Piel Morena (Vedia 459). Si no podés venir, avisanos así lo libera otra clienta.$link"),
+                "Hola {$c['cliente_nombre']}! Te recordamos tu turno de {$c['servicio']} $dia a las $hora en Piel Morena (Vedia 459). Si no podés venir, avisanos así lo libera otra clienta.$cierre"),
         ];
     }, $stmt->fetchAll());
 };

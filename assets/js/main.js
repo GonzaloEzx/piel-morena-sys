@@ -604,7 +604,8 @@ const TreatmentsCatalog = {
   },
 
   _buildWhatsappHref(title) {
-    const message = encodeURIComponent(`Hola, quiero consultar por el tratamiento ${title}.`);
+    const plantilla = this.section.dataset.msgServicio || 'Hola, quiero consultar por el tratamiento {servicio}.';
+    const message = encodeURIComponent(plantilla.replace('{servicio}', title));
     return `https://wa.me/${this.whatsappNumber}?text=${message}`;
   },
 
@@ -703,201 +704,24 @@ const MobileMenu = {
 
 
 /* ═══════════════════════════════════════════════════════════
-   AGENDA PÚBLICA — turnos libres de la semana → WhatsApp
-   Cada turno libre es un link a WhatsApp con servicio, día y
-   hora ya escritos. Si la agenda no se pudo verificar (modo
-   'horario'), NUNCA se muestra un turno como libre: se ofrece
-   consultar el día.
+   PEDIR TURNO — sección #reservar de la landing
+   Sin JS el formulario lleva a reservar.php?servicio=. Con JS abre
+   WhatsApp directo con el servicio elegido escrito en el mensaje.
+   Los textos vienen del servidor (includes/whatsapp.php).
    ═══════════════════════════════════════════════════════════ */
-const AgendaPublica = {
-  /* Textos de los mensajes. {servicio} llega vacío si no eligieron. */
-  mensajes: {
-    turno: '¡Hola! Vi en la web que {dia} a las {hora} hay lugar{para}. ¿Me lo reservan?',
-    turnoSinServicio: '¡Hola! Vi en la web que {dia} a las {hora} hay lugar. Quería un turno para: ',
-    dia: '¡Hola! Quería un turno{para} {dia}. ¿Qué horarios tienen?',
-    sinLugar: '¡Hola! Quería un turno{para} esta semana pero no vi lugar en la web. ¿Me avisan si se libera algo?',
-    general: '¡Hola! Vi la web de Piel Morena y quiero reservar un turno.',
-    generalServicio: '¡Hola! Vi la web de Piel Morena y quería consultar por {servicio}.',
-  },
-
-  diasCorto: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
-  diasLargo: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'],
-
-  root: null,
-  datos: null,
-  activo: 0,
-  pedido: 0,
-
+const PedirTurno = {
   init() {
-    this.root = document.getElementById('pmAgenda');
-    if (!this.root) return;
-
-    this.api = this.root.dataset.api;
-    this.numero = this.root.dataset.whatsappNumber || '';
-    this.select = document.getElementById('pmAgendaServicio');
-    this.estado = this.root.querySelector('.pm-agenda__estado');
-    this.cinta = this.root.querySelector('.pm-agenda__dias');
-    this.panel = this.root.querySelector('.pm-agenda__turnos');
-    this.general = document.querySelector('[data-agenda-wa-general]');
-
-    this.select.addEventListener('change', () => this.cargar());
-    this.cinta.addEventListener('click', (e) => {
-      const boton = e.target.closest('[data-dia]');
-      if (!boton || boton.disabled) return;
-      this.activo = Number(boton.dataset.dia);
-      this.pintar();
+    const form = document.getElementById('pmPedirTurno');
+    if (!form || !form.dataset.waNumero) return;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const select = form.querySelector('select');
+      const opcion = select.options[select.selectedIndex];
+      const mensaje = select.value
+        ? form.dataset.msgServicio.replace('{servicio}', opcion.textContent.trim())
+        : form.dataset.msgGeneral;
+      window.open(`https://wa.me/${form.dataset.waNumero}?text=${encodeURIComponent(mensaje)}`, '_blank', 'noopener');
     });
-
-    this.cargar();
-  },
-
-  async cargar() {
-    const pedido = ++this.pedido;
-    this.root.classList.add('is-cargando');
-    this.actualizarGeneral();
-
-    let datos = null;
-    try {
-      const r = await fetch(`${this.api}?id_servicio=${encodeURIComponent(this.select.value || 0)}`, { cache: 'no-store' });
-      const j = await r.json();
-      if (j.success) datos = j.data;
-    } catch (err) {
-      console.warn('Agenda: no se pudo leer', err);
-    }
-
-    // Si cambiaron de servicio mientras tanto, esta respuesta ya no sirve
-    if (pedido !== this.pedido) return;
-
-    this.datos = datos;
-    this.root.classList.remove('is-cargando');
-    this.pintar();
-  },
-
-  servicio() {
-    const op = this.select.selectedOptions[0];
-    return op && op.value ? op.dataset.nombre : '';
-  },
-
-  waLink(texto) {
-    return `https://wa.me/${this.numero}?text=${encodeURIComponent(texto)}`;
-  },
-
-  mensaje(plantilla, valores = {}) {
-    const servicio = this.servicio();
-    const todo = { servicio, para: servicio ? ` para ${servicio}` : '', ...valores };
-    return plantilla.replace(/\{(\w+)\}/g, (_, k) => todo[k] ?? '');
-  },
-
-  actualizarGeneral() {
-    if (!this.general) return;
-    this.general.href = this.waLink(this.servicio()
-      ? this.mensaje(this.mensajes.generalServicio)
-      : this.mensajes.general);
-  },
-
-  /* "hoy", "mañana", "el jueves 16/10": así se lee natural en el mensaje */
-  diaTexto(i, fecha) {
-    if (i === 0) return 'hoy';
-    if (i === 1) return 'mañana';
-    return `el ${this.diasLargo[fecha.getDay()]} ${fecha.getDate()}/${fecha.getMonth() + 1}`;
-  },
-
-  aFecha(iso) {
-    const [a, m, d] = iso.split('-').map(Number);
-    return new Date(a, m - 1, d);
-  },
-
-  libres(dia) {
-    return dia.turnos.filter((t) => t.libre).length;
-  },
-
-  hayLugar(dia) {
-    return this.datos.modo === 'vivo' ? this.libres(dia) > 0 : dia.abierto;
-  },
-
-  pintar() {
-    if (!this.datos) {
-      this.estado.textContent = 'No pudimos leer la agenda ahora. Escribinos por WhatsApp y te decimos qué horarios quedan.';
-      this.cinta.innerHTML = '';
-      this.panel.innerHTML = '';
-      return;
-    }
-
-    const { modo, dias } = this.datos;
-    const vivo = modo === 'vivo';
-    const total = dias.reduce((n, d) => n + this.libres(d), 0);
-    const servicio = this.servicio();
-
-    if (!this.hayLugar(dias[this.activo] || dias[0])) {
-      this.activo = Math.max(0, dias.findIndex((d) => this.hayLugar(d)));
-    }
-
-    if (vivo) {
-      const para = servicio ? ` para <strong>${this.escape(servicio)}</strong>` : '';
-      this.estado.innerHTML = total
-        ? `<span class="pm-agenda__vivo" aria-hidden="true"></span><strong>${total}</strong> turno${total === 1 ? '' : 's'} libre${total === 1 ? '' : 's'}${para} en los próximos ${dias.length} días`
-        : `Esta semana no quedan turnos${para}.`;
-    } else {
-      this.estado.textContent = 'Estos son nuestros horarios de atención. Elegí el día y te decimos qué turno queda.';
-    }
-
-    this.cinta.innerHTML = dias.map((d, i) => {
-      const fecha = this.aFecha(d.fecha);
-      const lugar = this.hayLugar(d);
-      const libres = this.libres(d);
-      const pie = !d.abierto ? 'cerrado'
-        : !vivo ? 'consultar'
-        : libres ? `${libres} libre${libres === 1 ? '' : 's'}` : 'sin lugar';
-      return `<button type="button" class="pm-agenda__dia${i === this.activo ? ' is-activo' : ''}"
-          data-dia="${i}" aria-pressed="${i === this.activo}" ${lugar ? '' : 'disabled'}>
-        <span>${i === 0 ? 'Hoy' : this.diasCorto[fecha.getDay()]}</span>
-        <strong>${fecha.getDate()}</strong>
-        <em>${pie}</em>
-      </button>`;
-    }).join('');
-
-    this.panel.innerHTML = this.panelDia(dias, total);
-
-    // En celular la cinta scrollea: dejar a la vista el día elegido
-    const activo = this.cinta.querySelector('.is-activo');
-    if (activo && this.cinta.scrollWidth > this.cinta.clientWidth) {
-      this.cinta.scrollLeft = activo.offsetLeft - this.cinta.offsetLeft - 16;
-    }
-  },
-
-  panelDia(dias, total) {
-    const dia = dias[this.activo];
-    const vivo = this.datos.modo === 'vivo';
-    const diaTexto = this.diaTexto(this.activo, this.aFecha(dia.fecha));
-
-    if (vivo && !total) {
-      return `<a class="pm-agenda__aviso" target="_blank" rel="noopener"
-          href="${this.waLink(this.mensaje(this.mensajes.sinLugar))}">
-        <i class="bi bi-bell me-2"></i>Avisame si se libera un lugar
-      </a>`;
-    }
-
-    if (!vivo) {
-      return `${dia.franja ? `<p class="pm-agenda__nota">Atendemos de ${this.escape(dia.franja)}.</p>` : ''}
-        <a class="pm-agenda__aviso" target="_blank" rel="noopener"
-          href="${this.waLink(this.mensaje(this.mensajes.dia, { dia: diaTexto }))}">
-          <i class="bi bi-whatsapp me-2"></i>Consultar turnos para ${this.escape(diaTexto)}
-        </a>`;
-    }
-
-    const plantilla = this.servicio() ? this.mensajes.turno : this.mensajes.turnoSinServicio;
-    return `<div class="pm-agenda__chips">${dia.turnos.map((t) => t.libre
-      ? `<a class="pm-agenda__chip" target="_blank" rel="noopener"
-          href="${this.waLink(this.mensaje(plantilla, { dia: diaTexto, hora: t.hora }))}"
-          aria-label="Pedir el turno de las ${t.hora} por WhatsApp">${t.hora}</a>`
-      : `<span class="pm-agenda__chip is-ocupado" aria-label="${t.hora}, ocupado">${t.hora}</span>`
-    ).join('')}</div>`;
-  },
-
-  escape(v) {
-    return String(v ?? '').replace(/[&<>"']/g, (c) => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-    }[c]));
   },
 };
 
@@ -914,6 +738,6 @@ document.addEventListener('DOMContentLoaded', () => {
   CarouselSync.init();
   GalleryLightbox.init();
   TreatmentsCatalog.init();
-  AgendaPublica.init();
+  PedirTurno.init();
   MobileMenu.init();
 });

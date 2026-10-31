@@ -6252,10 +6252,9 @@ section#contacto .pm-contact-info-card:hover {
 
 
 /* =============================================================
-   E37. Agenda pública (landing, sección #reservar)
-   Turnos libres de la semana; cada turno abre WhatsApp.
-   Mobile-first: la cinta de días scrollea de costado en celular
-   y pasa a 7 columnas fijas desde tablet.
+   E37. Pedir turno (landing, sección #reservar)
+   Elegir servicio (opcional) y continuar por WhatsApp. Sin JS el
+   formulario lleva a reservar.php?servicio=; con JS abre WhatsApp.
    ============================================================= */
 .pm-agenda-subtitle {
     margin-left: auto;
@@ -6265,7 +6264,7 @@ section#contacto .pm-contact-info-card:hover {
 .pm-agenda {
     position: relative;
     z-index: 1;
-    max-width: 760px;
+    max-width: 640px;
     margin: 0 auto var(--pm-space-6);
     padding: var(--pm-space-5) var(--pm-space-4);
     background: var(--pm-surface);
@@ -6299,219 +6298,26 @@ section#contacto .pm-contact-info-card:hover {
     box-shadow: 0 0 0 3px rgba(138, 118, 80, 0.2);
 }
 
-.pm-agenda__estado {
-    margin: var(--pm-space-5) 0 var(--pm-space-3);
-    font-family: var(--pm-font-body);
-    font-size: 0.9375rem;
-    color: var(--pm-text-muted);
-}
-
-.pm-agenda__estado strong {
-    color: var(--pm-text-heading);
-}
-
-.pm-agenda__vivo {
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0 var(--pm-space-2) 2px 2px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--pm-verde);
-    box-shadow: 0 0 0 0 rgba(142, 151, 125, 0.6);
-    animation: pmAgendaPulso 2s ease-out infinite;
-}
-
-@keyframes pmAgendaPulso {
-    0%   { box-shadow: 0 0 0 0 rgba(142, 151, 125, 0.6); }
-    70%  { box-shadow: 0 0 0 8px rgba(142, 151, 125, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(142, 151, 125, 0); }
-}
-
-/* Cinta de días */
-.pm-agenda__dias {
-    display: flex;
-    gap: var(--pm-space-2);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    margin: 0 calc(-1 * var(--pm-space-4));
-    padding: 2px var(--pm-space-4) var(--pm-space-2);
-    scrollbar-width: none;
-}
-
-.pm-agenda__dias::-webkit-scrollbar {
-    display: none;
-}
-
-.pm-agenda__dia {
-    flex: 0 0 68px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: var(--pm-space-2) var(--pm-space-1);
-    border: 2px solid var(--pm-border-light);
-    border-radius: var(--pm-radius-md);
-    background: var(--pm-surface);
-    color: var(--pm-text);
-    font-family: var(--pm-font-ui);
-    scroll-snap-align: start;
-    cursor: pointer;
-    transition: border-color 200ms ease, background 200ms ease, color 200ms ease;
-}
-
-.pm-agenda__dia span {
-    font-size: 0.75rem;
-    text-transform: capitalize;
-    color: var(--pm-text-muted);
-}
-
-.pm-agenda__dia strong {
-    font-size: 1.25rem;
-    line-height: 1.1;
-}
-
-.pm-agenda__dia em {
-    font-style: normal;
-    font-size: 0.6875rem;
-    color: var(--pm-text-light);
-    white-space: nowrap;
-}
-
-.pm-agenda__dia:hover:not(:disabled) {
-    border-color: var(--pm-bronce);
-}
-
-.pm-agenda__dia.is-activo {
-    border-color: var(--pm-bronce);
-    background: var(--pm-bronce);
-    color: var(--pm-text-inverse);
-}
-
-.pm-agenda__dia.is-activo span,
-.pm-agenda__dia.is-activo em {
-    color: var(--pm-dorado);
-}
-
-.pm-agenda__dia:disabled {
-    opacity: 0.45;
-    cursor: default;
-}
-
-.pm-agenda__dia:focus-visible,
-.pm-agenda__chip:focus-visible,
-.pm-agenda__aviso:focus-visible {
-    outline: 3px solid var(--pm-bronce);
-    outline-offset: 2px;
-}
-
-/* Turnos del día elegido */
-.pm-agenda__turnos {
-    margin-top: var(--pm-space-4);
-    min-height: 56px;
-    transition: opacity 200ms ease;
-}
-
-.pm-agenda.is-cargando .pm-agenda__turnos,
-.pm-agenda.is-cargando .pm-agenda__dias {
-    opacity: 0.45;
-    pointer-events: none;
-}
-
-.pm-agenda__chips {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
-    gap: var(--pm-space-2);
-}
-
-.pm-agenda__chip {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    border: 2px solid var(--pm-border);
-    border-radius: var(--pm-radius-md);
-    background: var(--pm-surface);
-    color: var(--pm-text);
-    font-family: var(--pm-font-ui);
-    font-weight: 500;
-    font-size: 0.9375rem;
-    text-decoration: none;
-    transition: border-color 200ms ease, background 200ms ease, transform 200ms ease;
-}
-
-a.pm-agenda__chip:hover {
-    border-color: var(--pm-bronce);
-    background: var(--pm-crema);
-    color: var(--pm-text);
-    transform: translateY(-1px);
-}
-
-.pm-agenda__chip.is-ocupado {
-    border-color: transparent;
-    background: var(--pm-surface-alt);
-    color: var(--pm-text-light);
-    text-decoration: line-through;
-}
-
-.pm-agenda__nota {
-    margin-bottom: var(--pm-space-3);
-    font-size: 0.9375rem;
-    color: var(--pm-text-muted);
-}
-
-.pm-agenda__aviso {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: var(--pm-space-2) var(--pm-space-4);
-    border: 2px solid var(--pm-bronce);
-    border-radius: var(--pm-radius-full);
-    color: var(--pm-bronce-dark);
-    font-family: var(--pm-font-ui);
-    font-weight: 500;
-    font-size: 0.9375rem;
-    text-decoration: none;
-}
-
-.pm-agenda__aviso:hover {
-    background: var(--pm-bronce);
-    color: var(--pm-text-inverse);
+.pm-agenda__enviar {
+    width: 100%;
+    min-height: 48px;
+    margin-top: var(--pm-space-3);
 }
 
 .pm-agenda__micro {
     margin: var(--pm-space-4) 0 0;
     font-size: 0.8125rem;
-    color: var(--pm-text-light);
+    color: var(--pm-text-muted);
 }
 
 @media (min-width: 768px) {
     .pm-agenda {
         padding: var(--pm-space-6);
     }
-
-    .pm-agenda__dias {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        overflow: visible;
-        margin: 0;
-        padding: 2px 0 0;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .pm-agenda__vivo {
-        animation: none;
-    }
-
-    a.pm-agenda__chip:hover {
-        transform: none;
-    }
 }
 
 /* =============================================================
-   E38. Reserva v2 — profesional, días, datos y gestión del turno
-   (reservar.php, mi-turno.php)
+   E38. Pedir turno (reservar.php): servicios que abren WhatsApp
    ============================================================= */
 .pm-wizard-titulo {
     font-family: var(--pm-font-heading);
@@ -6543,145 +6349,119 @@ a.pm-agenda__chip:hover {
     margin: 0 0 var(--pm-space-2);
 }
 
-.pm-opcional {
-    text-transform: none;
-    font-weight: 400;
-    color: var(--pm-text-muted);
+.pm-reservar-section .pm-wizard-step + .pm-wizard-step {
+    margin-top: var(--pm-space-4);
 }
 
-/* Las opciones de servicio ahora son <button> */
-button.pm-servicio-option {
-    width: 100%;
-    text-align: left;
-    font: inherit;
-    color: inherit;
-}
-
-.pm-so-info,
-.pm-so-name,
-.pm-so-meta {
-    display: block;
-}
-
-/* Profesionales */
-.pm-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--pm-space-2);
-}
-
-.pm-chip {
-    min-height: 44px;
-    padding: 0 var(--pm-space-4);
-    border: 1.5px solid var(--pm-border);
-    border-radius: var(--pm-radius-full);
-    background: var(--pm-surface);
-    color: var(--pm-text);
-    font-family: var(--pm-font-ui);
-    font-size: 0.9375rem;
-    transition: border-color var(--pm-transition-fast), background var(--pm-transition-fast);
-}
-
-.pm-chip:hover {
-    border-color: var(--pm-bronce);
-}
-
-.pm-chip.selected {
-    border-color: var(--pm-bronce);
-    background: var(--pm-bronce);
-    color: var(--pm-text-inverse);
-}
-
-.pm-chip:focus-visible,
-.pm-jornada-card:focus-visible,
-.pm-turno-btn:focus-visible {
-    outline: none;
-    box-shadow: var(--pm-shadow-focus);
-}
-
-/* Tira de días con scroll horizontal */
-.pm-dias-scroll {
-    display: flex;
-    gap: var(--pm-space-2);
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    padding: 2px 2px var(--pm-space-2);
-    -webkit-overflow-scrolling: touch;
-}
-
-.pm-dias-scroll .pm-jornada-card {
-    flex: 0 0 68px;
-    scroll-snap-align: start;
-    padding: 10px 4px;
-}
-
-.pm-dias-scroll .pm-jornada-num {
-    font-size: 1.3rem;
-}
-
-.pm-jornada-card:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.pm-otra-fecha {
-    display: flex;
+.pm-btn-wa {
+    min-height: 48px;
+    display: inline-flex;
     align-items: center;
-    gap: var(--pm-space-3);
-    font-size: 0.875rem;
-    color: var(--pm-text-muted);
+    justify-content: center;
 }
 
-.pm-otra-fecha .input-pm {
-    max-width: 200px;
+.pm-pedir-elegido {
+    border: 2px solid var(--pm-bronce);
 }
 
-.pm-turno-btn {
-    min-height: 44px;
-}
-
-/* Campo trampa para bots: fuera de la vista, no de los lectores de pantalla */
-.pm-campo-trampa {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-}
-
-.pm-exito-acciones {
+.pm-pedir-general {
     display: flex;
     flex-direction: column;
     gap: var(--pm-space-3);
 }
 
-.pm-link-whatsapp {
-    color: var(--pm-tierra);
-    font-weight: 600;
+.pm-pedir-cat {
+    border-bottom: 1px solid var(--pm-border-light);
 }
 
-/* Estado del turno */
-.pm-estado {
-    display: inline-block;
-    padding: var(--pm-space-1) var(--pm-space-4);
-    border-radius: var(--pm-radius-full);
+.pm-pedir-cat summary {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    cursor: pointer;
     font-family: var(--pm-font-ui);
-    font-size: 0.875rem;
     font-weight: 600;
-    background: var(--pm-crema);
+    color: var(--pm-text-heading);
+    list-style: none;
+}
+
+.pm-pedir-cat summary::-webkit-details-marker {
+    display: none;
+}
+
+.pm-pedir-cat summary::after {
+    content: "\F282"; /* bi-chevron-down */
+    font-family: "bootstrap-icons";
+    margin-left: auto;
+    transition: transform var(--pm-transition-fast);
+}
+
+.pm-pedir-cat[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.pm-pedir-lista {
+    list-style: none;
+    margin: 0 0 var(--pm-space-3);
+    padding: 0;
+}
+
+.pm-pedir-item {
+    display: flex;
+    align-items: center;
+    gap: var(--pm-space-3);
+    min-height: 56px;
+    padding: var(--pm-space-2) var(--pm-space-3);
+    border-radius: var(--pm-radius-md);
+    color: var(--pm-text);
+    text-decoration: none;
+    transition: background var(--pm-transition-fast);
+}
+
+.pm-pedir-item:hover,
+.pm-pedir-item:focus-visible {
+    background: var(--pm-surface-hover);
     color: var(--pm-text);
 }
 
-.pm-estado--pendiente  { background: #F6E3C8; color: #7A4E1F; }
-.pm-estado--confirmada { background: #DDE3D2; color: #3F4A33; }
-.pm-estado--completada { background: var(--pm-crema); color: var(--pm-text-muted); }
-.pm-estado--cancelada  { background: #F0D9D4; color: #7A3328; }
+.pm-pedir-item:focus-visible,
+.pm-pedir-cat summary:focus-visible {
+    outline: none;
+    box-shadow: var(--pm-shadow-focus);
+}
+
+.pm-pedir-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.pm-pedir-info .pm-so-name,
+.pm-pedir-info .pm-so-meta {
+    display: block;
+}
+
+.pm-pedir-cta {
+    flex: 0 0 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--pm-radius-full);
+    background: var(--pm-bronce);
+    color: var(--pm-text-inverse);
+    font-size: 1.25rem;
+}
+
+.pm-pedir-aviso {
+    margin-top: var(--pm-space-5);
+    font-size: 0.875rem;
+    color: var(--pm-text-muted);
+}
 
 @media (min-width: 576px) {
-    .pm-exito-acciones {
+    .pm-pedir-general {
         flex-direction: row;
-        justify-content: center;
+        align-items: center;
+        justify-content: space-between;
     }
 }

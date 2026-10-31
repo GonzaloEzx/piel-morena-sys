@@ -171,9 +171,9 @@ $navbar_light  = $pagina_actual !== 'index';
       <!-- ── Botones de acción (desktop) ──────────────────── -->
       <div class="pm-navbar-actions d-flex align-items-center gap-2">
 
-        <!-- Reservar Cita -->
+        <!-- Pedir turno (página de WhatsApp) -->
         <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm btn-pm-sm">
-          <i class="bi bi-calendar-check me-1"></i>Reservar Cita
+          <i class="bi bi-whatsapp me-1"></i>Pedir turno
         </a>
 
         <!-- Auth -->
@@ -289,7 +289,7 @@ $navbar_light  = $pagina_actual !== 'index';
     <!-- Acciones mobile -->
     <div class="pm-offcanvas-actions">
       <a href="<?= URL_BASE ?>/reservar.php" class="btn btn-pm w-100 mb-3 pm-sheet-action">
-        <i class="bi bi-calendar-check me-2"></i>Reservar Cita
+        <i class="bi bi-whatsapp me-2"></i>Pedir turno
       </a>
 
       <?php if ($logueado): ?>
@@ -324,7 +324,7 @@ $navbar_light  = $pagina_actual !== 'index';
         </span>
         <span class="pm-offcanvas-whatsapp">
           <i class="bi bi-whatsapp"></i>
-          <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="<?= htmlspecialchars(pm_wa_turno()) ?>" target="_blank" rel="noopener">WhatsApp</a>
         </span>
       </div>
     </div>

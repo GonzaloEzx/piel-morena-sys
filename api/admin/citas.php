@@ -171,7 +171,6 @@ if ($method === 'POST') {
         responder_json(false, null, $r['error'], $r['codigo']);
     }
     $id_cita = $r['id'];
-    $token_gestion = $r['token'];
 
     // Notificación al cliente (best-effort)
     try {
@@ -185,7 +184,6 @@ if ($method === 'POST') {
                 'servicio'       => $servicio['nombre'],
                 'fecha'          => $fecha_fmt,
                 'hora'           => $hora_inicio,
-                'link_gestion'   => URL_BASE . '/mi-turno.php?t=' . $token_gestion,
             ]);
             registrar_notificacion($id_cliente, 'sistema', 'Cita agendada', 'Tu cita de ' . $servicio['nombre'] . ' para el ' . $fecha_fmt . ' fue agendada.');
         }

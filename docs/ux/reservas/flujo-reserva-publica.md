@@ -1,58 +1,18 @@
-# Flujo de Reserva Publica
+# Flujo publico — Pedir turno
 
 > Estado: vigente
 > Audiencia: producto, UX, desarrollo, agentes
-> Fuente de verdad: complementaria
-> Ultima revision: 2026-04-03
+> Fuente de verdad: complementaria (manda el contrato 03)
+> Ultima revision: 2026-10-31
 
-## Objetivo
+## Recorrido
 
-Explicar el recorrido visible que hace una clienta para reservar una cita.
+1. La clienta toca "Pedir turno" en una tarjeta de servicio, un tratamiento,
+   una promo, el menu o el bloque `#reservar`.
+2. Se abre WhatsApp con el servicio escrito (o un mensaje general).
+3. Coordina dia y horario con el salon por chat.
+4. El salon carga el turno en el panel y lo marca confirmado.
 
-## Paso a paso
-
-### Paso 0 - Acceso
-
-Si la usuaria no esta autenticada:
-
-- ve un bloque que explica por que conviene crear cuenta;
-- puede ir a `registro.php` o `login.php`;
-- ambos caminos deben volver a `reservar.php`.
-
-### Paso 1 - Elegir servicio
-
-- selecciona una categoria;
-- elige un servicio concreto;
-- ve duracion y precio antes de avanzar.
-
-### Paso 2 - Elegir fecha
-
-- selecciona una fecha dentro de la ventana disponible;
-- no puede elegir fechas pasadas;
-- la experiencia debe sentirse simple y rapida.
-
-### Paso 3 - Elegir horario
-
-- ve horarios disponibles para ese servicio y fecha;
-- si no hay disponibilidad, recibe un mensaje claro;
-- el horario elegido debe sentirse definitivo y confiable.
-
-### Paso 4 - Confirmar
-
-- revisa resumen de servicio, fecha, hora y precio;
-- confirma la reserva;
-- recibe una pantalla de exito con numero de referencia.
-
-## Criterios UX del flujo
-
-- baja friccion;
-- lenguaje simple;
-- confianza en la disponibilidad;
-- continuidad natural hacia `Mi Cuenta`;
-- cero pasos redundantes.
-
-## Referencias
-
-- `docs/modulos/reservas/reservas-publicas.md`
-- `docs/modulos/reservas/disponibilidad-y-reglas.md`
-- `docs/contracts/03-sistema-reservas.md`
+Sin nombre, email, telefono, cuenta ni contraseña antes de abrir el chat.
+Sin horarios libres ni pantalla de "reserva exitosa": la web solo abre la
+conversacion.

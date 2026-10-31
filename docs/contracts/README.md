@@ -22,7 +22,7 @@ los contratos 03 y 04 describen la agenda entregada.
 |---|---|---|
 | 01 | Gestion de usuarios | Implementado con observacion sobre Google UI |
 | 02 | Catalogo de servicios | Implementado con override de disponibilidad |
-| 03 | Sistema de reservas | v2 local: sin cuenta, por profesional y con gestion por token; cambio a WhatsApp en revision |
+| 03 | Sistema de reservas | La web abre WhatsApp; turnos cargados en el panel con calculo por profesional |
 | 04 | Panel de administracion | Implementado |
 | 05 | Control de caja | Implementado |
 | 06 | Notificaciones | Parcial alto |

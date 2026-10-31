@@ -1,7 +1,8 @@
 <?php
 /**
  * Piel Morena — Admin: Agenda del día (v2.0)
- * Turnos por profesional, pendientes para confirmar por WhatsApp,
+ * Los turnos se acuerdan por WhatsApp y se cargan acá.
+ * Turnos por profesional, pendientes para confirmar,
  * recordatorios de mañana y alta rápida del turno tomado por WhatsApp.
  * Pensada para usarse desde el celular.
  */
@@ -72,11 +73,11 @@ require_once __DIR__ . '/../includes/admin_header.php';
     <div class="pm-ag-cols" id="agCols"></div>
   </div>
   <div class="tab-pane fade" id="tabPendientes" role="tabpanel">
-    <p class="pm-ag-meta">Reservas de la web y turnos sin confirmar. Confirmá por WhatsApp y quedan agendados.</p>
+    <p class="pm-ag-meta">Turnos cargados sin confirmar. Abrí WhatsApp para escribirle a la clienta y, cuando lo acuerden, marcalo como confirmado.</p>
     <div id="agPendientes"></div>
   </div>
   <div class="tab-pane fade" id="tabManana" role="tabpanel">
-    <p class="pm-ag-meta">Turnos de mañana. Un toque abre WhatsApp con el recordatorio armado.</p>
+    <p class="pm-ag-meta">Turnos de mañana. Un toque abre WhatsApp con el recordatorio armado; enviarlo queda de tu lado.</p>
     <div id="agManana"></div>
   </div>
 </div>
@@ -223,14 +224,15 @@ const Agenda = {
     if (modo === 'recordar') {
       const enviado = Recordados.leer()[c.id];
       acciones.push(c.wa_recordar
-        ? `<a class="btn btn-pm btn-sm" href="${c.wa_recordar}" target="_blank" rel="noopener" onclick="Recordados.marcar(${c.id}); setTimeout(() => Agenda.cargar(), 500)"><i class="bi bi-whatsapp me-1"></i>Recordar</a>`
+        ? `<a class="btn btn-pm btn-sm" href="${c.wa_recordar}" target="_blank" rel="noopener" onclick="Recordados.marcar(${c.id}); setTimeout(() => Agenda.cargar(), 500)"><i class="bi bi-whatsapp me-1"></i>Abrir recordatorio</a>`
         : '<span class="pm-ag-meta">Sin WhatsApp válido</span>');
-      if (enviado) acciones.push('<span class="pm-ag-enviado"><i class="bi bi-check2-all"></i> Recordatorio abierto</span>');
+      if (enviado) acciones.push('<span class="pm-ag-enviado"><i class="bi bi-check2"></i> Ya abriste este recordatorio</span>');
     } else {
       if (c.estado === 'pendiente') {
-        acciones.push(c.wa_confirmar
-          ? `<a class="btn btn-pm btn-sm" href="${c.wa_confirmar}" target="_blank" rel="noopener" onclick="Agenda.estado(${c.id}, 'confirmada', true)"><i class="bi bi-whatsapp me-1"></i>Confirmar</a>`
-          : `<button type="button" class="btn btn-pm btn-sm" onclick="Agenda.estado(${c.id}, 'confirmada')">Confirmar</button>`);
+        if (c.wa_confirmar) {
+          acciones.push(`<a class="btn btn-pm-outline btn-sm" href="${c.wa_confirmar}" target="_blank" rel="noopener"><i class="bi bi-whatsapp me-1"></i>Abrir WhatsApp</a>`);
+        }
+        acciones.push(`<button type="button" class="btn btn-pm btn-sm" onclick="Agenda.estado(${c.id}, 'confirmada')"><i class="bi bi-check2 me-1"></i>Marcar confirmado</button>`);
       }
       if (modo === 'dia' && c.estado === 'confirmada') {
         acciones.push(`<button type="button" class="btn btn-pm-outline btn-sm" onclick="Agenda.estado(${c.id}, 'completada')"><i class="bi bi-check2 me-1"></i>Atendida</button>`);

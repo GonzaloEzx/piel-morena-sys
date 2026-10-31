@@ -93,7 +93,7 @@ require_once "includes/header.php";
               <p class="pm-hero-subtitle pm-animate">Faciales &middot; Depilación &middot; Corporal</p>
               <div class="pm-hero-ctas pm-animate">
                 <a href="#reservar" class="btn-pm-dorado btn-pm-lg">
-                  <i class="bi bi-calendar-check me-2"></i>Reservar Cita
+                  <i class="bi bi-whatsapp me-2"></i>Pedir turno
                 </a>
                 <a href="#servicios" class="btn-pm-outline btn-pm-lg pm-hero-btn-secondary">
                   Ver Servicios <i class="bi bi-arrow-down ms-2"></i>
@@ -115,7 +115,7 @@ require_once "includes/header.php";
               <p class="pm-hero-subtitle pm-animate">Tecnología láser de última generación</p>
               <div class="pm-hero-ctas pm-animate">
                 <a href="#reservar" class="btn-pm-dorado btn-pm-lg">
-                  <i class="bi bi-calendar-check me-2"></i>Agendar Sesión
+                  <i class="bi bi-whatsapp me-2"></i>Pedir turno
                 </a>
               </div>
             </div>
@@ -321,7 +321,7 @@ require_once "includes/header.php";
             <?php endif; ?>
           </div>
           <div class="pm-service-footer">
-            <a href="<?= URL_BASE ?>/reservar.php" class="btn-pm w-100">Reservar Cita <i class="bi bi-arrow-right ms-1"></i></a>
+            <a href="<?= htmlspecialchars(pm_wa_turno($serv["nombre"])) ?>" class="btn-pm w-100" target="_blank" rel="noopener"><i class="bi bi-whatsapp me-1"></i> Pedir turno</a>
           </div>
         </div>
       </div>
@@ -748,7 +748,8 @@ $tratamientos_catalogo_json = json_encode(
   id="tratamientos"
   class="pm-section-alt pm-tratamientos-section"
   data-section="tratamientos"
-  data-whatsapp-number="<?= preg_replace("/[^0-9]/", "", TELEFONO_NEGOCIO) ?>"
+  data-whatsapp-number="<?= pm_wa_numero() ?>"
+  data-msg-servicio="<?= htmlspecialchars(pm_wa_mensaje_turno("{servicio}")) ?>"
 >
   <div class="container">
 
@@ -995,7 +996,7 @@ $tratamientos_catalogo_json = json_encode(
                           <h3 class="pm-promo-title">${esc(p.nombre)}</h3>
                           ${desc ? `<p class="pm-promo-desc">${desc}</p>` : ''}
                           <a href="${reservaUrl}" class="btn-pm-dorado">
-                            <i class="bi bi-calendar-check me-2"></i>Reservar Pack
+                            <i class="bi bi-whatsapp me-2"></i>Pedir este pack
                           </a>
                         </div>
                       </div>
@@ -1109,68 +1110,53 @@ $tratamientos_catalogo_json = json_encode(
 
 
 <!-- ═══════════════════════════════════════════════════════════════
-     8. RESERVA TU CITA — agenda pública: turnos libres → WhatsApp
-     Los turnos salen de api/citas/agenda-publica.php y el JS vive en
-     main.js (AgendaPublica). Los textos de los mensajes, ahí mismo.
+     8. PEDÍ TU TURNO — elegir servicio (opcional) y seguir por WhatsApp
+     Sin JS el formulario lleva a reservar.php?servicio=; con JS
+     (PedirTurno en main.js) abre WhatsApp con el servicio escrito.
      ═══════════════════════════════════════════════════════════════ -->
 <?php
-$stmt_agenda = $db_landing->query("SELECT s.id, s.nombre, s.duracion_minutos, c.nombre AS categoria
+$stmt_pedir = $db_landing->query("SELECT s.id, s.nombre, c.nombre AS categoria
      FROM servicios s
      LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
      WHERE s.activo = 1
      ORDER BY c.orden IS NULL, c.orden, c.nombre, s.nombre");
-$servicios_agenda = [];
-foreach ($stmt_agenda->fetchAll() as $s) {
-    $servicios_agenda[$s["categoria"] ?? "Otros"][] = $s;
+$servicios_pedir = [];
+foreach ($stmt_pedir->fetchAll() as $s) {
+    $servicios_pedir[$s["categoria"] ?? "Otros"][] = $s;
 }
-$wa_numero = preg_replace("/[^0-9]/", "", TELEFONO_NEGOCIO);
 ?>
 <section id="reservar" class="pm-section-alt pm-cta-section pm-agenda-section" data-section="reservar">
   <div class="container">
     <div class="text-center">
-      <h2 class="pm-cta-title pm-animate">Elegí tu tratamiento y tu horario</h2>
+      <h2 class="pm-cta-title pm-animate">Pedí tu turno por WhatsApp</h2>
       <p class="pm-cta-subtitle pm-animate pm-agenda-subtitle">
-        Mirá los turnos libres de esta semana. Tocá el que te sirve y te abrimos
-        WhatsApp con el mensaje ya escrito.
+        Elegí qué te querés hacer y te abrimos WhatsApp con el mensaje listo.
+        Coordinamos el día y el horario con vos.
       </p>
     </div>
 
-    <div class="pm-agenda pm-animate" id="pmAgenda"
-         data-api="<?= URL_API ?>/citas/agenda-publica.php"
-         data-whatsapp-number="<?= $wa_numero ?>">
-      <label class="pm-agenda__label" for="pmAgendaServicio">¿Qué te querés hacer?</label>
-      <select id="pmAgendaServicio" class="form-select pm-agenda__select">
-        <option value="">Todavía no sé, quiero consultar</option>
-        <?php foreach ($servicios_agenda as $categoria => $items): ?>
+    <form class="pm-agenda pm-animate" id="pmPedirTurno" action="<?= URL_BASE ?>/reservar.php" method="get"
+          data-wa-numero="<?= pm_wa_numero() ?>"
+          data-msg-servicio="<?= htmlspecialchars(pm_wa_mensaje_turno("{servicio}")) ?>"
+          data-msg-general="<?= htmlspecialchars(pm_wa_mensaje_turno()) ?>">
+      <label class="pm-agenda__label" for="pmPedirServicio">¿Qué te querés hacer?</label>
+      <select id="pmPedirServicio" name="servicio" class="form-select pm-agenda__select">
+        <option value="">Necesito asesoramiento</option>
+        <?php foreach ($servicios_pedir as $categoria => $items): ?>
           <optgroup label="<?= htmlspecialchars($categoria) ?>">
             <?php foreach ($items as $s): ?>
-              <option value="<?= (int) $s["id"] ?>" data-nombre="<?= htmlspecialchars($s["nombre"]) ?>">
-                <?= htmlspecialchars($s["nombre"]) ?> · <?= (int) $s["duracion_minutos"] ?> min
-              </option>
+              <option value="<?= (int) $s["id"] ?>"><?= htmlspecialchars($s["nombre"]) ?></option>
             <?php endforeach; ?>
           </optgroup>
         <?php endforeach; ?>
       </select>
-
-      <p class="pm-agenda__estado" aria-live="polite">Mirando la agenda…</p>
-      <div class="pm-agenda__dias" role="group" aria-label="Días de la semana"></div>
-      <div class="pm-agenda__turnos"></div>
-
+      <button type="submit" class="btn-pm-dorado btn-pm-lg pm-agenda__enviar">
+        <i class="bi bi-whatsapp me-2"></i>Continuar por WhatsApp
+      </button>
       <p class="pm-agenda__micro">
-        El turno queda confirmado cuando te respondemos por WhatsApp.
-        ¿No ves el horario que buscás? Escribinos igual.
+        Tu turno queda confirmado cuando acordamos el día y el horario por WhatsApp.
       </p>
-    </div>
-
-    <div class="pm-animate pm-cta-actions">
-      <a href="https://wa.me/<?= $wa_numero ?>" class="btn-pm-dorado btn-pm-lg"
-         target="_blank" rel="noopener" data-agenda-wa-general>
-        <i class="bi bi-whatsapp me-2"></i>Escribinos por WhatsApp
-      </a>
-      <a href="reservar.php" class="btn-pm-outline btn-pm-outline--white btn-pm-lg">
-        <i class="bi bi-calendar-check me-2"></i>Prefiero reservar online
-      </a>
-    </div>
+    </form>
   </div>
 </section>
 
@@ -1242,11 +1228,7 @@ $wa_numero = preg_replace("/[^0-9]/", "", TELEFONO_NEGOCIO);
             </div>
             <div>
               <strong>Teléfono</strong>
-              <p><a href="tel:+54<?= preg_replace(
-                  "/[^0-9]/",
-                  "",
-                  TELEFONO_NEGOCIO,
-              ) ?>"><?= TELEFONO_NEGOCIO ?></a></p>
+              <p><a href="tel:<?= TELEFONO_NEGOCIO ?>"><?= TELEFONO_NEGOCIO ?></a></p>
             </div>
           </div>
 
@@ -1280,11 +1262,7 @@ $wa_numero = preg_replace("/[^0-9]/", "", TELEFONO_NEGOCIO);
                 : "#" ?>" class="pm-social-icon" aria-label="Instagram" target="_blank" rel="noopener">
               <i class="bi bi-instagram"></i>
             </a>
-            <a href="https://wa.me/<?= preg_replace(
-                "/[^0-9]/",
-                "",
-                TELEFONO_NEGOCIO,
-            ) ?>" class="pm-social-icon" aria-label="WhatsApp" target="_blank" rel="noopener">
+            <a href="<?= htmlspecialchars(pm_wa_turno()) ?>" class="pm-social-icon" aria-label="WhatsApp" target="_blank" rel="noopener">
               <i class="bi bi-whatsapp"></i>
             </a>
           </div>

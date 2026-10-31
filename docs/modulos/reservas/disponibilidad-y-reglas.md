@@ -4,7 +4,7 @@
 > Audiencia: producto, desarrollo, agentes
 > Fuente de verdad: complementaria
 > Relacion: reglas transversales del modulo de reservas
-> Ultima revision: 2026-10-31 (MVP v2.0)
+> Ultima revision: 2026-10-31 (uso interno; la web no reserva)
 
 ## Objetivo
 
@@ -23,19 +23,19 @@ Evitar `agenda` como nombre principal de modulo nuevo.
 
 ## Reglas vigentes (v2.0)
 
-El calculo vive en `includes/agenda.php`:
+El calculo vive en `includes/agenda.php` y es de **uso interno del panel**:
 
 - `pm_contexto_dia()`: ventana de maquina o jornada, horario del local, profesionales del servicio con sus franjas del dia y citas activas;
 - `pm_franja_libre()`: profesionales libres para una franja;
 - `pm_turnos_del_dia()`: grilla de turnos (`max(duracion, intervalo)`, margen de 30 min si es hoy);
-- `pm_reservar()`: crea o mueve una cita bajo `GET_LOCK('pm_agenda_<fecha>')`.
+- `pm_reservar()`: crea o mueve una cita bajo `GET_LOCK('pm_agenda_<fecha>')`; si el bloqueo no se consigue, responde 503 y no escribe.
 
 ### Modo profesional
 
 - el servicio tiene filas en `empleados_servicios` (usuarios activos `empleado` o `admin`);
 - cada profesional trabaja segun `horarios` del dia; sin filas en `horarios`, en el horario del local; con filas pero ninguna ese dia, no trabaja;
 - una cita asignada ocupa a su profesional;
-- una cita sin asignar, o un evento de Google Calendar, ocupa a una profesional libre que pueda hacerla; se descuentan primero las que la clienta no eligio.
+- una cita sin asignar ocupa a una profesional libre que pueda hacerla; se descuentan primero las que no se pidieron.
 
 ### Modo salon
 
@@ -50,9 +50,9 @@ Servicio sin profesionales asignadas: cualquier cita activa superpuesta bloquea 
 
 ### Creacion, cancelacion y cambio
 
-- web: `api/citas/crear.php` crea la cita `pendiente` con `token_gestion`;
-- clienta: `api/citas/gestionar.php` cancela o reprograma hasta 2 horas antes (vuelve a `pendiente`);
-- personal: `api/admin/citas.php` (alta, estados) y `api/citas/cancelar.php`.
+- solo personal: `api/admin/citas.php` (alta por POST con el calculo, estados y cancelacion por PATCH);
+- `api/citas/disponibilidad.php` y `profesionales.php` exigen sesion de admin o empleada;
+- la clienta coordina altas, cambios y cancelaciones por WhatsApp.
 
 ## Configuracion relevante
 
@@ -66,8 +66,7 @@ Claves operativas vigentes:
 ## Inconsistencias abiertas
 
 - el footer publica "Sabado 9:00 a 14:00" pero `dias_laborales` es `1,2,3,4,5`: confirmar con Mari;
-- una clienta que reservo como invitada y despues se registra queda como dos usuarios (el registro no se vincula por telefono);
-- la agenda publica de la landing todavia confirma por WhatsApp en vez de llevar al wizard (v2.1).
+- una clienta cargada desde el panel que despues se registra queda como dos usuarios (el registro no se vincula por telefono);
 
 ## Recomendacion de lectura
 

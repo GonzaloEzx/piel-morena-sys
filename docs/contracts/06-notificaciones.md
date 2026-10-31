@@ -17,7 +17,7 @@ Emails transaccionales, cron de recordatorios y notificaciones internas del sist
 - helper `includes/mail_helper.php`;
 - templates en `templates/email/`;
 - email de bienvenida;
-- email de confirmacion de reserva;
+- email de confirmacion de cita (alta desde el panel; invita a escribir por WhatsApp para cambios);
 - email por cambio de estado relevante;
 - email de cancelacion;
 - cron `cron/recordatorios.php`;

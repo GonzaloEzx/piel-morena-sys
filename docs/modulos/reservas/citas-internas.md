@@ -25,7 +25,8 @@ Las piezas principales son:
 - `admin/views/citas.php`
 - `admin/views/mis-citas.php`
 - `api/admin/citas.php`
-- `api/citas/cancelar.php`
+- `admin/views/agenda.php` y `api/admin/agenda.php` (agenda del dia)
+- `includes/agenda.php` (calculo de disponibilidad)
 
 ## Funcionalidades implementadas
 

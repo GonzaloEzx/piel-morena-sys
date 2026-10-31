@@ -21,7 +21,7 @@
           <a href="<?= defined('INSTAGRAM_NEGOCIO') ? INSTAGRAM_NEGOCIO : '#' ?>" class="pm-footer-red-btn" aria-label="Instagram" target="_blank" rel="noopener">
             <i class="bi bi-instagram"></i>
           </a>
-          <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>" class="pm-footer-red-btn" aria-label="WhatsApp" target="_blank" rel="noopener">
+          <a href="<?= htmlspecialchars(pm_wa_turno()) ?>" class="pm-footer-red-btn" aria-label="WhatsApp" target="_blank" rel="noopener">
             <i class="bi bi-whatsapp"></i>
           </a>
         </div>
@@ -76,7 +76,7 @@
           </li>
           <li>
             <i class="bi bi-whatsapp"></i>
-            <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', TELEFONO_NEGOCIO) ?>" target="_blank" rel="noopener">
+            <a href="<?= htmlspecialchars(pm_wa_turno()) ?>" target="_blank" rel="noopener">
               Escríbenos por WhatsApp
             </a>
           </li>

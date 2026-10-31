@@ -4,7 +4,7 @@
 > Audiencia: producto, desarrollo, agentes
 > Fuente de verdad: si
 > Relacion: contrato funcional del modulo de reservas y citas
-> Ultima revision: 2026-10-31 (MVP v2.0, rama `v2-agenda`)
+> Ultima revision: 2026-10-31 (reservas por WhatsApp, rama `v2-agenda`)
 
 ## Alcance
 
@@ -12,25 +12,38 @@ Reservas, disponibilidad, cancelacion, gestion de citas y asignacion de empleado
 
 ## Estado actual
 
-### Implementado
+### Decision vigente (2026-10-31)
 
-- wizard `reservar.php` de tres pasos: servicio → profesional, dia y horario → datos;
-- **reserva sin cuenta (decision D2, 2026-10-31):** la invitada deja nombre y WhatsApp (email opcional) y se la reconoce por telefono (`usuarios.telefono_norm`); con sesion se usan los datos de la cuenta;
-- la reserva online queda `pendiente` y el salon la confirma por WhatsApp desde el panel (decision D3);
-- calculo unico en `includes/agenda.php`, usado por el wizard, la agenda publica de la landing (contrato 08), la gestion del turno y el alta del panel;
-- **disponibilidad por profesional:** si el servicio tiene profesionales en `empleados_servicios`, un horario esta libre cuando alguna de ellas trabaja esa franja (`horarios`; sin horario cargado, el del local) y no tiene otra cita superpuesta. La cita queda asignada a la elegida o a la primera libre;
-- servicio sin profesionales asignadas: cualquier cita superpuesta bloquea el horario (comportamiento v1);
-- en ambos modos rigen los bloqueos de maquina (una cita por maquina a la vez), alquiler y jornada;
-- reserva atomica: bloqueo por fecha (`GET_LOCK`) y nueva verificacion antes de guardar;
-- **gestion por la clienta:** link `mi-turno.php?t=<token_gestion>` para ver, cancelar o reprogramar hasta 2 horas antes;
-- defensas de la reserva sin cuenta: campo trampa y maximo 5 reservas por hora por IP;
-- APIs: `api/citas/profesionales.php`, `disponibilidad.php` (`id_empleado` y `t` opcionales), `crear.php`, `gestionar.php`; `cancelar.php` sigue para el personal;
-- alta desde el panel por el mismo calculo, con horarios fuera de grilla (contrato 04);
-- emails y notificaciones asociados al flujo (best-effort).
+**La web no reserva.** La clienta toca un boton, se abre WhatsApp con el
+servicio escrito y coordina el turno con el salon. El turno queda confirmado
+cuando lo acuerdan por WhatsApp; el salon lo carga en el panel (contrato 04).
+Reemplaza a la reserva online sin cuenta de `d9eb1cf` (D2/D3), que no llego a
+publicarse.
 
-### Decision cerrada
+### Publico
 
-Auth vs invitado: se reserva como invitada (D2). La cuenta queda opcional para ver el historial en `mi-cuenta.php`.
+- `reservar.php`: pagina "Pedi tu turno" armada en el servidor, sin JS para lo
+  esencial. Lista de servicios por categoria, cada uno con su enlace a
+  WhatsApp; `?servicio=<id>` destaca uno arriba; id invalido = consulta general;
+- `#reservar` de la landing: selector opcional de servicio y boton "Continuar
+  por WhatsApp" (sin JS va a `reservar.php?servicio=`);
+- tarjetas de servicios, tratamientos, promos, menu y pie: enlaces de WhatsApp
+  con el nombre del servicio cuando corresponde;
+- numero y mensajes en un solo lugar: `includes/whatsapp.php`
+  (`WHATSAPP_NUMERO` en `config/config.php`, ajustable en `config.local.php`);
+- no hay disponibilidad publica, alta publica ni reprogramacion online.
+  Abrir WhatsApp no crea ni confirma una cita.
+
+### Interno (panel)
+
+- calculo de disponibilidad por profesional en `includes/agenda.php`
+  (ver `docs/modulos/reservas/disponibilidad-y-reglas.md`);
+- `api/citas/disponibilidad.php` y `api/citas/profesionales.php` exigen sesion
+  de admin o empleada;
+- alta y cambios de estado por `api/admin/citas.php`;
+- retirados: `api/citas/crear.php`, `gestionar.php`, `agenda-publica.php`,
+  `api/maquinas/disponibles.php`, `api/jornadas/disponibles.php`, `mi-turno.php`
+  y la integracion con Google Calendar.
 
 ## Estados de cita
 
@@ -59,7 +72,7 @@ Servicios que requieren jornada, ya sea por `categorias_servicios.requiere_jorna
 - [x] restriccion de cancelacion
 - [x] notificaciones base
 - [x] soporte de jornadas en disponibilidad y wizard
-- [x] definicion final auth vs invitado (D2)
-- [x] disponibilidad por profesional
-- [x] gestion del turno por la clienta con token
-- [ ] sena con Mercado Pago (v2.2)
+- [x] la web no reserva: contacto por WhatsApp con el servicio escrito
+- [x] disponibilidad por profesional (uso interno)
+- [ ] numero de WhatsApp validado desde un celular real
+- [ ] sena con Mercado Pago (fuera de este bloque)

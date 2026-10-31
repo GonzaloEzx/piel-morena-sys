@@ -61,3 +61,8 @@ INSERT INTO citas (id_cliente, id_servicio, id_empleado, fecha, hora_inicio, hor
 SELECT (SELECT id FROM usuarios WHERE email = 'sofia@clienta.demo'),
        (SELECT es.id_servicio FROM empleados_servicios es JOIN usuarios u ON u.id = es.id_empleado WHERE u.email = 'nathalia@demo.local' LIMIT 1),
        NULL, @dia, '10:00', '11:00', 'pendiente', 'demo-v2';
+
+-- Servicios destacados en la landing (una tarjeta por categoria, hasta 6)
+UPDATE servicios s
+JOIN (SELECT MIN(id) id FROM servicios WHERE activo = 1 AND id_maquina IS NULL GROUP BY id_categoria ORDER BY MIN(id) LIMIT 6) d ON d.id = s.id
+SET s.destacado = 1;

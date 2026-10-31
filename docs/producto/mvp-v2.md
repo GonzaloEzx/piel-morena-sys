@@ -70,12 +70,21 @@ y desplegado (verificado en producción). Probar una rama no prueba producción.
 | Bloque | Estado | Evidencia |
 |---|---|---|
 | Deploy `9fbe7f4` (agenda de la landing, 10-10) | Integrado, no desplegado | `origin/main`; producción sin verificar. Con el cambio a WhatsApp, su agenda pública queda reemplazada: se puede publicar directo el commit integrado siguiente |
-| v2.0 agenda (`d9eb1cf`) | Preparado, sin integrar | Pruebas del 31-10 en local; ver "Resultado" |
-| Reservas por WhatsApp | Propuesto, revisado por Claude | [reservas-whatsapp.md](reservas-whatsapp.md#revisión-de-claude-code--2026-10-31) |
+| v2.0 agenda (`d9eb1cf`) | Reemplazado en lo público | Su reserva online y `mi-turno` no se publicaron; el panel y el cálculo siguen |
+| Pedir turno por WhatsApp + panel | Preparado (commit local en `v2-agenda`) | Verificación del 31-10 abajo |
+| `/test` en producción | En curso | Falta la base de prueba creada en hPanel |
 
 Cada verificación nueva registra alcance, resultado y fecha propios.
 Cuando este proyecto quede sin ediciones simultáneas, es candidato para la
 prueba de continuidad del marco (dos sesiones nuevas reconstruyen el estado).
+
+### Verificación — pedir turno por WhatsApp (2026-10-31, local)
+
+- Cálculo interno: 25 casos OK, incluida la contención del bloqueo con dos conexiones (503 y sin escribir).
+- curl sin sesión: `crear`, `gestionar`, `agenda-publica`, `mi-turno` y `maquinas/disponibles` dan 404; `disponibilidad` y `profesionales` dan 403.
+- Playwright (Edge) a 390, 768 y 1440 px sobre una base de prueba armada con `database/demo/armar_base_test.php`: `#reservar` abre WhatsApp con el servicio; tarjetas con mensaje; `reservar.php?servicio=` destaca; id inválido sin destacado; sin pedidos a endpoints retirados ni errores JS. Sin JS: formulario y categorías funcionan.
+- Panel a 390 px: abrir WhatsApp no cambia el estado, "Marcar confirmado" sí; alta rápida con horarios libres; disponibilidad con sesión.
+- No verificado: número de WhatsApp desde un celular real; producción.
 
 ## Versiones
 

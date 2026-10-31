@@ -3,13 +3,16 @@
  * Piel Morena - API: Profesionales que realizan un servicio
  * GET ?id_servicio=X → JSON { success, data: [{ id, nombre, foto }] }
  *
- * Lista vacía: el servicio no tiene profesionales asignadas y se reserva
- * sin elegir.
+ * Uso interno del panel (alta de turnos). Lista vacía: el servicio no
+ * tiene profesionales asignadas.
  */
 
 require_once __DIR__ . '/../../includes/init.php';
 require_once __DIR__ . '/../../includes/agenda.php';
 
+if (!esta_autenticado() || (!tiene_rol('admin') && !tiene_rol('empleado'))) {
+    responder_json(false, null, 'No autorizado', 403);
+}
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     responder_json(false, null, 'Método no permitido', 405);
 }

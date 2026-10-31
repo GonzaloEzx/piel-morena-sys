@@ -24,7 +24,7 @@
 </div>
 
 <div style="text-align: center; margin: 24px 0;">
-    <a href="<?= URL_BASE ?>/reservar.php" style="display: inline-block; background: #957C62; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">Reservar nueva cita</a>
+    <a href="<?= URL_BASE ?>/reservar.php" style="display: inline-block; background: #957C62; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">Pedir otro turno</a>
 </div>
 
 <p style="color: #746754; font-size: 13px; margin: 16px 0 0;">Podes reservar una nueva cita cuando quieras. Te esperamos.</p>

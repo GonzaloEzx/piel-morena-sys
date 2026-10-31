@@ -2,9 +2,9 @@
 /**
  * Piel Morena - Cálculo de turnos y reserva
  *
- * Única fuente de disponibilidad: la usan la reserva online, la agenda
- * pública de la landing, la gestión del turno por la clienta y el alta
- * desde el panel.
+ * Uso interno del panel: el alta de turnos acordados por WhatsApp y los
+ * horarios libres que ven las vistas de citas y agenda. La web pública no
+ * calcula disponibilidad ni crea citas.
  *
  * Modos:
  *   profesional → el servicio tiene profesionales asignadas
@@ -25,8 +25,8 @@ const PM_ESTADOS_ACTIVOS = ['pendiente', 'confirmada', 'en_proceso'];
  * pm_turnos_del_dia().
  *
  * $id_empleado: si viene, solo cuenta esa profesional.
- * $ocupados_extra: franjas [inicio, fin] en timestamps (Google Calendar);
- * cada una ocupa a una profesional, como una cita sin asignar.
+ * $ocupados_extra: franjas [inicio, fin] en timestamps que ocupan a una
+ * profesional cada una, como una cita sin asignar.
  * $excluir_cita: id de una cita que no cuenta como ocupada (reprogramar).
  */
 function pm_contexto_dia(PDO $db, array $servicio, string $fecha, array $ocupados_extra = [], ?int $id_empleado = null, int $excluir_cita = 0): array
@@ -251,7 +251,7 @@ function pm_franja_libre(array $ctx, string $ini, string $fin): array
         $libres[] = $id;
     }
 
-    // Cada cita sin asignar (o evento de Google) ocupa a una profesional
+    // Cada cita sin asignar (o franja extra) ocupa a una profesional
     // que pueda hacerla; se descuentan primero las que no pidió la clienta.
     $pedida = $ctx['id_empleado'];
     foreach ($superpuestas as $c) {
@@ -343,14 +343,16 @@ function pm_profesionales_servicio(PDO $db, int $id_servicio): array
 
 /**
  * Crea o mueve una cita verificando la disponibilidad bajo un bloqueo por
- * fecha, para que dos reservas simultáneas no tomen el mismo lugar.
+ * fecha, para que dos altas simultáneas no tomen el mismo lugar.
  *
  * $datos: id_servicio, fecha, hora_inicio ('H:i'), id_empleado (opcional),
  *         id_cliente, estado, notas; id_cita para reprogramar una existente.
  * $opciones['panel'] = true: se permiten horarios fuera de la grilla y de
  * hoy ya pasados (el salón carga turnos tomados por WhatsApp).
  *
- * Devuelve ['ok' => true, 'id', 'id_empleado', 'hora_fin', 'token']
+ * $opciones['espera_lock']: segundos de espera del bloqueo (10 por defecto).
+ *
+ * Devuelve ['ok' => true, 'id', 'id_empleado', 'hora_fin']
  *       o ['ok' => false, 'codigo', 'error'].
  */
 function pm_reservar(PDO $db, array $datos, array $opciones = []): array
@@ -375,8 +377,14 @@ function pm_reservar(PDO $db, array $datos, array $opciones = []): array
         return $error(400, 'Ese horario ya pasó. Elegí otro.');
     }
 
+    // Un solo alta por fecha a la vez. Si no se consigue el bloqueo, no se
+    // escribe: otra persona está cargando un turno ese día.
     $candado = 'pm_agenda_' . $fecha;
-    $db->query("SELECT GET_LOCK(" . $db->quote($candado) . ", 10)");
+    $espera = (int) ($opciones['espera_lock'] ?? 10);
+    $tomado = (int) $db->query("SELECT GET_LOCK(" . $db->quote($candado) . ", $espera)")->fetchColumn() === 1;
+    if (!$tomado) {
+        return $error(503, 'La agenda está ocupada en este momento. Probá de nuevo.');
+    }
     try {
         $ctx = pm_contexto_dia($db, $servicio, $fecha, [], $id_empleado, $id_cita);
         if ($ctx['mensaje'] !== null) {
@@ -408,13 +416,12 @@ function pm_reservar(PDO $db, array $datos, array $opciones = []): array
                  WHERE id = ?"
             );
             $stmt->execute([$fecha, $ini, $fin, $asignada, $id_cita]);
-            return ['ok' => true, 'id' => $id_cita, 'id_empleado' => $asignada, 'hora_fin' => $fin, 'token' => null];
+            return ['ok' => true, 'id' => $id_cita, 'id_empleado' => $asignada, 'hora_fin' => $fin];
         }
 
-        $token = bin2hex(random_bytes(16));
         $stmt = $db->prepare(
-            "INSERT INTO citas (id_cliente, id_servicio, id_empleado, fecha, hora_inicio, hora_fin, estado, notas, token_gestion)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO citas (id_cliente, id_servicio, id_empleado, fecha, hora_inicio, hora_fin, estado, notas)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         );
         $stmt->execute([
             (int) $datos['id_cliente'],
@@ -425,9 +432,8 @@ function pm_reservar(PDO $db, array $datos, array $opciones = []): array
             $fin,
             $datos['estado'] ?? 'pendiente',
             ($datos['notas'] ?? '') !== '' ? $datos['notas'] : null,
-            $token,
         ]);
-        return ['ok' => true, 'id' => (int) $db->lastInsertId(), 'id_empleado' => $asignada, 'hora_fin' => $fin, 'token' => $token];
+        return ['ok' => true, 'id' => (int) $db->lastInsertId(), 'id_empleado' => $asignada, 'hora_fin' => $fin];
     } finally {
         $db->query("SELECT RELEASE_LOCK(" . $db->quote($candado) . ")");
     }
@@ -494,80 +500,4 @@ function pm_clienta_por_telefono(PDO $db, string $nombre, string $telefono, stri
         $norm !== '' ? $norm : null,
     ]);
     return (int) $db->lastInsertId();
-}
-
-/**
- * Franjas ocupadas del Google Calendar del salón, como [inicio, fin] en
- * timestamps, entre $desde y $hasta (fechas Y-m-d, $hasta inclusive).
- *
- * Devuelve null si no hay calendario configurado o Google no contesta:
- * en ese caso quien llama no puede afirmar que un turno está libre.
- *
- * Solo se piden inicio y fin de cada evento: el título (nombre de la
- * clienta) nunca sale de Google. La respuesta se guarda 60 s para no
- * pegarle a Google en cada visita.
- */
-function pm_google_ocupados(string $desde, string $hasta): ?array
-{
-    if (AGENDA_GOOGLE_CALENDAR_ID === '' || AGENDA_GOOGLE_API_KEY === '') {
-        return null;
-    }
-
-    $cache = sys_get_temp_dir() . '/pm_agenda_' . md5(AGENDA_GOOGLE_CALENDAR_ID . $desde . $hasta) . '.json';
-    if (is_file($cache) && time() - filemtime($cache) < 60) {
-        $guardado = json_decode((string) file_get_contents($cache), true);
-        if (is_array($guardado)) {
-            return $guardado;
-        }
-    }
-
-    $url = 'https://www.googleapis.com/calendar/v3/calendars/'
-        . rawurlencode(AGENDA_GOOGLE_CALENDAR_ID) . '/events?' . http_build_query([
-            'key'          => AGENDA_GOOGLE_API_KEY,
-            'timeMin'      => date('c', strtotime("$desde 00:00")),
-            'timeMax'      => date('c', strtotime("$hasta 00:00 +1 day")),
-            'singleEvents' => 'true',
-            'orderBy'      => 'startTime',
-            'maxResults'   => 500,
-            'fields'       => 'items(start,end,status,transparency)',
-        ]);
-
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CONNECTTIMEOUT => 3,
-        CURLOPT_TIMEOUT        => 5,
-    ]);
-    $cuerpo = curl_exec($ch);
-    $codigo = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    if ($cuerpo === false || $codigo !== 200) {
-        error_log("Agenda: Google Calendar no contestó (HTTP $codigo)");
-        return null;
-    }
-
-    $json = json_decode($cuerpo, true);
-    if (!is_array($json)) {
-        return null;
-    }
-
-    $ocupados = [];
-    foreach ($json['items'] ?? [] as $evento) {
-        // "Disponible" en Google (transparent) no bloquea
-        if (($evento['status'] ?? '') === 'cancelled' || ($evento['transparency'] ?? '') === 'transparent') {
-            continue;
-        }
-        // Eventos de día completo vienen con `date` en vez de `dateTime`
-        $momento = fn(array $p) => isset($p['dateTime']) ? strtotime($p['dateTime'])
-            : (isset($p['date']) ? strtotime($p['date'] . ' 00:00') : false);
-        $ini = $momento($evento['start'] ?? []);
-        $fin = $momento($evento['end'] ?? []);
-        if ($ini && $fin && $fin > $ini) {
-            $ocupados[] = [$ini, $fin];
-        }
-    }
-
-    @file_put_contents($cache, json_encode($ocupados));
-    return $ocupados;
 }

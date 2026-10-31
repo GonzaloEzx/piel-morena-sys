@@ -1,6 +1,6 @@
 <p style="color: #3F352B; font-size: 16px; margin: 0 0 16px;">Hola <strong><?= htmlspecialchars($cliente_nombre) ?></strong>,</p>
 
-<p style="color: #3F352B; font-size: 16px; margin: 0 0 24px;">Tu cita fue reservada con exito. Estos son los detalles:</p>
+<p style="color: #3F352B; font-size: 16px; margin: 0 0 24px;">Tu turno quedo agendado. Estos son los detalles:</p>
 
 <div style="background: #F8F4E8; border-radius: 12px; padding: 20px; margin: 0 0 24px;">
     <table style="width: 100%; border-collapse: collapse;">
@@ -20,7 +20,7 @@
 </div>
 
 <div style="text-align: center; margin: 24px 0;">
-    <a href="<?= !empty($link_gestion) ? htmlspecialchars($link_gestion) : URL_BASE . '/mi-cuenta.php' ?>" style="display: inline-block; background: #957C62; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">Ver mi turno</a>
+    <a href="<?= htmlspecialchars(pm_wa_link()) ?>" style="display: inline-block; background: #957C62; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">Escribir por WhatsApp</a>
 </div>
 
-<p style="color: #746754; font-size: 13px; margin: 16px 0 0;">Si necesitas cancelar o cambiar el horario, podes hacerlo desde ese link hasta 2 horas antes, o escribirnos por WhatsApp.</p>
+<p style="color: #746754; font-size: 13px; margin: 16px 0 0;">Si necesitas cambiarlo o cancelarlo, escribinos por WhatsApp.</p>

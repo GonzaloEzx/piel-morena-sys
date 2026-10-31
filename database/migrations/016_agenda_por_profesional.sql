@@ -1,12 +1,15 @@
 -- =============================================
--- Migration 016: Agenda por profesional y reserva como invitada (MVP v2.0)
+-- Migration 016: clientas cargadas desde el panel (MVP v2)
 --
--- 1. usuarios.email pasa a ser opcional: la clienta puede reservar solo con
---    nombre y WhatsApp. UNIQUE admite varios NULL.
+-- Los turnos se acuerdan por WhatsApp y el salon los carga en el panel.
+-- 1. usuarios.email pasa a ser opcional: la clienta se carga con nombre y
+--    WhatsApp. UNIQUE admite varios NULL. (El alta del panel ya insertaba
+--    NULL en clientas sin email y fallaba contra NOT NULL.)
 -- 2. usuarios.telefono_norm: ultimos 10 digitos del telefono (codigo de area
 --    + numero) para reconocer a la clienta aunque lo escriba distinto.
--- 3. citas.token_gestion: link para que la clienta vea, cancele o
---    reprograme su turno. Se recuperan los tokens viejos guardados en notas.
+--
+-- Requiere MySQL 8 o MariaDB 10.0.5+ (REGEXP_REPLACE). No es repetible:
+-- antes de correrla, revisar SHOW COLUMNS FROM usuarios.
 --
 -- Fecha: 2026-10-31
 -- =============================================
@@ -22,18 +25,9 @@ UPDATE usuarios
  WHERE telefono IS NOT NULL
    AND LENGTH(REGEXP_REPLACE(telefono, '[^0-9]', '')) >= 10;
 
-ALTER TABLE citas
-  ADD COLUMN token_gestion CHAR(32) NULL AFTER notas,
-  ADD UNIQUE INDEX uk_token_gestion (token_gestion);
-
-UPDATE citas
-   SET token_gestion = SUBSTRING(notas, 7, 32)
- WHERE notas REGEXP '^token:[0-9a-f]{32}';
-
 -- =============================================
 -- DOWN (rollback manual):
 --
--- ALTER TABLE citas DROP INDEX uk_token_gestion, DROP COLUMN token_gestion;
 -- ALTER TABLE usuarios DROP INDEX idx_telefono_norm, DROP COLUMN telefono_norm;
 -- UPDATE usuarios SET email = CONCAT('sin-email-', id, '@pielmorena.invalid') WHERE email IS NULL;
 -- ALTER TABLE usuarios MODIFY email VARCHAR(150) NOT NULL;
