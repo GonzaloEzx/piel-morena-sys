@@ -8,12 +8,12 @@
 
 ## Estado y siguiente bloque
 
-La rama `v2-agenda` tiene el flujo público por WhatsApp publicado en `/test`
-(`ed905ac`). El panel conserva la agenda por profesional. La raíz permanece
+La rama `v2-agenda` tiene la nueva imagen v2.1 y el flujo público por WhatsApp
+publicados y verificados en `/test` (`3770a3e`). El panel conserva la agenda por profesional. La raíz permanece
 con su versión anterior. Detalle: [estado de entrega](../producto/mvp-v2.md#estado-de-entrega).
 
 El 2026-10-31 Gonzalo transmitió la autorización de Mari para la nueva imagen
-v2 y su publicación en `/test`, con datos de ejemplo explícitos. Se implementa
+v2 y su publicación en `/test`, con datos de ejemplo explícitos. Quedaron publicados
 la portada, el catálogo y la orientación de primera visita del contrato 08;
 el panel queda fuera del rediseño. El modo demo no escribe en la base operativa.
 Verificación y pendientes de material: [plan v2](../producto/mvp-v2.md#v21-imagen-uiux).
@@ -29,7 +29,7 @@ Verificación y pendientes de material: [plan v2](../producto/mvp-v2.md#v21-imag
 | 05 | Control de caja | Implementado |
 | 06 | Notificaciones | Parcial alto |
 | 07 | Analytics y reportes | Implementado |
-| 08 | Landing publica | Implementado con placeholders de contenido |
+| 08 | Landing publica | V2.1 publicada en `/test`, con contenido de ejemplo identificado |
 | 09 | Productos e inventario | Implementado con mejoras pendientes |
 | 10 | Jornadas | Alcance reducido a personal externo (desde mayo 2026) |
 | 11 | Promociones y packs | Implementado |

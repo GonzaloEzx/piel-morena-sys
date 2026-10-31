@@ -1,5 +1,14 @@
 # Piel Morena — Design System v3.1
 
+> Estado: vigente
+> Audiencia: diseno, frontend, producto, agentes
+> Fuente de verdad: si, para la capa visual compartida
+> Relacion: contrato de diseno del proyecto
+> Ultima revision: 2026-04-03
+> Contexto: salon de belleza, depilacion y tratamientos esteticos en Resistencia, Chaco
+
+---
+
 ## Presentación pública v2.1 — 2026-10-31
 
 Autorizada por Gonzalo y Mari para `/test`. La portada y el catálogo usan
@@ -18,15 +27,6 @@ no se cargan en la nueva presentación pública.
 
 Este apartado reemplaza las recetas del hero/carruseles y layout público
 anteriores solo en `index.php` y `reservar.php`; los tokens y el panel se mantienen.
-
-> Estado: vigente
-> Audiencia: diseno, frontend, producto, agentes
-> Fuente de verdad: si, para la capa visual compartida
-> Relacion: contrato de diseno del proyecto
-> Ultima revision: 2026-04-03
-> Contexto: salon de belleza, depilacion y tratamientos esteticos en Resistencia, Chaco
-
----
 
 ## INSTRUCCIONES PARA CLAUDE CODE
 

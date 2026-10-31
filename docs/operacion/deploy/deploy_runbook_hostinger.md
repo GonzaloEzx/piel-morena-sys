@@ -8,6 +8,28 @@
 
 ## Objetivo
 
+### Entorno vigente de v2 — 2026-10-31
+
+La nueva imagen v2.1 y WhatsApp están en
+`https://pielmorenaestetica.com.ar/test/` (commit de producto `3770a3e`).
+Gonzalo autorizó publicar ahí. La raíz permanece en `0c75b1d` y su actualización
+requiere un bloque de publicación propio.
+
+- Worktree remoto: `~/domains/pielmorenaestetica.com.ar/public_html/test`.
+- Rama: `v2-agenda`; push de esa rama y pull con `--ff-only` en ese worktree.
+- Revisar estado antes y conservar el `.htaccess` local (no versionado).
+- PHP del CLI remoto: usar `/opt/alt/php83/usr/bin/php`, no el `php` 7.4 por defecto.
+- El panel comparte la base con la raíz, autorizado en la entrega anterior.
+  La demo pública de imagen usa contenido independiente y no escribe en la base.
+- No aplicar migraciones ni recargar los seeds para desplegar cambios de imagen.
+- El banner y `noindex` siguen hasta validar el material definitivo con Mari.
+
+Verificación de la presentación, desde el workspace con ss-taller instalado:
+`node.exe tests/public-v2.cjs https://pielmorenaestetica.com.ar/test`.
+No se envían mensajes de WhatsApp durante la prueba.
+
+Los comandos siguientes para `main` corresponden al dominio raíz, no a `/test`.
+
 Mantener un flujo de deploy simple, repetible y alineado a una unica produccion:
 
 - Produccion oficial: `https://pielmorenaestetica.com.ar`

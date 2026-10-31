@@ -1,6 +1,6 @@
 # MVP v2 — Piel Morena: reservas reales y nueva imagen
 
-> Estado: flujo por WhatsApp desplegado en `/test` sobre `ed905ac`. Nueva imagen v2.1 autorizada por Gonzalo y Mari el 2026-10-31, preparada y verificada localmente.
+> Estado: nueva imagen v2.1 y flujo por WhatsApp desplegados y verificados en `/test` (`3770a3e`, 2026-10-31). La raíz sigue en `0c75b1d`.
 > Audiencia: producto, desarrollo, agentes.
 > Alcance vigente: presentación pública, catálogo y primera visita en `/test`, con contenido de ejemplo identificado. La raíz y el panel no se rediseñan en este bloque.
 > Los contratos de `docs/contracts/` acompañan cada entrega. Los apartados de agenda inicial se conservan como antecedente.
@@ -64,7 +64,7 @@ y desplegado (verificado en producción). Probar una rama no prueba producción.
 | Deploy `9fbe7f4` (agenda de la landing, 10-10) | Integrado, no desplegado | `origin/main`; producción sin verificar. Con el cambio a WhatsApp, su agenda pública queda reemplazada: se puede publicar directo el commit integrado siguiente |
 | v2.0 agenda (`d9eb1cf`) | Reemplazado en lo público | Su reserva online y `mi-turno` no se publicaron; el panel y el cálculo siguen |
 | Pedir turno por WhatsApp + panel | Desplegado en `/test` (rama `v2-agenda`), no en la raíz | Verificación local y en `/test` abajo |
-| `/test` en producción | Desplegado | Worktree `public_html/test`; usa la base de producción (autorizado por Gonzalo, sitio sin uso) |
+| `/test` en producción | Desplegado y verificado en `3770a3e` | Worktree `public_html/test`; la demo pública no consulta ni escribe la base; el panel sigue usando la base compartida autorizada |
 | Raíz de producción | Integrado en `0c75b1d` (mayo) | Sigue con el wizard viejo; comparte base con `/test`, ya con la 016 |
 
 Cada verificación nueva registra alcance, resultado y fecha propios.
@@ -91,7 +91,7 @@ prueba de continuidad del marco (dos sesiones nuevas reconstruyen el estado).
 |---|---|---|
 | v1.x | Landing, wizard con cuenta, panel, caja, jornadas, máquinas, promos | En producción; falta verificar si está en `9fbe7f4` |
 | **v2.0 Agenda real** | Disponibilidad por profesional, reserva como invitada, gestión del turno por la clienta, agenda del día y alta rápida en el panel, WhatsApp prearmado | Propuesta |
-| v2.1 Imagen | Portada, catálogo y primera visita con demo explícita | Preparado; publicación en `/test` autorizada |
+| v2.1 Imagen | Portada, catálogo y primera visita con demo explícita | Desplegado y verificado en `/test` (`3770a3e`) |
 | v2.2 Seña y tienda | Seña con Mercado Pago, lista de espera, tienda de productos con pedido por WhatsApp | Propuesta |
 | v3 | Recordatorios automáticos por la API de WhatsApp Business, fidelización y reportes por profesional | Futuro |
 
@@ -189,7 +189,15 @@ Estos materiales no bloquean la demo; sí la publicación definitiva sin etiquet
   después 7,3 (7,5 / 8 / 7 / 5). Contenido limitado a 5 por los ejemplos
   explícitos y las fotos/presentaciones aún pendientes. No es una valoración
   de la futura versión con material definitivo.
-- Pendiente: verificar esta entrega publicada en `/test`.
+- Publicado en `/test` desde el commit `3770a3e`. Repetidas las 112 comprobaciones
+  contra la URL pública: todas OK. Taller remoto: 26 pasan / 22 omitidas / 0 fallan.
+  Las omisiones son las configuradas por navegador y PageSpeed sin clave;
+  no hay medición nueva de LCP. Capturas y resumen en
+  `ss-taller/reports/piel-morena-v2-test/`.
+- Raíz verificada por SSH: `0c75b1d`, sin desplegar cambios allí. Sin migraciones
+  ni escrituras de datos en este bloque. `.htaccess` local del servidor preservado.
+- El siguiente bloque de Claude (servicios/horarios por profesional) sigue en
+  [su relevo](relevo-claude-2026-10-31.md), a la espera de la señal de Gonzalo.
 
 ## v2.2 Seña y tienda
 
