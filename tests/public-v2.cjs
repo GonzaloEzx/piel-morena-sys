@@ -37,24 +37,40 @@ async function inspect(page, label) {
   await context.route('https://wa.me/**', route => route.fulfill({ status: 200, body: 'WhatsApp interceptado por la prueba; no se envía ningún mensaje.' }));
   page.on('pageerror', e => errors.push(e.message));
   page.on('request', request => { if (/\/api\/(citas|jornadas|maquinas)\//.test(request.url())) unexpected.push(request.url()); });
-  for (const width of [1440, 768, 390, 320]) {
-    await page.setViewportSize({ width, height: 900 });
+  for (const [width, height] of [[1440, 900], [768, 1024], [430, 932], [390, 844], [360, 740], [320, 568]]) {
+    await page.setViewportSize({ width, height });
     const response = await page.goto(`${base}/`, { waitUntil: 'networkidle' });
     check(response.status() === 200, `inicio ${width}: HTTP 200`);
     await page.locator('footer.pmv-footer').scrollIntoViewIfNeeded();
-    await page.evaluate(() => scrollTo(0, 0));
+    await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
     await page.waitForTimeout(250);
     await inspect(page, `inicio-${width}`);
     const invalidAnchors = await page.locator('a[href*="#"]').evaluateAll(anchors => anchors.filter(a => a.origin === location.origin && a.pathname === location.pathname && a.hash && !document.getElementById(decodeURIComponent(a.hash.slice(1)))).map(a => a.hash));
     check(invalidAnchors.length === 0, `inicio ${width}: anclas ${invalidAnchors}`);
     if (width < 992) {
+      const smallTargets = [];
+      for (const control of await page.locator('a, button, summary, input, select').all()) {
+        if (!await control.isVisible()) continue;
+        const box = await control.boundingBox();
+        if (box && (box.width < 47 || box.height < 47)) smallTargets.push({ text: (await control.innerText()).trim().slice(0, 60), width: box.width, height: box.height });
+      }
+      check(smallTargets.length === 0, `inicio ${width}: controles táctiles ${JSON.stringify(smallTargets)}`);
+      check(!await page.locator('.pmv-mobile-bar').isVisible(), 'CTA fija oculta cuando el botón principal es visible');
       await page.locator('.pmv-menu summary').click();
       check(await page.locator('.pmv-menu nav').isVisible(), 'menú móvil abierto');
+      const menuBox = await page.locator('.pmv-menu nav').boundingBox();
+      check(menuBox && menuBox.width >= width - 48, 'menú móvil con ancho cómodo');
       await page.keyboard.press('Escape');
       check(!await page.locator('.pmv-menu nav').isVisible(), 'Escape cierra menú');
       check(await page.locator('.pmv-menu summary').evaluate(e => e === document.activeElement), 'Escape devuelve foco');
+      await page.locator('#servicios').scrollIntoViewIfNeeded();
+      await page.waitForTimeout(200);
       const bar = await page.locator('.pmv-mobile-bar').boundingBox();
-      check(bar && bar.y + bar.height <= 901, 'CTA móvil dentro de la pantalla');
+      check(bar && bar.y + bar.height <= height + 1 && bar.height <= 80, 'CTA móvil compacta dentro de la pantalla');
+      const header = await page.locator('.pmv-header').boundingBox();
+      check(header && Math.abs(header.y) < 2 && header.height <= 72, 'cabecera permanece visible al desplazarse');
+      await page.locator('.pmv-team-disclosure summary').click();
+      check(await page.locator('.pmv-team-list').isVisible(), 'equipo disponible al desplegar');
     }
     await page.goto(`${base}/reservar.php?servicio=-1`, { waitUntil: 'networkidle' });
     await inspect(page, `catalogo-${width}`);
@@ -62,6 +78,17 @@ async function inspect(page, label) {
     const selectedHref = await page.locator('.pmv-selected .pmv-button').getAttribute('href');
     check(new URL(selectedHref).searchParams.get('text').includes('Limpieza facial personalizada'), 'WhatsApp conserva el servicio');
   }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${base}/reservar.php`, { waitUntil: 'networkidle' });
+  const firstCategory = await page.locator('#categoria-faciales summary').first().boundingBox();
+  check(firstCategory && firstCategory.y + firstCategory.height < 844, 'categorías del catálogo accesibles en la primera pantalla');
+  check(await page.locator('.pmv-catalog-group[open]').count() === 0, 'vista inicial permite recorrer todas las categorías');
+  await page.locator('#categoria-faciales > summary').click();
+  const detail = page.locator('#categoria-faciales .pmv-service-detail').first();
+  check((await detail.locator('summary').innerText()).includes('$32.000'), 'precio visible antes de abrir el servicio');
+  check((await detail.locator('summary').innerText()).includes('90 min'), 'duración visible antes de abrir el servicio');
+  await detail.locator('summary').click();
+  check(await detail.locator('a').isVisible(), 'detalles y consulta disponibles al abrir el servicio');
   const search = page.locator('#pmv-search');
   await search.fill('HIDRATACION');
   check(await page.locator('[data-service]:visible').count() === 1, 'búsqueda sin acentos y mayúsculas');
@@ -84,8 +111,10 @@ async function inspect(page, label) {
   const noJS = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const staticPage = await noJS.newPage();
   await staticPage.goto(`${base}/reservar.php`, { waitUntil: 'networkidle' });
-  await staticPage.locator('#categoria-manos summary').click();
+  await staticPage.locator('#categoria-manos > summary').click();
   check(await staticPage.locator('#categoria-manos ul').isVisible(), 'catálogo funciona sin JS');
+  await staticPage.locator('#categoria-manos .pmv-service-detail summary').first().click();
+  check(await staticPage.locator('#categoria-manos a').first().isVisible(), 'detalles y consulta funcionan sin JS');
   check((await staticPage.locator('#categoria-manos a').first().getAttribute('href')).includes('wa.me/'), 'WhatsApp funciona sin JS');
   await staticPage.goto(`${base}/`, { waitUntil: 'networkidle' });
   await staticPage.locator('.pmv-menu summary').click();
@@ -94,6 +123,15 @@ async function inspect(page, label) {
   await staticPage.locator('#pmv-service-select').selectOption('-2');
   await staticPage.locator('#pmPedirTurno button').click();
   check((await staticPage.locator('#pmv-selected-title').innerText()).includes('Hidratación'), 'formulario GET conserva el servicio sin JS');
+  await page.setViewportSize({ width: 740, height: 360 });
+  await page.goto(`${base}/`, { waitUntil: 'networkidle' });
+  await page.locator('.pmv-menu summary').click();
+  const landscapeMenu = await page.locator('.pmv-menu nav').boundingBox();
+  check(landscapeMenu && landscapeMenu.y + landscapeMenu.height <= 361, 'menú dentro de la pantalla horizontal');
+  await page.locator('.pmv-menu nav a').last().scrollIntoViewIfNeeded();
+  const lastMenuItem = await page.locator('.pmv-menu nav a').last().boundingBox();
+  check(lastMenuItem && lastMenuItem.y + lastMenuItem.height <= 361, 'última opción de menú accesible en horizontal');
+  check(!await page.locator('.pmv-mobile-bar').isVisible(), 'menú sin superposición de la barra fija');
   check(errors.length === 0, `sin errores JS: ${errors}`);
   check(unexpected.length === 0, `sin APIs de reserva retiradas: ${unexpected}`);
   await browser.close();
@@ -102,7 +140,7 @@ async function inspect(page, label) {
   const safariPage = await safariContext.newPage();
   await safariPage.goto(`${base}/`, { waitUntil: 'networkidle' });
   await safariPage.locator('footer.pmv-footer').scrollIntoViewIfNeeded();
-  await safariPage.evaluate(() => scrollTo(0, 0));
+  await safariPage.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
   await safariPage.waitForTimeout(200);
   await inspect(safariPage, 'inicio-webkit-mobile');
   await safari.close();

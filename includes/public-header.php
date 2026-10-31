@@ -36,9 +36,10 @@ $pm_canonical = URL_BASE . (($pagina_actual ?? '') === 'reservar' ? '/reservar.p
 <body class="pm-public">
 <a class="pmv-skip" href="#contenido">Ir al contenido</a>
 <?php if ($pm_public_preview): ?>
-<div class="pmv-preview" role="note">
-  <div class="container"><strong>Vista previa · v<?= $pm_public_version ?></strong><span>Servicios, precios y textos de ejemplo. Confirmá la información por WhatsApp.</span></div>
-</div>
+<details class="pmv-preview">
+  <summary class="container"><strong>Vista previa · v<?= $pm_public_version ?></strong><span>Contenido de ejemplo</span><i class="bi bi-chevron-down" aria-hidden="true"></i></summary>
+  <div class="container pmv-preview-content">Servicios, precios y textos de ejemplo. Confirmá la información por WhatsApp.</div>
+</details>
 <?php endif; ?>
 <header class="pmv-header">
   <div class="container pmv-header-inner">

@@ -1,9 +1,43 @@
 # MVP v2 — Piel Morena: reservas reales y nueva imagen
 
-> Estado: nueva imagen v2.1 y flujo por WhatsApp desplegados y verificados en `/test` (`3770a3e`, 2026-10-31). La raíz sigue en `0c75b1d`.
+> Estado: v2.04 de refinamiento móvil preparada; publicación autorizada en `/test`. Última versión publicada: `d231cd7` (producto `3770a3e`).
 > Audiencia: producto, desarrollo, agentes.
 > Alcance vigente: presentación pública, catálogo y primera visita en `/test`, con contenido de ejemplo identificado. La raíz y el panel no se rediseñan en este bloque.
 > Los contratos de `docs/contracts/` acompañan cada entrega. Los apartados de agenda inicial se conservan como antecedente.
+
+## v2.04 — refinamiento móvil
+
+Gonzalo y Mari aprobaron el diseño anterior. Gonzalo autoriza una pasada de
+estilo enfocada en móvil, con el nombre **v2.04**, el 2026-10-31.
+
+Tres ejes: jerarquía y listas más cortas, marca/tipografía/espaciado, y acciones
+que acompañan sin ocupar permanentemente la pantalla.
+
+- Logo integrado con el fondo desde CSS; no se redibuja la marca.
+- Tarjetas de servicios horizontales en móvil y categorías en dos columnas.
+- Equipo y experiencias de ejemplo desplegables, sin retirar la información.
+- Catálogo antes del bloque de asesoramiento, categorías cerradas inicialmente
+  y detalles por servicio con nombre/precio/duración visibles al resumir.
+- Avisos de demo ampliables, cabecera compacta que sigue al scroll, barra fija
+  más baja y visible cuando hace falta; se oculta con el menú abierto.
+- Controles de 48 px, fuentes legibles y menú desplazable para pantallas bajas.
+- Conserva WhatsApp, selección por URL, búsqueda, teclado y funcionamiento sin JS.
+
+### Evidencia y verificación
+
+Antes y después: `ss-taller/reports/piel-morena-v204/{antes,despues}/`.
+La captura a 390 × 844 px mostraba 9.430 px de inicio y el catálogo a 1.175 px
+antes de su primera categoría. La primera pasada deja unos 6.500 px y lleva
+la búsqueda/categorías cerca de los 400 px. La reducción corresponde a la
+composición y los desplegables, no a texto más pequeño ni a contenido retirado.
+
+194 comprobaciones locales OK: 320/360/390/430, tablet, escritorio, WebKit,
+ausencia de JS, menú horizontal, áreas táctiles y acceso progresivo a los servicios.
+Taller local: 26 pasan / 22 omitidas / 0 fallan (las omisiones configuradas por
+navegador y PageSpeed sin clave). Verificación remota pendiente al preparar la entrega.
+
+La raíz y el panel quedan fuera del bloque. Se mantienen los datos dummy
+identificados y todos los pendientes de material real de v2.1.
 
 ## Punto de partida anterior a la entrega d9eb1cf
 

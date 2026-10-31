@@ -8,7 +8,7 @@ require __DIR__ . '/includes/public-header.php';
     <div class="container">
       <div class="row align-items-center gy-4 gy-lg-0">
         <div class="col-lg-6 pmv-hero-copy">
-          <p class="pmv-eyebrow">Piel Morena · Resistencia, Chaco</p>
+          <p class="pmv-eyebrow">Estética en Resistencia, Chaco</p>
           <h1>Estamos<br>para cuidarte.</h1>
           <p class="pmv-lead">Tu piel. Tu tiempo.<br>Un espacio para sentirte bien.</p>
           <div class="pmv-actions">
@@ -24,7 +24,7 @@ require __DIR__ . '/includes/public-header.php';
           </figure>
         </div>
       </div>
-      <div class="pmv-hero-bottom"><span>Cuidado facial y corporal</span><span>Belleza de todos los días</span><span>Atención con turno previo</span></div>
+      <div class="pmv-hero-bottom"><span>Cuidado personalizado</span><span>Atención con turno previo</span></div>
     </div>
   </section>
 
@@ -32,7 +32,7 @@ require __DIR__ . '/includes/public-header.php';
     <span id="tratamientos"></span>
     <div class="container">
       <div class="pmv-section-heading"><div><p class="pmv-eyebrow">Encontrá tu momento</p><h2>¿Qué te gustaría cuidar?</h2></div><p>Podés venir con una idea.<br>O empezar por una conversación.</p></div>
-      <?php if ($pm_public_preview): ?><p class="pmv-data-note"><i class="bi bi-info-circle" aria-hidden="true"></i>Catálogo de ejemplo: precios en pesos argentinos y duraciones a confirmar.</p><?php endif; ?>
+      <?php if ($pm_public_preview): ?><p class="pmv-data-note"><i class="bi bi-info-circle" aria-hidden="true"></i>Precios ARS y duraciones de ejemplo. Fotos de referencia.</p><?php else: ?><p class="pmv-small">Fotografías de referencia.</p><?php endif; ?>
       <div id="galeria" class="row g-4">
       <?php foreach (['faciales', 'mirada', 'manos'] as $key):
           $cat = $pm_public_categories[$key];
@@ -41,9 +41,9 @@ require __DIR__ . '/includes/public-header.php';
       ?>
         <div class="col-md-4"><a class="pmv-service-feature" href="<?= URL_BASE ?>/reservar.php?categoria=<?= $key ?>#catalogo">
           <div class="pmv-service-photo"><img src="<?= URL_BASE ?>/assets/img/public/<?= str_replace('.jpg', '.webp', $cat['imagen']) ?>" alt="<?= pm_public_escape($cat['alt']) ?>" width="600" height="700" loading="lazy" decoding="async"><span class="pmv-photo-label">Imagen de referencia</span></div>
-          <div class="pmv-service-heading"><h3><?= $cat['nombre'] ?></h3><i class="bi bi-arrow-up-right" aria-hidden="true"></i></div>
+          <div class="pmv-service-copy"><div class="pmv-service-heading"><h3><?= $cat['nombre'] ?></h3><i class="bi bi-arrow-up-right" aria-hidden="true"></i></div>
           <p><?= $cat['texto'] ?></p>
-          <span class="pmv-service-meta"><?= $prices ? 'Desde ' . pm_public_price(min($prices)) . ($pm_public_preview ? ' · ejemplo' : '') : 'Consultá las opciones' ?></span>
+          <span class="pmv-service-meta"><?= $prices ? 'Desde ' . pm_public_price(min($prices)) . ($pm_public_preview ? ' · ejemplo' : '') : 'Consultá las opciones' ?></span></div>
         </a></div>
       <?php endforeach; ?>
       </div>
@@ -52,7 +52,7 @@ require __DIR__ . '/includes/public-header.php';
         <a href="<?= URL_BASE ?>/reservar.php?categoria=<?= $key ?>#catalogo"><i class="bi <?= $cat['icono'] ?>" aria-hidden="true"></i><span><?= $cat['nombre'] ?></span><i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
         <?php endforeach; ?>
       </div>
-      <div class="pmv-services-end"><a class="pmv-text-link" href="<?= URL_BASE ?>/reservar.php">Ver todos los servicios y precios <i class="bi bi-arrow-right" aria-hidden="true"></i></a><span>¿No sabés por dónde empezar? <a href="<?= pm_public_escape(pm_wa_turno()) ?>" target="_blank" rel="noopener">Te ayudamos a elegir.</a></span></div>
+      <div class="pmv-services-end"><a class="pmv-text-link" href="<?= URL_BASE ?>/reservar.php">Ver todos los servicios y precios <i class="bi bi-arrow-right" aria-hidden="true"></i></a><div class="pmv-service-advice"><span>¿No sabés por dónde empezar?</span><a class="pmv-text-link" href="<?= pm_public_escape(pm_wa_turno()) ?>" target="_blank" rel="noopener">Te ayudamos a elegir.</a></div></div>
     </div>
   </section>
 
@@ -65,8 +65,10 @@ require __DIR__ . '/includes/public-header.php';
 
   <section id="equipo" class="pmv-section pmv-team-section">
     <div class="container"><div class="pmv-section-heading"><div><p class="pmv-eyebrow">Quiénes te acompañan</p><h2>Personas detrás del cuidado.</h2></div><p>Cada especialidad tiene su lugar.<br>Tu comodidad, también.</p></div>
-      <div class="pmv-team-list"><?php foreach ($pm_public_team as [$name, $role]): ?><div><h3><?= pm_public_escape($name) ?></h3><p><?= pm_public_escape($role) ?></p></div><?php endforeach; ?></div>
-      <p class="pmv-small">Presentación del equipo a validar con Mari. Próximamente, sus fotos y una presentación de cada profesional.</p>
+      <details class="pmv-disclosure pmv-team-disclosure"><summary><span>Conocé el equipo y sus especialidades</span><i class="bi bi-plus" aria-hidden="true"></i></summary>
+        <div class="pmv-team-list"><?php foreach ($pm_public_team as [$name, $role]): ?><div><h3><?= pm_public_escape($name) ?></h3><p><?= pm_public_escape($role) ?></p></div><?php endforeach; ?></div>
+        <p class="pmv-small">Presentación del equipo a validar con Mari. Próximamente, sus fotos y una presentación de cada profesional.</p>
+      </details>
     </div>
   </section>
 
@@ -80,7 +82,7 @@ require __DIR__ . '/includes/public-header.php';
   <section id="testimonios" class="pmv-section pmv-experiences">
     <div class="container"><div class="pmv-section-heading"><div><p class="pmv-eyebrow">El lugar de las clientas</p><h2>Sentirte cómoda importa.</h2></div><p>Queremos que cada experiencia<br>hable por sí misma.</p></div>
       <p class="pmv-data-note">Ejemplos de redacción para revisar. No son testimonios de clientas reales.</p>
-      <div class="row g-4"><div class="col-md-6"><blockquote><p>“Me explicaron las opciones y pude elegir tranquila, sin sentir que tenía que saber de tratamientos.”</p><footer>Texto de ejemplo · Primera visita</footer></blockquote></div><div class="col-md-6"><blockquote><p>“Tener un momento para mí y sentirme cómoda con quien me atiende hace la diferencia.”</p><footer>Texto de ejemplo · Atención personalizada</footer></blockquote></div></div>
+      <details class="pmv-disclosure pmv-experience-disclosure"><summary><span>Ver los ejemplos de experiencias</span><i class="bi bi-plus" aria-hidden="true"></i></summary><div class="row g-4"><div class="col-md-6"><blockquote><p>“Me explicaron las opciones y pude elegir tranquila, sin sentir que tenía que saber de tratamientos.”</p><footer>Texto de ejemplo · Primera visita</footer></blockquote></div><div class="col-md-6"><blockquote><p>“Tener un momento para mí y sentirme cómoda con quien me atiende hace la diferencia.”</p><footer>Texto de ejemplo · Atención personalizada</footer></blockquote></div></div></details>
       <a class="pmv-text-link" href="<?= pm_public_escape(INSTAGRAM_NEGOCIO) ?>" target="_blank" rel="noopener">Visitá nuestro Instagram <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
     </div>
   </section>

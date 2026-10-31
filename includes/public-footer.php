@@ -8,6 +8,6 @@
     <div class="pmv-footer-bottom"><span>© <?= date('Y') ?> Piel Morena Estética.</span><span><?= $pm_public_preview ? 'Versión de prueba · contenido pendiente de validación.' : 'Atención con turno coordinado por WhatsApp.' ?></span><a href="#contenido">Volver arriba ↑</a></div>
   </div>
 </footer>
-<div class="pmv-mobile-bar"><a class="pmv-button" href="<?= pm_public_escape(pm_wa_turno($pm_public_selected_name ?? '')) ?>" target="_blank" rel="noopener"><i class="bi bi-whatsapp" aria-hidden="true"></i>Pedir turno por WhatsApp</a><span>El día y horario se acuerdan por mensaje.</span></div>
+<div class="pmv-mobile-bar"><a class="pmv-button" aria-describedby="pmv-mobile-note" href="<?= pm_public_escape(pm_wa_turno($pm_public_selected_name ?? '')) ?>" target="_blank" rel="noopener"><i class="bi bi-whatsapp" aria-hidden="true"></i>Pedir turno por WhatsApp</a><span id="pmv-mobile-note" class="visually-hidden">El día y horario se acuerdan por mensaje.</span></div>
 </body>
 </html>

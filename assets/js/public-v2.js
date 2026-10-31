@@ -20,6 +20,27 @@
     if (menu?.open && !menu.contains(event.target)) menu.open = false;
   });
 
+  // En móvil la acción fija acompaña el recorrido cuando no hay otra visible.
+  const mobileBar = document.querySelector('.pmv-mobile-bar');
+  const mainActions = [...document.querySelectorAll('main .pmv-button[href*="wa.me/"], #pmPedirTurno button')];
+  if (mobileBar && mainActions.length && 'IntersectionObserver' in window) {
+    const visibleActions = new Set();
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) visibleActions.add(entry.target);
+        else visibleActions.delete(entry.target);
+      });
+      // No ocultar un control mientras está siendo utilizado con el teclado.
+      if (!mobileBar.contains(document.activeElement)) mobileBar.hidden = visibleActions.size > 0;
+    }, { rootMargin: '-80px 0px -72px 0px', threshold: 0.5 });
+    mainActions.forEach(action => observer.observe(action));
+    mobileBar.addEventListener('focusout', () => {
+      queueMicrotask(() => {
+        if (!mobileBar.contains(document.activeElement)) mobileBar.hidden = visibleActions.size > 0;
+      });
+    });
+  }
+
   const search = document.querySelector('#pmv-search');
   const results = document.querySelector('#pmv-search-results');
   const empty = document.querySelector('#pmv-no-results');

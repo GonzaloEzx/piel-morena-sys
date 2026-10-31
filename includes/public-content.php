@@ -6,7 +6,7 @@ if (!defined('PIEL_MORENA')) {
 
 // La publicación de contenido definitivo requiere aprobación explícita del negocio.
 $pm_public_preview = !($pm_local_config['public_content_approved'] ?? false);
-$pm_public_version = '2.1';
+$pm_public_version = '2.04';
 
 function pm_public_escape($value): string
 {

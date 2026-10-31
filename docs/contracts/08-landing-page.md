@@ -10,6 +10,28 @@
 
 Página principal, presentación de marca, orientación de servicios y contacto por WhatsApp.
 
+## V2.04 — refinamiento móvil autorizado el 2026-10-31
+
+Gonzalo y Mari aprobaron la dirección visual anterior. Gonzalo pide una
+revisión más precisa, con móvil como referencia y la denominación **v2.04**.
+
+- Cabecera compacta y fija al desplazarse. El logo existente se integra con
+  las superficies claras mediante CSS, sin el recuadro blanco visible.
+- Tarjetas horizontales de servicios en móvil; categorías secundarias en dos columnas.
+- Equipo y experiencias de ejemplo se consultan con desplegables nativos.
+- El catálogo aparece antes del asesoramiento; las categorías empiezan
+  cerradas, salvo la enlazada o la del servicio elegido.
+- Cada servicio muestra nombre, precio y duración en su resumen. Al abrirlo
+  aparecen explicación, aviso de ejemplo y consulta por WhatsApp.
+- Avisos de demo compactos y ampliables; las etiquetas de ejemplo siguen visibles.
+- La barra inferior acompaña cuando no hay una acción principal visible.
+  Se oculta al abrir el menú y conserva el funcionamiento sin JavaScript.
+- Menú desplazable en horizontal, controles táctiles de al menos 48 px,
+  foco visible y espacio final para llegar a todos los enlaces.
+
+Se mantienen formulario GET sin JS, selección por URL, mensajes centralizados,
+contenido de prueba independiente y noindex. Publicación autorizada en `/test`.
+
 ## V2.1 — imagen autorizada el 2026-10-31
 
 Gonzalo transmite la autorización de Mari para implementar el rediseño y

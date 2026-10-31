@@ -21,6 +21,12 @@ En la presentación definitiva, el catálogo lee del panel y conserva el filtro
 de promociones vigentes. La API y el CRUD operativo siguen funcionando.
 Detalle de la aprobación editorial y modo demo: contrato 08.
 
+En v2.04, el recorrido móvil empieza por la búsqueda y las categorías. Las
+descripciones se despliegan por servicio; precio y duración se ven antes de
+abrirlo. Sin categoría o servicio en la URL, todas empiezan cerradas. La
+búsqueda permite abrir varias categorías con resultados y restaura su estado
+anterior al limpiarla. Todas las consultas siguen funcionando sin JS.
+
 ### Implementado
 
 - cards en landing con CTA y tooltip de precio;

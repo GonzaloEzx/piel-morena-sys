@@ -11,6 +11,18 @@
 
 ## Presentación pública v2.1 — 2026-10-31
 
+### Ajuste v2.04 — referencia móvil
+
+- Márgenes laterales de 20 px, ritmo de 8/12/16/24 px y secciones de 44 px en móvil.
+- Texto principal de 16 px, apoyo de 14 px y etiquetas desde 12 px; controles de 48 px o más.
+- Cabecera de 64 px más borde, aviso de demo desplegable y barra inferior de 64 px más borde/safe area.
+- Marca existente con composición `multiply` sobre marfil/crema para integrar el blanco del PNG.
+- Servicios con miniatura lateral en móvil y disposición fotográfica vertical desde tablet.
+- Catálogo con detalle progresivo nativo; equipo y experiencias disponibles al desplegar.
+- Cabecera realmente sticky (body sin contenedor de scroll accidental), menú con altura limitada y barra contextual.
+
+El nombre v2.04 es el solicitado por Gonzalo; no renumera los antecedentes v2.1.
+
 Autorizada por Gonzalo y Mari para `/test`. La portada y el catálogo usan
 `assets/css/public-v2.css`, sobre los tokens de `style.css` y Bootstrap 5.3.
 `premium-v3.css` y `premium-auth.css` siguen para las pantallas anteriores;
