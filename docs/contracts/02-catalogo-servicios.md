@@ -4,13 +4,22 @@
 > Audiencia: producto, desarrollo, agentes
 > Fuente de verdad: si
 > Relacion: contrato funcional del catalogo de servicios
-> Ultima revision: 2026-04-05
+> Ultima revision: 2026-10-31
 
 ## Alcance
 
 Gestion de servicios, categorias, precios, duracion, imagenes y consultas de precio.
 
 ## Estado actual
+
+### Presentación v2.1 en `/test`
+
+El catálogo público de prueba usa servicios y precios ARS de ejemplo, con
+IDs negativos y etiquetas visibles. No escribe esos datos en la base.
+La búsqueda es progresiva; las categorías y WhatsApp funcionan sin JavaScript.
+En la presentación definitiva, el catálogo lee del panel y conserva el filtro
+de promociones vigentes. La API y el CRUD operativo siguen funcionando.
+Detalle de la aprobación editorial y modo demo: contrato 08.
 
 ### Implementado
 

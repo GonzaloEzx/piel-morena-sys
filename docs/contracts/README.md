@@ -8,13 +8,15 @@
 
 ## Estado y siguiente bloque
 
-La rama `v2-agenda` contiene la entrega local `d9eb1cf`, sin push ni deploy
-según el último cierre. Gonzalo aceptó simplificar las reservas públicas a
-mensajes de WhatsApp. Codex y Claude dejaron su análisis en el
-[plan de WhatsApp](../producto/reservas-whatsapp.md). Al cerrar, Gonzalo
-reafirmó el alcance mínimo: botones y mensajes, retiro de reserva pública
-y panel fuera del bloque salvo ajustes indispensables. Sin implementación;
-los contratos 03 y 04 describen la agenda entregada.
+La rama `v2-agenda` tiene el flujo público por WhatsApp publicado en `/test`
+(`ed905ac`). El panel conserva la agenda por profesional. La raíz permanece
+con su versión anterior. Detalle: [estado de entrega](../producto/mvp-v2.md#estado-de-entrega).
+
+El 2026-10-31 Gonzalo transmitió la autorización de Mari para la nueva imagen
+v2 y su publicación en `/test`, con datos de ejemplo explícitos. Se implementa
+la portada, el catálogo y la orientación de primera visita del contrato 08;
+el panel queda fuera del rediseño. El modo demo no escribe en la base operativa.
+Verificación y pendientes de material: [plan v2](../producto/mvp-v2.md#v21-imagen-uiux).
 
 ## Indice
 

@@ -4,13 +4,51 @@
 > Audiencia: producto, desarrollo, agentes
 > Fuente de verdad: si
 > Relacion: contrato funcional del home publico
-> Ultima revision: 2026-04-03
+> Ultima revision: 2026-10-31
 
 ## Alcance
 
-Pagina principal, secciones de marca, formulario de contacto y CTAs de reserva.
+Página principal, presentación de marca, orientación de servicios y contacto por WhatsApp.
 
-## Estado actual
+## V2.1 — imagen autorizada el 2026-10-31
+
+Gonzalo transmite la autorización de Mari para implementar el rediseño y
+publicarlo en `/test`, con datos de ejemplo identificados. La raíz no forma
+parte de esta publicación.
+
+- Portada estática con un solo h1, fotografía de referencia y CTA visible.
+- Recorrido: categorías, espacio/Mari, equipo, primera visita, ejemplos de
+  experiencias, preguntas frecuentes, WhatsApp y ubicación.
+- Catálogo en `reservar.php`: categorías nativas desplegables, precio y duración
+  visibles, búsqueda opcional y servicio preseleccionado por URL.
+- Navegación, categorías y enlaces de WhatsApp funcionan sin JavaScript.
+- WhatsApp lleva el servicio en el mensaje; abrirlo no confirma una reserva.
+- CTA inferior en móvil sin tapar el final de la página; menú con Escape y foco.
+- Se retiran de esta presentación el carrusel, los grandes bloques de iniciales,
+  el formulario de contacto y la duplicación de servicios/tratamientos.
+
+### Presentación honesta de la demo
+
+`includes/public-content.php` mantiene el contenido público de prueba separado
+de la base. No crea ni modifica datos operativos. Los IDs de ejemplo son negativos.
+
+Mientras `public_content_approved` no sea `true` en la configuración local:
+
+- banner visible y `noindex` en meta y cabecera HTTP;
+- servicios, precios ARS y duraciones marcados como ejemplos;
+- fotografías existentes identificadas como referencias;
+- experiencias identificadas como textos de ejemplo, sin estrellas ni autoras ficticias;
+- horarios, políticas y presentación del equipo pendientes de validación visibles.
+
+La aprobación del contenido definitivo requiere una revisión editorial conjunta;
+no alcanza con ocultar el banner. Fuera del modo demo, el catálogo lee los servicios
+del panel y mantiene el filtro de packs vigentes del contrato 02.
+
+Los componentes públicos de v2 usan `public-header.php`, `public-footer.php`,
+`public-v2.css` y `public-v2.js`. El panel y las pantallas de autenticación
+conservan sus componentes actuales.
+
+## Antecedente v1 / primera entrega de WhatsApp
 
 ### Implementado
 

@@ -1,17 +1,9 @@
 # MVP v2 — Piel Morena: reservas reales y nueva imagen
 
-> Estado: D1–D4 aprobadas por Gonzalo el 2026-10-31. v2.0 terminada en local, rama `v2-agenda`, sin push ni deploy.
+> Estado: flujo por WhatsApp desplegado en `/test` sobre `ed905ac`. Nueva imagen v2.1 autorizada por Gonzalo y Mari el 2026-10-31, preparada y verificada localmente.
 > Audiencia: producto, desarrollo, agentes.
-> Relación: antecedente y entrega local de la agenda. Gonzalo aceptó después
-> simplificar el flujo público a WhatsApp; siguiente bloque: revisar
-> [reservas-whatsapp.md](reservas-whatsapp.md) con Claude Code antes de implementar.
-> Los contratos (`docs/contracts/`) se
-> actualizan junto con cada entrega, según su regla de uso.
-> Referencia: [MVP de Team Di Paola](../../../team-di-paola-kick-boxing-sys/docs/plans/mvp-v1.md).
-
-El contenido siguiente conserva el alcance y los resultados de esa entrega.
-Sus pasos pendientes no autorizan publicar la agenda completa tras el cambio
-de dirección. La revisión de WhatsApp aún no modificó el comportamiento.
+> Alcance vigente: presentación pública, catálogo y primera visita en `/test`, con contenido de ejemplo identificado. La raíz y el panel no se rediseñan en este bloque.
+> Los contratos de `docs/contracts/` acompañan cada entrega. Los apartados de agenda inicial se conservan como antecedente.
 
 ## Punto de partida anterior a la entrega d9eb1cf
 
@@ -85,7 +77,7 @@ prueba de continuidad del marco (dos sesiones nuevas reconstruyen el estado).
 - curl sin sesión: `crear`, `gestionar`, `agenda-publica`, `mi-turno` y `maquinas/disponibles` dan 404; `disponibilidad` y `profesionales` dan 403.
 - Playwright (Edge) a 390, 768 y 1440 px sobre una base de prueba armada con `database/demo/armar_base_test.php`: `#reservar` abre WhatsApp con el servicio; tarjetas con mensaje; `reservar.php?servicio=` destaca; id inválido sin destacado; sin pedidos a endpoints retirados ni errores JS. Sin JS: formulario y categorías funcionan.
 - Panel a 390 px: abrir WhatsApp no cambia el estado, "Marcar confirmado" sí; alta rápida con horarios libres; disponibilidad con sesión.
-- No verificado: número de WhatsApp desde un celular real.
+- Gonzalo verificó desde el celular que el WhatsApp actual abre el número correcto (relevo de Claude, 2026-10-31).
 
 ### Verificación — `/test` en producción (2026-10-31)
 
@@ -99,7 +91,7 @@ prueba de continuidad del marco (dos sesiones nuevas reconstruyen el estado).
 |---|---|---|
 | v1.x | Landing, wizard con cuenta, panel, caja, jornadas, máquinas, promos | En producción; falta verificar si está en `9fbe7f4` |
 | **v2.0 Agenda real** | Disponibilidad por profesional, reserva como invitada, gestión del turno por la clienta, agenda del día y alta rápida en el panel, WhatsApp prearmado | Propuesta |
-| v2.1 Imagen | Rediseño UI/UX de la landing y del flujo de reserva sobre el design system vigente | Propuesta |
+| v2.1 Imagen | Portada, catálogo y primera visita con demo explícita | Preparado; publicación en `/test` autorizada |
 | v2.2 Seña y tienda | Seña con Mercado Pago, lista de espera, tienda de productos con pedido por WhatsApp | Propuesta |
 | v3 | Recordatorios automáticos por la API de WhatsApp Business, fidelización y reportes por profesional | Futuro |
 
@@ -152,21 +144,52 @@ prueba de continuidad del marco (dos sesiones nuevas reconstruyen el estado).
 
 ## v2.1 Imagen (UI/UX)
 
-Se ejecuta con la skill `mejorar-ui`: revisión a tres anchos, hallazgos al
-taller y corrección con capturas de antes y después.
+**Autorizado el 2026-10-31:** Gonzalo transmite el permiso de Mari para aplicar
+la propuesta de marca/UX y publicar en `/test`. Admite datos dummy explícitos.
+Se mantiene el flujo de WhatsApp y el panel operativo.
 
-- Botón "Reservar turno" fijo abajo en mobile y CTA al final de cada
-  servicio y de cada profesional, que entra al wizard con el servicio o la
-  profesional ya elegidos.
-- Landing más corta: hero, servicios destacados, equipo con fotos reales,
-  reseñas y ubicación. La galería y los tratamientos completos pasan a
-  páginas propias o a un desplegable.
-- Rendimiento: imagen del hero en WebP o AVIF con `fetchpriority`, carga
-  diferida de mapas y galería. Meta: LCP mobile menor a 2,5 s.
-- SEO y accesibilidad: canonical, un solo `<h1>`, `title` del iframe, zonas
-  táctiles de 44 px y contraste de `/reservar.php`.
-- Paleta "Oliva & Arcilla" y tipografías vigentes; el design system se
-  ajusta, no se reemplaza.
+- Portada estática con fotografía, voz de marca «Estamos para cuidarte» y CTA.
+- Servicios agrupados; catálogo aparte con precios ARS, duración, búsqueda,
+  asesoramiento y mensajes por servicio. Categorías y navegación sin JS.
+- Presentación de Mari y equipo sin retratos inventados ni grandes bloques de iniciales.
+- Primera visita, FAQ, ubicación y experiencias de ejemplo identificadas.
+- Banner de prueba, noindex HTTP/meta y precios/fotos/textos marcados.
+- Contenido demo fuera de la base operativa. Los IDs negativos de ejemplo
+  no se usan en la agenda. Publicación de datos definitivos exige revisión
+  editorial; `public_content_approved` permanece desactivado por defecto.
+- Paleta «Oliva & Arcilla», Playfair Display/DM Sans, CSS propio sobre Bootstrap.
+- Fotos existentes optimizadas a WebP. Panel y auth conservan sus componentes.
+
+### Material que Gonzalo puede conseguir
+
+1. Retrato de Mari y fotos del equipo, con nombres y especialidades confirmados.
+2. Fotos actuales del interior y de trabajos autorizados para publicar; confirmar
+   la procedencia y permiso de las imágenes de referencia existentes.
+3. Presentación breve de Mari en su voz y versión principal del logo.
+4. Catálogo vigente: servicios, qué incluye cada uno, precio, duración y profesional.
+5. Horarios generales, jornadas y medios de pago; reglas de seña, cancelación y cambios.
+6. Dos o tres testimonios reales, con permiso y procedencia confirmada.
+WhatsApp ya fue probado por Gonzalo desde el celular: número actual correcto.
+
+Estos materiales no bloquean la demo; sí la publicación definitiva sin etiquetas.
+
+### Verificación de esta entrega
+
+- 112 comprobaciones locales OK: 320/390/768/1440 px, un h1, noindex,
+  imágenes, ausencia de desborde, menú con Escape/foco, búsqueda sin acentos,
+  vacío/limpiar, selección válida e inválida, WhatsApp por servicio, formulario
+  GET sin JS, WebKit móvil y accesibilidad axe. No se envían mensajes.
+- Taller local: 26 pruebas pasan, 22 omitidas por alcance de navegador o
+  PageSpeed sin clave. Smoke, accesibilidad WCAG 2.2, capturas, noindex y CLS
+  dentro del umbral. Evidencia: `ss-taller/reports/piel-morena-v2-local/`.
+- Capturas antes: `ss-taller/reports/piel-morena-v2/antes/`.
+  Después: `.playwright/public-v2/`. La primera pantalla móvil se ajustó para
+  incluir la fotografía y el CTA sin obligar a leer varios párrafos.
+- Rúbrica de diseño: antes 5,6 (diseño 5,5 / usabilidad 6 / idea 5,5 / contenido 5);
+  después 7,3 (7,5 / 8 / 7 / 5). Contenido limitado a 5 por los ejemplos
+  explícitos y las fotos/presentaciones aún pendientes. No es una valoración
+  de la futura versión con material definitivo.
+- Pendiente: verificar esta entrega publicada en `/test`.
 
 ## v2.2 Seña y tienda
 

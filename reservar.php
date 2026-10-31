@@ -1,119 +1,38 @@
 <?php
-/**
- * Piel Morena - Pedir turno por WhatsApp
- *
- * La web no reserva: cada servicio abre WhatsApp con su nombre escrito y el
- * turno se coordina con el salón. Funciona sin JavaScript.
- *
- * ?servicio=<id> destaca ese servicio arriba (enlaces de servicios,
- * banners y promociones). Un id inválido muestra la consulta general.
- */
-$titulo_pagina = "Pedir turno — Piel Morena Estética";
-$meta_descripcion =
-    "Pedí tu turno en Piel Morena Estética: elegí el servicio y te abrimos WhatsApp con el mensaje listo para coordinar día y horario.";
-$pagina_actual = "reservar";
-require_once "includes/header.php";
-
-$db = getDB();
-$stmt = $db->query(
-    "SELECT s.id, s.nombre, s.duracion_minutos, s.precio,
-            c.nombre AS categoria, c.icono AS categoria_icono
-     FROM servicios s
-     LEFT JOIN categorias_servicios c ON s.id_categoria = c.id
-     LEFT JOIN promociones p ON p.id_servicio_generado = s.id
-     WHERE s.activo = 1
-       AND (
-         p.id IS NULL
-         OR (
-           p.activo = 1
-           AND (p.fecha_inicio IS NULL OR p.fecha_inicio <= CURDATE())
-           AND (p.fecha_fin IS NULL OR p.fecha_fin >= CURDATE())
-         )
-       )
-     ORDER BY c.orden IS NULL, c.orden, c.nombre, s.nombre"
-);
-$categorias = [];
-$elegido = null;
-$id_elegido = intval($_GET["servicio"] ?? 0);
-foreach ($stmt->fetchAll() as $s) {
-    $categorias[$s["categoria"] ?? "Otros"]["icono"] = $s["categoria_icono"] ?: "bi-stars";
-    $categorias[$s["categoria"] ?? "Otros"]["servicios"][] = $s;
-    if ((int) $s["id"] === $id_elegido) {
-        $elegido = $s;
-    }
+$pagina_actual = 'reservar';
+$titulo_pagina = 'Servicios y turnos · Piel Morena';
+require_once __DIR__ . '/includes/public-content.php';
+$id = filter_input(INPUT_GET, 'servicio', FILTER_VALIDATE_INT);
+$selected = null;
+$groups = [];
+foreach ($pm_public_services as $service) {
+    $groups[$service['grupo']][] = $service;
+    if ($id !== false && $id !== null && (int) $service['id'] === $id) $selected = $service;
 }
-
-$precio = fn($p) => (float) $p > 0 ? "$" . number_format((float) $p, 0, ",", ".") : "";
+$category = is_string($_GET['categoria'] ?? null) ? $_GET['categoria'] : '';
+if ($selected) $category = $selected['grupo'];
+$pm_public_selected_name = $selected['nombre'] ?? '';
+require __DIR__ . '/includes/public-header.php';
 ?>
-
-<section class="pm-section pm-reservar-section">
-  <div class="container" style="max-width: 720px;">
-
-    <div class="text-center mb-4">
-      <h1 class="pm-reservar-title">
-        <i class="bi bi-whatsapp me-2"></i>Pedí tu turno
-      </h1>
-      <p class="pm-reservar-subtitle">Elegí el servicio y te abrimos WhatsApp con el mensaje listo. Coordinamos el día y el horario con vos.</p>
-      <div class="pm-divider"></div>
+<main id="contenido" class="pmv-catalog-page" tabindex="-1">
+  <div class="container">
+    <a class="pmv-back" href="<?= URL_BASE ?>/#servicios"><i class="bi bi-arrow-left" aria-hidden="true"></i>Volver a Piel Morena</a>
+    <div class="pmv-catalog-intro"><p class="pmv-eyebrow">Tu cuidado, a tu ritmo</p><h1>Encontrá tu próximo<br>momento para vos.</h1><p class="pmv-lead">Explorá los servicios. Coordinamos tu turno por WhatsApp.</p></div>
+    <?php if ($pm_public_preview): ?><div class="pmv-catalog-notice" role="note"><strong>Estás viendo un catálogo de ejemplo.</strong><p>Precios en pesos argentinos, servicios y duraciones de referencia. No constituyen una oferta vigente. Consultá el presupuesto y la disponibilidad con Mari.</p></div><?php endif; ?>
+    <?php if ($selected): ?><section class="pmv-selected" aria-labelledby="pmv-selected-title"><div><p class="pmv-eyebrow">Tu elección<?= $pm_public_preview ? ' · ejemplo' : '' ?></p><h2 id="pmv-selected-title"><?= pm_public_escape($selected['nombre']) ?></h2><p><?= (int) $selected['duracion_minutos'] ?> min · <?= pm_public_price($selected['precio']) ?><?= $pm_public_preview ? ' · precio de ejemplo' : '' ?></p></div><a class="pmv-button" href="<?= pm_public_escape(pm_wa_turno($selected['nombre'])) ?>" target="_blank" rel="noopener"><i class="bi bi-whatsapp" aria-hidden="true"></i>Consultar este servicio</a></section><?php endif; ?>
+    <div class="pmv-catalog-layout row gy-4 gx-lg-5">
+      <aside class="col-lg-4"><div class="pmv-catalog-aside"><h2>¿No sabés qué elegir?</h2><p>No hace falta tenerlo decidido. Contanos qué buscás y te orientamos.</p><a class="pmv-button pmv-button-outline" href="<?= pm_public_escape(pm_wa_turno()) ?>" target="_blank" rel="noopener">Necesito asesoramiento <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a><p class="pmv-small">El turno queda confirmado cuando acordamos el día y horario por WhatsApp.</p><a class="pmv-text-link" href="<?= URL_BASE ?>/#primera-visita">Cómo es tu primera visita <i class="bi bi-arrow-right" aria-hidden="true"></i></a></div></aside>
+      <section id="catalogo" class="col-lg-8" aria-labelledby="pmv-catalog-title"><h2 id="pmv-catalog-title" class="pmv-catalog-title">Servicios y precios</h2>
+        <div class="pmv-search"><label for="pmv-search">Buscá un servicio</label><div><i class="bi bi-search" aria-hidden="true"></i><input id="pmv-search" type="search" placeholder="Por ejemplo: facial, cejas, masaje" autocomplete="off" aria-describedby="pmv-search-results"></div><p id="pmv-search-results" role="status" aria-live="polite"></p></div>
+        <?php foreach ($groups as $key => $services): $cat = $pm_public_categories[$key]; ?>
+        <details class="pmv-catalog-group" id="categoria-<?= pm_public_escape($key) ?>" <?= $category === $key || ($category === '' && $key === 'faciales') ? 'open' : '' ?>><summary><span><i class="bi <?= $cat['icono'] ?>" aria-hidden="true"></i><?= $cat['nombre'] ?></span><span class="pmv-group-count"><?= count($services) ?> opciones<i class="bi bi-plus" aria-hidden="true"></i></span></summary><ul>
+          <?php foreach ($services as $s): ?><li data-service="<?= pm_public_escape($s['nombre'] . ' ' . $cat['nombre']) ?>"><div class="pmv-service-row"><div><h3><?= pm_public_escape($s['nombre']) ?></h3><p class="pmv-service-description"><?= pm_public_escape($s['descripcion'] ?? 'Consultá qué incluye y si se adapta a lo que buscás.') ?></p><p class="pmv-service-time"><?= (int) $s['duracion_minutos'] ?> min<?= $pm_public_preview ? ' aprox. · ejemplo' : '' ?></p></div><div class="pmv-service-price"><strong><?= pm_public_price($s['precio']) ?></strong><?php if ($pm_public_preview): ?><small>Precio de ejemplo</small><?php endif; ?></div></div><a class="pmv-text-link" href="<?= pm_public_escape(pm_wa_turno($s['nombre'])) ?>" target="_blank" rel="noopener">Consultar por WhatsApp <i class="bi bi-arrow-up-right" aria-hidden="true"></i><span class="visually-hidden">: <?= pm_public_escape($s['nombre']) ?></span></a></li><?php endforeach; ?>
+        </ul></details>
+        <?php endforeach; ?>
+        <div id="pmv-no-results" class="pmv-empty" hidden><h3>No encontramos ese servicio.</h3><p>Probá con otra palabra o contanos qué necesitás.</p><a class="pmv-text-link" href="<?= pm_public_escape(pm_wa_turno()) ?>" target="_blank" rel="noopener">Consultar con Piel Morena <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a></div>
+        <p class="pmv-small pmv-catalog-end">Abrir WhatsApp no confirma una reserva. Revisá el servicio, presupuesto y horario con el salón antes de tu visita.</p>
+      </section>
     </div>
-
-    <?php if ($elegido): ?>
-    <div class="pm-wizard-step pm-pedir-elegido">
-      <p class="pm-reserva-etiqueta">Elegiste</p>
-      <h2 class="pm-wizard-titulo"><?= htmlspecialchars($elegido["nombre"]) ?></h2>
-      <p class="pm-wizard-sub">
-        <?= (int) $elegido["duracion_minutos"] ?> min<?= $precio($elegido["precio"]) ? " · " . $precio($elegido["precio"]) : "" ?>
-      </p>
-      <a href="<?= htmlspecialchars(pm_wa_turno($elegido["nombre"])) ?>" class="btn btn-pm w-100 mt-3 pm-btn-wa" target="_blank" rel="noopener">
-        <i class="bi bi-whatsapp me-2"></i>Pedir turno por WhatsApp
-      </a>
-      <p class="pm-wizard-ayuda text-center mt-2">¿Querés otro servicio? Elegilo abajo.</p>
-    </div>
-    <?php endif; ?>
-
-    <div class="pm-wizard-step">
-      <div class="pm-pedir-general">
-        <div>
-          <h2 class="pm-wizard-titulo">¿No sabés qué elegir?</h2>
-          <p class="pm-wizard-sub">Contanos qué buscás y te asesoramos.</p>
-        </div>
-        <a href="<?= htmlspecialchars(pm_wa_turno()) ?>" class="btn btn-pm-outline pm-btn-wa" target="_blank" rel="noopener">
-          <i class="bi bi-chat-heart me-1"></i>Necesito asesoramiento
-        </a>
-      </div>
-    </div>
-
-    <div class="pm-wizard-step">
-      <h2 class="pm-wizard-titulo mb-3"><i class="bi bi-stars me-2"></i>Servicios</h2>
-      <?php if (!$categorias): ?>
-        <p class="pm-wizard-sub">Escribinos y te contamos qué hacemos.</p>
-      <?php endif; ?>
-      <?php foreach ($categorias as $nombre_cat => $cat): ?>
-      <details class="pm-pedir-cat" <?= $elegido && ($elegido["categoria"] ?? "Otros") === $nombre_cat ? "open" : "" ?>>
-        <summary><i class="bi <?= htmlspecialchars($cat["icono"]) ?> me-2" aria-hidden="true"></i><?= htmlspecialchars($nombre_cat) ?></summary>
-        <ul class="pm-pedir-lista">
-          <?php foreach ($cat["servicios"] as $s): ?>
-          <li>
-            <a href="<?= htmlspecialchars(pm_wa_turno($s["nombre"])) ?>" class="pm-pedir-item" target="_blank" rel="noopener">
-              <span class="pm-pedir-info">
-                <span class="pm-so-name"><?= htmlspecialchars($s["nombre"]) ?></span>
-                <span class="pm-so-meta"><i class="bi bi-clock me-1" aria-hidden="true"></i><?= (int) $s["duracion_minutos"] ?> min<?= $precio($s["precio"]) ? " · " . $precio($s["precio"]) : "" ?></span>
-              </span>
-              <span class="pm-pedir-cta"><i class="bi bi-whatsapp" aria-hidden="true"></i><span class="visually-hidden">Pedir turno por WhatsApp</span></span>
-            </a>
-          </li>
-          <?php endforeach; ?>
-        </ul>
-      </details>
-      <?php endforeach; ?>
-    </div>
-
-    <p class="pm-pedir-aviso text-center">
-      <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
-      Tu turno queda confirmado cuando acordamos el día y el horario por WhatsApp.
-    </p>
-
   </div>
-</section>
-
-<?php require_once "includes/footer.php"; ?>
+</main>
+<?php require __DIR__ . '/includes/public-footer.php'; ?>

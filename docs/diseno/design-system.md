@@ -1,4 +1,24 @@
 # Piel Morena — Design System v3.1
+
+## Presentación pública v2.1 — 2026-10-31
+
+Autorizada por Gonzalo y Mari para `/test`. La portada y el catálogo usan
+`assets/css/public-v2.css`, sobre los tokens de `style.css` y Bootstrap 5.3.
+`premium-v3.css` y `premium-auth.css` siguen para las pantallas anteriores;
+no se cargan en la nueva presentación pública.
+
+- Playfair Display para títulos y DM Sans para lectura y controles.
+- Marfil/crema como superficies, texto tierra oscuro y bronce oscuro para
+  acciones con contraste. Botones planos, fotos protagonistas y filetes para agrupar.
+- Un h1; hero sin carrusel. Fotografías existentes a WebP con dimensiones
+  reservadas, prioridad para el hero y carga diferida para las secundarias.
+- Composición móvil propia, menú nativo y CTA fijo inferior con espacio final.
+- Aviso de demo y etiquetas legibles para contenido de ejemplo.
+- El texto informativo nunca depende de animaciones. Foco visible y movimiento reducido.
+
+Este apartado reemplaza las recetas del hero/carruseles y layout público
+anteriores solo en `index.php` y `reservar.php`; los tokens y el panel se mantienen.
+
 > Estado: vigente
 > Audiencia: diseno, frontend, producto, agentes
 > Fuente de verdad: si, para la capa visual compartida
