@@ -106,6 +106,7 @@ y desplegado (verificado en producción). Probar una rama no prueba producción.
 | v2.0 agenda (`d9eb1cf`) | Reemplazado en lo público | Su reserva online y `mi-turno` no se publicaron; el panel y el cálculo siguen |
 | Pedir turno por WhatsApp + panel | Desplegado en `/test` (rama `v2-agenda`), no en la raíz | Verificación local y en `/test` abajo |
 | `/test` en producción | Desplegado y verificado en `3770a3e` | Worktree `public_html/test`; la demo pública no consulta ni escribe la base; el panel sigue usando la base compartida autorizada |
+| Panel de profesionales (rama `claude/profesionales`) | Preparado | Local 31-10: Playwright a 390 y 1440 px, lista sin desborde, editor a pantalla completa en el celular, guardar, validaciones de la API y restauración de datos |
 | Raíz de producción | Integrado en `0c75b1d` (mayo) | Sigue con el wizard viejo; comparte base con `/test`, ya con la 016 |
 
 Cada verificación nueva registra alcance, resultado y fecha propios.
@@ -254,7 +255,7 @@ Estos materiales no bloquean la demo; sí la publicación definitiva sin etiquet
 
 **De Mari (negocio):**
 - Qué servicios hace cada profesional y sus horarios reales; si atienden
-  los sábados.
+  los sábados. Se cargan en Panel → Profesionales; hoy hay datos de demo.
 - Política de cancelación, de inasistencias y de seña (monto y servicios).
 - Cuántas clientas atiende a la vez cada rubro (camillas o puestos) y qué
   máquinas comparten.

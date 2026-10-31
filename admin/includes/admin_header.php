@@ -161,6 +161,12 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
         </a>
       </li>
       <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/profesionales.php" class="pm-sidebar-link <?= $vista_actual === 'profesionales' ? 'active' : '' ?>">
+          <i class="bi bi-calendar-week"></i>
+          <span>Profesionales</span>
+        </a>
+      </li>
+      <li class="pm-sidebar-item">
         <a href="<?= URL_ADMIN ?>/views/productos.php" class="pm-sidebar-link <?= $vista_actual === 'productos' ? 'active' : '' ?>">
           <i class="bi bi-box-seam"></i>
           <span>Productos</span>

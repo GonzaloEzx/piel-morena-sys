@@ -34,6 +34,7 @@ No incluye como fuente funcional principal:
 - gestion de citas con cambio de estado y alta manual desde panel;
 - **agenda del dia** (`admin/views/agenda.php`, admin y empleado): turnos por profesional en columnas (en el celular, filtro por profesional), pendientes (turnos cargados sin confirmar), recordatorios de manana y alta rapida del turno acordado por WhatsApp (busca a la clienta por telefono y sugiere horarios libres);
 - WhatsApp desde el panel: "Abrir WhatsApp" y "Abrir recordatorio" solo abren el mensaje armado; el estado se cambia aparte con "Marcar confirmado". Abrir un mensaje no se registra como enviado;
+- **profesionales** (`admin/views/profesionales.php`, solo admin): qué servicios hace cada profesional (por categoría o servicio por servicio) y sus días y franjas horarias; avisa qué categorías no tienen profesional activa. Sin horario cargado, la profesional atiende en el horario del local; un servicio sin profesional activa usa el horario del local sin control por profesional. Pensada primero para el celular;
 - el alta manual usa el calculo de disponibilidad de `includes/agenda.php` (contrato 03) y admite horarios fuera de grilla; ya no bloquea todo el salon por una cita;
 - gestion de jornadas con calendario, tabla, creacion multi-fecha y cancelacion con preview;
 - caja con movimientos, ventas, cierres e historico;
@@ -83,6 +84,7 @@ admin/
 │   ├── clientes.php
 │   ├── citas.php
 │   ├── empleados.php
+│   ├── profesionales.php
 │   ├── productos.php
 │   ├── caja.php
 │   ├── mensajes.php
@@ -117,6 +119,7 @@ admin/
 - `api/admin/clientes.php`
 - `api/admin/citas.php`
 - `api/admin/empleados.php`
+- `api/admin/profesionales.php`
 - `api/admin/productos.php`
 - `api/admin/caja.php`
 - `api/admin/mensajes.php`

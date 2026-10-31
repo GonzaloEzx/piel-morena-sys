@@ -9,6 +9,7 @@ require_once __DIR__ . '/../includes/admin_header.php';
 <div class="pm-panel">
   <div class="pm-panel-header">
     <h3 class="pm-panel-title"><i class="bi bi-person-badge me-2"></i>Listado de Empleados</h3>
+    <a class="btn btn-pm-outline btn-pm-sm ms-auto me-2" href="profesionales.php"><i class="bi bi-calendar-week me-1"></i>Servicios y horarios</a>
     <button class="btn btn-pm btn-pm-sm" onclick="abrirModalEmpleado()">
       <i class="bi bi-plus-lg me-1"></i>Nuevo Empleado
     </button>
