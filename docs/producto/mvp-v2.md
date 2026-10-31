@@ -1,6 +1,6 @@
 # MVP v2 — Piel Morena: reservas reales y nueva imagen
 
-> Estado: v2.04 de refinamiento móvil preparada; publicación autorizada en `/test`. Última versión publicada: `d231cd7` (producto `3770a3e`).
+> Estado: v2.04 de refinamiento móvil publicada y verificada en `/test` (`cccd619`, 2026-10-31). La raíz conserva `0c75b1d`.
 > Audiencia: producto, desarrollo, agentes.
 > Alcance vigente: presentación pública, catálogo y primera visita en `/test`, con contenido de ejemplo identificado. La raíz y el panel no se rediseñan en este bloque.
 > Los contratos de `docs/contracts/` acompañan cada entrega. Los apartados de agenda inicial se conservan como antecedente.
@@ -27,14 +27,21 @@ que acompañan sin ocupar permanentemente la pantalla.
 
 Antes y después: `ss-taller/reports/piel-morena-v204/{antes,despues}/`.
 La captura a 390 × 844 px mostraba 9.430 px de inicio y el catálogo a 1.175 px
-antes de su primera categoría. La primera pasada deja unos 6.500 px y lleva
-la búsqueda/categorías cerca de los 400 px. La reducción corresponde a la
+antes de su primera categoría. La entrega publicada deja 6.498 px y lleva
+la búsqueda/categorías a 396 px. La reducción corresponde a la
 composición y los desplegables, no a texto más pequeño ni a contenido retirado.
 
 194 comprobaciones locales OK: 320/360/390/430, tablet, escritorio, WebKit,
 ausencia de JS, menú horizontal, áreas táctiles y acceso progresivo a los servicios.
 Taller local: 26 pasan / 22 omitidas / 0 fallan (las omisiones configuradas por
-navegador y PageSpeed sin clave). Verificación remota pendiente al preparar la entrega.
+navegador y PageSpeed sin clave). Repetidas contra la URL pública: **194 OK**;
+taller remoto: **26 pasan / 22 omitidas / 0 fallan**. Sin nueva medición de LCP.
+Publicado desde `cccd619`; raíz comprobada en `0c75b1d` y sin escrituras de base.
+
+Comparativa visual: `ss-taller/reports/piel-morena-v204/index.html`.
+Auditoría remota: `ss-taller/reports/piel-morena-v204-test/`.
+Rúbrica: antes 7,3 (diseño 7,5 / usabilidad 8 / idea 7 / contenido 5);
+después 7,65 (8 / 8,5 / 7 / 5). El contenido de ejemplo mantiene su tope de 5.
 
 La raíz y el panel quedan fuera del bloque. Se mantienen los datos dummy
 identificados y todos los pendientes de material real de v2.1.
@@ -125,7 +132,8 @@ prueba de continuidad del marco (dos sesiones nuevas reconstruyen el estado).
 |---|---|---|
 | v1.x | Landing, wizard con cuenta, panel, caja, jornadas, máquinas, promos | En producción; falta verificar si está en `9fbe7f4` |
 | **v2.0 Agenda real** | Disponibilidad por profesional, reserva como invitada, gestión del turno por la clienta, agenda del día y alta rápida en el panel, WhatsApp prearmado | Propuesta |
-| v2.1 Imagen | Portada, catálogo y primera visita con demo explícita | Desplegado y verificado en `/test` (`3770a3e`) |
+| v2.04 Estilo móvil | Refinamiento de portada y catálogo para móvil | Desplegado y verificado en `/test` (`cccd619`) |
+| v2.1 Imagen | Portada, catálogo y primera visita con demo explícita | Antecedente publicado (`3770a3e`); refinado por v2.04 |
 | v2.2 Seña y tienda | Seña con Mercado Pago, lista de espera, tienda de productos con pedido por WhatsApp | Propuesta |
 | v3 | Recordatorios automáticos por la API de WhatsApp Business, fidelización y reportes por profesional | Futuro |
 

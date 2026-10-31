@@ -10,8 +10,8 @@
 
 ### Entorno vigente de v2 — 2026-10-31
 
-La nueva imagen v2.1 y WhatsApp están en
-`https://pielmorenaestetica.com.ar/test/` (commit de producto `3770a3e`).
+La nueva imagen v2.04 móvil y WhatsApp están en
+`https://pielmorenaestetica.com.ar/test/` (commit de producto `cccd619`).
 Gonzalo autorizó publicar ahí. La raíz permanece en `0c75b1d` y su actualización
 requiere un bloque de publicación propio.
 

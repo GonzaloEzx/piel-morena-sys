@@ -15,7 +15,7 @@
 
 - Márgenes laterales de 20 px, ritmo de 8/12/16/24 px y secciones de 44 px en móvil.
 - Texto principal de 16 px, apoyo de 14 px y etiquetas desde 12 px; controles de 48 px o más.
-- Cabecera de 64 px más borde, aviso de demo desplegable y barra inferior de 64 px más borde/safe area.
+- Cabecera de 64 px más borde, aviso de demo desplegable y barra inferior de unos 70 px más safe area.
 - Marca existente con composición `multiply` sobre marfil/crema para integrar el blanco del PNG.
 - Servicios con miniatura lateral en móvil y disposición fotográfica vertical desde tablet.
 - Catálogo con detalle progresivo nativo; equipo y experiencias disponibles al desplegar.

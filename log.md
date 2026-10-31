@@ -22,3 +22,10 @@
 - Barra inferior contextual, controles de 48 px y menú accesible en horizontal. Se conservan WhatsApp, formulario GET sin JS, búsqueda y avisos de ejemplo.
 - 194 comprobaciones locales OK en 320/360/390/430 px, tablet, escritorio, WebKit y sin JS. Taller: 26 pasan / 22 omitidas / 0 fallan; PHP/JS y diff revisados.
 - Capturas antes/después en ss-taller/reports/piel-morena-v204/. Publicación en /test autorizada y pendiente al preparar este commit; raíz y panel fuera del bloque.
+
+## 2026-10-31T21:41:16Z — v2.04 publicada y verificada
+
+- `cccd619` subido en v2-agenda y publicado mediante fast-forward en /test. Raíz comprobada en `0c75b1d`, sin cambios.
+- 194 comprobaciones remotas OK; taller remoto: 26 pasan / 22 omitidas / 0 fallan. Incluye menú horizontal, áreas táctiles, no JS y WebKit. PageSpeed sin clave, LCP sin nueva medición.
+- A 390 × 844 px, inicio de 9.430 a 6.498 px y catálogo de 1.175 a 396 px; logo integrado y barra inferior contextual. Comparativa en ss-taller/reports/piel-morena-v204/index.html.
+- Material definitivo de Mari pendiente según el plan. Panel de profesionales y trabajo ajeno preservados.
