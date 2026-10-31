@@ -29,3 +29,11 @@
 - 194 comprobaciones remotas OK; taller remoto: 26 pasan / 22 omitidas / 0 fallan. Incluye menú horizontal, áreas táctiles, no JS y WebKit. PageSpeed sin clave, LCP sin nueva medición.
 - A 390 × 844 px, inicio de 9.430 a 6.498 px y catálogo de 1.175 a 396 px; logo integrado y barra inferior contextual. Comparativa en ss-taller/reports/piel-morena-v204/index.html.
 - Material definitivo de Mari pendiente según el plan. Panel de profesionales y trabajo ajeno preservados.
+
+## 2026-10-31T19:05:50-03:00 — Cierre de sesión de Codex
+
+- Cerrado el bloque público v2.04: producto `cccd619` y documentación `ca07afd`, publicados en `/test`. Verificación del bloque ya registrada: 194 comprobaciones remotas OK, taller 26 pasan / 22 omitidas / 0 fallan; PageSpeed pendiente. No se repiten pruebas de producto para este cierre documental.
+- Archivos propios: `index.php`, `reservar.php`, `includes/public-{content,header,footer}.php`, `assets/css/public-v2.css`, `assets/js/public-v2.js`, `tests/public-v2.cjs`, contratos 02/08, design system, plan v2 y registro. Lista exacta del producto: `git show --name-only cccd619`.
+- Entrega posterior de Claude preservada: `d8ec18c` (panel de profesionales, navegación, API y contratos/plan) y `0e2c071` (estado de publicación). El plan informa su deploy y pruebas; Codex no vuelve a validarlo ni lo atribuye al bloque visual. Los archivos públicos verificados permanecen iguales respecto de `ca07afd`.
+- Preexistentes sin seguimiento, preservados y fuera de este cierre: `.gitattributes` y `docs/producto/relevo-claude-2026-10-31.md`. Hallazgos del taller y coordinación quedan en sus registros existentes, sin mezclarlos en el commit del cliente.
+- Próximo paso: reunir y validar el material definitivo de Mari, confirmar equipo/servicios/horarios y decidir la publicación en la raíz. La demo mantiene sus etiquetas y noindex; la raíz no recibió cambios de este bloque.
