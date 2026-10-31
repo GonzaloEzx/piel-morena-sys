@@ -2,11 +2,18 @@
 
 > Estado: D1–D4 aprobadas por Gonzalo el 2026-10-31. v2.0 terminada en local, rama `v2-agenda`, sin push ni deploy.
 > Audiencia: producto, desarrollo, agentes.
-> Relación: plan vigente del proyecto. Los contratos (`docs/contracts/`) se
+> Relación: antecedente y entrega local de la agenda. Gonzalo aceptó después
+> simplificar el flujo público a WhatsApp; siguiente bloque: revisar
+> [reservas-whatsapp.md](reservas-whatsapp.md) con Claude Code antes de implementar.
+> Los contratos (`docs/contracts/`) se
 > actualizan junto con cada entrega, según su regla de uso.
 > Referencia: [MVP de Team Di Paola](../../../team-di-paola-kick-boxing-sys/docs/plans/mvp-v1.md).
 
-## Punto de partida (código y Git al 31-10)
+El contenido siguiente conserva el alcance y los resultados de esa entrega.
+Sus pasos pendientes no autorizan publicar la agenda completa tras el cambio
+de dirección. La revisión de WhatsApp aún no modificó el comportamiento.
+
+## Punto de partida anterior a la entrega d9eb1cf
 
 - `main` = `origin/main` = `9fbe7f4` (10-10). Ese commit trae la agenda
   pública con turnos que abren WhatsApp y el arreglo del anti-solapamiento.
@@ -53,6 +60,22 @@
 | D2 | ¿Reserva con cuenta o como invitada? | Como invitada, con nombre y WhatsApp. La cuenta queda opcional para ver el historial. Cierra la decisión abierta del contrato 03. |
 | D3 | ¿La web reserva o solo pide? | Reserva en estado `pendiente` y el salón confirma con un toque por WhatsApp. La confirmación automática queda para cuando exista la seña. |
 | D4 | ¿Seña? | Solo en servicios largos o con máquina (láser), con Mercado Pago, en v2.2. Necesita la política de Mari. |
+
+## Estado de entrega
+
+Estados según el [marco del ecosistema](../../../../room_master/ECOSISTEMA_AGENTICO.md):
+propuesto, en curso, preparado (commit local verificado), integrado (en `main`)
+y desplegado (verificado en producción). Probar una rama no prueba producción.
+
+| Bloque | Estado | Evidencia |
+|---|---|---|
+| Deploy `9fbe7f4` (agenda de la landing, 10-10) | Integrado, no desplegado | `origin/main`; producción sin verificar. Con el cambio a WhatsApp, su agenda pública queda reemplazada: se puede publicar directo el commit integrado siguiente |
+| v2.0 agenda (`d9eb1cf`) | Preparado, sin integrar | Pruebas del 31-10 en local; ver "Resultado" |
+| Reservas por WhatsApp | Propuesto, revisado por Claude | [reservas-whatsapp.md](reservas-whatsapp.md#revisión-de-claude-code--2026-10-31) |
+
+Cada verificación nueva registra alcance, resultado y fecha propios.
+Cuando este proyecto quede sin ediciones simultáneas, es candidato para la
+prueba de continuidad del marco (dos sesiones nuevas reconstruyen el estado).
 
 ## Versiones
 
