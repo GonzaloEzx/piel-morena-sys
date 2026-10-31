@@ -106,7 +106,7 @@ y desplegado (verificado en producción). Probar una rama no prueba producción.
 | v2.0 agenda (`d9eb1cf`) | Reemplazado en lo público | Su reserva online y `mi-turno` no se publicaron; el panel y el cálculo siguen |
 | Pedir turno por WhatsApp + panel | Desplegado en `/test` (rama `v2-agenda`), no en la raíz | Verificación local y en `/test` abajo |
 | `/test` en producción | Desplegado y verificado en `3770a3e` | Worktree `public_html/test`; la demo pública no consulta ni escribe la base; el panel sigue usando la base compartida autorizada |
-| Panel de profesionales (rama `claude/profesionales`) | Preparado | Local 31-10: Playwright a 390 y 1440 px, lista sin desborde, editor a pantalla completa en el celular, guardar, validaciones de la API y restauración de datos |
+| Panel de profesionales (`d8ec18c`) | Desplegado en `/test` | 31-10, local y en `/test`: Playwright a 390 y 1440 px, lista sin desborde, editor a pantalla completa en el celular, guardar, validaciones de la API y restauración de datos. Aviso en `/test`: Masajes y Packs sin profesional activa |
 | Raíz de producción | Integrado en `0c75b1d` (mayo) | Sigue con el wizard viejo; comparte base con `/test`, ya con la 016 |
 
 Cada verificación nueva registra alcance, resultado y fecha propios.
