@@ -1,77 +1,54 @@
 <?php
 /**
- * Piel Morena - Página de Reservas Online
- * Flujo: Servicio → Fecha → Hora → Datos → Confirmar
+ * Piel Morena - Reserva online (v2.0)
+ * Flujo: Servicio → Profesional, día y horario → Tus datos
+ *
+ * No exige cuenta: la invitada deja nombre y WhatsApp. Con sesión, se usan
+ * los datos de la cuenta. La reserva queda pendiente hasta que el salón la
+ * confirma por WhatsApp.
+ *
+ * Preselección por URL: ?servicio=<id>&profesional=<id>&fecha=<Y-m-d>
  */
-$titulo_pagina = "Reservar Cita — Piel Morena Estética";
+$titulo_pagina = "Reservar turno — Piel Morena Estética";
 $meta_descripcion =
-    "Reserva tu cita online en Piel Morena Estética. Elige servicio, fecha y horario.";
+    "Reservá tu turno online en Piel Morena Estética: elegí servicio, profesional y horario. Te confirmamos por WhatsApp.";
 $pagina_actual = "reservar";
 require_once "includes/header.php";
 
-$servicio_preseleccionado = intval($_GET["servicio"] ?? 0);
 $logueado = esta_autenticado();
+$preseleccion = [
+    'servicio'    => intval($_GET["servicio"] ?? 0),
+    'profesional' => intval($_GET["profesional"] ?? 0),
+    'fecha'       => preg_match('/^\d{4}-\d{2}-\d{2}$/', $_GET["fecha"] ?? '') ? $_GET["fecha"] : '',
+];
+
+$stmt = getDB()->prepare("SELECT valor FROM configuracion WHERE clave = 'dias_laborales'");
+$stmt->execute();
+$dias_laborales = array_map('intval', explode(',', $stmt->fetchColumn() ?: '1,2,3,4,5'));
 ?>
 
-<!-- ═══ RESERVAS — Wizard paso a paso ═══ -->
 <section class="pm-section pm-reservar-section">
   <div class="container" style="max-width: 720px;">
 
-    <!-- Título -->
     <div class="text-center mb-4">
       <h1 class="pm-reservar-title">
-        <i class="bi bi-calendar-check me-2"></i>Reservar Cita
+        <i class="bi bi-calendar-check me-2"></i>Reservar turno
       </h1>
-      <p class="pm-reservar-subtitle">Elige tu servicio, fecha y horario en menos de 1 minuto</p>
+      <p class="pm-reservar-subtitle">Elegí servicio, profesional y horario. Sin crear cuenta.</p>
       <div class="pm-divider"></div>
     </div>
 
-    <?php if (!$logueado): ?>
-    <!-- ═══ AVISO: Necesita cuenta para reservar ═══ -->
-    <div class="pm-auth-required">
-      <div class="pm-auth-required-icon">
-        <i class="bi bi-calendar-heart"></i>
-      </div>
-      <h3>Necesitás una cuenta para reservar</h3>
-      <p>Creá tu cuenta o iniciá sesión para poder reservar tus citas, ver tu historial y recibir recordatorios.</p>
-      <ul class="pm-auth-required-benefits">
-        <li><i class="bi bi-check-circle-fill"></i>Gestioná tus citas desde tu cuenta</li>
-        <li><i class="bi bi-check-circle-fill"></i>Recibí recordatorios antes de tu turno</li>
-        <li><i class="bi bi-check-circle-fill"></i>Accedé a tu historial de servicios</li>
-        <li><i class="bi bi-check-circle-fill"></i>Reservá de forma rápida y sencilla</li>
-      </ul>
-      <div class="pm-auth-required-actions">
-        <a href="<?= URL_BASE ?>/registro.php?redirect=<?= urlencode(
-    "/reservar.php",
-) ?>" class="btn btn-pm w-100">
-          <i class="bi bi-person-plus me-2"></i>Crear cuenta
-        </a>
-        <div class="pm-auth-required-divider"><span>o</span></div>
-        <a href="<?= URL_BASE ?>/login.php?redirect=<?= urlencode(
-    "/reservar.php",
-) ?>" class="btn btn-pm-outline w-100">
-          <i class="bi bi-box-arrow-in-right me-2"></i>Ya tengo cuenta
-        </a>
-      </div>
-    </div>
-    <?php else: ?>
-
-    <!-- Progress Steps -->
     <div class="pm-steps mb-4" id="progressSteps">
       <div class="pm-step active" data-step="1"><span class="pm-step-num">1</span><span class="pm-step-label">Servicio</span></div>
       <div class="pm-step-line"></div>
-      <div class="pm-step" data-step="2"><span class="pm-step-num">2</span><span class="pm-step-label">Fecha</span></div>
+      <div class="pm-step" data-step="2"><span class="pm-step-num">2</span><span class="pm-step-label">Día y hora</span></div>
       <div class="pm-step-line"></div>
-      <div class="pm-step" data-step="3"><span class="pm-step-num">3</span><span class="pm-step-label">Hora</span></div>
-      <div class="pm-step-line"></div>
-      <div class="pm-step" data-step="4"><span class="pm-step-num">4</span><span class="pm-step-label">Confirmar</span></div>
+      <div class="pm-step" data-step="3"><span class="pm-step-num">3</span><span class="pm-step-label">Tus datos</span></div>
     </div>
 
-    <!-- ═══ PASO 1: Elegir servicio ═══ -->
+    <!-- ═══ PASO 1: Servicio ═══ -->
     <div class="pm-wizard-step" id="step1">
-      <h3 style="font-family: var(--pm-font-heading); color: var(--pm-tierra-dark);">
-        <i class="bi bi-stars me-2"></i>Elige un servicio
-      </h3>
+      <h2 class="pm-wizard-titulo"><i class="bi bi-stars me-2"></i>¿Qué te querés hacer?</h2>
       <div id="serviciosList" class="pm-servicios-lista mt-3">
         <div class="text-center py-4">
           <div class="spinner-border" style="color: var(--pm-bronce);" role="status">
@@ -81,25 +58,29 @@ $logueado = esta_autenticado();
       </div>
     </div>
 
-    <!-- ═══ PASO 2: Elegir fecha ═══ -->
+    <!-- ═══ PASO 2: Profesional, día y horario ═══ -->
     <div class="pm-wizard-step d-none" id="step2">
-      <h3 style="font-family: var(--pm-font-heading); color: var(--pm-tierra-dark);">
-        <i class="bi bi-calendar3 me-2"></i>Elige una fecha
-      </h3>
-      <p id="step2Servicio" style="color: var(--pm-text-muted);"></p>
+      <h2 class="pm-wizard-titulo"><i class="bi bi-calendar3 me-2"></i>Elegí día y horario</h2>
+      <p id="step2Servicio" class="pm-wizard-sub"></p>
 
-      <!-- Fecha libre (servicios sin jornada) -->
-      <div class="mt-3" id="step2FechaLibre">
-        <input type="date" id="fechaCita" class="input-pm w-100"
-               min="<?= date("Y-m-d") ?>" max="<?= date(
-    "Y-m-d",
-    strtotime("+60 days"),
-) ?>"
-               value="<?= date("Y-m-d", strtotime("+1 day")) ?>">
+      <div id="bloqueProfesional" class="d-none">
+        <p class="pm-reserva-etiqueta">Profesional</p>
+        <div class="pm-chips" id="profesionalesList" role="radiogroup" aria-label="Profesional"></div>
       </div>
 
-      <!-- Fechas de jornada (servicios con jornada) -->
-      <div class="mt-3 d-none" id="step2Jornadas">
+      <p class="pm-reserva-etiqueta mt-3">Día</p>
+      <!-- Días libres (servicios sin máquina ni jornada) -->
+      <div id="step2FechaLibre">
+        <div class="pm-dias-scroll" id="diasList"></div>
+        <label class="pm-otra-fecha mt-2">
+          <span>Otra fecha</span>
+          <input type="date" id="fechaCita" class="input-pm"
+                 min="<?= date("Y-m-d") ?>" max="<?= date("Y-m-d", strtotime("+60 days")) ?>">
+        </label>
+      </div>
+
+      <!-- Fechas de jornada o alquiler de máquina -->
+      <div class="d-none" id="step2Jornadas">
         <p class="pm-jornada-aviso">
           <i class="bi bi-info-circle me-1"></i>
           <span id="step2JornadaMsg">Este servicio tiene fechas específicas disponibles</span>
@@ -107,297 +88,339 @@ $logueado = esta_autenticado();
         <div id="jornadasGrid" class="pm-jornadas-grid"></div>
       </div>
 
+      <div id="bloqueTurnos" class="d-none">
+        <p class="pm-reserva-etiqueta mt-3" id="step2Info">Horario</p>
+        <div id="turnosList" class="pm-turnos-grid"></div>
+      </div>
+
       <div class="d-flex gap-2 mt-4">
-        <button class="btn btn-pm-outline flex-fill" onclick="Wizard.goTo(1)">
-          <i class="bi bi-arrow-left me-1"></i>Atrás
-        </button>
-        <button class="btn btn-pm flex-fill" id="btnVerTurnos" onclick="Wizard.selectFecha()">
-          Ver turnos<i class="bi bi-arrow-right ms-1"></i>
+        <button type="button" class="btn btn-pm-outline flex-fill" onclick="Wizard.goTo(1)">
+          <i class="bi bi-arrow-left me-1"></i>Cambiar servicio
         </button>
       </div>
     </div>
 
-    <!-- ═══ PASO 3: Elegir hora ═══ -->
+    <!-- ═══ PASO 3: Datos y confirmar ═══ -->
     <div class="pm-wizard-step d-none" id="step3">
-      <h3 style="font-family: var(--pm-font-heading); color: var(--pm-tierra-dark);">
-        <i class="bi bi-clock me-2"></i>Elige un horario
-      </h3>
-      <p id="step3Info" style="color: var(--pm-text-muted);"></p>
-      <div id="turnosList" class="pm-turnos-grid mt-3"></div>
-      <div class="d-flex gap-2 mt-4">
-        <button class="btn btn-pm-outline flex-fill" onclick="Wizard.goTo(2)">
-          <i class="bi bi-arrow-left me-1"></i>Atrás
-        </button>
-      </div>
-    </div>
+      <h2 class="pm-wizard-titulo"><i class="bi bi-person-check me-2"></i>Confirmá tu turno</h2>
 
-    <!-- ═══ PASO 4: Datos + Confirmar ═══ -->
-    <div class="pm-wizard-step d-none" id="step4">
-      <h3 style="font-family: var(--pm-font-heading); color: var(--pm-tierra-dark);">
-        <i class="bi bi-check-circle me-2"></i>Confirmar reserva
-      </h3>
-
-      <!-- Resumen -->
       <div class="pm-resumen-card mt-3">
-        <div class="pm-resumen-row"><span>Servicio:</span><strong id="resServicio"></strong></div>
-        <div class="pm-resumen-row"><span>Fecha:</span><strong id="resFecha"></strong></div>
-        <div class="pm-resumen-row"><span>Hora:</span><strong id="resHora"></strong></div>
-        <div class="pm-resumen-row"><span>Precio:</span><strong id="resPrecio" style="color: var(--pm-dorado);"></strong></div>
+        <div class="pm-resumen-row"><span>Servicio</span><strong id="resServicio"></strong></div>
+        <div class="pm-resumen-row"><span>Profesional</span><strong id="resProfesional"></strong></div>
+        <div class="pm-resumen-row"><span>Día</span><strong id="resFecha"></strong></div>
+        <div class="pm-resumen-row"><span>Horario</span><strong id="resHora"></strong></div>
+        <div class="pm-resumen-row"><span>Precio</span><strong id="resPrecio"></strong></div>
       </div>
 
-      <div class="d-flex gap-2 mt-4">
-        <button class="btn btn-pm-outline flex-fill" onclick="Wizard.goTo(3)">
-          <i class="bi bi-arrow-left me-1"></i>Atrás
-        </button>
-        <button class="btn btn-pm flex-fill" id="btnConfirmar" onclick="Wizard.confirmar()">
-          <i class="bi bi-check-circle me-1"></i>Confirmar Reserva
-        </button>
-      </div>
+      <form id="formDatos" class="mt-4" novalidate onsubmit="event.preventDefault(); Wizard.confirmar();">
+        <?php if ($logueado): ?>
+          <p class="pm-wizard-sub">Reservás como <strong><?= htmlspecialchars($_SESSION['usuario_nombre'] ?? '') ?></strong>.</p>
+        <?php else: ?>
+          <div class="mb-3">
+            <label for="datoNombre" class="pm-reserva-etiqueta">Nombre y apellido</label>
+            <input type="text" id="datoNombre" class="input-pm w-100" autocomplete="name" required maxlength="100">
+          </div>
+          <div class="mb-3">
+            <label for="datoTelefono" class="pm-reserva-etiqueta">WhatsApp</label>
+            <input type="tel" id="datoTelefono" class="input-pm w-100" autocomplete="tel" inputmode="tel"
+                   placeholder="3624 123456" required maxlength="20">
+            <small class="pm-wizard-ayuda">Por acá te confirmamos el turno.</small>
+          </div>
+          <div class="mb-3">
+            <label for="datoEmail" class="pm-reserva-etiqueta">Email <span class="pm-opcional">(opcional)</span></label>
+            <input type="email" id="datoEmail" class="input-pm w-100" autocomplete="email" maxlength="150">
+          </div>
+          <div class="pm-campo-trampa" aria-hidden="true">
+            <label for="datoSitio">Sitio web</label>
+            <input type="text" id="datoSitio" tabindex="-1" autocomplete="off">
+          </div>
+          <p class="pm-wizard-ayuda">¿Ya tenés cuenta? <a href="<?= URL_BASE ?>/login.php?redirect=<?= urlencode("/reservar.php") ?>">Ingresá</a> para ver tu historial.</p>
+        <?php endif; ?>
+
+        <div class="d-flex gap-2 mt-4">
+          <button type="button" class="btn btn-pm-outline flex-fill" onclick="Wizard.goTo(2)">
+            <i class="bi bi-arrow-left me-1"></i>Atrás
+          </button>
+          <button type="submit" class="btn btn-pm flex-fill" id="btnConfirmar">
+            <i class="bi bi-check-circle me-1"></i>Reservar turno
+          </button>
+        </div>
+      </form>
     </div>
 
     <!-- ═══ ÉXITO ═══ -->
     <div class="pm-wizard-step d-none text-center" id="stepExito">
-      <div style="font-size: 4rem; color: var(--pm-verde);">
-        <i class="bi bi-check-circle-fill"></i>
-      </div>
-      <h2 style="font-family: var(--pm-font-heading); color: var(--pm-tierra);">¡Reserva confirmada!</h2>
-      <p style="color: var(--pm-text-muted);" id="exitoMensaje"></p>
-      <div class="pm-resumen-card mt-3" id="exitoResumen"></div>
-      <p class="mt-3" style="font-size: 0.875rem; color: var(--pm-text-light);" id="exitoToken"></p>
-      <div class="d-flex gap-3 mt-4 justify-content-center">
-        <a href="<?= URL_BASE ?>/mi-cuenta.php" class="btn btn-pm">
-          <i class="bi bi-person me-1"></i>Ver mis citas
+      <div style="font-size: 3.5rem; color: var(--pm-verde);"><i class="bi bi-check-circle-fill"></i></div>
+      <h2 class="pm-wizard-titulo">¡Recibimos tu reserva!</h2>
+      <p class="pm-wizard-sub">Queda <strong>pendiente</strong> hasta que te confirmemos por WhatsApp.</p>
+      <div class="pm-resumen-card mt-3 text-start" id="exitoResumen"></div>
+      <div class="pm-exito-acciones mt-4">
+        <a href="#" class="btn btn-pm" id="exitoWhatsapp" target="_blank" rel="noopener">
+          <i class="bi bi-whatsapp me-1"></i>Avisar por WhatsApp
         </a>
-        <a href="<?= URL_BASE ?>/" class="btn btn-pm-outline">
-          <i class="bi bi-house me-1"></i>Volver al inicio
+        <a href="#" class="btn btn-pm-outline" id="exitoGestion">
+          <i class="bi bi-calendar2-week me-1"></i>Ver o cambiar mi turno
         </a>
       </div>
+      <p class="pm-wizard-ayuda mt-3">Guardá el link de tu turno: desde ahí podés cancelarlo o cambiarlo hasta 2 horas antes.</p>
     </div>
-
-    <?php endif;
-/* fin del check $logueado */
-?>
 
   </div>
 </section>
 
-<?php if ($logueado): ?>
-<!-- ═══ Script del wizard ═══ -->
 <script>
 const DIAS_ES = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 const DIAS_CORTOS = ['dom','lun','mar','mié','jue','vie','sáb'];
 const MESES_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const MESES_CORTOS = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const TELEFONO_SALON = <?= json_encode(preg_replace('/\D/', '', TELEFONO_NEGOCIO)) ?>;
+const DIAS_LABORALES = <?= json_encode($dias_laborales) ?>; // 1=lun ... 7=dom
 
 function formatearFechaAR(fechaISO, opciones = {}) {
-    const [y, m, d] = fechaISO.split('-').map(Number);
-    const date = new Date(y, m - 1, d);
-    const dia = String(d).padStart(2, '0');
-    const mes = String(m).padStart(2, '0');
-    const diaSemana = DIAS_ES[date.getDay()];
-    const diaSemanaCorto = DIAS_CORTOS[date.getDay()];
-    const mesNombre = MESES_ES[m - 1];
+  const [y, m, d] = fechaISO.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  if (opciones.largo) return `${DIAS_ES[date.getDay()]} ${d} de ${MESES_ES[m - 1]}`;
+  return `${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}/${y}`;
+}
 
-    if (opciones.largo) {
-        return `${diaSemana} ${d} de ${mesNombre} de ${y}`;
-    }
-    if (opciones.medio) {
-        return `${diaSemanaCorto} ${dia}/${mes}/${y}`;
-    }
-    return `${dia}/${mes}/${y}`;
+function isoLocal(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function esc(texto) {
+  const div = document.createElement('div');
+  div.textContent = texto ?? '';
+  return div.innerHTML;
+}
+
+function precioTexto(precio) {
+  return parseFloat(precio) > 0
+    ? '$' + parseFloat(precio).toLocaleString('es-AR', { maximumFractionDigits: 0 })
+    : 'A consultar';
 }
 
 const Wizard = {
-  state: { servicio: null, fecha: '', hora: '', turnoFin: '', precio: '', servicioNombre: '', requiereJornada: false },
-  logueado: <?= $logueado ? "true" : "false" ?>,
-  preseleccionado: <?= $servicio_preseleccionado ?>,
+  state: { servicio: null, servicioNombre: '', precio: '', duracion: 0, profesional: 0, profesionales: [], fecha: '', hora: '', turnoFin: '', fechasFijas: false },
+  logueado: <?= $logueado ? 'true' : 'false' ?>,
+  pre: <?= json_encode($preseleccion) ?>,
 
   async init() {
     await this.loadServicios();
-    if (this.preseleccionado) {
-      const opt = document.querySelector(`.pm-servicio-option[data-id="${this.preseleccionado}"]`);
+    if (this.pre.servicio) {
+      const opt = document.querySelector(`.pm-servicio-option[data-id="${this.pre.servicio}"]`);
       if (opt) opt.click();
     }
+    document.getElementById('fechaCita').addEventListener('change', e => {
+      if (!e.target.value) return;
+      document.querySelectorAll('#diasList .pm-jornada-card').forEach(c => c.classList.remove('selected'));
+      this.elegirFecha(e.target.value);
+    });
   },
 
   async loadServicios() {
+    const container = document.getElementById('serviciosList');
     try {
       const r = await fetch('api/servicios/listar.php');
       const data = await r.json();
       if (!data.success) throw new Error(data.error);
-
-      const container = document.getElementById('serviciosList');
       if (!data.data.length) {
         container.innerHTML = '<p class="text-center" style="color:var(--pm-text-muted)">No hay servicios disponibles</p>';
         return;
       }
 
-      // Agrupar servicios por categoría
       const categorias = {};
       data.data.forEach(s => {
         const cat = s.categoria || 'Packs';
-        if (!categorias[cat]) {
-          categorias[cat] = { icono: s.categoria_icono || 'bi-stars', servicios: [] };
-        }
+        if (!categorias[cat]) categorias[cat] = { icono: s.categoria_icono || 'bi-stars', servicios: [] };
         categorias[cat].servicios.push(s);
       });
 
       let html = '<div class="accordion pm-categorias-accordion" id="accordionServicios">';
-      let idx = 0;
-      for (const [catName, catData] of Object.entries(categorias)) {
-        const collapseId = 'cat-' + idx;
+      Object.entries(categorias).forEach(([catName, catData], idx) => {
         html += `
         <div class="accordion-item pm-cat-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button pm-cat-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
-              <i class="bi ${catData.icono} me-2"></i>${catName}
+          <h3 class="accordion-header">
+            <button class="accordion-button pm-cat-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cat-${idx}">
+              <i class="bi ${esc(catData.icono)} me-2"></i>${esc(catName)}
             </button>
-          </h2>
-          <div id="${collapseId}" class="accordion-collapse collapse" data-bs-parent="#accordionServicios">
+          </h3>
+          <div id="cat-${idx}" class="accordion-collapse collapse" data-bs-parent="#accordionServicios">
             <div class="accordion-body p-0">`;
         catData.servicios.forEach(s => {
-          const precio = parseFloat(s.precio) > 0
-            ? '$' + parseFloat(s.precio).toLocaleString('es-AR', {minimumFractionDigits:2})
-            : 'Consultar';
-          html += `<div class="pm-servicio-option" data-id="${s.id}" data-name="${s.nombre}" data-price="${s.precio}" data-duration="${s.duracion_minutos}" onclick="Wizard.selectServicio(this)">
-            <div class="pm-so-info">
-              <div class="pm-so-name">${s.nombre}</div>
-              <div class="pm-so-meta"><i class="bi bi-clock me-1"></i>${s.duracion_minutos} min</div>
-            </div>
-            <div class="pm-so-price">${precio}</div>
-          </div>`;
+          html += `<button type="button" class="pm-servicio-option" data-id="${s.id}" data-name="${esc(s.nombre)}" data-price="${s.precio}" data-duration="${s.duracion_minutos}" onclick="Wizard.selectServicio(this)">
+            <span class="pm-so-info">
+              <span class="pm-so-name">${esc(s.nombre)}</span>
+              <span class="pm-so-meta"><i class="bi bi-clock me-1"></i>${s.duracion_minutos} min</span>
+            </span>
+            <span class="pm-so-price">${precioTexto(s.precio)}</span>
+          </button>`;
         });
-        html += `</div></div></div>`;
-        idx++;
-      }
-      html += '</div>';
-      container.innerHTML = html;
+        html += '</div></div></div>';
+      });
+      container.innerHTML = html + '</div>';
 
-      // Si hay preselección, abrir la categoría correspondiente
-      if (this.preseleccionado) {
-        const opt = container.querySelector(`.pm-servicio-option[data-id="${this.preseleccionado}"]`);
-        if (opt) {
-          const collapse = opt.closest('.accordion-collapse');
-          if (collapse) new bootstrap.Collapse(collapse, { show: true });
-        }
+      if (this.pre.servicio) {
+        const opt = container.querySelector(`.pm-servicio-option[data-id="${this.pre.servicio}"]`);
+        const collapse = opt && opt.closest('.accordion-collapse');
+        if (collapse) new bootstrap.Collapse(collapse, { show: true });
       }
-    } catch(e) {
-      document.getElementById('serviciosList').innerHTML = '<p class="text-center" style="color:var(--pm-rojo)">Error al cargar servicios</p>';
+    } catch (e) {
+      container.innerHTML = '<p class="text-center" style="color:var(--pm-rojo)">No pudimos cargar los servicios. Probá de nuevo o escribinos por WhatsApp.</p>';
     }
   },
 
   async selectServicio(el) {
     document.querySelectorAll('.pm-servicio-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
-    this.state.servicio = el.dataset.id;
-    this.state.servicioNombre = el.dataset.name;
-    this.state.precio = el.dataset.price;
-    this.state.requiereJornada = false;
-    document.getElementById('step2Servicio').textContent = el.dataset.name + ' · ' + el.dataset.duration + ' min';
+    Object.assign(this.state, {
+      servicio: el.dataset.id, servicioNombre: el.dataset.name, precio: el.dataset.price,
+      duracion: el.dataset.duration, fecha: '', hora: '', fechasFijas: false,
+    });
+    document.getElementById('step2Servicio').textContent = `${el.dataset.name} · ${el.dataset.duration} min · ${precioTexto(el.dataset.price)}`;
+    document.getElementById('bloqueTurnos').classList.add('d-none');
 
-    // 1. Chequear si el servicio depende de una maquina alquilada
-    try {
-      const r = await fetch('api/maquinas/disponibles.php?id_servicio=' + el.dataset.id);
-      const data = await r.json();
-      if (data.success && data.data.requiere_maquina) {
-        this.state.requiereJornada = true;
-        this.renderFechasDisponibles(data.data, 'maquina');
-      }
-    } catch(e) { /* silencioso, sigue a jornadas */ }
+    const [pros, maquina, jornada] = await Promise.all([
+      fetch('api/citas/profesionales.php?id_servicio=' + el.dataset.id).then(r => r.json()).catch(() => null),
+      fetch('api/maquinas/disponibles.php?id_servicio=' + el.dataset.id).then(r => r.json()).catch(() => null),
+      fetch('api/jornadas/disponibles.php?id_servicio=' + el.dataset.id).then(r => r.json()).catch(() => null),
+    ]);
 
-    // 2. Si no es por maquina, chequear jornada (personal externo)
-    if (!this.state.requiereJornada) {
-      try {
-        const r = await fetch('api/jornadas/disponibles.php?id_servicio=' + el.dataset.id);
-        const data = await r.json();
-        if (data.success && data.data.requiere_jornada) {
-          this.state.requiereJornada = true;
-          this.renderFechasDisponibles(data.data, 'jornada');
-        }
-      } catch(e) { /* silencioso, usa fecha libre */ }
-    }
+    this.renderProfesionales(pros && pros.success ? pros.data : []);
 
-    // Mostrar/ocultar UI segun tipo
-    const fechaLibre = document.getElementById('step2FechaLibre');
-    const jornadas   = document.getElementById('step2Jornadas');
-    const btnTurnos  = document.getElementById('btnVerTurnos');
-    if (this.state.requiereJornada) {
-      fechaLibre.classList.add('d-none');
-      jornadas.classList.remove('d-none');
-      btnTurnos.classList.add('d-none');
+    if (maquina && maquina.success && maquina.data.requiere_maquina) {
+      this.state.fechasFijas = true;
+      this.renderFechasFijas(maquina.data, 'maquina');
+    } else if (jornada && jornada.success && jornada.data.requiere_jornada) {
+      this.state.fechasFijas = true;
+      this.renderFechasFijas(jornada.data, 'jornada');
     } else {
-      fechaLibre.classList.remove('d-none');
-      jornadas.classList.add('d-none');
-      btnTurnos.classList.remove('d-none');
+      this.renderDias();
     }
+    document.getElementById('step2FechaLibre').classList.toggle('d-none', this.state.fechasFijas);
+    document.getElementById('step2Jornadas').classList.toggle('d-none', !this.state.fechasFijas);
 
     this.goTo(2);
+
+    const preFecha = this.pre.fecha;
+    this.pre.fecha = '';
+    if (preFecha) {
+      const card = document.querySelector(`#step2 .pm-jornada-card[data-fecha="${preFecha}"]`);
+      if (card) card.click();
+      else if (!this.state.fechasFijas) { document.getElementById('fechaCita').value = preFecha; this.elegirFecha(preFecha); }
+    }
   },
 
-  renderFechasDisponibles(data, tipo) {
-    const grid = document.getElementById('jornadasGrid');
-    const nombre = tipo === 'maquina' ? (data.maquina || 'esta maquina') : (data.categoria || 'este servicio');
-    const intro  = tipo === 'maquina'
-      ? `Este servicio se realiza con la maquina ${nombre}, disponible los siguientes dias:`
-      : `Fechas disponibles para ${nombre}`;
-    const empty  = tipo === 'maquina'
-      ? `No hay alquileres programados de ${nombre} proximamente`
-      : `No hay fechas programadas para ${nombre} proximamente`;
+  renderProfesionales(lista) {
+    this.state.profesionales = lista;
+    const preId = this.pre.profesional;
+    this.pre.profesional = 0;
+    this.state.profesional = lista.some(p => p.id === preId) ? preId : 0;
 
-    document.getElementById('step2JornadaMsg').textContent =
-      data.fechas.length > 0 ? intro : empty;
-
-    if (!data.fechas.length) {
-      grid.innerHTML = '<div class="pm-no-turnos"><i class="bi bi-calendar-x"></i>Sin fechas disponibles<br><small>Consultá por WhatsApp para más información</small></div>';
+    const bloque = document.getElementById('bloqueProfesional');
+    if (lista.length < 2) {
+      bloque.classList.add('d-none');
+      this.state.profesional = 0;
       return;
     }
-
-    grid.innerHTML = data.fechas.map(f => `
-      <button class="pm-jornada-card" onclick="Wizard.selectJornadaFecha(this, '${f.fecha}')">
-        <span class="pm-jornada-dia">${f.dia_semana}</span>
-        <span class="pm-jornada-num">${f.dia_numero}</span>
-        <span class="pm-jornada-mes">${f.mes}</span>
-      </button>
-    `).join('');
+    bloque.classList.remove('d-none');
+    const chip = (id, nombre) => `<button type="button" class="pm-chip${this.state.profesional === id ? ' selected' : ''}" role="radio"
+        aria-checked="${this.state.profesional === id}" data-id="${id}" onclick="Wizard.selectProfesional(${id})">${esc(nombre)}</button>`;
+    document.getElementById('profesionalesList').innerHTML =
+      chip(0, 'Cualquiera') + lista.map(p => chip(p.id, p.nombre.split(' ')[0])).join('');
   },
 
-  selectJornadaFecha(el, fecha) {
-    document.querySelectorAll('.pm-jornada-card').forEach(c => c.classList.remove('selected'));
+  selectProfesional(id) {
+    this.state.profesional = id;
+    document.querySelectorAll('#profesionalesList .pm-chip').forEach(c => {
+      const activo = Number(c.dataset.id) === id;
+      c.classList.toggle('selected', activo);
+      c.setAttribute('aria-checked', activo);
+    });
+    if (this.state.fecha) this.loadTurnos();
+  },
+
+  renderDias() {
+    const hoy = new Date();
+    let html = '';
+    for (let i = 0; i < 14; i++) {
+      const d = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + i);
+      const iso = isoLocal(d);
+      const laboral = DIAS_LABORALES.includes(d.getDay() === 0 ? 7 : d.getDay());
+      html += `<button type="button" class="pm-jornada-card" data-fecha="${iso}" ${laboral ? '' : 'disabled aria-disabled="true"'}
+          onclick="Wizard.selectDia(this)" aria-label="${formatearFechaAR(iso, { largo: true })}">
+        <span class="pm-jornada-dia">${i === 0 ? 'hoy' : i === 1 ? 'mañana' : DIAS_CORTOS[d.getDay()]}</span>
+        <span class="pm-jornada-num">${d.getDate()}</span>
+        <span class="pm-jornada-mes">${MESES_CORTOS[d.getMonth()]}</span>
+      </button>`;
+    }
+    document.getElementById('diasList').innerHTML = html;
+    document.getElementById('fechaCita').value = '';
+  },
+
+  selectDia(el) {
+    document.querySelectorAll('#step2 .pm-jornada-card').forEach(c => c.classList.remove('selected'));
     el.classList.add('selected');
-    this.state.fecha = fecha;
-    this.loadTurnos();
+    document.getElementById('fechaCita').value = '';
+    this.elegirFecha(el.dataset.fecha);
   },
 
-  selectFecha() {
-    const fecha = document.getElementById('fechaCita').value;
-    if (!fecha) { Swal.fire({icon:'warning',text:'Selecciona una fecha',customClass:{popup:'pm-modal',confirmButton:'btn-pm'}}); return; }
+  renderFechasFijas(data, tipo) {
+    const grid = document.getElementById('jornadasGrid');
+    const nombre = tipo === 'maquina' ? (data.maquina || 'el equipo') : (data.categoria || 'este servicio');
+    document.getElementById('step2JornadaMsg').textContent = data.fechas.length
+      ? (tipo === 'maquina' ? `Este servicio se hace con ${nombre}, disponible estos días:` : `Fechas disponibles para ${nombre}:`)
+      : `No hay fechas programadas para ${nombre} por ahora.`;
+
+    if (!data.fechas.length) {
+      grid.innerHTML = `<div class="pm-no-turnos"><i class="bi bi-calendar-x"></i>Sin fechas disponibles<br>
+        <a href="https://wa.me/${TELEFONO_SALON}?text=${encodeURIComponent('Hola! Quería consultar fechas para ' + this.state.servicioNombre)}" target="_blank" rel="noopener">Consultá por WhatsApp</a></div>`;
+      return;
+    }
+    grid.innerHTML = data.fechas.map(f => `
+      <button type="button" class="pm-jornada-card" data-fecha="${f.fecha}" onclick="Wizard.selectDia(this)">
+        <span class="pm-jornada-dia">${esc(f.dia_semana)}</span>
+        <span class="pm-jornada-num">${esc(String(f.dia_numero))}</span>
+        <span class="pm-jornada-mes">${esc(f.mes)}</span>
+      </button>`).join('');
+  },
+
+  elegirFecha(fecha) {
     this.state.fecha = fecha;
     this.loadTurnos();
   },
 
   async loadTurnos() {
+    const bloque = document.getElementById('bloqueTurnos');
     const container = document.getElementById('turnosList');
+    bloque.classList.remove('d-none');
     container.innerHTML = '<div class="text-center py-3"><div class="spinner-border" style="color:var(--pm-bronce)" role="status"></div></div>';
-    this.goTo(3);
+    document.getElementById('step2Info').textContent = 'Horarios del ' + formatearFechaAR(this.state.fecha, { largo: true });
 
-    const fechaTexto = formatearFechaAR(this.state.fecha, { largo: true });
-    document.getElementById('step3Info').textContent = this.state.servicioNombre + ' — ' + fechaTexto;
+    const params = new URLSearchParams({ fecha: this.state.fecha, id_servicio: this.state.servicio });
+    if (this.state.profesional) params.set('id_empleado', this.state.profesional);
 
     try {
-      const r = await fetch(`api/citas/disponibilidad.php?fecha=${this.state.fecha}&id_servicio=${this.state.servicio}`);
+      const r = await fetch('api/citas/disponibilidad.php?' + params);
       const data = await r.json();
       if (!data.success) throw new Error(data.error);
 
       if (!data.data.turnos.length) {
-        container.innerHTML = `<div class="pm-no-turnos"><i class="bi bi-calendar-x"></i>${data.data.mensaje || 'No hay turnos disponibles para esta fecha'}<br><small>Probá otro día</small></div>`;
+        const quien = this.state.profesional ? ' con esa profesional' : '';
+        container.innerHTML = `<div class="pm-no-turnos"><i class="bi bi-calendar-x"></i>${esc(data.data.mensaje || 'No quedan horarios' + quien + ' este día')}<br><small>Probá otro día${quien ? ' o elegí "Cualquiera"' : ''}</small></div>`;
         return;
       }
-
       container.innerHTML = data.data.turnos.map(t =>
-        `<button class="pm-turno-btn" onclick="Wizard.selectTurno(this,'${t.hora_inicio}','${t.hora_fin}')">${t.hora_inicio}</button>`
+        `<button type="button" class="pm-turno-btn" onclick="Wizard.selectTurno(this,'${t.hora_inicio}','${t.hora_fin}')">${t.hora_inicio}</button>`
       ).join('');
-    } catch(e) {
-      container.innerHTML = '<p class="text-center" style="color:var(--pm-rojo)">Error al cargar turnos</p>';
+      bloque.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch (e) {
+      container.innerHTML = '<p class="text-center" style="color:var(--pm-rojo)">No pudimos cargar los horarios. Probá de nuevo.</p>';
     }
+  },
+
+  nombreProfesional() {
+    const p = this.state.profesionales.find(p => p.id === this.state.profesional);
+    return p ? p.nombre : 'La primera disponible';
   },
 
   selectTurno(el, inicio, fin) {
@@ -406,56 +429,71 @@ const Wizard = {
     this.state.hora = inicio;
     this.state.turnoFin = fin;
 
-    // Llenar resumen
     document.getElementById('resServicio').textContent = this.state.servicioNombre;
+    document.getElementById('resProfesional').textContent = this.nombreProfesional();
+    document.getElementById('resProfesional').parentElement.classList.toggle('d-none', !this.state.profesionales.length);
     document.getElementById('resFecha').textContent = formatearFechaAR(this.state.fecha, { largo: true });
-    document.getElementById('resHora').textContent = inicio + ' - ' + fin;
-    document.getElementById('resPrecio').textContent = parseFloat(this.state.precio) > 0
-      ? '$' + parseFloat(this.state.precio).toLocaleString('es-AR', {minimumFractionDigits:2})
-      : 'Consultar';
-
-    this.goTo(4);
+    document.getElementById('resHora').textContent = `${inicio} a ${fin}`;
+    document.getElementById('resPrecio').textContent = precioTexto(this.state.precio);
+    this.goTo(3);
   },
 
   async confirmar() {
     const btn = document.getElementById('btnConfirmar');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Reservando...';
-
     const body = {
       id_servicio: this.state.servicio,
       fecha: this.state.fecha,
       hora_inicio: this.state.hora,
+      id_empleado: this.state.profesional || null,
     };
+    if (!this.logueado) {
+      body.nombre = document.getElementById('datoNombre').value.trim();
+      body.telefono = document.getElementById('datoTelefono').value.trim();
+      body.email = document.getElementById('datoEmail').value.trim();
+      body.sitio = document.getElementById('datoSitio').value;
+      if (body.nombre.length < 2) return this.aviso('Contanos tu nombre', 'datoNombre');
+      if (body.telefono.replace(/\D/g, '').length < 10) return this.aviso('Ingresá tu WhatsApp con código de área (ej: 3624 123456)', 'datoTelefono');
+    }
 
-    // Usuario siempre autenticado — no se requieren datos adicionales
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Reservando...';
+    const restaurar = () => { btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Reservar turno'; };
 
     try {
-      const r = await fetch('api/citas/crear.php', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+      const r = await fetch('api/citas/crear.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const data = await r.json();
-
       if (!data.success) {
-        Swal.fire({icon:'error',title:'Error',text:data.error,customClass:{popup:'pm-modal',confirmButton:'btn-pm'}});
-        btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Confirmar Reserva'; return;
+        restaurar();
+        if (r.status === 409) {
+          await this.aviso(data.error);
+          this.goTo(2);
+          this.loadTurnos();
+          return;
+        }
+        return this.aviso(data.error);
       }
 
-      // Éxito
-      document.getElementById('exitoMensaje').textContent = 'Tu cita ha sido reservada exitosamente. Te esperamos.';
+      const d = data.data;
+      const fechaTexto = formatearFechaAR(this.state.fecha, { largo: true });
       document.getElementById('exitoResumen').innerHTML = `
-        <div class="pm-resumen-row"><span>Servicio:</span><strong>${data.data.servicio}</strong></div>
-        <div class="pm-resumen-row"><span>Fecha:</span><strong>${formatearFechaAR(this.state.fecha, { largo: true })}</strong></div>
-        <div class="pm-resumen-row"><span>Hora:</span><strong>${data.data.hora}</strong></div>
-        <div class="pm-resumen-row"><span>N° Reserva:</span><strong>#${data.data.id}</strong></div>
-      `;
-      // Token informativo (uso interno)
-      if (data.data.token) {
-        document.getElementById('exitoToken').textContent = 'Referencia: #' + data.data.id;
-      }
+        <div class="pm-resumen-row"><span>Servicio</span><strong>${esc(d.servicio)}</strong></div>
+        ${d.profesional ? `<div class="pm-resumen-row"><span>Profesional</span><strong>${esc(d.profesional)}</strong></div>` : ''}
+        <div class="pm-resumen-row"><span>Día</span><strong>${fechaTexto}</strong></div>
+        <div class="pm-resumen-row"><span>Horario</span><strong>${esc(d.hora)}</strong></div>
+        <div class="pm-resumen-row"><span>Reserva</span><strong>#${d.id}</strong></div>`;
+      const mensaje = `Hola! Reservé ${d.servicio} para el ${fechaTexto} a las ${d.hora} (reserva #${d.id}).`;
+      document.getElementById('exitoWhatsapp').href = `https://wa.me/${TELEFONO_SALON}?text=${encodeURIComponent(mensaje)}`;
+      document.getElementById('exitoGestion').href = d.link_gestion;
       this.goTo('exito');
-    } catch(e) {
-      Swal.fire({icon:'error',title:'Error de conexión',text:'Intenta de nuevo más tarde',customClass:{popup:'pm-modal',confirmButton:'btn-pm'}});
-      btn.disabled = false; btn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Confirmar Reserva';
+    } catch (e) {
+      restaurar();
+      this.aviso('Error de conexión. Probá de nuevo en un momento.');
     }
+  },
+
+  aviso(texto, foco) {
+    return Swal.fire({ icon: 'warning', text: texto, customClass: { popup: 'pm-modal', confirmButton: 'btn-pm' } })
+      .then(() => { if (foco) document.getElementById(foco).focus(); });
   },
 
   goTo(step) {
@@ -463,21 +501,20 @@ const Wizard = {
     if (step === 'exito') {
       document.getElementById('stepExito').classList.remove('d-none');
       document.getElementById('progressSteps').style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     document.getElementById('step' + step).classList.remove('d-none');
-    // Actualizar progress
     document.querySelectorAll('.pm-step').forEach(s => {
       const n = parseInt(s.dataset.step);
       s.classList.toggle('active', n === step);
       s.classList.toggle('done', n < step);
     });
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 };
 
 document.addEventListener('DOMContentLoaded', () => Wizard.init());
 </script>
-<?php endif; ?>
 
 <?php require_once "includes/footer.php"; ?>

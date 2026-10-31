@@ -7,6 +7,7 @@
  */
 
 require_once __DIR__ . '/../../includes/init.php';
+require_once __DIR__ . '/../../includes/agenda.php';
 
 if (!esta_autenticado()) {
     responder_json(false, null, 'No autorizado', 403);
@@ -35,11 +36,13 @@ if ($method === 'GET') {
                  CONCAT(nombre, ' ', apellidos) LIKE ?
                  OR email LIKE ?
                  OR telefono LIKE ?
+                 OR (? <> '' AND telefono_norm LIKE ?)
              )
              ORDER BY nombre ASC
              LIMIT 10"
         );
-        $stmt->execute([$like, $like, $like]);
+        $digitos = preg_replace('/\D/', '', $q);
+        $stmt->execute([$like, $like, $like, $digitos, '%' . $digitos . '%']);
         responder_json(true, $stmt->fetchAll());
     }
 
@@ -142,63 +145,33 @@ if ($method === 'POST') {
         responder_json(false, null, 'Servicio no encontrado', 404);
     }
 
-    $hora_fin = date('H:i', strtotime($hora_inicio) + ($servicio['duracion_minutos'] * 60));
-
-    // Determinar cliente
+    // Determinar cliente: existente, o se busca/crea por teléfono (o email)
     if ($id_cliente <= 0) {
-        // Crear cliente nuevo
         if (!$nombre) {
             responder_json(false, null, 'El nombre del cliente es requerido', 400);
         }
-        if ($email) {
-            // Buscar si ya existe un usuario con ese email
-            $stmt = $db->prepare("SELECT id FROM usuarios WHERE email = ? LIMIT 1");
-            $stmt->execute([$email]);
-            $existente = $stmt->fetch();
-            if ($existente) {
-                $id_cliente = $existente['id'];
-            }
+        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            responder_json(false, null, 'El email no es válido', 400);
         }
-        if ($id_cliente <= 0) {
-            $password_temp = password_hash(bin2hex(random_bytes(8)), PASSWORD_DEFAULT);
-            $partes = explode(' ', $nombre, 2);
-            $nom = $partes[0];
-            $ape = $partes[1] ?? '';
-            $stmt = $db->prepare(
-                "INSERT INTO usuarios (nombre, apellidos, email, password, telefono, rol) VALUES (?, ?, ?, ?, ?, 'cliente')"
-            );
-            $stmt->execute([$nom, $ape, $email ?: null, $password_temp, $telefono]);
-            $id_cliente = $db->lastInsertId();
-        }
+        $id_cliente = pm_clienta_por_telefono($db, $nombre, $telefono, $email);
     }
 
-    // Verificar disponibilidad (anti-solapamiento)
-    $stmt = $db->prepare(
-        "SELECT id FROM citas
-         WHERE fecha = ? AND estado IN ('pendiente', 'confirmada', 'en_proceso')
-         AND hora_inicio < ? AND hora_fin > ?
-         LIMIT 1"
-    );
-    $stmt->execute([$fecha, $hora_fin, $hora_inicio]);
-    if ($stmt->fetch()) {
-        responder_json(false, null, 'Este horario ya está ocupado. Selecciona otro.', 409);
+    // Mismo cálculo que la reserva online: profesional, máquina, jornada.
+    // Desde el panel se admiten horarios fuera de la grilla.
+    $r = pm_reservar($db, [
+        'id_servicio' => $id_servicio,
+        'fecha'       => $fecha,
+        'hora_inicio' => $hora_inicio,
+        'id_empleado' => $id_empleado,
+        'id_cliente'  => $id_cliente,
+        'estado'      => in_array($input['estado'] ?? '', ['pendiente', 'confirmada'], true) ? $input['estado'] : 'confirmada',
+        'notas'       => $notas,
+    ], ['panel' => true]);
+    if (!$r['ok']) {
+        responder_json(false, null, $r['error'], $r['codigo']);
     }
-
-    // Crear la cita
-    $stmt = $db->prepare(
-        "INSERT INTO citas (id_cliente, id_servicio, id_empleado, fecha, hora_inicio, hora_fin, estado, notas)
-         VALUES (?, ?, ?, ?, ?, ?, 'confirmada', ?)"
-    );
-    $stmt->execute([
-        $id_cliente,
-        $id_servicio,
-        $id_empleado,
-        $fecha,
-        $hora_inicio,
-        $hora_fin,
-        $notas ?: null,
-    ]);
-    $id_cita = $db->lastInsertId();
+    $id_cita = $r['id'];
+    $token_gestion = $r['token'];
 
     // Notificación al cliente (best-effort)
     try {
@@ -212,6 +185,7 @@ if ($method === 'POST') {
                 'servicio'       => $servicio['nombre'],
                 'fecha'          => $fecha_fmt,
                 'hora'           => $hora_inicio,
+                'link_gestion'   => URL_BASE . '/mi-turno.php?t=' . $token_gestion,
             ]);
             registrar_notificacion($id_cliente, 'sistema', 'Cita agendada', 'Tu cita de ' . $servicio['nombre'] . ' para el ' . $fecha_fmt . ' fue agendada.');
         }
@@ -219,7 +193,7 @@ if ($method === 'POST') {
         error_log('Piel Morena Mail Error (admin crear cita): ' . $e->getMessage());
     }
 
-    responder_json(true, ['id' => $id_cita, 'servicio' => $servicio['nombre'], 'fecha' => $fecha, 'hora' => $hora_inicio]);
+    responder_json(true, ['id' => $id_cita, 'id_empleado' => $r['id_empleado'], 'servicio' => $servicio['nombre'], 'fecha' => $fecha, 'hora' => $hora_inicio]);
 }
 
 // ── PATCH (cambiar estado) ──

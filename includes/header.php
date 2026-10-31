@@ -30,7 +30,7 @@ $navbar_light  = $pagina_actual !== 'index';
   <meta name="description" content="<?= $meta_descripcion ?? 'Salón de belleza, depilación, tratamientos de frío y estética corporal/facial. Reserva tu cita online.' ?>" />
   <meta name="keywords" content="salón de belleza, depilación, estética, tratamientos faciales, tratamientos corporales, crioterapia, piel morena" />
   <meta name="author" content="Piel Morena Estética" />
-  <meta name="robots" content="index, follow" />
+  <meta name="robots" content="<?= $meta_robots ?? 'index, follow' ?>" />
   <meta name="language" content="es" />
 
   <!-- ── Open Graph ───────────────────────────────────────── -->

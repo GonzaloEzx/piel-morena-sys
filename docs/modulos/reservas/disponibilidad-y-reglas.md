@@ -4,7 +4,7 @@
 > Audiencia: producto, desarrollo, agentes
 > Fuente de verdad: complementaria
 > Relacion: reglas transversales del modulo de reservas
-> Ultima revision: 2026-04-04
+> Ultima revision: 2026-10-31 (MVP v2.0)
 
 ## Objetivo
 
@@ -21,46 +21,38 @@ Usar:
 
 Evitar `agenda` como nombre principal de modulo nuevo.
 
-## Reglas vigentes
+## Reglas vigentes (v2.0)
 
-### Disponibilidad
+El calculo vive en `includes/agenda.php`:
 
-`api/citas/disponibilidad.php` hoy:
+- `pm_contexto_dia()`: ventana de maquina o jornada, horario del local, profesionales del servicio con sus franjas del dia y citas activas;
+- `pm_franja_libre()`: profesionales libres para una franja;
+- `pm_turnos_del_dia()`: grilla de turnos (`max(duracion, intervalo)`, margen de 30 min si es hoy);
+- `pm_reservar()`: crea o mueve una cita bajo `GET_LOCK('pm_agenda_<fecha>')`.
 
-- acepta solo `GET`;
-- valida fecha e id de servicio;
-- exige servicio activo;
-- **chequea si el servicio requiere jornada:**
-  - prioridad: `servicios.id_grupo_jornada` > `categorias_servicios.requiere_jornada`;
-  - si requiere jornada y no hay jornada activa para esa fecha → devuelve turnos vacios con mensaje;
-  - si hay jornada activa → usa horarios de la jornada (sobreescribe apertura/cierre general);
-  - si hay jornada activa → salta chequeo de dia laboral;
-- usa configuracion general del negocio (para servicios sin jornada);
-- no devuelve slots para dias no laborables (excepto con jornada activa);
-- si la fecha es hoy, aplica margen de 30 minutos;
-- genera slots con `max(duracion_servicio, intervalo_citas)`;
-- bloquea solapamientos contra citas `pendiente`, `confirmada` y `en_proceso`.
+### Modo profesional
 
-### Creacion
+- el servicio tiene filas en `empleados_servicios` (usuarios activos `empleado` o `admin`);
+- cada profesional trabaja segun `horarios` del dia; sin filas en `horarios`, en el horario del local; con filas pero ninguna ese dia, no trabaja;
+- una cita asignada ocupa a su profesional;
+- una cita sin asignar, o un evento de Google Calendar, ocupa a una profesional libre que pueda hacerla; se descuentan primero las que la clienta no eligio.
 
-`api/citas/crear.php` hoy:
+### Modo salon
 
-- acepta solo `POST`;
-- valida servicio, fecha y hora;
-- recalcula `hora_fin` segun duracion;
-- vuelve a chequear anti-solapamiento;
-- crea la cita en estado `pendiente`;
-- guarda `token:<hex>` en `notas`;
-- intenta enviar email y notificacion en modo best-effort.
+Servicio sin profesionales asignadas: cualquier cita activa superpuesta bloquea el horario. Es identico al calculo v1 (882 casos comparados el 2026-10-31).
 
-### Cancelacion
+### Comunes
 
-`api/citas/cancelar.php` hoy:
+- servicio con maquina: requiere alquiler activo y una sola cita por maquina a la vez;
+- categoria con jornada: requiere jornada activa; sus horarios mandan;
+- dia no laboral: cerrado salvo ventana activa;
+- estados que ocupan: `pendiente`, `confirmada`, `en_proceso`.
 
-- requiere sesion autenticada;
-- solo permite `admin` o `empleado`;
-- no permite cancelar citas `cancelada` o `completada`;
-- el cliente final no tiene hoy un flujo publico de cancelacion.
+### Creacion, cancelacion y cambio
+
+- web: `api/citas/crear.php` crea la cita `pendiente` con `token_gestion`;
+- clienta: `api/citas/gestionar.php` cancela o reprograma hasta 2 horas antes (vuelve a `pendiente`);
+- personal: `api/admin/citas.php` (alta, estados) y `api/citas/cancelar.php`.
 
 ## Configuracion relevante
 
@@ -73,28 +65,9 @@ Claves operativas vigentes:
 
 ## Inconsistencias abiertas
 
-### Auth requerido en UI vs invitado permitido en backend
-
-Hoy conviven dos realidades:
-
-- la UI publica exige cuenta;
-- `api/citas/crear.php` todavia soporta invitadas.
-
-Esto no debe resolverse por accidente. Requiere decision de producto.
-
-### Cancelacion historica vs cancelacion real
-
-Parte de la documentacion vieja hablaba de:
-
-- cancelacion por cliente;
-- cancelacion por token;
-- limite de 2 horas.
-
-El codigo vigente ya no funciona asi. La realidad actual es cancelacion solo por personal autenticado.
-
-### Jornadas especificas
-
-Implementado. Ver `docs/contracts/10-jornadas.md` para el contrato funcional completo y `docs/modulos/reservas/jornadas.md` para detalle tecnico.
+- el footer publica "Sabado 9:00 a 14:00" pero `dias_laborales` es `1,2,3,4,5`: confirmar con Mari;
+- una clienta que reservo como invitada y despues se registra queda como dos usuarios (el registro no se vincula por telefono);
+- la agenda publica de la landing todavia confirma por WhatsApp en vez de llevar al wizard (v2.1).
 
 ## Recomendacion de lectura
 

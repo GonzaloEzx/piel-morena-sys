@@ -20,7 +20,7 @@
 </div>
 
 <div style="text-align: center; margin: 24px 0;">
-    <a href="<?= URL_BASE ?>/mi-cuenta.php" style="display: inline-block; background: #957C62; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">Ver mis citas</a>
+    <a href="<?= !empty($link_gestion) ? htmlspecialchars($link_gestion) : URL_BASE . '/mi-cuenta.php' ?>" style="display: inline-block; background: #957C62; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600;">Ver mi turno</a>
 </div>
 
-<p style="color: #746754; font-size: 13px; margin: 16px 0 0;">Si necesitas cancelar o reprogramar, podes hacerlo desde tu cuenta o contactarnos directamente.</p>
+<p style="color: #746754; font-size: 13px; margin: 16px 0 0;">Si necesitas cancelar o cambiar el horario, podes hacerlo desde ese link hasta 2 horas antes, o escribirnos por WhatsApp.</p>

@@ -1,149 +1,139 @@
 <?php
 /**
- * Piel Morena - API: Crear cita/reserva
- * POST { id_servicio, fecha, hora_inicio, nombre?, email?, telefono? }
- * → JSON { success, data: { id, token } }
+ * Piel Morena - API: Crear reserva
+ * POST { id_servicio, fecha, hora_inicio, id_empleado?, nombre?, telefono?, email?, sitio? }
+ *   → JSON { success, data: { id, token, link_gestion, servicio, fecha, hora, profesional } }
  *
- * Permite reservar como usuario logueado o como invitado.
- * Si invitado: crea registro temporal en usuarios con rol 'cliente'.
+ * Con sesión: la reserva queda a nombre de la usuaria logueada.
+ * Sin sesión (invitada): nombre y WhatsApp obligatorios, email opcional.
+ * La clienta se reconoce por teléfono. La cita queda `pendiente` hasta que
+ * el salón la confirma por WhatsApp.
+ *
+ * `sitio` es un campo trampa: si viene con texto, es un bot.
  */
 
 require_once __DIR__ . '/../../includes/init.php';
+require_once __DIR__ . '/../../includes/agenda.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     responder_json(false, null, 'Método no permitido', 405);
 }
 
-$input = json_decode(file_get_contents('php://input'), true);
+$input = json_decode(file_get_contents('php://input'), true) ?: [];
 
 $id_servicio = intval($input['id_servicio'] ?? 0);
 $fecha       = trim($input['fecha'] ?? '');
 $hora_inicio = trim($input['hora_inicio'] ?? '');
+$id_empleado = intval($input['id_empleado'] ?? 0) ?: null;
+$nombre      = trim($input['nombre'] ?? '');
+$email       = trim($input['email'] ?? '');
+$telefono    = trim($input['telefono'] ?? '');
 
-// Datos de invitado (opcionales si está logueado)
-$nombre   = trim($input['nombre'] ?? '');
-$email    = trim($input['email'] ?? '');
-$telefono = trim($input['telefono'] ?? '');
+if (trim($input['sitio'] ?? '') !== '') {
+    responder_json(false, null, 'No se pudo registrar la reserva', 400);
+}
 
 // --- Validaciones básicas ---
 if ($id_servicio <= 0) {
     responder_json(false, null, 'Selecciona un servicio', 400);
 }
-
-if (!$fecha || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) {
+if (!$fecha || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha) || strtotime($fecha) < strtotime('today')) {
     responder_json(false, null, 'Fecha inválida', 400);
 }
-
-if (strtotime($fecha) < strtotime('today')) {
-    responder_json(false, null, 'No se puede reservar en una fecha pasada', 400);
+if (strtotime($fecha) > strtotime('+60 days')) {
+    responder_json(false, null, 'Se puede reservar hasta 60 días adelante', 400);
 }
-
 if (!$hora_inicio || !preg_match('/^\d{2}:\d{2}$/', $hora_inicio)) {
     responder_json(false, null, 'Hora inválida', 400);
 }
 
 $db = getDB();
 
-// --- Obtener servicio ---
-$stmt = $db->prepare("SELECT id, nombre, duracion_minutos FROM servicios WHERE id = ? AND activo = 1 LIMIT 1");
-$stmt->execute([$id_servicio]);
-$servicio = $stmt->fetch();
-
-if (!$servicio) {
-    responder_json(false, null, 'Servicio no encontrado', 404);
-}
-
-$hora_fin = date('H:i', strtotime($hora_inicio) + ($servicio['duracion_minutos'] * 60));
-
-// --- Determinar cliente ---
-$id_cliente = null;
-
+// --- Determinar clienta ---
 if (esta_autenticado()) {
     $id_cliente = usuario_actual_id();
+    $stmt = $db->prepare("SELECT nombre, email, telefono FROM usuarios WHERE id = ?");
+    $stmt->execute([$id_cliente]);
+    $u = $stmt->fetch() ?: [];
+    $nombre = $u['nombre'] ?? '';
+    $email = (string) ($u['email'] ?? '');
+    $telefono = (string) ($u['telefono'] ?? '');
 } else {
-    // Invitado: validar datos
-    if (!$nombre) {
-        responder_json(false, null, 'El nombre es requerido', 400);
+    if (mb_strlen($nombre) < 2) {
+        responder_json(false, null, 'Contanos tu nombre', 400);
     }
-    if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        responder_json(false, null, 'Ingresa un email válido', 400);
+    if (pm_tel_norm($telefono) === '') {
+        responder_json(false, null, 'Ingresá tu WhatsApp con código de área (ej: 3624 123456)', 400);
+    }
+    if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        responder_json(false, null, 'El email no es válido', 400);
     }
 
-    // Buscar si ya existe un usuario con ese email
-    $stmt = $db->prepare("SELECT id FROM usuarios WHERE email = ? LIMIT 1");
-    $stmt->execute([$email]);
-    $existente = $stmt->fetch();
-
-    if ($existente) {
-        $id_cliente = $existente['id'];
-    } else {
-        // Crear usuario invitado
-        $password_temp = password_hash(bin2hex(random_bytes(8)), PASSWORD_DEFAULT);
-        $stmt = $db->prepare(
-            "INSERT INTO usuarios (nombre, apellidos, email, password, telefono, rol) VALUES (?, '', ?, ?, ?, 'cliente')"
-        );
-        $stmt->execute([$nombre, $email, $password_temp, $telefono]);
-        $id_cliente = $db->lastInsertId();
+    // Máximo 5 reservas por hora desde la misma IP
+    $marca = sys_get_temp_dir() . '/pm_reservas_' . md5($_SERVER['REMOTE_ADDR'] ?? '') . '.json';
+    $previas = is_file($marca) ? (json_decode((string) file_get_contents($marca), true) ?: []) : [];
+    $previas = array_values(array_filter($previas, fn($t) => $t > time() - 3600));
+    if (count($previas) >= 5) {
+        responder_json(false, null, 'Hiciste muchas reservas seguidas. Escribinos por WhatsApp.', 429);
     }
+
+    $id_cliente = pm_clienta_por_telefono($db, $nombre, $telefono, $email);
 }
 
-// --- Verificar disponibilidad (anti-solapamiento) ---
-$stmt = $db->prepare(
-    "SELECT id FROM citas
-     WHERE fecha = ? AND estado IN ('pendiente', 'confirmada', 'en_proceso')
-     AND hora_inicio < ? AND hora_fin > ?
-     LIMIT 1"
-);
-$stmt->execute([$fecha, $hora_fin, $hora_inicio]);
-
-if ($stmt->fetch()) {
-    responder_json(false, null, 'Este horario ya no está disponible. Selecciona otro.', 409);
-}
-
-// --- Crear la cita ---
-$token = bin2hex(random_bytes(16)); // Token para cancelación sin login
-
-$stmt = $db->prepare(
-    "INSERT INTO citas (id_cliente, id_servicio, fecha, hora_inicio, hora_fin, estado, notas)
-     VALUES (?, ?, ?, ?, ?, 'pendiente', ?)"
-);
-$stmt->execute([
-    $id_cliente,
-    $id_servicio,
-    $fecha,
-    $hora_inicio,
-    $hora_fin,
-    'token:' . $token,
+$r = pm_reservar($db, [
+    'id_servicio' => $id_servicio,
+    'fecha'       => $fecha,
+    'hora_inicio' => $hora_inicio,
+    'id_empleado' => $id_empleado,
+    'id_cliente'  => $id_cliente,
+    'estado'      => 'pendiente',
 ]);
 
-$id_cita = $db->lastInsertId();
+if (!$r['ok']) {
+    responder_json(false, null, $r['error'], $r['codigo']);
+}
 
-// Enviar email de confirmacion (best-effort, no bloquea la reserva)
+if (isset($marca)) {
+    $previas[] = time();
+    @file_put_contents($marca, json_encode($previas));
+}
+
+$stmt = $db->prepare("SELECT nombre FROM servicios WHERE id = ?");
+$stmt->execute([$id_servicio]);
+$servicio_nombre = (string) $stmt->fetchColumn();
+
+$profesional = null;
+if ($r['id_empleado']) {
+    $stmt = $db->prepare("SELECT nombre FROM usuarios WHERE id = ?");
+    $stmt->execute([$r['id_empleado']]);
+    $profesional = $stmt->fetchColumn() ?: null;
+}
+
+$link_gestion = URL_BASE . '/mi-turno.php?t=' . $r['token'];
+
+// Email y notificación (best-effort, no bloquean la reserva)
 try {
-    $email_cliente = esta_autenticado() ? ($_SESSION['usuario_email'] ?? '') : $email;
-    $nombre_cliente = esta_autenticado() ? ($_SESSION['usuario_nombre'] ?? '') : $nombre;
-
-    if ($email_cliente) {
-        $fecha_fmt = date('d/m/Y', strtotime($fecha));
-        enviar_email($email_cliente, 'Confirmacion de cita — Piel Morena', 'confirmacion_cita', [
-            'cliente_nombre' => $nombre_cliente,
-            'servicio'       => $servicio['nombre'],
+    $fecha_fmt = date('d/m/Y', strtotime($fecha));
+    if ($email !== '') {
+        enviar_email($email, 'Recibimos tu reserva — Piel Morena', 'confirmacion_cita', [
+            'cliente_nombre' => $nombre,
+            'servicio'       => $servicio_nombre,
             'fecha'          => $fecha_fmt,
             'hora'           => $hora_inicio,
+            'link_gestion'   => $link_gestion,
         ]);
-
-        if ($id_cliente) {
-            registrar_notificacion($id_cliente, 'sistema', 'Cita reservada', 'Tu cita de ' . $servicio['nombre'] . ' para el ' . $fecha_fmt . ' fue reservada con exito.');
-        }
     }
-} catch (Exception $e) {
+    registrar_notificacion($id_cliente, 'sistema', 'Reserva recibida', 'Tu turno de ' . $servicio_nombre . ' para el ' . $fecha_fmt . ' quedó pendiente de confirmación.');
+} catch (Throwable $e) {
     error_log('Piel Morena Mail Error (crear cita): ' . $e->getMessage());
 }
 
 responder_json(true, [
-    'id'       => $id_cita,
-    'token'    => $token,
-    'servicio' => $servicio['nombre'],
-    'fecha'    => $fecha,
-    'hora'     => $hora_inicio,
+    'id'           => $r['id'],
+    'token'        => $r['token'],
+    'link_gestion' => $link_gestion,
+    'servicio'     => $servicio_nombre,
+    'fecha'        => $fecha,
+    'hora'         => $hora_inicio,
+    'profesional'  => $profesional,
 ]);

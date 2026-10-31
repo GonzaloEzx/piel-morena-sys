@@ -91,6 +91,13 @@ $vista_actual  = basename($uri, '.php') ?: 'index';
       <li class="pm-sidebar-divider"><?= $esAdmin ? 'Gestión' : 'Mi Panel' ?></li>
 
       <li class="pm-sidebar-item">
+        <a href="<?= URL_ADMIN ?>/views/agenda.php" class="pm-sidebar-link <?= $vista_actual === 'agenda' ? 'active' : '' ?>">
+          <i class="bi bi-calendar-week"></i>
+          <span>Agenda</span>
+        </a>
+      </li>
+
+      <li class="pm-sidebar-item">
         <a href="<?= URL_ADMIN ?>/views/<?= $esAdmin ? 'citas' : 'mis-citas' ?>.php" class="pm-sidebar-link <?= in_array($vista_actual, ['citas','mis-citas']) ? 'active' : '' ?>">
           <i class="bi bi-calendar-check"></i>
           <span><?= $esAdmin ? 'Citas' : 'Mis Citas' ?></span>
